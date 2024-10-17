@@ -29,8 +29,9 @@ def get_ipca_data(start_date=None, end_date=None):
     else:
         df_ipca = cache_data
 
-    # Convertendo a coluna de data
+    # Convertendo dados para formatos adequados
     df_ipca["data"] = pd.to_datetime(df_ipca["D2C"], format="%Y%m")
+    df_ipca["V"] = pd.to_numeric(df_ipca["V"])
 
     # Filtrando os dados pelo intervalo de datas, se fornecido
     if start_date and end_date:

@@ -19,7 +19,6 @@ meses_portugues = {
 }
 
 
-# Função para o gráfico de Inflação por Categoria e Mês
 def plot_inflacao_categoria_mes(df_ipca):
     st.header("Inflação por Categoria e Mês")
 
@@ -41,22 +40,61 @@ def plot_inflacao_categoria_mes(df_ipca):
     st.plotly_chart(fig1)
 
 
-# Função para o gráfico de IPCA por Categoria Acumulado no Ano
-def plot_ipca_categoria_acumulado(df_ipca):
-    df_ipca["V"] = pd.to_numeric(df_ipca["V"])
+def plot_ipca_categoria_vs_ipca_geral(df_ipca):
     st.header("IPCA por Categoria vs IPCA no Ano")
 
-    # Cálculo do acumulado por categoria
-    df_ipca["Acumulado"] = df_ipca.groupby("D4N")["V"].transform(
+    # Filtra os dados para o Índice Geral e as outras categorias
+    df_indice_geral = df_ipca[df_ipca["D4N"] == "Índice geral"]
+    df_categorias = df_ipca[df_ipca["D4N"] != "Índice geral"]
+
+    # Calcula o IPCA acumulado no ano para o Índice Geral
+    ipca_geral = (df_indice_geral["V"].values / 100 + 1).prod() - 1
+
+    # Agrupa por categoria e calcula o acumulado para cada uma
+    acumulados_categoria = df_categorias.groupby("D4N")["V"].transform(
         lambda x: (x / 100 + 1).prod() - 1
     )
 
-    fig2 = px.bar(
-        df_ipca,
-        x="D4N",
-        y="Acumulado",
-        labels={"D4N": "Categoria", "Acumulado": "IPCA (%)"},
-        title="IPCA por Categoria Acumulado no Ano",
+    # Cria um novo DataFrame para o gráfico
+    categorias = df_categorias["D4N"].unique()
+    resultados = {
+        "Categoria": [],
+        "IPCA no Ano (Índice Geral)": [],
+        "IPCA Acumulado na Categoria": [],
+    }
+
+    for categoria in categorias:
+        resultados["Categoria"].append(categoria)
+        resultados["IPCA no Ano (Índice Geral)"].append(
+            round(ipca_geral * 100, 2)  # Arredonda para 2 casas decimais
+        )
+        resultados["IPCA Acumulado na Categoria"].append(
+            round(
+                acumulados_categoria[df_categorias["D4N"] == categoria].iloc[0] * 100, 2
+            )
+        )
+
+    # Converte os resultados em um DataFrame
+    df_resultados = pd.DataFrame(resultados)
+
+    # Transforma o DataFrame para o formato desejado
+    df_resultados_melted = df_resultados.melt(
+        id_vars="Categoria", var_name="Tipo", value_name="IPCA (%)"
     )
+
+    # Plota o gráfico com as barras agrupadas
+    fig2 = px.bar(
+        df_resultados_melted,
+        x="Categoria",
+        y="IPCA (%)",
+        color="Tipo",
+        barmode="group",
+        labels={"IPCA (%)": "Inflação (%)"},
+        title="IPCA por Categoria vs IPCA no Ano",
+        text_auto=".2f",  # Exibe as porcentagens arredondadas com 2 casas decimais
+    )
+
+    # Atualiza o hover template para mostrar 2 casas decimais no tooltip
+    fig2.update_traces(hovertemplate="%{y:.2f}%<extra></extra>")
 
     st.plotly_chart(fig2)

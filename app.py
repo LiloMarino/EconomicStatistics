@@ -2,7 +2,7 @@ from datetime import datetime
 
 import streamlit as st
 
-from graph_utils import plot_inflacao_categoria_mes, plot_ipca_categoria_acumulado
+from graph_utils import plot_inflacao_categoria_mes, plot_ipca_categoria_vs_ipca_geral
 from ipca import get_ipca_data
 
 # Configurações da página
@@ -22,4 +22,4 @@ if st.button("Gerar Gráficos"):
 
     # Exibir os gráficos
     plot_inflacao_categoria_mes(df_ipca)
-    plot_ipca_categoria_acumulado(df_ipca)
+    plot_ipca_categoria_vs_ipca_geral(df_ipca)
