@@ -1,8 +1,9 @@
 import os
-import pickle
 from datetime import datetime, timedelta
 
-CACHE_FILE = "ipca_cache.pkl"
+import pandas as pd
+
+CACHE_FILE = "ipca_cache.csv"
 CACHE_EXPIRATION_DAYS = 30  # Atualiza o cache a cada 30 dias
 
 
@@ -17,11 +18,9 @@ def is_cache_valid():
 
 def load_cache():
     if is_cache_valid():
-        with open(CACHE_FILE, "rb") as f:
-            return pickle.load(f)
+        return pd.read_csv(CACHE_FILE)
     return None
 
 
 def save_cache(data):
-    with open(CACHE_FILE, "wb") as f:
-        pickle.dump(data, f)
+    data.to_csv(CACHE_FILE, index=False)

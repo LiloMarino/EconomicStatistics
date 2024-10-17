@@ -16,11 +16,15 @@ def get_ipca_data(start_date=None, end_date=None):
             ibge_territorial_code="all",  # Todos os territórios
             classifications={
                 "315": "7169,7170,7445,7486,7558,7625,7660,7712,7766,7786"
-            },  # Grupos: Índice geral, Alimentação e bebidas, Habitação, Artigos de residência, Vestuário, Transportes, Saúde e cuidados pessoais, Despesas pessoais, Educação, Comunicação
+            },  # Grupos
             variable="63",  # Somente variação mensal
             period="all",  # Todos os meses
             header="n",  # Sem cabeçalho extra
         )
+
+        # Filtrando apenas as colunas desejadas
+        df_ipca = df_ipca[["D2C", "D2N", "D4C", "D4N", "V"]]
+
         save_cache(df_ipca)
     else:
         df_ipca = cache_data
