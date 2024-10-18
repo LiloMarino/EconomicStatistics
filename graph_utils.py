@@ -27,6 +27,9 @@ def plot_inflacao_categoria_mes(df_ipca):
         lambda x: f"{meses_portugues[x.month]} {x.year}"
     )
 
+    # Adiciona uma coluna de texto formatado com o símbolo de %
+    df_ipca["IPCA (%) text"] = df_ipca["Valor"].apply(lambda x: f"{x:.2f}%")
+
     fig1 = px.bar(
         df_ipca,
         x="Categoria",  # Categorias no eixo X
@@ -35,13 +38,22 @@ def plot_inflacao_categoria_mes(df_ipca):
         labels={"Valor": "Inflação (%)", "Categoria": "Categoria", "data_mes": "Mês"},
         title="Inflação por Categoria e Mês",
         barmode="group",  # Barras agrupadas lado a lado
+        text="IPCA (%) text",  # Exibe o texto com o símbolo de %
+    )
+
+    # Atualiza o hover template para mostrar a categoria, mês e IPCA formatado
+    fig1.update_traces(
+        hovertemplate="Categoria: %{x}<br>"
+        "Mês: %{customdata[0]}<br>"
+        "Inflação: <b>%{y:.2f}%</b><extra></extra>",
+        customdata=df_ipca[["data_mes"]],  # Passa o mês para o hover
     )
 
     st.plotly_chart(fig1)
 
 
 def plot_ipca_categoria_vs_ipca_geral(df_ipca):
-    st.header("IPCA por Categoria vs IPCA no Ano")
+    st.header("IPCA por Categoria vs IPCA Geral")
 
     # Filtra os dados para o Índice Geral e as outras categorias
     df_indice_geral = df_ipca[df_ipca["Categoria"] == "Índice geral"]
@@ -60,6 +72,7 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
     resultados = {
         "Categoria": [],
         "IPCA no Ano (Índice Geral)": [],
+        "IPCA Acumulado na Categoria": [],
         "IPCA Acumulado na Categoria": [],
     }
 
@@ -84,6 +97,11 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
         id_vars="Categoria", var_name="Tipo", value_name="IPCA (%)"
     )
 
+    # Adiciona uma coluna de texto formatado com o símbolo de %
+    df_resultados_melted["IPCA (%) text"] = df_resultados_melted["IPCA (%)"].apply(
+        lambda x: f"{x:.2f}%"
+    )
+
     # Plota o gráfico com as barras agrupadas
     fig2 = px.bar(
         df_resultados_melted,
@@ -92,11 +110,18 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
         color="Tipo",
         barmode="group",
         labels={"IPCA (%)": "Inflação (%)"},
-        title="IPCA por Categoria vs IPCA no Ano",
-        text_auto=".2f",  # Exibe as porcentagens arredondadas com 2 casas decimais
+        title="IPCA por Categoria vs IPCA Geral",
+        text="IPCA (%) text",  # Exibe o texto com o símbolo de %
     )
 
-    # Atualiza o hover template para mostrar 2 casas decimais no tooltip
-    fig2.update_traces(hovertemplate="%{y:.2f}%<extra></extra>")
+    # Atualiza o hover template para padronizar as informações
+    fig2.update_traces(
+        hovertemplate="Categoria: %{x}<br>"
+        "Tipo: %{customdata[0]}<br>"
+        "IPCA: <b>%{y:.2f}%</b><extra></extra>",
+        customdata=df_resultados_melted[
+            ["Tipo"]
+        ],  # Passa o tipo de dado (IPCA geral ou categoria)
+    )
 
     st.plotly_chart(fig2)
