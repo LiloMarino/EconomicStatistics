@@ -2,6 +2,8 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from ipca import get_ipca_data
+
 # Mapeamento manual dos meses em português
 meses_portugues = {
     1: "Janeiro",
@@ -19,6 +21,10 @@ meses_portugues = {
 }
 
 
+def formatar_data_mes(data):
+    return data.strftime("%B %Y")
+
+
 def plot_inflacao_categoria_mes(df_ipca):
     st.header("Inflação por Categoria e Mês")
 
@@ -30,7 +36,7 @@ def plot_inflacao_categoria_mes(df_ipca):
     # Adiciona uma coluna de texto formatado com o símbolo de %
     df_ipca["IPCA (%) text"] = df_ipca["Valor"].apply(lambda x: f"{x:.2f}%")
 
-    fig1 = px.bar(
+    fig = px.bar(
         df_ipca,
         x="Categoria",  # Categorias no eixo X
         y="Valor",  # Inflação no eixo Y
@@ -43,13 +49,13 @@ def plot_inflacao_categoria_mes(df_ipca):
     )
 
     # Atualizando o hovertemplate para incluir o mês e a inflação
-    fig1.update_traces(
+    fig.update_traces(
         hovertemplate="Categoria: %{x}<br>"
         "Mês: %{customdata}<br>"
         "Inflação: <b>%{y:.2f}%</b><extra></extra>",
     )
 
-    st.plotly_chart(fig1)
+    st.plotly_chart(fig)
 
 
 def plot_ipca_categoria_vs_ipca_geral(df_ipca):
@@ -105,7 +111,7 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
     )
 
     # Plota o gráfico com as barras agrupadas
-    fig2 = px.bar(
+    fig = px.bar(
         df_resultados_melted,
         x="Categoria",
         y="IPCA (%)",
@@ -118,10 +124,73 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
     )
 
     # Atualiza o hover template para padronizar as informações
-    fig2.update_traces(
+    fig.update_traces(
         hovertemplate="Categoria: %{x}<br>"
         "Tipo: %{customdata}<br>"
         "IPCA: <b>%{y:.2f}%</b><extra></extra>",
     )
 
-    st.plotly_chart(fig2)
+    st.plotly_chart(fig)
+
+
+def plot_acumulado_12_meses(df_ipca):
+    st.header("Acumulado dos Últimos 12 Meses por Categoria")
+
+    # Inicializa um DataFrame para armazenar os acumulados
+    df_acumulado = pd.DataFrame()
+
+    # Itera sobre cada linha do DataFrame filtrado de entrada
+    for _, row in df_ipca.iterrows():
+        mes_atual = row["Data"]  # Mês atual
+        categoria = row["Categoria"]  # Categoria atual
+
+        # Obtém os dados dos 12 meses anteriores ao mês atual
+        df_12_meses = get_ipca_data(
+            start_date=(mes_atual - pd.DateOffset(months=11)), end_date=mes_atual
+        )
+
+        # Filtra os dados pela categoria atual
+        df_categoria = df_12_meses[df_12_meses["Categoria"] == categoria]
+
+        # Calcula o acumulado dos últimos 12 meses
+        if not df_categoria.empty:
+            acumulado = ((df_categoria["Valor"] / 100 + 1).prod() - 1) * 100
+
+            # Cria um DataFrame temporário com o acumulado atual
+            df_temp = pd.DataFrame(
+                {
+                    "Data": [mes_atual],
+                    "Categoria": [categoria],
+                    "Acumulado 12 Meses": [acumulado],
+                }
+            )
+
+            # Concatena o DataFrame temporário ao DataFrame principal
+            df_acumulado = pd.concat([df_acumulado, df_temp], ignore_index=True)
+
+    # Remove NaNs se houver
+    df_acumulado = df_acumulado.dropna(subset=["Acumulado 12 Meses"])
+
+    # Cria o gráfico de linha
+    fig = px.line(
+        df_acumulado,
+        x="Data",
+        y="Acumulado 12 Meses",
+        color="Categoria",
+        labels={
+            "Acumulado 12 Meses": "Acumulado (%)",
+            "Data": "Mês",
+            "Categoria": "Categoria",
+        },
+        title="Acumulado dos Últimos 12 Meses por Categoria",
+        custom_data=["Categoria"],
+    )
+
+    # Atualiza o hovertemplate para exibir o valor corretamente
+    fig.update_traces(
+        hovertemplate="Categoria: %{customdata}<br>"
+        "Mês: %{x}<br>"
+        "Acumulado 12 Meses: <b>%{y:.2f}%</b><extra></extra>",
+    )
+
+    st.plotly_chart(fig)
