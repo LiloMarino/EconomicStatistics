@@ -23,16 +23,16 @@ def plot_inflacao_categoria_mes(df_ipca):
     st.header("Inflação por Categoria e Mês")
 
     # Ajustando os dados para exibir o nome do mês em português
-    df_ipca["data_mes"] = df_ipca["data"].apply(
+    df_ipca["data_mes"] = df_ipca["Data"].apply(
         lambda x: f"{meses_portugues[x.month]} {x.year}"
     )
 
     fig1 = px.bar(
         df_ipca,
-        x="D4N",  # Categorias no eixo X
-        y="V",  # Inflação no eixo Y
+        x="Categoria",  # Categorias no eixo X
+        y="Valor",  # Inflação no eixo Y
         color="data_mes",  # As barras serão diferenciadas por mês
-        labels={"V": "Inflação (%)", "D4N": "Categoria", "data_mes": "Mês"},
+        labels={"Valor": "Inflação (%)", "Categoria": "Categoria", "data_mes": "Mês"},
         title="Inflação por Categoria e Mês",
         barmode="group",  # Barras agrupadas lado a lado
     )
@@ -44,19 +44,19 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
     st.header("IPCA por Categoria vs IPCA no Ano")
 
     # Filtra os dados para o Índice Geral e as outras categorias
-    df_indice_geral = df_ipca[df_ipca["D4N"] == "Índice geral"]
-    df_categorias = df_ipca[df_ipca["D4N"] != "Índice geral"]
+    df_indice_geral = df_ipca[df_ipca["Categoria"] == "Índice geral"]
+    df_categorias = df_ipca[df_ipca["Categoria"] != "Índice geral"]
 
     # Calcula o IPCA acumulado no ano para o Índice Geral
-    ipca_geral = (df_indice_geral["V"].values / 100 + 1).prod() - 1
+    ipca_geral = (df_indice_geral["Valor"].values / 100 + 1).prod() - 1
 
     # Agrupa por categoria e calcula o acumulado para cada uma
-    acumulados_categoria = df_categorias.groupby("D4N")["V"].transform(
+    acumulados_categoria = df_categorias.groupby("Categoria")["Valor"].transform(
         lambda x: (x / 100 + 1).prod() - 1
     )
 
     # Cria um novo DataFrame para o gráfico
-    categorias = df_categorias["D4N"].unique()
+    categorias = df_categorias["Categoria"].unique()
     resultados = {
         "Categoria": [],
         "IPCA no Ano (Índice Geral)": [],
@@ -70,7 +70,9 @@ def plot_ipca_categoria_vs_ipca_geral(df_ipca):
         )
         resultados["IPCA Acumulado na Categoria"].append(
             round(
-                acumulados_categoria[df_categorias["D4N"] == categoria].iloc[0] * 100, 2
+                acumulados_categoria[df_categorias["Categoria"] == categoria].iloc[0]
+                * 100,
+                2,
             )
         )
 

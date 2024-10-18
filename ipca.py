@@ -4,10 +4,10 @@ import sidrapy
 from cache import load_cache, save_cache
 
 
-# Função para obter os dados do IPCA
 def get_ipca_data(start_date=None, end_date=None):
-    cache_data = load_cache()
-    if cache_data is None:
+    df_ipca = load_cache()
+
+    if df_ipca is None:
         print("Consultando dados da API...")
         # Faz a consulta apenas para a variação mensal do IPCA por grupos
         df_ipca = sidrapy.get_table(
@@ -23,23 +23,30 @@ def get_ipca_data(start_date=None, end_date=None):
         )
 
         # Filtrando apenas as colunas desejadas
-        df_ipca = df_ipca[["D2C", "D2N", "D4C", "D4N", "V"]]
+        df_ipca = df_ipca[["D2C", "D4N", "V"]]
 
+        # Renomeando as colunas para algo mais intuitivo
+        df_ipca = df_ipca.rename(
+            columns={"D2C": "Data", "D4N": "Categoria", "V": "Valor"}
+        )
+
+        # Convertendo as colunas para os tipos adequados
+        df_ipca["Data"] = pd.to_datetime(df_ipca["Data"], format="%Y%m")
+        df_ipca["Valor"] = pd.to_numeric(df_ipca["Valor"])
+
+        # Salvando o cache em CSV
         save_cache(df_ipca)
     else:
-        df_ipca = cache_data
-
-    # Convertendo dados para formatos adequados
-    df_ipca["data"] = pd.to_datetime(df_ipca["D2C"], format="%Y%m")
-    df_ipca["V"] = pd.to_numeric(df_ipca["V"])
+        # Convertendo a coluna 'Data' para datetime caso venha do CSV
+        df_ipca["Data"] = pd.to_datetime(df_ipca["Data"])
 
     # Filtrando os dados pelo intervalo de datas, se fornecido
     if start_date and end_date:
-        # Converter start_date e end_date para datetime
         start_date = pd.to_datetime(start_date)
         end_date = pd.to_datetime(end_date)
 
         df_ipca = df_ipca[
-            (df_ipca["data"] >= start_date) & (df_ipca["data"] <= end_date)
+            (df_ipca["Data"] >= start_date) & (df_ipca["Data"] <= end_date)
         ]
+
     return df_ipca
