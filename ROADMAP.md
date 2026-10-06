@@ -22,7 +22,6 @@
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F19 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F18, F19 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13 | — |
-| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ⏳ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ⏳ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ⏳ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ⏳ |
@@ -44,7 +43,7 @@
 | **F20** | IPCA por grupo antes de 2020 (tabelas antigas do IBGE) | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (4 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (5 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -52,6 +51,7 @@
 | **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F19 | ✅ |
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta | F7, F8, F11 | ✅ |
+| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 
 </details>
 
@@ -63,7 +63,8 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | M1 | 19 | ⏳ |
+| **F2** | Cache de séries no SQLite com refresh idempotente | M1 | 15 | ⏳ |
+| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | M2 | 4 | ⏳ |
 
 ---
 
@@ -75,16 +76,23 @@
 >
 > **Serve:** N1, N3
 >
-> **Progresso:** 0/6 concluídas
+> **Progresso:** 1/6 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ⏳ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | F1 | ⏳ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | F2 | ⏳ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | F2 | ⏳ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | F3 | ⏳ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | F3, F4 | ⏳ |
+
+<details><summary>Concluído (1 item)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
+
+</details>
 
 ### M2 — Camada didática
 
@@ -157,7 +165,7 @@
 
 | ID | Resumo | Atende (N#) | D# | Marco | Depende de | Esforço | Risco | Valor | Custo-benefício | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | N1, N2, N3 | D1 | M1 | — | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | N1, N2, N3 | D1 | M1 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F2** | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 | F1 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 | F2 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 | F2 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
@@ -174,19 +182,22 @@
 | **F18** | Linha do tempo histórica com os episódios marcados | N5, N2 | — | M5 | F12 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 | **F19** | Comparação internacional da dívida (FMI) | N4, N5 | D2 | — | F2 | Médio | Médio | Médio | Médio | 💤 Registrado, sem prioridade |
 
-**F1 — Scaffold no padrão do Finance Manager.** Estrutura do Finance Manager: `backend/{core,adapters,domain,features,repository,migrations}`, `frontend/` sem `src/`, `scripts/export_openapi.py`, `tests/`, `main.py`, e `data/` no `.gitignore`. Configuração copiada e enxugada de lá:
-- `pyproject.toml` e `pyrightconfig.json`, sem pandas;
-- o `package.json` da raiz, com setup, dev e check;
-- o `frontend/package.json`, sem as libs de form, tabela e data até alguma feature pedir.
+**F1 — Scaffold no padrão do Finance Manager.** Feito.
 
-O `CLAUDE.md` é adaptado do Finance Manager: IDs do roadmap só nos documentos do roadmap, o `ROADMAP.md` gerado por script, e as convenções de backend e front. A parte de Decimal sai, porque aqui é float (D3). O layout do front tem uma sidebar com Visão geral, Inflação, Poder de compra, Dívida e Aprender.
+**Backend:** a estrutura e as configurações vieram do Finance Manager, com três cortes:
+- **Decimal:** sai, porque aqui o valor é float.
+- **Snapshot e dry-run de migration:** saem, porque o banco é cache de dado público e o `migrate()` é só `alembic upgrade head`.
+- **Dependências:** o `pyproject.toml` ficou com alembic, fastapi, pydantic, pydantic-settings, sqlalchemy e uvicorn, sem pandas.
 
-Sai do repo:
-- `app.py`, `graph_utils.py`, `ipca.py` e `cache.py`;
-- `requirements.txt`, `ipca_cache.csv`, `venv/` e `__pycache__/`;
-- a configuração de launch do Streamlit.
+**Frontend:** vieram do Finance Manager:
+- as configurações (Vite 8, TS 6, oxlint/oxfmt, shadcn base-nova);
+- o gerador de tipos, sem os transforms de Decimal e Blob;
+- os componentes de UI usados;
+- o `index.css`, sem os tokens de carteira (referências, liquidez, subcarteira, compra/venda).
 
-As fórmulas sobrevivem no git e nos planos de F5 e F6. Base de N1, N2 e N3. Gatilho: é a primeira coisa a fazer.
+O layout tem sidebar e toggle de tema, e os caminhos são em inglês (`/inflation`, `/purchasing-power`), como no Finance Manager. `CLAUDE.md` e `README.md` adaptados. Saem o Streamlit, o `requirements.txt` e o launch do VS Code.
+
+**Limitação:** `venv/`, `__pycache__/` e `ipca_cache.csv` não puderam ser apagados pela sessão (permissão negada) e ficam para remoção manual; os dois primeiros já estão no `.gitignore`.
 
 **F2 — Cache de séries no SQLite.**
 

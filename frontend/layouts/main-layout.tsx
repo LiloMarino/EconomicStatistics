@@ -1,0 +1,133 @@
+import { ChartNoAxesCombined, Moon, PanelLeft, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+
+import { isActive, navGroups } from "@/layouts/navigation";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from "@/shared/components/ui/sidebar";
+import { Toaster } from "@/shared/components/ui/sonner";
+import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
+import { TooltipProvider } from "@/shared/components/ui/tooltip";
+
+function CollapseButton() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <Button
+      variant="ghost"
+      size="icon-sm"
+      aria-label="Recolher a sidebar"
+      title="Recolher a sidebar (Ctrl B)"
+      className="group-data-[collapsible=icon]:hidden"
+      onClick={toggleSidebar}
+    >
+      <PanelLeft />
+    </Button>
+  );
+}
+
+function ThemeSwitch() {
+  const { resolvedTheme, setTheme } = useTheme();
+
+  return (
+    <div className="text-caption text-muted-foreground flex items-center justify-between pr-1 pl-2.5 group-data-[collapsible=icon]:hidden">
+      Tema
+      <ToggleGroup
+        variant="segmented"
+        size="sm"
+        aria-label="Tema"
+        value={[resolvedTheme ?? "dark"]}
+        onValueChange={([value]) => {
+          if (value) setTheme(value);
+        }}
+      >
+        <ToggleGroupItem value="light" aria-label="Claro">
+          <Sun />
+        </ToggleGroupItem>
+        <ToggleGroupItem value="dark" aria-label="Escuro">
+          <Moon />
+        </ToggleGroupItem>
+      </ToggleGroup>
+    </div>
+  );
+}
+
+export function MainLayout() {
+  const { pathname } = useLocation();
+
+  return (
+    <TooltipProvider>
+      <SidebarProvider>
+        <Sidebar variant="inset" collapsible="icon">
+          {/* Nome do app e recolher */}
+          <SidebarHeader>
+            <SidebarMenu>
+              <SidebarMenuItem className="flex items-center gap-0.5">
+                <SidebarMenuButton render={<NavLink to="/" />}>
+                  <ChartNoAxesCombined />
+                  <span className="font-semibold">Economia BR</span>
+                </SidebarMenuButton>
+                <CollapseButton />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarHeader>
+
+          {/* Navegação */}
+          <SidebarContent>
+            {navGroups.map((group) => (
+              <SidebarGroup key={group.label} className="py-1">
+                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.items.map(({ to, label, icon: Icon }) => (
+                      <SidebarMenuItem key={to}>
+                        <SidebarMenuButton
+                          isActive={isActive(to, pathname)}
+                          tooltip={label}
+                          render={<NavLink to={to} />}
+                        >
+                          <Icon />
+                          <span>{label}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+          </SidebarContent>
+
+          {/* Tema */}
+          <SidebarFooter className="gap-1.5">
+            <ThemeSwitch />
+          </SidebarFooter>
+        </Sidebar>
+
+        <SidebarInset className="min-w-0">
+          {/* No celular, a sidebar abre por aqui */}
+          <div className="p-3 md:hidden">
+            <SidebarTrigger />
+          </div>
+          <main className="flex flex-1 flex-col gap-6 p-6">
+            <Outlet />
+          </main>
+        </SidebarInset>
+        <Toaster richColors />
+      </SidebarProvider>
+    </TooltipProvider>
+  );
+}

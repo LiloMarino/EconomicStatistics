@@ -1,0 +1,12 @@
+# Copie para config.toml (que não é versionado) e ajuste o que precisar.
+# Variável de ambiente tem precedência: ES_SERVER__PORT=9000
+
+[server]
+host = "127.0.0.1"
+port = 8000
+
+[logging]
+level = "INFO"
+
+[database]
+path = "data/economic.db"
