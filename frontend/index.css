@@ -24,6 +24,17 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
   --color-chart-grid: var(--chart-grid);
+  --color-diverging-mid: var(--diverging-mid);
+  --color-diverging-neg-1: var(--diverging-neg-1);
+  --color-diverging-neg-2: var(--diverging-neg-2);
+  --color-diverging-neg-3: var(--diverging-neg-3);
+  --color-diverging-pos-1: var(--diverging-pos-1);
+  --color-diverging-pos-2: var(--diverging-pos-2);
+  --color-diverging-pos-3: var(--diverging-pos-3);
+  --color-diverging-ink-2: var(--diverging-ink-2);
+  --color-diverging-ink-3: var(--diverging-ink-3);
+  --color-power-loss: var(--diverging-pos-2);
+  --color-power-gain: var(--diverging-neg-2);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -143,6 +154,17 @@
   --chart-4: #eda100;
   --chart-5: #e87ba4;
   --chart-grid: #e8ebef;
+  /* Divergente azul <-> vermelho com cinza no zero: azul é queda, vermelho é alta. Os
+  dois braços têm a mesma luminosidade (OKLCH) em cada passo */
+  --diverging-mid: #f0efec;
+  --diverging-neg-1: #9ec5f4;
+  --diverging-neg-2: #3987e5;
+  --diverging-neg-3: #184f95;
+  --diverging-pos-1: #f3ada7;
+  --diverging-pos-2: #da5450;
+  --diverging-pos-3: #8c2828;
+  --diverging-ink-2: #0f141a;
+  --diverging-ink-3: #ffffff;
   --card-shadow: 0 1px 2px rgb(15 20 26 / 0.05);
   --popover-shadow: 0 8px 24px rgb(15 20 26 / 0.12);
   --sidebar: #f1f3f6;
@@ -193,6 +215,16 @@
   --chart-4: #c98500;
   --chart-5: #d55181;
   --chart-grid: #252c36;
+  /* No escuro a rampa inverte: o passo mais forte é o mais claro */
+  --diverging-mid: #383835;
+  --diverging-neg-1: #184f95;
+  --diverging-neg-2: #3987e5;
+  --diverging-neg-3: #9ec5f4;
+  --diverging-pos-1: #8c2828;
+  --diverging-pos-2: #da5450;
+  --diverging-pos-3: #f3ada7;
+  --diverging-ink-2: #0c0f13;
+  --diverging-ink-3: #0c0f13;
   --card-shadow: none;
   --popover-shadow: 0 8px 24px rgb(0 0 0 / 0.45);
   --sidebar: #0c0f13;

@@ -4,6 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { MainLayout } from "@/layouts/main-layout";
 import { ErrorPage } from "@/pages/error";
+import { InflationPage } from "@/pages/inflation";
+import { PurchasingPowerPage } from "@/pages/purchasing-power";
 import { queryClient } from "@/shared/lib/query-client";
 
 export default function App() {
@@ -13,6 +15,8 @@ export default function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route index element={<Navigate to="/inflation" replace />} />
+            <Route path="inflation" element={<InflationPage />} />
+            <Route path="purchasing-power" element={<PurchasingPowerPage />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>
         </Routes>

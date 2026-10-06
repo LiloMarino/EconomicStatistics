@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-06):** Cache de séries e fontes IBGE e BCB/SGS concluídos; a D3 registra a composição dos mensais.
+> **Última mudança (2026-10-06):** M1 concluído: inflação por categoria e poder de compra na nova stack, com o cache de séries.
 
 ## Glossário
 
@@ -22,8 +22,6 @@
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F19 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F18, F19 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13 | — |
-| **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ⏳ |
-| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ⏳ |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | — | ⏳ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ⏳ |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | — | ⏳ |
@@ -40,7 +38,7 @@
 | **F20** | IPCA por grupo antes de 2020 (tabelas antigas do IBGE) | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (8 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (10 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -52,6 +50,8 @@
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ |
+| **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ |
+| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
 
 </details>
 
@@ -67,8 +67,6 @@
 | **F13** | Resultado fiscal decomposto: primário, juros e nominal | M4 | 3 | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | M3 | 2 | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | M3 | 1 | ⏳ |
-| **F5** | Tela de inflação por categoria (os três gráficos atuais) | M1 | 0 | ⏳ |
-| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | M1 | 0 | ⏳ |
 | **F16** | Composição da dívida pública federal (Tesouro) | — | 0 | 🔍 |
 | **F20** | IPCA por grupo antes de 2020 (tabelas antigas do IBGE) | — | 0 | 🔍 |
 
@@ -82,14 +80,13 @@
 >
 > **Serve:** N1, N3
 >
-> **Progresso:** 4/6 concluídas
+> **Progresso:** 6/6 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F5** | Tela de inflação por categoria (os três gráficos atuais) | F3 | ⏳ |
-| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | F3, F4 | ⏳ |
+| — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (4 itens)</summary>
+<details><summary>Concluído (6 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -97,6 +94,8 @@
 | **F2** | Cache de séries no SQLite com refresh idempotente | F1 | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | F2 | ✅ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | F2 | ✅ |
+| **F5** | Tela de inflação por categoria (os três gráficos atuais) | F3 | ✅ |
+| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | F3, F4 | ✅ |
 
 </details>
 
@@ -175,8 +174,8 @@
 | **F2** | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 | F1 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 | F2 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 | F2 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
-| **F5** | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 | F3 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
-| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
+| **F5** | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 | F3 | Médio | Baixo | Alto | Bom | ✅ Concluído |
+| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | N2 | D4 | M2 | F1 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F8** | Aba Aprender: glossário e página por conceito | N2 | D4 | M2 | F7 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | N2, N5 | — | M2 | F8 | Médio | Médio | Médio | Bom | ⏳ Pendente |
@@ -242,23 +241,40 @@ O `series_id` é texto sem CHECK, então uma série nova entra no registro sem m
 - **INPC:** SGS 188, desde abr/1979.
 - **Salário mínimo:** SGS 1619. O registro começa em jul/1994, porque antes do Real o valor está em outras moedas e a razão entre dois meses deixa de ser reajuste. O SGS publica o ano inteiro do mínimo já em janeiro, e por isso o registro dele não tem atraso de publicação.
 
-**F5 — Tela de inflação por categoria.** Os três gráficos do Streamlit, em Recharts via o `chart.tsx` do shadcn:
-- variação mensal por grupo, em barras agrupadas;
-- acumulado do período por grupo contra o índice geral;
-- acumulado de 12 meses por grupo, em linha.
+**F5 — Tela de inflação por categoria.** Feito. API `GET /api/inflation/groups` e tela `/inflation`. As contas moram em `backend/domain/rates.py` e fazem uma passada só, com o 12 meses lendo os 11 meses anteriores ao período.
 
-O período fica na URL. As contas moram em `backend/domain/rates.py` (`accumulate`, `rolling_12m`) e fazem uma passada só sobre a série. O código atual relê o cache a cada linha. O rótulo passa a dizer "acumulado no período", e não "no ano" (D3).
+**Período:** fica na URL (`?start=AAAA-MM&end=AAAA-MM`). Os atalhos são "Ano atual", "12 meses", "Ano anterior" e "Tudo", mais dois seletores de mês. Sem período, vale o ano do último dado.
 
-**F6 — Poder de compra por categoria.** Por grupo, a conta é `(1 + reajuste) / (1 + inflação_categoria) − 1`, em `domain/rates.py` (D3). Ela substitui a subtração do app atual.
+**Os três gráficos mudaram de forma em relação ao Streamlit.** A regra de no máximo 8 cores categóricas não comporta 10 séries:
+- **variação mensal:** mapa de calor grupo × mês, divergente azul↔vermelho com cinza no zero. Tem o valor em cada célula, e por isso serve também de tabela.
+- **acumulado no período:** barras de uma cor, ordenadas, com o índice geral tracejado;
+- **acumulado de 12 meses:** pequenos múltiplos, um painel por grupo na mesma escala, com o índice geral tracejado.
 
-**Seletor de referência:**
-- **IPCA geral:** acumulado do índice geral no período.
-- **INPC:** acumulado da SGS 188, a reposição pela inflação das famílias de renda mais baixa.
-- **Salário mínimo real:** valor da SGS 1619 no fim do período ÷ valor no início − 1. O reajuste do mínimo é um degrau por ano.
-- **Reajuste digitado:** percentual informado na tela, guardado só na URL.
+Os eixos usam ticks "redondos" (`shared/lib/nice-scale.ts`), e cada gráfico traz a descrição de como ler.
 
-**Gráfico:** barras divergentes, com perda abaixo de zero e ganho acima, e a dica de como ler.
-**Aceite:** em 2022, com a referência IPCA geral, Alimentação e bebidas dá −5,24% (1,0579 ÷ 1,1164 − 1).
+**Limitações:**
+- o 12 meses só existe a partir de dez/2020, porque a série por grupo começa em jan/2020;
+- o acumulado difere do oficial em até ~0,02 pp, e a tela avisa (decisão registrada na D3).
+
+**F6 — Poder de compra por categoria.** Feito. API `GET /api/inflation/purchasing-power` e tela `/purchasing-power`. A conta é `(1 + reajuste) / (1 + inflação do grupo) − 1` (`real_change`), e substitui a subtração do Streamlit.
+
+**Referências** (na URL, `?reference=…&raise=…`):
+- IPCA geral;
+- INPC (SGS 188);
+- salário mínimo ponto a ponto: o valor do fim do período sobre o do mês anterior ao início;
+- reajuste digitado, com vírgula aceita.
+
+**Erros tratados:**
+- reajuste digitado sem valor dá 422;
+- INPC ou mínimo faltando no período dá 409, com o motivo.
+
+**Tela:**
+- barras divergentes ordenadas da maior perda ao maior ganho, num eixo simétrico em torno do zero;
+- vermelho é perda e azul é ganho, o mesmo par do mapa de calor;
+- uma frase de leitura com o reajuste, a maior perda e o maior ganho;
+- a conta escrita com exemplo.
+
+**Aceite cumprido:** em 2022, com a referência IPCA geral, Alimentação e bebidas dá −5,24%, no teste e na tela com dados reais. O salário mínimo de 2022 dá reajuste de 10,18%, e o INPC de 2022 dá 5,93%.
 
 **F7 — Catálogo de conceitos e hints.**
 
