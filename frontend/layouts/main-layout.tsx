@@ -29,14 +29,14 @@ import { TooltipProvider } from "@/shared/components/ui/tooltip";
 import { formatMonth } from "@/shared/lib/format";
 
 function CollapseButton() {
-  const { toggleSidebar } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
+  const label = state === "expanded" ? "Recolher a sidebar" : "Expandir a sidebar";
   return (
     <Button
       variant="ghost"
       size="icon-sm"
-      aria-label="Recolher a sidebar"
-      title="Recolher a sidebar (Ctrl B)"
-      className="group-data-[collapsible=icon]:hidden"
+      aria-label={label}
+      title={`${label} (Ctrl B)`}
       onClick={toggleSidebar}
     >
       <PanelLeft />
@@ -98,7 +98,10 @@ export function MainLayout() {
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem className="flex items-center gap-0.5">
-                <SidebarMenuButton render={<NavLink to="/" />}>
+                <SidebarMenuButton
+                  className="group-data-[collapsible=icon]:hidden"
+                  render={<NavLink to="/" />}
+                >
                   <ChartNoAxesCombined />
                   <span className="font-semibold">Economia BR</span>
                 </SidebarMenuButton>
