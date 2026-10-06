@@ -1,7 +1,10 @@
 import { ChartNoAxesCombined, Moon, PanelLeft, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
+import { useRefreshSeries } from "@/features/series/use-refresh-series";
+import { useSeriesStatus } from "@/features/series/use-series-status";
 import { isActive, navGroups } from "@/layouts/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -23,6 +26,7 @@ import {
 import { Toaster } from "@/shared/components/ui/sonner";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
 import { TooltipProvider } from "@/shared/components/ui/tooltip";
+import { formatMonth } from "@/shared/lib/format";
 
 function CollapseButton() {
   const { toggleSidebar } = useSidebar();
@@ -66,8 +70,25 @@ function ThemeSwitch() {
   );
 }
 
+function DataUntil() {
+  const { data } = useSeriesStatus();
+  const ipca = data?.find((item) => item.series_id === "ipca_general")?.last_ref_date;
+
+  return (
+    <p className="text-caption text-muted-foreground px-2.5 group-data-[collapsible=icon]:hidden">
+      {ipca ? `IPCA até ${formatMonth(ipca)}` : "Buscando os dados…"}
+    </p>
+  );
+}
+
 export function MainLayout() {
   const { pathname } = useLocation();
+  const { mutate: refreshSeries } = useRefreshSeries();
+
+  // A cada abertura, o backend confere o que falta no cache de séries
+  useEffect(() => {
+    refreshSeries();
+  }, [refreshSeries]);
 
   return (
     <TooltipProvider>
@@ -111,8 +132,9 @@ export function MainLayout() {
             ))}
           </SidebarContent>
 
-          {/* Tema */}
+          {/* Até quando há dado e tema */}
           <SidebarFooter className="gap-1.5">
+            <DataUntil />
             <ThemeSwitch />
           </SidebarFooter>
         </Sidebar>

@@ -12,6 +12,10 @@ from backend.app import create_app
 from backend.core.database.engine import create_engine_for
 from backend.core.database.migrate import migrate
 from backend.core.database.session import get_session
+from backend.core.enum import Source
+from backend.domain.series import SeriesProvider
+from backend.features.providers import get_providers
+from tests.fakes import FakeProvider
 
 
 @pytest.fixture
@@ -41,13 +45,23 @@ def session(engine: Engine) -> Iterator[Session]:
 
 
 @pytest.fixture
-def api(engine: Engine) -> TestClient:
-    """App com a sessão apontando para o banco do teste."""
+def fake_provider() -> FakeProvider:
+    return FakeProvider()
+
+
+@pytest.fixture
+def api(engine: Engine, fake_provider: FakeProvider) -> TestClient:
+    """App com a sessão apontando para o banco do teste e as fontes trocadas pelo
+    fake: teste nenhum sai para a rede."""
 
     def session_override() -> Iterator[Session]:
         with Session(engine) as session:
             yield session
 
+    def providers_override() -> dict[Source, SeriesProvider]:
+        return {Source.IBGE: fake_provider, Source.BCB_SGS: fake_provider}
+
     app = create_app()
     app.dependency_overrides[get_session] = session_override
+    app.dependency_overrides[get_providers] = providers_override
     return TestClient(app)

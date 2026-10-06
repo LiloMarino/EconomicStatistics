@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-06):** Roadmap criado: necessidades, decisões de stack e cache, e os cinco marcos da nova versão.
+> **Última mudança (2026-10-06):** Cache de séries e fontes IBGE e BCB/SGS concluídos; a D3 registra a composição dos mensais.
 
 ## Glossário
 
@@ -22,9 +22,6 @@
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F19 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F18, F19 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13 | — |
-| **F2** | Cache de séries no SQLite com refresh idempotente | — | ⏳ |
-| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ⏳ |
-| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ⏳ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ⏳ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ⏳ |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | — | ⏳ |
@@ -43,7 +40,7 @@
 | **F20** | IPCA por grupo antes de 2020 (tabelas antigas do IBGE) | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (5 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (8 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -52,6 +49,9 @@
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta | F7, F8, F11 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
+| **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
+| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
+| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ |
 
 </details>
 
@@ -63,8 +63,14 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F2** | Cache de séries no SQLite com refresh idempotente | M1 | 15 | ⏳ |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | M2 | 4 | ⏳ |
+| **F13** | Resultado fiscal decomposto: primário, juros e nominal | M4 | 3 | ⏳ |
+| **F10** | Fonte Focus/BCB: expectativas de mercado | M3 | 2 | ⏳ |
+| **F12** | Tela de série: histórico, período e comparação na URL | M3 | 1 | ⏳ |
+| **F5** | Tela de inflação por categoria (os três gráficos atuais) | M1 | 0 | ⏳ |
+| **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | M1 | 0 | ⏳ |
+| **F16** | Composição da dívida pública federal (Tesouro) | — | 0 | 🔍 |
+| **F20** | IPCA por grupo antes de 2020 (tabelas antigas do IBGE) | — | 0 | 🔍 |
 
 ---
 
@@ -76,21 +82,21 @@
 >
 > **Serve:** N1, N3
 >
-> **Progresso:** 1/6 concluídas
+> **Progresso:** 4/6 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F2** | Cache de séries no SQLite com refresh idempotente | F1 | ⏳ |
-| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | F2 | ⏳ |
-| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | F2 | ⏳ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | F3 | ⏳ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | F3, F4 | ⏳ |
 
-<details><summary>Concluído (1 item)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
+| **F2** | Cache de séries no SQLite com refresh idempotente | F1 | ✅ |
+| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | F2 | ✅ |
+| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | F2 | ✅ |
 
 </details>
 
@@ -166,9 +172,9 @@
 | ID | Resumo | Atende (N#) | D# | Marco | Depende de | Esforço | Risco | Valor | Custo-benefício | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | N1, N2, N3 | D1 | M1 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
-| **F2** | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 | F1 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
-| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 | F2 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
-| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 | F2 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F2** | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 | F1 | Médio | Médio | Alto | Excelente | ✅ Concluído |
+| **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 | F2 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
+| **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 | F2 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 | F3 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | N2 | D4 | M2 | F1 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
@@ -199,46 +205,42 @@ O layout tem sidebar e toggle de tema, e os caminhos são em inglês (`/inflatio
 
 **Limitação:** `venv/`, `__pycache__/` e `ipca_cache.csv` não puderam ser apagados pela sessão (permissão negada) e ficam para remoção manual; os dois primeiros já estão no `.gitignore`.
 
-**F2 — Cache de séries no SQLite.**
+**F2 — Cache de séries no SQLite.** Feito.
 
-**Registro das séries.** O enum `SeriesId` aponta para um `SeriesSpec` em código, com fonte, código na fonte, unidade, frequência, primeira data e atraso de publicação.
+**Registro das séries.** O registro é `SERIES: dict[SeriesId, SeriesSpec]` (`backend/domain/series.py`), com fonte, código, unidade, primeira data, atraso em meses e dia de publicação.
 
-**Tabelas** (primeira migration Alembic):
-- `observations(series_id, ref_date, value REAL)`, com PK composta e upsert `ON CONFLICT`;
-- `fetch_log(series_id, attempted_at, succeeded_at, last_ref_date)`.
+**Tabelas** (primeira migration):
+- `observations(series_id, ref_date, value)`;
+- `fetch_log(series_id, attempted_at, succeeded_at, gap)`.
 
-**`POST /refresh`:**
-- percorre as séries e só chama o provider quando a próxima referência já devia ter sido publicada, no máximo uma vez a cada 6 h;
-- rebaixa os últimos 12 meses, porque a fonte revisa o que já publicou;
-- devolve `RefreshReport(updated, failed)`.
+O `series_id` é texto sem CHECK, então uma série nova entra no registro sem migration.
 
-**`GET /series/{id}?start&end`** devolve os valores.
+**Decisão de ida à fonte** (`domain/coverage.py`, porte do Finance Manager generalizado pelo spec):
+- a referência esperada é o mês `hoje − atraso`, com um mês a menos antes do dia de publicação;
+- na primeira carga, busca a série inteira; depois, a janela de 12 meses antes do último em cache;
+- no máximo uma tentativa a cada 6 h.
 
-O front dispara o refresh ao abrir o app e mostra "dado até <mês>". Modelo: `refresh_indexes()` e `fetch_log` do Finance Manager. Os valores são float (D3).
-**Aceite:** com o cache em dia, dois refreshes seguidos não fazem nenhuma requisição externa.
+**Refresh e API:**
+- o refresh (`features/series/refresh.py`) roda um por vez e consulta a rede fora da transação;
+- falha da fonte deixa o cache como estava, e o `failed` traz só a falta nova;
+- os endpoints são `POST /api/series/refresh` e `GET /api/series/status`.
 
-**F3 — Fonte IBGE (tabela 7060).** O `IbgeAggregatesProvider` em `adapters/` é um fetcher próprio no molde do `bcb_sgs_provider.py` (`urllib` + Pydantic), sem `sidrapy` nem pandas (D1). Ele consulta a API de agregados v3 do IBGE: `https://servicodados.ibge.gov.br/api/v3/agregados/7060/periodos/{p1|p2|…}/variaveis/63?localidades=N1[all]&classificacao=315[{grupos}]`.
+**Front.** Dispara o refresh ao abrir o app e mostra "IPCA até <mês>" no rodapé da sidebar.
 
-**Por que essa API:**
-- a resposta descreve a si mesma: cada categoria traz o próprio `serie: {"202201": "0.54", ...}`;
-- a `apisidra` devolve colunas posicionais (`D2C`, `D3C`), cujo significado muda com a ordem dos parâmetros na URL.
+**Aceite cumprido:** dois refreshes seguidos, e um terceiro 7 h depois, fazem zero consultas (`test_second_refresh_does_not_hit_the_source`).
 
-**Valores sem dado.** O IBGE marca dado indisponível com `"..."`, `"-"` ou `"X"`. Esses valores viram ausência explícita, nunca 0.
+**F3 — Fonte IBGE (tabela 7060).** Feito. O `IbgeAggregatesProvider` (`backend/adapters/ibge_provider.py`) usa a API de agregados v3 com `urllib` + Pydantic, e descomprime o gzip que parte dos endpoints manda sem o cliente pedir. Cada um dos 10 grupos é um `SeriesId`, com o código `7060/63/315/<categoria>` no registro.
 
-**Grupos.** São os 10 da classificação 315 que o app atual já usa (7169 é o índice geral; 7170 a 7786 são os grupos). Cada um vira um `SeriesId` (`ipca.alimentacao`…).
+**Correção de convenção:** no IBGE, `"-"` é **zero absoluto** e vira 0. Só `".."`, `"..."` e `"X"` são valor inexistente e ficam de fora. Os rótulos são do app, porque a API devolve os nomes de categoria com acentuação corrompida.
 
-Gatilho: logo depois de F2.
-**Aceite:** o IPCA de 2022 acumulado dá 5,79%, e Alimentação e bebidas dá 11,64%, como publicado pelo IBGE.
+**Limitação:** uma consulta por grupo (10 na primeira carga, cerca de 0,4 s cada).
+**Aceite:** as variações mensais de 2022 batem com as do IBGE. O acumulado compõe esses mensais de 2 casas e dá 5,78% no índice geral e 11,63% em Alimentação e bebidas; o IBGE publica 5,79% e 11,64%, calculados do índice sem arredondar.
 
-**F4 — Fonte BCB/SGS.** Porte do `Finance Manager/backend/adapters/bcb_sgs_provider.py`, que já faz o essencial:
-- quebra o pedido em janelas de 10 anos, porque o SGS recusa janelas maiores em série diária;
-- trata 404 como janela sem dado.
+**F4 — Fonte BCB/SGS.** Feito. Porte do `bcb_sgs_provider.py` do Finance Manager, com a janela de 10 anos e o 404 como janela vazia; o código vem do registro, e o valor vira float.
 
-Muda uma coisa: o mapa fixo de três séries vira o código do SGS guardado no `SeriesSpec`.
-- **Séries que nascem com ele:** 433 (IPCA), 188 (INPC) e 1619 (salário mínimo), usadas pelo poder de compra.
-- **Séries que outras features adicionam:** 432 (meta Selic), 4513 (dívida líquida/PIB), 13762 (dívida bruta/PIB) e 4380 (PIB mensal).
-
-Gatilho: logo depois de F2, junto com F3.
+**Séries:**
+- **INPC:** SGS 188, desde abr/1979.
+- **Salário mínimo:** SGS 1619. O registro começa em jul/1994, porque antes do Real o valor está em outras moedas e a razão entre dois meses deixa de ser reajuste. O SGS publica o ano inteiro do mínimo já em janeiro, e por isso o registro dele não tem atraso de publicação.
 
 **F5 — Tela de inflação por categoria.** Os três gráficos do Streamlit, em Recharts via o `chart.tsx` do shadcn:
 - variação mensal por grupo, em barras agrupadas;

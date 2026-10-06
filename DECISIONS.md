@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-06):** roadmap criado: o app de gráficos do IPCA vira acompanhador e ferramenta de aprendizado da economia brasileira, na stack do Finance Manager.
+> **Última mudança (2026-10-06):** a D3 registra que o acumulado compõe as variações mensais publicadas, com até ~0,02 pp de diferença para o número oficial.
 
 ---
 
@@ -112,6 +112,10 @@ Onde se vê o déficit, e se o governo está emitindo moeda para pagar a dívida
 **Por quê:**
 - A subtração é uma aproximação, e o erro dela cresce com a magnitude dos números. Com inflação de dois dígitos, ela deixa de ser desprezível.
 - Float, e não Decimal: são estatísticas publicadas com 2 casas, não dinheiro. É o mesmo argumento que o Finance Manager usa para volatilidade e correlação.
+
+**Atualização (2026-10-06):** o acumulado de um período compõe as variações mensais que o IBGE publica, com 2 casas. O número oficial do ano é calculado pelo IBGE a partir do índice sem arredondar, e por isso os dois diferem em até ~0,02 ponto percentual. Em 2022, a composição dá 5,78% e o oficial é 5,79%; Alimentação e bebidas dá 11,63% contra 11,64%. A tela avisa a diferença.
+
+A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7060 publica por grupo (no ano e em 12 meses) e encadeá-los. Ela bateria com o oficial no ano cheio, mas dobraria as séries e o código do provider. Ficou de fora pela simplicidade: a composição dos mensais é o que o app Streamlit já fazia.
 
 ### D4 — Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta
 **Status:** ✅ Decidida
