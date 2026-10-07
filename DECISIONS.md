@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-07):** a D6 (linguagem visual própria) foi decidida com as telas de inflação e de poder de compra aprovadas no canvas.
+> **Última mudança (2026-10-07):** a D6 foi reescrita com a linguagem implementada e o padrão de toda tela nova, depois da segunda rodada de design no canvas.
 
 ---
 
@@ -166,24 +166,28 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 ### D6 — Linguagem visual própria, definida no canvas antes de virar código
 **Status:** ✅ Decidida
 
-**Decisão (em aberto):** a direção proposta no canvas de design é a do "caderno anotado":
-- o título da página diz a conclusão, com o número-chave marcado em amarelo ("Os preços subiram **3,11%** em 2026");
-- o título de cada gráfico é a pergunta que ele responde ("A inflação está acelerando ou freando?");
-- a explicação mora em notas numeradas na margem, na cor normal do texto e em frases curtas, ao lado do dado que explicam, com exemplo calculado com os números da tela;
-- a tipografia é Bricolage Grotesque nos títulos e Public Sans no texto;
-- saem o card com título e descrição cinza do shadcn.
+**Decisão:** toda tela segue a linguagem aprovada nas rodadas de design do canvas, a mesma das telas de inflação e de poder de compra.
 
-A F22 (rodadas de design no canvas) fecha a decisão.
+**Base visual:**
+- paleta própria em claro e escuro: papel, folha, tinta e régua, mais o marca-texto amarelo para o número em destaque, o par vermelho (sobe, perde) e azul (desce, ganha) para tendência e verde para "dentro da faixa";
+- Bricolage Grotesque nos títulos e nos números grandes, Public Sans no texto, em corpo 15px; a explicação vem na cor normal do texto, e não em cinza miúdo;
+- fórmulas em KaTeX;
+- o título da página é o nome da tela, com uma linha embaixo dizendo o que ela mostra; os controles, como o período, ficam abaixo do título.
+
+**Padrão de toda tela:**
+- **Resumo:** cartões de número no topo, cada um com um "?" curto: o que o número é e como lê-lo, em duas ou três frases. Quando a conta é longa, o "?" leva até ela em vez de repeti-la.
+- **Cartão de gráfico:** o título diz o que o gráfico mostra, e a linha de apoio dá o período e a unidade. A explicação longa mora na bandeja no pé do cartão, que começa fechada e abre pelo botão "Como ler" ou "Ver a conta" no cabeçalho.
+- **Conta:** a fórmula vem separada do exemplo. Primeiro a fórmula, com a legenda de cada símbolo; depois a mesma conta com os números da tela.
+- **Semáforo:** verde, amarelo e vermelho só onde existe faixa oficial, como a meta de inflação. Sem faixa, o número aparece com a referência escrita ao lado.
+- **Grupos do IPCA:** sempre no chip da D5.
 
 **Por quê:**
 - O texto cinza pequeno debaixo do título tem cara de letra miúda, e o olho aprende a pulá-lo. O conteúdo é importante, mas a hierarquia visual diz que não é.
-- O exemplo com número inventado obriga a traduzir o exemplo para os números reais. O exemplo com os números da tela não.
-- O visual herdado do Finance Manager é uma cópia, e o app pede identidade própria.
+- A bandeja tira a explicação longa do caminho de quem só quer o número, sem escondê-la: o botão fica no cabeçalho do gráfico que ela explica.
+- A fórmula sozinha ensina a regra, e o exemplo com número inventado obriga a traduzi-lo para os números reais. Os dois juntos, com os números da tela, mostram que a regra dá exatamente o número que está ali.
+- Cor de semáforo sem faixa oficial vira opinião do app.
+- O visual herdado do Finance Manager era uma cópia, e o app pede identidade própria.
 
-**Consequências:** a forma das explicações do catálogo de conceitos (F7) segue esta decisão, e as telas que já existem são refeitas nela (F23).
-
-**Atualização (2026-10-07):** a rodada de design no Claude chat aprovou as telas de inflação e de poder de compra, e a linguagem virou código com dois ajustes em relação à proposta:
-- as notas na margem viraram uma bandeja no pé de cada cartão, aberta por "Como ler" ou "Ver a conta";
-- as definições curtas ficam num "?" ao lado de cada número.
-
-O título da página voltou a ser o nome da tela, com a linha de fonte embaixo, e a conclusão foi para os cartões de resumo. A tipografia, a paleta e o marca-texto ficaram como na proposta.
+**Consequências:**
+- O catálogo de conceitos (F7) guarda os textos dos "?" e das bandejas, que hoje moram nos componentes das telas.
+- Toda tela nova nasce no padrão, a partir da prancha dela no canvas.

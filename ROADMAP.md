@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-07):** M6 concluído: as telas de inflação e de poder de compra na linguagem visual do canvas, com o ritmo da inflação e a comparação com outros anos.
+> **Última mudança (2026-10-07):** Segunda rodada de design: a linha do tempo saiu, a comparação internacional virou casos do simulador da dívida, as contas públicas viraram as telas Déficit e Dívida, e a D6 ganhou o padrão de toda tela nova.
 
 ## Glossário
 
@@ -17,44 +17,44 @@
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F12, F20, F21, F25 | — |
-| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F18, F22, F23, F25 | — |
+| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
-| **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F19, F24 | — |
-| **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F18, F19, F21 | — |
+| **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24 | — |
+| **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F21, F24 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13, F16 | — |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | — | ⏳ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ⏳ |
-| **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | — | ⏳ |
+| **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | — | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | — | ⏳ |
-| **F11** | Painel "Visão geral" em três camadas | — | ⏳ |
+| **F11** | Painel "Visão geral": inflação e juros, contas públicas, atividade e setor externo | — | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | — | ⏳ |
-| **F13** | Resultado fiscal decomposto: primário, juros e nominal | — | ⏳ |
-| **F14** | Dinâmica da dívida: r, g, r − g e o primário que estabiliza | — | ⏳ |
+| **F13** | Tela Déficit: primário, juros e nominal | — | ⏳ |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
-| **F16** | Composição da dívida pública federal (Tesouro) | — | ⏳ |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ⏳ |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
-| **F18** | Linha do tempo histórica com os episódios marcados | — | ⏳ |
-| **F19** | Comparação internacional da dívida (FMI) | — | 💤 |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ⏳ |
-| **F24** | Simulador da trajetória da dívida | — | ⏳ |
+| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (16 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (18 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | F1 | ✅ |
-| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F19, F20 | ✅ |
+| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F20 | ✅ |
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta | F7, F8, F11 | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F22, F23 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F12, F13, F14, F16, F17, F22, F23, F24 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
+| **F18** | Linha do tempo histórica com os episódios marcados | — | 🚫 |
+| **F19** | Comparação internacional da dívida (FMI) | — | 🚫 |
 | **F21** | Inflação acelerando ou freando | — | ✅ |
 | **F22** | Rodadas de design no canvas | — | ✅ |
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
@@ -70,11 +70,11 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
+| **F13** | Tela Déficit: primário, juros e nominal | M4 | 5 | ⏳ |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | M2 | 4 | ⏳ |
-| **F13** | Resultado fiscal decomposto: primário, juros e nominal | M4 | 4 | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | M3 | 2 | ⏳ |
-| **F12** | Tela de série: histórico, período e comparação na URL | M3 | 1 | ⏳ |
-| **F16** | Composição da dívida pública federal (Tesouro) | M4 | 1 | ⏳ |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | 1 | ⏳ |
+| **F12** | Tela de série: histórico, período e comparação na URL | M3 | 0 | ⏳ |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | 0 | ⏳ |
 
 ---
@@ -118,11 +118,11 @@
 | --- | --- | --- | --- |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | F22 | ⏳ |
 | **F8** | Aba Aprender: glossário e página por conceito | F7 | ⏳ |
-| **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | F8 | ⏳ |
+| **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | F8 | ⏳ |
 
 ### M3 — Painel da economia
 
-> **Objetivo:** Uma tela com os indicadores principais atualizados, em três camadas: fiscal, monetária, atividade e externo.
+> **Objetivo:** Uma tela com os indicadores principais atualizados, em três blocos: inflação e juros, contas públicas, atividade e setor externo.
 >
 > **Serve:** N1
 >
@@ -131,7 +131,7 @@
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | F2 | ⏳ |
-| **F11** | Painel "Visão geral" em três camadas | F4, F7, F10 | ⏳ |
+| **F11** | Painel "Visão geral": inflação e juros, contas públicas, atividade e setor externo | F4, F7, F10, F13 | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | F4 | ⏳ |
 
 ### M4 — Dívida e déficit
@@ -144,24 +144,23 @@
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F13** | Resultado fiscal decomposto: primário, juros e nominal | F4 | ⏳ |
-| **F14** | Dinâmica da dívida: r, g, r − g e o primário que estabiliza | F13 | ⏳ |
+| **F13** | Tela Déficit: primário, juros e nominal | F4 | ⏳ |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | F13 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | F13, F16 | 🔍 |
-| **F16** | Composição da dívida pública federal (Tesouro) | F2 | ⏳ |
-| **F24** | Simulador da trajetória da dívida | F14 | ⏳ |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | F2 | ⏳ |
+| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | F14 | ⏳ |
 
-### M5 — Saúde e história
+### M5 — Saúde da economia
 
-> **Objetivo:** Os sinais de crise e o Brasil de hoje contra os episódios passados.
+> **Objetivo:** Os sinais que costumam piorar antes de uma crise, com cor só onde existe faixa oficial.
 >
 > **Serve:** N5
 >
-> **Progresso:** 0/2 concluídas
+> **Progresso:** 0/1 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F17** | "Check engine": semáforo dos sinais de crise | F11, F14 | ⏳ |
-| **F18** | Linha do tempo histórica com os episódios marcados | F12 | ⏳ |
 
 ### M6 — Linguagem visual própria e ritmo da inflação
 
@@ -188,11 +187,10 @@
 
 ### Sem marco
 
-> **Progresso:** 0/2 concluídas
+> **Progresso:** 0/1 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F19** | Comparação internacional da dívida (FMI) | F2 | 💤 |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | F3 | ⏳ |
 
 ---
@@ -208,20 +206,18 @@
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 | F3 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | N2 | D4, D6 | M2 | F22 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
-| **F8** | Aba Aprender: glossário e página por conceito | N2 | D4 | M2 | F7 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
-| **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | N2, N5 | — | M2 | F8 | Médio | Médio | Médio | Bom | ⏳ Pendente |
+| **F8** | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 | F7 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
+| **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | N2, N5 | D6 | M2 | F8 | Médio | Médio | Médio | Bom | ⏳ Pendente |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | N1, N5 | D2 | M3 | F2 | Baixo | Médio | Médio | Bom | ⏳ Pendente |
-| **F11** | Painel "Visão geral" em três camadas | N1 | D4 | M3 | F4, F7, F10 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
-| **F12** | Tela de série: histórico, período e comparação na URL | N1 | — | M3 | F4 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
-| **F13** | Resultado fiscal decomposto: primário, juros e nominal | N4, N6 | — | M4 | F4 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
-| **F14** | Dinâmica da dívida: r, g, r − g e o primário que estabiliza | N4 | D3 | M4 | F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
-| **F18** | Linha do tempo histórica com os episódios marcados | N5, N2 | — | M5 | F12 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
-| **F19** | Comparação internacional da dívida (FMI) | N4, N5 | D2 | — | F2 | Médio | Médio | Médio | Médio | 💤 Registrado, sem prioridade |
+| **F11** | Painel "Visão geral": inflação e juros, contas públicas, atividade e setor externo | N1 | D4, D6 | M3 | F4, F7, F10, F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
+| **F12** | Tela de série: histórico, período e comparação na URL | N1 | D6 | M3 | F4 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
+| **F13** | Tela Déficit: primário, juros e nominal | N4, N6 | D6 | M4 | F4 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 | F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F23** | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 | F22, F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
-| **F24** | Simulador da trajetória da dívida | N4 | D3 | M4 | F14 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
-| **F16** | Composição da dívida pública federal (Tesouro) | N4, N6 | D2 | M4 | F2 | Médio | Médio | Alto | Bom | ⏳ Pendente |
-| **F17** | "Check engine": semáforo dos sinais de crise | N5 | — | M5 | F11, F14 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
+| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | F14 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | F2 | Médio | Médio | Alto | Bom | ⏳ Pendente |
+| **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | F11, F14 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
@@ -323,7 +319,7 @@ Os eixos usam ticks "redondos" (`shared/lib/nice-scale.ts`), e cada gráfico tra
 
 **`<Formula tex>`.** Usa `katex.renderToString` com o CSS do pacote `katex`, mais a legenda das variáveis.
 
-**Forma na tela (D6).** O "?" guarda a definição de referência. A explicação do gráfico é a nota numerada na margem, com o exemplo calculado com os números da tela, no padrão que as rodadas de design (F22) aprovarem.
+**Forma na tela (D6).** O "?" guarda a definição de referência. A explicação do gráfico mora na bandeja "Como ler" ou "Ver a conta" do cartão, com a fórmula separada do exemplo calculado com os números da tela.
 
 **Onde entra primeiro.** Nas telas de F5 e F6. Conceitos iniciais:
 - IPCA, INPC e grupo do IPCA;
@@ -347,27 +343,29 @@ A página do conceito traz:
 
 Tudo sai do mesmo registro do F7 (D4).
 
-**F9 — Explicadores de mecanismo.** Páginas longas em `/aprender`, uma por tema:
+**F9 — Explicadores de mecanismo.** Páginas longas em `/aprender`, listadas no glossário (F8) na seção "Como as coisas se ligam", com o tempo de leitura. Uma por tema:
 - inflação inercial e indexação, e por que a inércia não morreu com o Real: hoje ela aparece na inflação de serviços e nas expectativas acima da meta;
 - URV e Plano Real;
-- os quatro loops e as setas que os cruzam, num diagrama: inflação → reajustes → inflação; dívida → juros → déficit → dívida; dívida → risco → câmbio → inflação; inflação → juros → dívida;
+- os quatro ciclos que se alimentam (inflação, juros, dívida e câmbio), num diagrama: inflação → reajustes → inflação; dívida → juros → déficit → dívida; dívida → risco → câmbio → inflação; inflação → juros → dívida;
 - os três caminhos de dívida para inflação: câmbio, monetização e recessão por juros;
 - dominância fiscal;
 - por que r − g decide a trajetória da dívida, com o País A (dívida de 120%, r 2%, g 6%) e o País B (dívida de 60%, r 15%, g 3%).
 
-Cada página liga aos conceitos (F7) e aos gráficos do app. O ponto de partida é a conversa com o ChatGPT, e cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro) antes de entrar. Esse é o motivo do risco médio.
+**Links no meio do texto:** o explicador leva ao dado real e ao simulador no ponto em que o assunto aparece. O de r − g liga à tela Dívida ("ver r, g e o primário que estabiliza") e ao simulador com os números do País A e do País B ("mexer nesses números"). O cabeçalho cita os conceitos usados, cada um com link para a página dele (F8).
+
+O ponto de partida é a conversa com o ChatGPT, e cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro) antes de entrar. Esse é o motivo do risco médio.
 
 **F10 — Fonte Focus/BCB.** Provider da API Olinda do BCB: `https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais`.
 - **O que busca:** a mediana das expectativas de IPCA, Selic, PIB e câmbio para o ano corrente e os dois seguintes.
 - **O que é essa série:** a pesquisa Focus, que o BC publica toda segunda-feira com o que o mercado espera.
 - **Onde grava:** em `observations`, com um `SeriesId` por indicador e ano-alvo.
 
-**F11 — Painel "Visão geral".** Três blocos de cards. Os códigos SGS foram conferidos ao vivo em 2026-10-06, menos o da conta corrente:
-- **Fiscal:** dívida líquida do setor público/PIB (4513, desde dez/2001), dívida bruta do governo geral/PIB (13762, desde dez/2006), e resultado primário, juros e nominal (F13).
-- **Monetário:** IPCA 12 meses (13522) × meta (13521), expectativas (F10), Selic meta (432) e juro real ex-ante.
-- **Atividade e externo:** PIB em 12 meses em R$ (4382), desemprego da PNAD Contínua (24369), dólar PTAX (1 diário, 3698 média mensal), reservas internacionais (13621) e conta corrente (código a levantar na implementação).
+**F11 — Painel "Visão geral".** Três blocos de cards, nesta ordem. Os códigos SGS foram conferidos ao vivo em 2026-10-06, menos o da conta corrente:
+- **Inflação e juros:** IPCA 12 meses (13522) × meta (13521), expectativas (F10), Selic meta (432) e juro real ex-ante.
+- **Contas públicas:** dívida bruta do governo geral/PIB (13762, desde dez/2006), dívida líquida do setor público/PIB (4513, desde dez/2001) e o cartão "Resultado do governo em 12 meses": barras de primário, juros e nominal (F13), a frase com quanto do déficit é juro e o link para a tela Déficit.
+- **Atividade e setor externo:** PIB em 12 meses em R$ (4382), desemprego da PNAD Contínua (24369), dólar PTAX (1 diário, 3698 média mensal), reservas internacionais (13621) e conta corrente em % do PIB em 12 meses (código a levantar na implementação).
 
-Cada card traz o último valor, a variação, uma sparkline, o "dado até" e um `<ConceptHint>`. O `Record` da D4 obriga a existir conceito para cada card.
+Cada card traz o último valor, a variação, uma sparkline, o "dado até", a fonte e o "?" (D6). O clique leva à tela de série (F12). O `Record` da D4 obriga a existir conceito para cada card. O cabeçalho tem "Atualizar dados" com a hora da última verificação.
 
 O juro real ex-ante é `(1 + Selic) / (1 + IPCA esperado em 12 meses) − 1`: o juro descontada a inflação que o mercado espera.
 
@@ -384,7 +382,12 @@ O juro real ex-ante é `(1 + Selic) / (1 + IPCA esperado em 12 meses) − 1`: o 
 
 **Séries candidatas** (SGS, % do PIB, 12 meses, setor público consolidado, sem desvalorização cambial): nominal 5727, juros nominais 5728, primário 5793. As três respondem, mas não fecham a conta em ago/2026: 0,62 + 7,83 dá 8,45, e a 5727 diz 9,48. O primeiro passo da implementação é conferir o nome de cada código no catálogo do SGS e achar o trio que fecha `nominal = primário + juros`.
 
-**Tela "Dívida e déficit":** barras empilhadas de primário + juros = nominal. Responde "onde se vê o déficit" e quanto dele é juro.
+**Tela "Déficit"** (rota própria, separada da tela Dívida):
+- três números de resumo, cada um com "?": déficit nominal, primário e juros da dívida, com quanto do déficit é juro;
+- o cartão "De onde vem o déficit": barras empilhadas de primário e juros por ano, com o nominal marcado, e a bandeja "Como ler e a conta" (o que é cada parte e a conta do último mês, que aqui é soma porque são valores em % do PIB do mesmo período);
+- a seção "Como o déficit é pago", que fica como esboço até a F15 fechar as séries.
+
+Responde "onde se vê o déficit" e quanto dele é juro.
 
 **Aceite:** o último mês bate com a nota de Estatísticas Fiscais do BCB do mesmo mês, e o primário somado aos juros dá o nominal.
 
@@ -400,24 +403,15 @@ O juro real ex-ante é `(1 + Selic) / (1 + IPCA esperado em 12 meses) − 1`: o 
 
 **Conferência:** a IFI do Senado estima cerca de 2,1% do PIB de primário para estabilizar a dívida bruta (RAF 115, ago/2026). O p* do app usa a dívida líquida e r e g nominais observados, então não precisa bater. A ordem de grandeza serve de conferência, e a tela explica a diferença de conceito.
 
-Inclui a fórmula com legenda (F7).
-
-**F18 — Linha do tempo histórica.** Um gráfico longo, com os episódios marcados: Collor, Real (1994), 1999, 2002, 2008, 2015 e 2020. Cada episódio tem um texto curto que liga ao explicador correspondente (F9).
-- **Séries:** IPCA desde 1980 (SGS 433), Selic desde 1986 e dívida líquida desde 2001 (SGS 4513).
-- **Escala:** a inflação anual vai de 2.477% (1993) a 1,65% (1998). Na escala comum, tudo depois de 1994 vira uma reta no zero. O eixo da inflação é logarítmico, com a explicação de como ler.
-- **Limitação:** a dívida antes de 2001 precisa de outra fonte, e fica de fora até existir uma.
-
-**F19 — Comparação internacional.**
-- **Fonte:** provider da API DataMapper do FMI: `https://www.imf.org/external/datamapper/api/v1/GGXWDG_NGDP` (dívida bruta/PIB), mais a inflação por país.
-- **Países:** Brasil, Argentina, Japão e Grécia, lado a lado.
-- **Pergunta que responde:** "como um país com mais de 200% do PIB de dívida pode estar de boa".
-
-Registrado sem prioridade.
+**Tela "Dívida"** (rota própria; a composição da F16 fica embaixo):
+- quatro números de resumo com "?": dívida líquida, dívida bruta, r − g e o primário que falta para a dívida parar de subir;
+- "A dívida sobe ou desce?": o primário feito contra o p*, a bandeja "Ver a conta" com a fórmula e a conta com os números, e o link para o simulador (F24);
+- "Juro da dívida contra crescimento da economia": r e g em 12 meses, com sombra onde r passa g, e a bandeja "Como ler" com por que r − g decide e o caso de 2021 e 2022, quando a inflação alta fez g passar r. A bandeja liga ao explicador de r − g (F9).
 
 **F23 — Linguagem visual nas telas que existem.** Feito.
 
 **Base:**
-- tokens do "caderno anotado" no `index.css` (papel, folha, tinta, marca-texto, tendência, faixa de gráfico e os 10 `--group-*` da D5), em claro e escuro;
+- tokens da paleta da D6 no `index.css` (papel, folha, tinta, marca-texto, tendência, faixa de gráfico e os 10 `--group-*` da D5), em claro e escuro;
 - Bricolage Grotesque e Public Sans pelo fontsource, sem rede;
 - KaTeX nas fórmulas.
 
@@ -453,7 +447,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 **Meta de inflação:** é o SGS 13521. O registro de séries ganhou periodicidade anual: a meta do ano é cobrada desde janeiro. A tolerância de 1,5 ponto fica no registro.
 
 **Tela:**
-- o cartão "Ritmo da inflação", com o "?" que mostra a conta de 1 e de 3 meses com os números do mês;
+- o cartão "Ritmo da inflação", com o "?" curto que leva à conta de 1 e de 3 meses, com os números do mês, na bandeja do gráfico de 12 meses;
 - o gráfico do 12 meses com o teto e o trecho dos 3 últimos meses na cor do veredito;
 - a tabela "Quem acelerou e quem freou", com janela de 1, 3 ou 6 meses na URL.
 
@@ -461,18 +455,20 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Limitação:** o ritmo precisa de 15 meses de IPCA antes do fim do período, então começa em mar/2021.
 
-**F24 — Simulador da trajetória da dívida.** Mexer em juros, crescimento e primário e ver a dívida/PIB dos próximos anos.
+**F24 — Simulador da trajetória da dívida.** Partir de um caso que aconteceu ou de um exemplo, mexer em juros, crescimento e primário e ver a dívida/PIB dos próximos 10 anos. Absorve a pergunta da comparação internacional: "como um país com mais de 200% do PIB de dívida pode estar de boa".
 
 **Backend:** `GET /api/debt/simulation?debt=&r=&g=&primary=&years=` devolve a trajetória ano a ano, com `d(t+1) = d(t) · (1 + r) / (1 + g) − p`, composta dividindo (D3), e o `p*` que estabiliza.
 
+**Pontos de partida, em dois grupos:**
+- **Casos que aconteceram:** Brasil hoje (com os valores da F14), Japão anos 2010, Grécia 2010 e Argentina 2001. Os parâmetros (dívida, r, g e primário) são conferidos com o FMI DataMapper na implementação. Escolher um caso abre o painel de contexto: moeda da dívida, quem empresta e o que aconteceu de verdade. Quando o usuário mexe nos números, o painel avisa que eles partiram daquele caso.
+- **Exemplos para entender a conta:** País A (dívida de 120%, r 2%, g 6%, primário zero) e País B (dívida de 60%, r 15%, g 3%, déficit de 1%).
+
 **Tela:**
-- quatro controles, com o estado na URL: dívida inicial (% do PIB), juro nominal efetivo, crescimento nominal do PIB e primário (% do PIB);
+- quatro controles, com o caso e os números na URL: dívida inicial (% do PIB), juro nominal efetivo, crescimento nominal do PIB, que aceita valor negativo, e primário (% do PIB, positivo é superávit);
 - a linha da dívida/PIB por 10 anos;
-- a frase "a dívida se estabiliza em X% do PIB", ou "a dívida cresce sem parar";
-- três exemplos prontos:
-  - Brasil hoje, com os valores da F14;
-  - País A: dívida de 120%, r 2%, g 6%, primário zero;
-  - País B: dívida de 60%, r 15%, g 3%, déficit de 1%.
+- dois resultados, cada um com "?": a dívida em 10 anos, com a frase de que sobe ou desce, e o primário que estabiliza, com a distância para o primário escolhido;
+- a bandeja "Como funciona": a corrida entre r e g; o que o simulador não vê (juro e câmbio que reagem à desconfiança, como na Argentina em 2002); por que o tamanho não basta (dever na própria moeda, para gente de dentro, contra dever em moeda que o país não emite), com o link para o explicador de r − g (F9);
+- a bandeja "Ver a conta": a fórmula com legenda e o primeiro ano com os números escolhidos.
 
 **Aceite:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos.
 
@@ -486,7 +482,9 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 - **vencimentos nos próximos 12 meses**, que é quanto o governo precisa refinanciar;
 - **parcela na carteira do Banco Central**, que alimenta a F15.
 
-**Tela, na seção de dívida:** barras empilhadas por indexador ao longo do tempo, mais cards de prazo médio e de vencimentos em 12 meses.
+**Tela "Dívida",** abaixo da dinâmica (F14):
+- o cartão "De que é feita a dívida federal": barras empilhadas por indexador, em dezembro de cada ano, com a bandeja "Como ler" (por que o indexador importa; prazo e vencimentos);
+- três números com "?": prazo médio, vencimentos em 12 meses e a parcela na carteira do BC, que liga com a tela Déficit (F15).
 
 **Fora:** detentores e custo médio, que só existem no Relatório Mensal da Dívida (PDF e anexo).
 
@@ -525,7 +523,16 @@ Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 
 **Aceite:** a variação mensal do índice geral bate com a publicada nos meses de troca de tabela: dez/2011 0,50% e jan/2012 0,56%.
 
-**F22 — Rodadas de design no canvas.** Feito. O canvas de design foi iterado no Claude Design, em uma rodada. As pranchas de inflação por categoria e de poder de compra, o seletor de período, a navegação e o chip de grupo foram aprovados e implementados (F23). As telas das ondas seguintes (painel, série, Aprender, contas públicas, saúde, outros países) seguem no canvas, como esboço de cada feature que as implementa.
+**F22 — Rodadas de design no canvas.** Feito. O canvas de design foi iterado no Claude Design, em duas rodadas.
+
+**Primeira rodada:** as pranchas de inflação por categoria e de poder de compra, o seletor de período, a navegação e o chip de grupo foram aprovados e implementados (F23).
+
+**Segunda rodada:**
+- a linha do tempo (F18) e a comparação internacional (F19) saíram; os países viraram casos do simulador (F24);
+- as contas públicas viraram duas telas, Déficit (F13, com o esboço da F15) e Dívida (F14 e F16);
+- o padrão de tela da D6 ficou fechado: "?" curto no resumo, conta na bandeja do gráfico, fórmula separada do exemplo e semáforo só com faixa oficial.
+
+As pranchas das telas que faltam (Visão geral, tela de série, Aprender, página de conceito, Déficit, Dívida, simulador, saúde da economia e o explicador de r − g) seguem no canvas, como esboço de cada feature que as implementa.
 
 **F25 — Comparação com o mesmo mês de outros anos.** Feito. `GET /api/inflation/seasonality?year=` (`domain/seasonality.py`) traz, para cada grupo:
 - os meses do ano;
@@ -551,7 +558,14 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 ---
 ## 3. Descartada
 
-> Nenhum item nesta categoria atualmente.
+| ID | Resumo | N# | Status |
+| --- | --- | --- | --- |
+| **F18** | Linha do tempo histórica com os episódios marcados | N5, N2 | 🚫 Descartado |
+| **F19** | Comparação internacional da dívida (FMI) | N4, N5 | 🚫 Descartado |
+
+**F18 — Descartado.** 🚫 Descartada na segunda rodada de design (2026-10-07): a linha do tempo foi considerada irrelevante.
+
+**F19 — Descartado.** 🚫 Descartada como tela própria na segunda rodada de design (2026-10-07) e absorvida pelo simulador da dívida (F24), que ganhou os casos Japão anos 2010, Grécia 2010 e Argentina 2001, com os parâmetros conferidos com o FMI DataMapper.
 
 ---
 ## 4. Incerta / exploratória
@@ -565,4 +579,9 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 - **fatores condicionantes da base, operações com títulos públicos:** SGS 1809;
 - **títulos da dívida na carteira do Banco Central:** o CSV de estoque do Tesouro (F16) separa a carteira "Banco Central" da carteira "Mercado".
 
-Falta separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro. A Lei de Responsabilidade Fiscal veda o financiamento direto. O spike lê as notas de política monetária do BCB e fecha duas coisas: quais séries entram, e a frase que a tela diz, no formato "o déficit é financiado com títulos vendidos ao mercado; a parcela da dívida na carteira do BC é X%".
+**Na tela:** a seção "Como o déficit é pago" da tela Déficit (F13) fica como esboço no canvas: o fluxo déficit → Tesouro vende títulos → mercado ou carteira do BC, os números da base monetária e da carteira do BC, e a vedação do financiamento direto pela Lei de Responsabilidade Fiscal.
+
+**O que o spike fecha,** lendo as notas de política monetária do BCB:
+- como separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro;
+- se a base monetária entra na tela ou só confunde, já que ela cresce também com a economia;
+- a frase final, com os números de verdade, no formato "o déficit é financiado com títulos vendidos ao mercado; a parcela da dívida na carteira do BC é X%".
