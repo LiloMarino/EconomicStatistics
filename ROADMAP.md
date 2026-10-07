@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-07):** Catálogo de conceitos, aba Aprender e busca com Ctrl+K concluídos; a D4 ganhou os ids próprios de conceito.
+> **Última mudança (2026-10-07):** IPCA por grupo desde 1999 concluído, e o Aprender passou a citar a fonte de cada fato e a mostrar a composição de cada grupo do IPCA.
 
 ## Glossário
 
@@ -31,11 +31,10 @@
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ⏳ |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
-| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (21 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (22 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -55,6 +54,7 @@
 | **F8** | Aba Aprender: glossário e página por conceito | — | ✅ |
 | **F18** | Linha do tempo histórica com os episódios marcados | — | 🚫 |
 | **F19** | Comparação internacional da dívida (FMI) | — | 🚫 |
+| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ✅ |
 | **F21** | Inflação acelerando ou freando | — | ✅ |
 | **F22** | Rodadas de design no canvas | — | ✅ |
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
@@ -76,7 +76,6 @@
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | 1 | ⏳ |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | M2 | 0 | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | M3 | 0 | ⏳ |
-| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | 0 | ⏳ |
 
 ---
 
@@ -196,11 +195,19 @@
 
 ### Sem marco
 
-> **Progresso:** 0/1 concluídas
+> **Progresso:** 1/1 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | F3 | ⏳ |
+| — | *(nada em aberto)* | — | — |
+
+<details><summary>Concluído (1 item)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | F3 | ✅ |
+
+</details>
 
 ---
 
@@ -227,7 +234,7 @@
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | F14 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | F2 | Médio | Médio | Alto | Bom | ⏳ Pendente |
 | **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | F11, F14 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
-| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F26** | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 | F8 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
@@ -517,7 +524,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 
-**F20 — IPCA por grupo desde 1999.** Quatro tabelas do IBGE se emendam sem sobreposição. Todas usam a variável 63 e a classificação 315 com os mesmos códigos de categoria (conferido ao vivo; a 655 já traz Educação em ago/1999):
+**F20 — IPCA por grupo desde 1999.** Feito. Quatro tabelas do IBGE se emendam sem sobreposição, todas com a variável 63 e a classificação 315 e com os mesmos códigos de categoria (conferido ao vivo):
 
 | Tabela | Período |
 |---|---|
@@ -526,13 +533,19 @@ Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 | 1419 | jan/2012 a dez/2019 |
 | 7060 | jan/2020 em diante |
 
-**Implementação:** o `SeriesSpec` do IPCA por grupo passa a ter as faixas de tabela por período. O provider do IBGE quebra o pedido nas tabelas que cobrem o intervalo, e o `first_date` vai a ago/1999. O 12 meses por grupo passa a existir desde jul/2000, e o poder de compra pelo salário mínimo (desde jul/1994 no registro) ganha os grupos a partir de ago/1999.
+**Implementação:**
+- o `SeriesSpec` ganhou `earlier_codes`, as tabelas antigas com o último mês de cada uma, e `code_ranges` (`domain/series.py`) parte um pedido nos trechos de cada tabela;
+- o provider do IBGE faz um pedido por tabela e emenda;
+- a regra de busca (`domain/coverage.py`) passou a olhar as duas pontas do cache: quando o registro cobre meses mais antigos que o primeiro em cache, busca o trecho que falta. Foi o que trouxe o histórico para o cache que já existia, sem apagar nada.
+
+**Aceite cumprido:**
+- dez/2011 0,50% e jan/2012 0,56%, nas emendas;
+- o acumulado de 2002 dá 12,53% e o de 2015, 10,67%, iguais aos oficiais;
+- as 10 séries têm 325 meses, de ago/1999 a ago/2026, e o segundo refresh não consulta nada.
+
+**Na tela:** o rodapé da inflação cita as quatro tabelas e avisa que a cesta de cada grupo muda a cada POF. O 12 meses por grupo passa a existir desde jul/2000, o ritmo desde nov/2000 e o poder de compra pelo salário mínimo ganha os grupos desde ago/1999.
 
 **Fora:** antes de ago/1999 (tabela 58, 1991 a 1999) há só 7 grupos, com Transportes e Comunicação juntos e sem Educação.
-
-**Ressalva na tela:** a cesta de cada grupo muda a cada POF (a pesquisa que redefine pesos e itens do IPCA). A variação mensal publicada já reflete a cesta da época.
-
-**Aceite:** a variação mensal do índice geral bate com a publicada nos meses de troca de tabela: dez/2011 0,50% e jan/2012 0,56%.
 
 **F22 — Rodadas de design no canvas.** Feito. O canvas de design foi iterado no Claude Design, em duas rodadas.
 
@@ -559,7 +572,7 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 **Aceite cumprido:** Educação em fev/2026 subiu 5,21%, contra a média de fevereiro de 2021 a 2025 de 4,81%.
 
-**Limitação:** a série por grupo começa em 2020, então a faixa tem no máximo 5 anos até a emenda das tabelas antigas (F20).
+**Histórico:** com a série por grupo desde ago/1999 (F20), a faixa tem sempre os 5 anos completos anteriores.
 
 **F26 — Busca com Ctrl+K.** Feito, no molde da busca do Finance Manager e da prancha `Nav` do canvas (`layouts/command-search.tsx`, shadcn `command` com cmdk).
 

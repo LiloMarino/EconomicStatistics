@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-07):** a D4 ganhou a atualização com os ids próprios de conceito e o mapa série → conceito, na implementação do catálogo e da aba Aprender.
+> **Última mudança (2026-10-07):** a D4 ganhou a regra das fontes no Aprender: toda página cita a fonte oficial de cada fato.
 
 ---
 
@@ -140,6 +140,8 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 - **Campos do `Concept`:** são as seções da página de conceito do canvas: resumo de uma linha, o `lead` (que é também o "?" das telas), o que mede, a fórmula com legenda, o exemplo com números reais e datado, como ler, os cuidados, os relacionados, a fonte oficial e as telas em que aparece.
 
 O "?" abre com clique, num balão curto (D6), e não num hover card.
+
+**Fontes no Aprender (2026-10-07):** toda página de conceito cita a fonte oficial de cada fato e de cada número dela (IBGE, Banco Central, lei ou decreto no Planalto), e cada fonte diz o que comprova. O tipo exige ao menos uma fonte, então uma página não nasce sem. Os grupos do IPCA continuam um conceito só, e a página dele mostra a composição de cada grupo (subgrupos, exemplos de itens e peso) tirada da estrutura da tabela 7060 do IBGE.
 
 ### D5 — Cada grupo do IPCA tem cor e ícone fixos
 **Status:** ✅ Decidida
