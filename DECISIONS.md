@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-07):** entram a D5 (cor e ícone fixos por grupo do IPCA) e a D6 (linguagem visual própria, em definição no canvas).
+> **Última mudança (2026-10-07):** a D6 (linguagem visual própria) foi decidida com as telas de inflação e de poder de compra aprovadas no canvas.
 
 ---
 
@@ -164,7 +164,7 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 **Consequências:** a paleta é do domínio do IPCA. Séries de outro domínio (juros, contas públicas) quase nunca aparecem junto com os grupos e podem reaproveitar as cores. As cores exatas podem mudar nas rodadas de design da D6; a regra de uso fica.
 
 ### D6 — Linguagem visual própria, definida no canvas antes de virar código
-**Status:** 🔍 Em aberto
+**Status:** ✅ Decidida
 
 **Decisão (em aberto):** a direção proposta no canvas de design é a do "caderno anotado":
 - o título da página diz a conclusão, com o número-chave marcado em amarelo ("Os preços subiram **3,11%** em 2026");
@@ -181,3 +181,9 @@ A F22 (rodadas de design no canvas) fecha a decisão.
 - O visual herdado do Finance Manager é uma cópia, e o app pede identidade própria.
 
 **Consequências:** a forma das explicações do catálogo de conceitos (F7) segue esta decisão, e as telas que já existem são refeitas nela (F23).
+
+**Atualização (2026-10-07):** a rodada de design no Claude chat aprovou as telas de inflação e de poder de compra, e a linguagem virou código com dois ajustes em relação à proposta:
+- as notas na margem viraram uma bandeja no pé de cada cartão, aberta por "Como ler" ou "Ver a conta";
+- as definições curtas ficam num "?" ao lado de cada número.
+
+O título da página voltou a ser o nome da tela, com a linha de fonte embaixo, e a conclusão foi para os cartões de resumo. A tipografia, a paleta e o marca-texto ficaram como na proposta.

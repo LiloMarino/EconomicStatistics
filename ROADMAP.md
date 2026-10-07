@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-07):** Features delineadas com as pesquisas de fonte: IPCA por grupo desde 1999, composição da dívida e check engine ganharam plano; entram o ritmo da inflação, o simulador da dívida e as rodadas de design (M6).
+> **Última mudança (2026-10-07):** M6 concluído: as telas de inflação e de poder de compra na linguagem visual do canvas, com o ritmo da inflação e a comparação com outros anos.
 
 ## Glossário
 
@@ -16,13 +16,12 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F12, F20, F21 | — |
-| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F18, F23 | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F12, F20, F21, F25 | — |
+| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F18, F22, F23, F25 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F19, F24 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F18, F19, F21 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13, F16 | — |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F23 | 🔍 |
 | **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | — | ⏳ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ⏳ |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, dívida × inflação, r − g | — | ⏳ |
@@ -37,27 +36,29 @@
 | **F18** | Linha do tempo histórica com os episódios marcados | — | ⏳ |
 | **F19** | Comparação internacional da dívida (FMI) | — | 💤 |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ⏳ |
-| **F21** | Inflação acelerando ou freando | — | ⏳ |
-| **F22** | Rodadas de design no canvas | — | 🔍 |
-| **F23** | Linguagem visual nas telas que existem | — | ⏳ |
 | **F24** | Simulador da trajetória da dívida | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (11 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (16 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | F1 | ✅ |
 | **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F19, F20 | ✅ |
-| **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24 | ✅ |
+| **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta | F7, F8, F11 | ✅ |
-| **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23 | ✅ |
+| **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F22, F23 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
+| **F21** | Inflação acelerando ou freando | — | ✅ |
+| **F22** | Rodadas de design no canvas | — | ✅ |
+| **F23** | Linguagem visual nas telas que existem | — | ✅ |
+| **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
 
 </details>
 
@@ -69,13 +70,12 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F22** | Rodadas de design no canvas | M6 | 6 | 🔍 |
+| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | M2 | 4 | ⏳ |
 | **F13** | Resultado fiscal decomposto: primário, juros e nominal | M4 | 4 | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | M3 | 2 | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | M3 | 1 | ⏳ |
 | **F16** | Composição da dívida pública federal (Tesouro) | M4 | 1 | ⏳ |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | 0 | ⏳ |
-| **F21** | Inflação acelerando ou freando | M6 | 0 | ⏳ |
 
 ---
 
@@ -169,13 +169,22 @@
 >
 > **Serve:** N1, N2, N3
 >
-> **Progresso:** 0/3 concluídas
+> **Progresso:** 4/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F21** | Inflação acelerando ou freando | F5 | ⏳ |
-| **F22** | Rodadas de design no canvas | — | 🔍 |
-| **F23** | Linguagem visual nas telas que existem | F22, F7 | ⏳ |
+| — | *(nada em aberto)* | — | — |
+
+<details><summary>Concluído (4 itens)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F21** | Inflação acelerando ou freando | F5 | ✅ |
+| **F22** | Rodadas de design no canvas | — | ✅ |
+| **F23** | Linguagem visual nas telas que existem | F22, F7 | ✅ |
+| **F25** | Comparação com o mesmo mês de outros anos | F5 | ✅ |
+
+</details>
 
 ### Sem marco
 
@@ -208,12 +217,14 @@
 | **F14** | Dinâmica da dívida: r, g, r − g e o primário que estabiliza | N4 | D3 | M4 | F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F18** | Linha do tempo histórica com os episódios marcados | N5, N2 | — | M5 | F12 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 | **F19** | Comparação internacional da dívida (FMI) | N4, N5 | D2 | — | F2 | Médio | Médio | Médio | Médio | 💤 Registrado, sem prioridade |
-| **F23** | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 | F22, F7 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
-| **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F23** | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 | F22, F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
+| **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F24** | Simulador da trajetória da dívida | N4 | D3 | M4 | F14 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F16** | Composição da dívida pública federal (Tesouro) | N4, N6 | D2 | M4 | F2 | Médio | Médio | Alto | Bom | ⏳ Pendente |
 | **F17** | "Check engine": semáforo dos sinais de crise | N5 | — | M5 | F11, F14 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
+| **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -403,34 +414,52 @@ Inclui a fórmula com legenda (F7).
 
 Registrado sem prioridade.
 
-**F23 — Linguagem visual nas telas que existem.**
-- **Tokens:** os da D6 no `@theme` do `index.css` (fontes, papel, tinta, marca-texto), em claro e escuro.
-- **Componentes novos no design system:**
-  - `GroupChip` (D5);
-  - a nota de margem numerada;
-  - o cabeçalho de página com a frase-conclusão, montada no front a partir dos números da API (só formatação).
-- **Tela de inflação por categoria:** reescrita conforme o canvas aprovado.
-- **Tela de poder de compra:**
-  - cartões de referência com o reajuste de cada um;
-  - barras clicáveis;
-  - o painel "como chegamos neste número", com a conta do grupo escolhido em R$ 100 e a fórmula em KaTeX (F7).
+**F23 — Linguagem visual nas telas que existem.** Feito.
 
-Gatilho: a F22 aprovada.
+**Base:**
+- tokens do "caderno anotado" no `index.css` (papel, folha, tinta, marca-texto, tendência, faixa de gráfico e os 10 `--group-*` da D5), em claro e escuro;
+- Bricolage Grotesque e Public Sans pelo fontsource, sem rede;
+- KaTeX nas fórmulas.
 
-**F21 — Inflação acelerando ou freando.** Uma seção nova na tela de inflação, como a do canvas de design.
+**Design system:**
+- variantes novas: `pill` e `hint` no `Button`, `sheet` e `CardTray` no `Card`, `chip` no `Toggle` e `nav` no item da sidebar;
+- `popover` e `collapsible` do shadcn.
 
-**Backend:**
-- no endpoint de inflação, para cada mês do 12 meses, o mês que entrou e o que saiu da conta (`m_t` e `m_{t−12}`), que já saem da passada do `rolling_12m`;
-- por grupo, o 12 meses do fim do período e o de 3 meses antes;
-- a meta de inflação como série nova: SGS 13521 (anual). A tolerância vem de série do SGS se houver; se não houver, vem do registro, com as datas de vigência.
+**Componentes compartilhados:**
+- `GroupChip`;
+- `StatCard`;
+- `HintButton`;
+- `ExplainedCard`, o cartão com a bandeja "Como ler"/"Ver a conta";
+- `Formula` e `FormulaBox`;
+- `PeriodPicker` (Mês com setas, atalhos e Personalizado em dois cliques; o modo vai na URL);
+- `PageHeader` com os controles embaixo.
+
+**Sidebar:** sem a variante inset e só com as telas que existem.
+
+**Telas:**
+- inflação com os quatro números do resumo, o mapa de calor com a maior alta contornada e a nota sazonal, e o acumulado com a conta do grupo escolhido;
+- poder de compra com os cartões de referência mostrando o reajuste de cada uma, o resumo e as barras clicáveis com a conta em R$ 100, a fórmula e "por que dividir".
+
+As contas de contraste (soma simples e subtração) vêm da API (D3).
+
+**Limitação:** os textos dos "?" estão nos componentes; o catálogo de conceitos (F7) os absorve.
+
+**F21 — Inflação acelerando ou freando.** Feito. Um endpoint novo, `GET /api/inflation/pace?end=` (`features/inflation/service.py`), traz:
+- o IPCA em 12 meses dos 24 meses até o fim do período, com o teto da meta de cada ano;
+- os 3 últimos meses contra os mesmos do ano anterior;
+- as inclinações de 1 e de 3 meses e o veredito (`domain/pace.py`: estável dentro de ±0,10 p.p. em 3 meses);
+- por grupo, o 12 meses no fim e as janelas de 1, 3 e 6 meses, com a inclinação em p.p. e relativa.
+
+**Meta de inflação:** é o SGS 13521. O registro de séries ganhou periodicidade anual: a meta do ano é cobrada desde janeiro. A tolerância de 1,5 ponto fica no registro.
 
 **Tela:**
-- a linha do IPCA 12 meses com o teto da meta;
-- o veredito ("acelerando" ou "freando") com a explicação calculada no último mês: o mês que entrou contra o que saiu;
-- um gráfico de halteres por grupo (12 meses de agora × de 3 meses antes) com a contagem "N de 9 grupos aceleraram";
-- a nota sobre efeito base.
+- o cartão "Ritmo da inflação", com o "?" que mostra a conta de 1 e de 3 meses com os números do mês;
+- o gráfico do 12 meses com o teto e o trecho dos 3 últimos meses na cor do veredito;
+- a tabela "Quem acelerou e quem freou", com janela de 1, 3 ou 6 meses na URL.
 
-**Aceite:** em ago/2026, entrou −0,32%, saiu −0,11%, e o 12 meses foi de 4,44% para 4,22%.
+**Aceite cumprido:** em ago/2026, entrou −0,32% e saiu −0,11%, e o 12 meses foi de 4,44% para 4,22%, −0,50 p.p. em 3 meses, "freando" (`test_pace_in_august_2026_is_slowing`).
+
+**Limitação:** o ritmo precisa de 15 meses de IPCA antes do fim do período, então começa em mar/2021.
 
 **F24 — Simulador da trajetória da dívida.** Mexer em juros, crescimento e primário e ver a dívida/PIB dos próximos anos.
 
@@ -496,6 +525,24 @@ Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 
 **Aceite:** a variação mensal do índice geral bate com a publicada nos meses de troca de tabela: dez/2011 0,50% e jan/2012 0,56%.
 
+**F22 — Rodadas de design no canvas.** Feito. O canvas de design foi iterado no Claude Design, em uma rodada. As pranchas de inflação por categoria e de poder de compra, o seletor de período, a navegação e o chip de grupo foram aprovados e implementados (F23). As telas das ondas seguintes (painel, série, Aprender, contas públicas, saúde, outros países) seguem no canvas, como esboço de cada feature que as implementa.
+
+**F25 — Comparação com o mesmo mês de outros anos.** Feito. `GET /api/inflation/seasonality?year=` (`domain/seasonality.py`) traz, para cada grupo:
+- os meses do ano;
+- por mês do calendário, a faixa (mínimo e máximo) e a média dos até 5 anos completos anteriores;
+- o mês de maior desvio.
+
+**Tela:** o cartão "Comparado com o mesmo mês de outros anos" tem:
+- a escolha do grupo por chips, na URL;
+- três números: maior desvio, típico e diferença;
+- a linha do ano sobre a faixa e a média.
+
+A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período é sazonal, e um mapa curto de causas conhecidas explica Educação em fevereiro.
+
+**Aceite cumprido:** Educação em fev/2026 subiu 5,21%, contra a média de fevereiro de 2021 a 2025 de 4,81%.
+
+**Limitação:** a série por grupo começa em 2020, então a faixa tem no máximo 5 anos até a emenda das tabelas antigas (F20).
+
 ---
 ## 2. Nice-to-have
 
@@ -512,7 +559,6 @@ Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 | ID | Resumo | Conexão | Marco | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
 | **F15** | Como medir o financiamento monetário do déficit | Serviria N6; falta separar gestão de liquidez do BC de financiamento do Tesouro | M4 | F13, F16 | 🔍 Em avaliação |
-| **F22** | Rodadas de design no canvas | Serviria N2; fecha a D6 | M6 | — | 🔍 Em avaliação |
 
 **F15 — Como medir o financiamento monetário.** As candidatas já têm fonte:
 - **base monetária:** SGS 1788 responde (ago/2026: 432.655.492, provavelmente em R$ mil); falta conferir nome e unidade;
@@ -520,7 +566,3 @@ Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
 - **títulos da dívida na carteira do Banco Central:** o CSV de estoque do Tesouro (F16) separa a carteira "Banco Central" da carteira "Mercado".
 
 Falta separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro. A Lei de Responsabilidade Fiscal veda o financiamento direto. O spike lê as notas de política monetária do BCB e fecha duas coisas: quais séries entram, e a frase que a tela diz, no formato "o déficit é financiado com títulos vendidos ao mercado; a parcela da dívida na carteira do BC é X%".
-
-**F22 — Rodadas de design no canvas.** O canvas de design, iterado no Claude Design, tem três pranchas: inflação por categoria, poder de compra e o chip dos grupos. O usuário comenta e as próximas telas entram em ondas no Claude chat, com as que ainda estão em aberto marcadas como esboço.
-
-Sai deste estado quando a linguagem visual estiver aprovada: tipografia, cores claro e escuro, padrão de explicação e componentes. O resultado fecha a D6 e vira o plano concreto da F23.
