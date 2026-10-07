@@ -5,6 +5,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { useRefreshSeries } from "@/features/series/use-refresh-series";
 import { useSeriesStatus } from "@/features/series/use-series-status";
+import { CommandSearch } from "@/layouts/command-search";
 import { isActive, navGroups } from "@/layouts/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -117,6 +118,11 @@ export function MainLayout() {
               </NavLink>
               <CollapseButton />
             </div>
+            <SidebarMenu className="pt-2">
+              <SidebarMenuItem>
+                <CommandSearch />
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarHeader>
 
           {/* Navegação */}
