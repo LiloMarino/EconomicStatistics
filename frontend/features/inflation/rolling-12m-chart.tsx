@@ -5,6 +5,7 @@ import { verdictLook } from "@/features/inflation/pace-verdict";
 import type { InflationPace } from "@/features/inflation/use-inflation-pace";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { Formula, FormulaBox } from "@/shared/components/formula";
 import {
   type ChartConfig,
   ChartContainer,
@@ -19,6 +20,7 @@ import {
   formatShortMonth,
 } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
+import { texDecimal } from "@/shared/lib/tex";
 
 const chartConfig = {
   rate: { label: "IPCA em 12 meses", color: "var(--foreground)" },
@@ -36,16 +38,22 @@ const RECENT_POINTS = 4;
 // Rótulo do eixo x a cada 4 meses
 const TICK_EVERY = 4;
 
+/** O que é a linha, por que ela sobe ou desce e a conta do ritmo com os números do fim
+do período. */
 function HowToRead({ pace }: { pace: InflationPace }) {
   const previous = pace.general_12m.at(-2);
   const current = pace.general_12m.at(-1);
+  const threeBefore = pace.general_12m.at(-4);
   const lastMonth = pace.last_months.at(-1);
-  if (!previous || !current || !lastMonth) return null;
-  const yearBefore = `${formatShortMonth(pace.end)}/${Number(pace.end.slice(0, 4)) - 1}`;
+  if (!previous || !current || !threeBefore || !lastMonth) return null;
+  const endYear = Number(pace.end.slice(0, 4));
+  const yearBefore = `${formatShortMonth(pace.end)}/${endYear - 1}`;
+  const label = `${formatShortMonth(pace.end)}/${String(endYear).slice(2)}`;
   const enteredBigger = lastMonth.rate > lastMonth.year_before;
+  const band = formatPoints(pace.steady_band).replace("+", "");
 
   return (
-    <>
+    <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] items-start gap-x-8 gap-y-5">
       <TrayItem title="O que cada ponto é">
         <p>
           A inflação acumulada nos 12 meses que terminam naquele mês. É o número que sai no
@@ -75,6 +83,74 @@ function HowToRead({ pace }: { pace: InflationPace }) {
           </span>
         </div>
       </TrayItem>
+      <TrayItem title="A conta de 1 mês">
+        <p className="text-muted-foreground">
+          O 12 meses ganha o mês novo e perde o mesmo mês do ano passado:
+        </p>
+        <FormulaBox
+          legend={[
+            { symbol: "A_t", text: <>acumulado de 12 meses no mês t</> },
+            { symbol: "m_t", text: <>inflação do mês t, em fração</> },
+            { symbol: "m_{t-12}", text: <>a do mesmo mês, um ano antes</> },
+          ]}
+        >
+          <Formula tex="1 + A_t = (1 + A_{t-1}) \times \dfrac{1 + m_t}{1 + m_{t-12}}" />
+        </FormulaBox>
+        <FormulaBox>
+          <Formula
+            flushLeft
+            tex={`1 + A_{\\text{${label}}} = ${texDecimal(1 + previous.rate, 4)} \\times \\dfrac{${texDecimal(1 + lastMonth.rate, 4)}}{${texDecimal(1 + lastMonth.year_before, 4)}} = ${texDecimal(1 + current.rate, 4)}`}
+          />
+          <Formula
+            flushLeft
+            tex={`\\text{inclinação} = ${texDecimal(current.rate * 100, 2)} - ${texDecimal(previous.rate * 100, 2)} = \\mathbf{${texDecimal(pace.change_1m * 100, 2)}}\\ \\text{p.p.}`}
+          />
+        </FormulaBox>
+      </TrayItem>
+      <TrayItem title="A conta de 3 meses">
+        <p className="text-muted-foreground">
+          É o mesmo passo três vezes: os últimos 3 meses deste ano contra os mesmos 3 do ano
+          passado.
+        </p>
+        <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 gap-y-1">
+          <span className="text-muted-foreground">Mês</span>
+          <span className="text-muted-foreground text-right">{endYear}</span>
+          <span className="text-muted-foreground text-right">{endYear - 1}</span>
+          <span className="text-muted-foreground text-right">Diferença</span>
+          {pace.last_months.map((month) => (
+            <div key={month.ref_date} className="contents">
+              <span>{formatShortMonth(month.ref_date)}</span>
+              <span className="text-right">{formatPercent(month.rate)}</span>
+              <span className="text-right">{formatPercent(month.year_before)}</span>
+              <strong className="text-right">
+                {formatPoints(month.difference).replace(" p.p.", "")}
+              </strong>
+            </div>
+          ))}
+          <span className="col-span-4 border-t pt-1.5">
+            Soma: {formatPoints(pace.last_months_difference)} Pela linha:{" "}
+            {formatPercent(threeBefore.rate)} → {formatPercent(current.rate)} ={" "}
+            <strong>{formatPoints(pace.change_3m)}</strong> A diferença entre as duas é a
+            composição.
+          </span>
+        </div>
+      </TrayItem>
+      <TrayItem title="Quando cada veredito aparece">
+        <span className="grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-0.5">
+          <strong className="text-trend-up">Acelerando</strong>
+          <span>subiu mais de {band} em 3 meses</span>
+          <strong>Estável</strong>
+          <span>
+            entre −{band.replace(" p.p.", "")} e +{band}
+          </span>
+          <strong className="text-trend-down">Freando</strong>
+          <span>caiu mais de {band}</span>
+        </span>
+        <p className="text-muted-foreground">
+          Um mês só também vale, mas oscila com o efeito base: se o mês de um ano atrás foi fora da
+          curva, a linha pula sem nada ter mudado hoje. Três meses diluem isso.
+        </p>
+      </TrayItem>
       <TrayItem title="Efeito base">
         <p>
           Um mês fora da curva há um ano mexe na linha hoje. Em jul a set/2023 ela subiu de 3,16%
@@ -82,13 +158,20 @@ function HowToRead({ pace }: { pace: InflationPace }) {
           sobre combustível e energia caiu.
         </p>
       </TrayItem>
-    </>
+    </div>
   );
 }
 
 /** O IPCA em 12 meses dos 24 meses até o fim do período, com o teto da meta e o trecho
 dos 3 últimos meses na cor do veredito. */
-export function Rolling12mChart({ pace }: { pace: InflationPace }) {
+interface Rolling12mChartProps {
+  pace: InflationPace;
+  /** A bandeja abre também pelo "?" do ritmo, no resumo. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartProps) {
   const look = verdictLook[pace.verdict];
   const points = pace.general_12m;
   const first = points.at(0);
@@ -112,8 +195,11 @@ export function Rolling12mChart({ pace }: { pace: InflationPace }) {
 
   return (
     <ExplainedCard
+      id="rolling-12m"
       title="IPCA em 12 meses e o teto da meta"
       subtitle={formatMonthRange(first.ref_date, last.ref_date)}
+      open={open}
+      onOpenChange={onOpenChange}
       explain={{
         label: "Como ler",
         icon: BookOpen,

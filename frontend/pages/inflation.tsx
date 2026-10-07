@@ -1,4 +1,5 @@
 import { CircleAlert } from "lucide-react";
+import { useState } from "react";
 
 import { AccumulatedChart } from "@/features/inflation/accumulated-chart";
 import { MonthlyHeatmap } from "@/features/inflation/monthly-heatmap";
@@ -48,6 +49,12 @@ function InflationSections({ data }: { data: InflationGroups }) {
   const view = useInflationView();
   const pace = useInflationPace(data.period.end);
   const seasonality = useSeasonality(Number(data.period.end.slice(0, 4)));
+  const [twelveOpen, setTwelveOpen] = useState(false);
+
+  function showPaceMath() {
+    setTwelveOpen(true);
+    document.getElementById("rolling-12m")?.scrollIntoView({ behavior: "smooth" });
+  }
 
   function compare(seriesId: IpcaSeriesId) {
     view.setSeasonGroup(seriesId);
@@ -56,14 +63,14 @@ function InflationSections({ data }: { data: InflationGroups }) {
 
   return (
     <>
-      <SummaryCards data={data} pace={pace.data} />
+      <SummaryCards data={data} pace={pace.data} onShowPaceMath={showPaceMath} />
 
       {/* Ritmo da inflação */}
       {pace.error ? (
         <Unavailable error={pace.error} />
       ) : pace.data ? (
         <>
-          <Rolling12mChart pace={pace.data} />
+          <Rolling12mChart pace={pace.data} open={twelveOpen} onOpenChange={setTwelveOpen} />
           <PaceTable
             pace={pace.data}
             window={view.paceWindow}
