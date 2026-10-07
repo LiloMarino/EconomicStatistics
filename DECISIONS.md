@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-06):** a D3 registra que o acumulado compõe as variações mensais publicadas, com até ~0,02 pp de diferença para o número oficial.
+> **Última mudança (2026-10-07):** entram a D5 (cor e ícone fixos por grupo do IPCA) e a D6 (linguagem visual própria, em definição no canvas).
 
 ---
 
@@ -134,3 +134,50 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 - O "?" com hover card, a aba Aprender e o card do painel leem o mesmo registro.
 
 **Por quê:** com `Record`, uma série nova sem explicação não compila. Explicar toda métrica (N2) deixa de depender de alguém lembrar. E o texto mora perto de quem o renderiza (markdown e KaTeX).
+
+### D5 — Cada grupo do IPCA tem cor e ícone fixos
+**Status:** ✅ Decidida
+
+**Decisão:**
+- Cada um dos 9 grupos do IPCA, mais o índice geral, tem uma cor e um ícone (lucide) que não mudam de tela para tela:
+
+  | Grupo | Ícone | Cor |
+  |---|---|---|
+  | Índice geral | `ChartNoAxesCombined` | `#9AA0A8` |
+  | Alimentação e bebidas | `Utensils` | `#E8853D` |
+  | Habitação | `House` | `#7C83E6` |
+  | Artigos de residência | `Sofa` | `#B07AD9` |
+  | Vestuário | `Shirt` | `#E66AA6` |
+  | Transportes | `Car` | `#2FB3A6` |
+  | Saúde e cuidados pessoais | `HeartPulse` | `#4FB061` |
+  | Despesas pessoais | `Wallet` | `#C9A43A` |
+  | Educação | `GraduationCap` | `#3FA7E0` |
+  | Comunicação | `Smartphone` | `#8E9AAF` |
+
+- O nome do grupo aparece sempre num chip: o ícone num quadrado tingido com a cor, ao lado do nome.
+- A cor do grupo pinta a marca do gráfico (barra, linha) só onde a cor não codifica outra coisa. No mapa de calor a cor é o valor, e no poder de compra é ganho ou perda; nesses gráficos a identidade do grupo fica só no chip.
+
+**Por quê:**
+- O usuário reconhece o grupo pelo desenho antes de ler o nome, em qualquer tela.
+- São 10 identidades, acima das cerca de 8 cores que o olho separa com segurança. Por isso o ícone carrega a identidade junto com a cor, e a cor sozinha nunca é a única pista.
+
+**Consequências:** a paleta é do domínio do IPCA. Séries de outro domínio (juros, contas públicas) quase nunca aparecem junto com os grupos e podem reaproveitar as cores. As cores exatas podem mudar nas rodadas de design da D6; a regra de uso fica.
+
+### D6 — Linguagem visual própria, definida no canvas antes de virar código
+**Status:** 🔍 Em aberto
+
+**Decisão (em aberto):** a direção proposta no canvas de design é a do "caderno anotado":
+- o título da página diz a conclusão, com o número-chave marcado em amarelo ("Os preços subiram **3,11%** em 2026");
+- o título de cada gráfico é a pergunta que ele responde ("A inflação está acelerando ou freando?");
+- a explicação mora em notas numeradas na margem, na cor normal do texto e em frases curtas, ao lado do dado que explicam, com exemplo calculado com os números da tela;
+- a tipografia é Bricolage Grotesque nos títulos e Public Sans no texto;
+- saem o card com título e descrição cinza do shadcn.
+
+A F22 (rodadas de design no canvas) fecha a decisão.
+
+**Por quê:**
+- O texto cinza pequeno debaixo do título tem cara de letra miúda, e o olho aprende a pulá-lo. O conteúdo é importante, mas a hierarquia visual diz que não é.
+- O exemplo com número inventado obriga a traduzir o exemplo para os números reais. O exemplo com os números da tela não.
+- O visual herdado do Finance Manager é uma cópia, e o app pede identidade própria.
+
+**Consequências:** a forma das explicações do catálogo de conceitos (F7) segue esta decisão, e as telas que já existem são refeitas nela (F23).
