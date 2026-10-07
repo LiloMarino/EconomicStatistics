@@ -1,9 +1,13 @@
-import { ChartColumn, type LucideIcon, ShoppingCart } from "lucide-react";
+import { ChartColumn, GraduationCap, type LucideIcon, ShoppingCart } from "lucide-react";
 
 export interface NavItem {
   to: string;
   label: string;
   icon: LucideIcon;
+  /** O que a tela mostra, numa linha: o subtítulo do resultado na busca. */
+  description: string;
+  /** Termos que levam a esta tela na busca, além do rótulo. */
+  keywords: string[];
 }
 
 // Paths em inglês acompanham o código; o rótulo é o que aparece pro usuário
@@ -11,8 +15,32 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
   {
     label: "Inflação",
     items: [
-      { to: "/inflation", label: "Por categoria", icon: ChartColumn },
-      { to: "/purchasing-power", label: "Poder de compra", icon: ShoppingCart },
+      {
+        to: "/inflation",
+        label: "Por categoria",
+        icon: ChartColumn,
+        description: "IPCA por grupo, ritmo e mês a mês",
+        keywords: ["inflação", "ipca", "grupo", "acumulado", "12 meses", "ritmo", "sazonalidade"],
+      },
+      {
+        to: "/purchasing-power",
+        label: "Poder de compra",
+        icon: ShoppingCart,
+        description: "Quanto um reajuste compra de cada grupo",
+        keywords: ["salário mínimo", "reajuste", "inpc", "ipca", "salário"],
+      },
+    ],
+  },
+  {
+    label: "Explorar",
+    items: [
+      {
+        to: "/learn",
+        label: "Aprender",
+        icon: GraduationCap,
+        description: "Glossário dos conceitos do app",
+        keywords: ["conceitos", "glossário", "explicação"],
+      },
     ],
   },
 ];

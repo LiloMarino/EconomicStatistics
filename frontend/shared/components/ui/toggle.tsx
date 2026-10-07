@@ -15,6 +15,9 @@ const toggleVariants = cva(
         // Escolha entre grupos: pílula com o chip do grupo, marcada pela borda
         chip:
           "h-10 rounded-full border border-border bg-transparent pr-3 pl-1.5 hover:bg-muted aria-pressed:border-foreground aria-pressed:bg-muted",
+        // Filtro de texto: pílula que, marcada, inverte para tinta sobre papel
+        pill:
+          "h-10 rounded-full border border-border bg-transparent px-3.5 text-muted-foreground hover:bg-muted aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:font-semibold aria-pressed:text-background aria-pressed:hover:bg-foreground",
       },
       size: {
         default:
