@@ -6,8 +6,13 @@ from fastapi import APIRouter
 
 from backend.core.database.session import SessionDep
 from backend.core.dto import ERROR_RESPONSES, BaseDTO
-from backend.core.enum import RaiseReference, SeriesId
-from backend.features.inflation.service import inflation_groups, purchasing_power
+from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
+from backend.features.inflation.service import (
+    inflation_groups,
+    inflation_pace,
+    purchasing_power,
+    seasonality,
+)
 
 router = APIRouter(prefix="/api/inflation", tags=["inflation"])
 
@@ -28,8 +33,11 @@ class GroupRateDTO(BaseDTO):
 
 
 class GroupAccumulatedDTO(BaseDTO):
+    """`simple_sum` soma as variações mensais: a conta errada, só para contraste."""
+
     series_id: SeriesId
     rate: float
+    simple_sum: float
 
 
 class InflationGroupsDTO(BaseDTO):
@@ -43,11 +51,20 @@ class InflationGroupsDTO(BaseDTO):
 
 
 class GroupPurchasingPowerDTO(BaseDTO):
-    """`change` negativo é perda de poder de compra no grupo; positivo, ganho."""
+    """`change` negativo é perda de poder de compra no grupo; positivo, ganho.
+    `naive_change` é a subtração, só para contraste."""
 
     series_id: SeriesId
     inflation: float
     change: float
+    naive_change: float
+
+
+class ReferenceRaiseDTO(BaseDTO):
+    """O reajuste da referência no período; `null` quando o cache não o cobre."""
+
+    reference: RaiseReference
+    rate: float | None
 
 
 class PurchasingPowerDTO(BaseDTO):
@@ -56,7 +73,84 @@ class PurchasingPowerDTO(BaseDTO):
     period: PeriodDTO
     reference: RaiseReference
     reference_raise: float
+    references: list[ReferenceRaiseDTO]
     groups: list[GroupPurchasingPowerDTO]
+
+
+class RollingPointDTO(BaseDTO):
+    """O 12 meses que termina em `ref_date` e o teto da meta do ano, em fração."""
+
+    ref_date: date
+    rate: float
+    ceiling: float | None
+
+
+class MonthVsYearBeforeDTO(BaseDTO):
+    """Um mês contra o mesmo mês do ano anterior; `difference` em fração de ponto."""
+
+    ref_date: date
+    rate: float
+    year_before: float
+    difference: float
+
+
+class GroupPaceDTO(BaseDTO):
+    """O 12 meses do grupo no fim e 1, 3 e 6 meses antes, em fração."""
+
+    series_id: SeriesId
+    rolling_12m: float
+    months_before_1: float | None
+    months_before_3: float | None
+    months_before_6: float | None
+
+
+class InflationPaceDTO(BaseDTO):
+    """O ritmo no fim do período. As inclinações são diferenças entre dois 12 meses,
+    em fração (-0.005 é -0,50 p.p.); o veredito usa a de 3 meses."""
+
+    end: date
+    general_12m: list[RollingPointDTO]
+    target: float | None
+    ceiling: float | None
+    last_months: list[MonthVsYearBeforeDTO]
+    change_1m: float
+    change_3m: float
+    verdict: PaceVerdict
+    groups: list[GroupPaceDTO]
+
+
+class MonthRateDTO(BaseDTO):
+    ref_date: date
+    rate: float
+
+
+class MonthBandDTO(BaseDTO):
+    """A faixa de um mês do calendário (1 a 12) nos anos comparados, em fração."""
+
+    month: int
+    low: float
+    high: float
+    mean: float
+
+
+class DeviationDTO(BaseDTO):
+    ref_date: date
+    rate: float
+    typical: float
+    difference: float
+
+
+class GroupSeasonalityDTO(BaseDTO):
+    series_id: SeriesId
+    months: list[MonthRateDTO]
+    bands: list[MonthBandDTO]
+    largest_deviation: DeviationDTO | None
+
+
+class SeasonalityDTO(BaseDTO):
+    year: int
+    years_compared: list[int]
+    groups: list[GroupSeasonalityDTO]
 
 
 @router.get("/groups", responses=ERROR_RESPONSES)
@@ -64,6 +158,18 @@ def groups(
     session: SessionDep, start: date | None = None, end: date | None = None
 ) -> InflationGroupsDTO:
     return InflationGroupsDTO.model_validate(inflation_groups(session, start, end))
+
+
+@router.get("/pace", responses=ERROR_RESPONSES)
+def pace(session: SessionDep, end: date | None = None) -> InflationPaceDTO:
+    return InflationPaceDTO.model_validate(inflation_pace(session, end))
+
+
+@router.get("/seasonality", responses=ERROR_RESPONSES)
+def seasonality_by_group(
+    session: SessionDep, year: int | None = None
+) -> SeasonalityDTO:
+    return SeasonalityDTO.model_validate(seasonality(session, year))
 
 
 @router.get("/purchasing-power", responses=ERROR_RESPONSES)
