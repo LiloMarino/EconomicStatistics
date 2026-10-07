@@ -94,28 +94,41 @@ class MonthVsYearBeforeDTO(BaseDTO):
     difference: float
 
 
+class PaceWindowDTO(BaseDTO):
+    """O 12 meses `months` meses antes do fim e a inclinação até o fim, em fração;
+    `relative_change` é a inclinação como fração do valor de antes (-0.21 é -21%)."""
+
+    months: int
+    rolling_12m_before: float
+    change: float
+    relative_change: float
+
+
 class GroupPaceDTO(BaseDTO):
-    """O 12 meses do grupo no fim e 1, 3 e 6 meses antes, em fração."""
+    """O 12 meses do grupo no fim, em fração, e as janelas de 1, 3 e 6 meses que têm
+    dado no cache."""
 
     series_id: SeriesId
     rolling_12m: float
-    months_before_1: float | None
-    months_before_3: float | None
-    months_before_6: float | None
+    windows: list[PaceWindowDTO]
 
 
 class InflationPaceDTO(BaseDTO):
     """O ritmo no fim do período. As inclinações são diferenças entre dois 12 meses,
-    em fração (-0.005 é -0,50 p.p.); o veredito usa a de 3 meses."""
+    em fração (-0.005 é -0,50 p.p.); o veredito usa a de 3 meses, e inclinação dentro
+    de `steady_band` para cima ou para baixo é estável. `last_months_difference` soma
+    as diferenças dos 3 últimos meses contra o ano anterior."""
 
     end: date
     general_12m: list[RollingPointDTO]
     target: float | None
     ceiling: float | None
     last_months: list[MonthVsYearBeforeDTO]
+    last_months_difference: float
     change_1m: float
     change_3m: float
     verdict: PaceVerdict
+    steady_band: float
     groups: list[GroupPaceDTO]
 
 

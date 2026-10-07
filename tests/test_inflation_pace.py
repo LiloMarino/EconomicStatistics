@@ -53,8 +53,11 @@ def test_pace_compares_each_group_with_months_before(api: TestClient) -> None:
     body = api.get("/api/inflation/pace", params=AUG_2026).json()
 
     housing = _group(body["groups"], "ipca_housing")
-    assert round(housing["months_before_3"] * 100, 2) == 6.24
+    three_months = next(item for item in housing["windows"] if item["months"] == 3)
+    assert round(three_months["rolling_12m_before"] * 100, 2) == 6.24
     assert round(housing["rolling_12m"] * 100, 2) == 4.91
+    assert round(three_months["change"] * 100, 2) == -1.33
+    assert round(three_months["relative_change"] * 100) == -21
 
 
 @pytest.mark.usefixtures("seeded")
