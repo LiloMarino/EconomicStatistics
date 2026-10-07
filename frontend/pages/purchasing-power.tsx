@@ -67,8 +67,8 @@ export function PurchasingPowerPage() {
             onSelect={(next) => update({ group: next })}
           />
           <footer className="text-caption text-muted-foreground border-t pt-5">
-            Fontes: IBGE, tabela 7060 (IPCA por grupo de gasto); Banco Central, séries 188 (INPC) e
-            1619 (salário mínimo).
+            Fontes: IBGE, tabelas 655, 2938, 1419 e 7060 (IPCA por grupo de gasto, desde ago/1999);
+            Banco Central, séries 188 (INPC) e 1619 (salário mínimo).
           </footer>
         </>
       )}

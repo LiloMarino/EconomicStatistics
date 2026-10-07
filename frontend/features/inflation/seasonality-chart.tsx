@@ -95,8 +95,9 @@ export function SeasonalityChart({ data, seriesId, onSelect }: SeasonalityChartP
             <TrayItem title="Por que não dessazonalizar">
               <p>
                 Métodos como o X-13, que o IBGE usa em outras pesquisas, estimam o padrão de cada
-                mês e o descontam. Com a série por grupo começando em 2020, são poucos anos para
-                estimar bem; comparar direto com os anos anteriores é mais honesto.
+                mês e o descontam. Eles precisam de muitos anos com a mesma cesta, e a cesta do IPCA
+                muda a cada Pesquisa de Orçamentos Familiares; comparar direto com os anos
+                anteriores é mais simples e mais honesto.
               </p>
             </TrayItem>
           </>

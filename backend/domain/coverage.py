@@ -44,21 +44,29 @@ def expected_ref_date(spec: SeriesSpec, today: date) -> date:
 
 def fetch_request(
     spec: SeriesSpec,
-    last_cached: date | None,
+    cached: DateRange | None,
     last: LastFetch | None,
     now: datetime,
 ) -> DateRange | None:
-    """A série inteira na primeira carga; depois, a janela de revisão a partir do
-    último mês em cache."""
+    """A série inteira na primeira carga. Depois, as pontas que faltam no cache: o
+    começo, quando o registro passa a cobrir meses mais antigos, e o fim, com a janela
+    de revisão a partir do último mês em cache."""
     if last is not None and now - last.attempted_at < FETCH_INTERVAL:
         return None
     today = now.date()
-    if last_cached is None:
+    if cached is None:
         return DateRange(start=spec.first_date, end=today)
-    if last_cached < expected_ref_date(spec, today):
-        start = max(spec.first_date, month_start(last_cached, REVISION_MONTHS))
-        return DateRange(start=start, end=today)
-    return None
+    missing_start = cached.start > spec.first_date
+    missing_end = cached.end < expected_ref_date(spec, today)
+    if not missing_start and not missing_end:
+        return None
+    start = (
+        spec.first_date
+        if missing_start
+        else max(spec.first_date, month_start(cached.end, REVISION_MONTHS))
+    )
+    end = today if missing_end else month_start(cached.start, 1)
+    return DateRange(start=start, end=end)
 
 
 def overdue(spec: SeriesSpec, last_cached: date | None, today: date) -> bool:

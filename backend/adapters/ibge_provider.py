@@ -10,7 +10,7 @@ from urllib.parse import urlencode
 
 from pydantic import BaseModel, TypeAdapter
 
-from backend.domain.series import Observation, SeriesSpec
+from backend.domain.series import Observation, SeriesSpec, code_ranges
 
 BASE_URL = "https://servicodados.ibge.gov.br/api/v3/agregados"
 TIMEOUT_SECONDS = 30
@@ -36,12 +36,20 @@ _variables = TypeAdapter(list[AggregateVariable])
 
 
 class IbgeAggregatesProvider:
-    """`spec.code` é `tabela/variável/classificação/categoria`, no nível Brasil."""
+    """Cada código é `tabela/variável/classificação/categoria`, no nível Brasil."""
 
     name = "ibge"
 
     def get_series(self, spec: SeriesSpec, start: date, end: date) -> list[Observation]:
-        table, variable, classification, category = spec.code.split("/")
+        """Um pedido por tabela que cobre o intervalo, emendados em ordem de data."""
+        return [
+            observation
+            for item in code_ranges(spec, start, end)
+            for observation in self._get_table(item.code, item.start, item.end)
+        ]
+
+    def _get_table(self, code: str, start: date, end: date) -> list[Observation]:
+        table, variable, classification, category = code.split("/")
         query = urlencode(
             {
                 "localidades": "N1[all]",

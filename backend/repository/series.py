@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from backend.core.enum import SeriesId
 from backend.core.models.models import FetchLog, SeriesObservation
-from backend.domain.coverage import LastFetch
+from backend.domain.coverage import DateRange, LastFetch
 from backend.domain.series import Observation
 
 
@@ -19,6 +19,20 @@ def last_cached(session: Session) -> dict[SeriesId, date]:
         for series_id, last_date in session.execute(
             select(
                 SeriesObservation.series_id, func.max(SeriesObservation.ref_date)
+            ).group_by(SeriesObservation.series_id)
+        )
+    }
+
+
+def cached_ranges(session: Session) -> dict[SeriesId, DateRange]:
+    """O primeiro e o último mês em cache de cada série."""
+    return {
+        series_id: DateRange(start=first, end=last)
+        for series_id, first, last in session.execute(
+            select(
+                SeriesObservation.series_id,
+                func.min(SeriesObservation.ref_date),
+                func.max(SeriesObservation.ref_date),
             ).group_by(SeriesObservation.series_id)
         )
     }

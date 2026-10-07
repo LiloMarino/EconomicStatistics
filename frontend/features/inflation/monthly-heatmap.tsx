@@ -89,10 +89,11 @@ function HighestNote({
       <Repeat className="mt-0.5 size-4.5 shrink-0" />
       <span>
         <strong>
-          {seriesLabels[highest.seriesId]} em {monthName} (contornado):
+          {seriesLabels[highest.seriesId]} em {monthName} de {highest.month.slice(0, 4)}{" "}
+          (contornado):
         </strong>{" "}
         {cause ? `${cause}, e se repete todo ano. ` : "é a maior alta do período. "}
-        Em {highest.month.slice(0, 4)} foi {formatPercent(highest.rate)}
+        Foi {formatPercent(highest.rate)}
         {typical ? `, ${typical}.` : "."}{" "}
         {band && (
           <Button

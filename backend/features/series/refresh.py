@@ -13,6 +13,7 @@ from backend.core.models.models import FetchLog
 from backend.domain.coverage import DateRange, fetch_request, overdue
 from backend.domain.series import SERIES, Observation, SeriesProvider, SeriesSpec
 from backend.repository.series import (
+    cached_ranges,
     fetch_logs,
     last_cached,
     last_fetch,
@@ -66,14 +67,14 @@ def _fetch(
 def _refresh(
     session: Session, providers: Mapping[Source, SeriesProvider], now: datetime
 ) -> RefreshReport:
-    cached = last_cached(session)
+    ranges = cached_ranges(session)
     logs = fetch_logs(session)
     plan = [
         (series_id, request)
         for series_id, spec in SERIES.items()
         if (
             request := fetch_request(
-                spec, cached.get(series_id), last_fetch(logs.get(series_id)), now
+                spec, ranges.get(series_id), last_fetch(logs.get(series_id)), now
             )
         )
         is not None

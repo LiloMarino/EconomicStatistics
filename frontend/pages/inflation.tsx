@@ -109,7 +109,7 @@ export function InflationPage() {
     <>
       <PageHeader
         title="Inflação por categoria"
-        description="IPCA por grupo de gasto · IBGE, tabela 7060"
+        description="IPCA por grupo de gasto, desde ago/1999 · IBGE"
         controls={data && <PeriodPicker period={data.period} mode={mode} onChange={setRange} />}
       />
 
@@ -121,7 +121,10 @@ export function InflationPage() {
         <>
           <InflationSections data={data} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
-            Fonte: IBGE, tabela 7060 (IPCA por grupo de gasto).
+            Fonte: IBGE, IPCA por grupo de gasto nas tabelas 655 (ago/1999 a jun/2006), 2938
+            (jul/2006 a dez/2011), 1419 (2012 a 2019) e 7060 (desde 2020). A cesta de cada grupo
+            muda a cada Pesquisa de Orçamentos Familiares, e a variação de cada mês usa a cesta da
+            época.
           </footer>
         </>
       )}
