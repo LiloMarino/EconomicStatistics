@@ -1,4 +1,4 @@
-import { ChartColumn, type LucideIcon, Scale } from "lucide-react";
+import { ChartColumn, type LucideIcon, ShoppingCart } from "lucide-react";
 
 export interface NavItem {
   to: string;
@@ -12,7 +12,7 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
     label: "Inflação",
     items: [
       { to: "/inflation", label: "Por categoria", icon: ChartColumn },
-      { to: "/purchasing-power", label: "Poder de compra", icon: Scale },
+      { to: "/purchasing-power", label: "Poder de compra", icon: ShoppingCart },
     ],
   },
 ];

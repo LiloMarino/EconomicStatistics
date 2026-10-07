@@ -2,17 +2,20 @@ import { CircleAlert } from "lucide-react";
 
 import { AccumulatedChart } from "@/features/inflation/accumulated-chart";
 import { MonthlyHeatmap } from "@/features/inflation/monthly-heatmap";
-import { Rolling12mPanels } from "@/features/inflation/rolling-12m-panels";
-import { useInflationGroups } from "@/features/inflation/use-inflation-groups";
-import { MonthRangeSelect } from "@/shared/components/month-range-select";
-import { PageHeader } from "@/shared/components/page-header";
+import { PaceTable } from "@/features/inflation/pace-table";
+import { Rolling12mChart } from "@/features/inflation/rolling-12m-chart";
+import { defaultSeasonGroup } from "@/features/inflation/default-season-group";
+import { SeasonalityChart } from "@/features/inflation/seasonality-chart";
+import { SummaryCards } from "@/features/inflation/summary-cards";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+  type InflationGroups,
+  useInflationGroups,
+} from "@/features/inflation/use-inflation-groups";
+import { useInflationPace } from "@/features/inflation/use-inflation-pace";
+import { useInflationView } from "@/features/inflation/use-inflation-view";
+import { useSeasonality } from "@/features/inflation/use-seasonality";
+import { PageHeader } from "@/shared/components/page-header";
+import { PeriodPicker } from "@/shared/components/period-picker";
 import {
   Empty,
   EmptyDescription,
@@ -23,79 +26,96 @@ import {
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useMonthRange } from "@/shared/hooks/use-month-range";
 import { getApiErrorMessage } from "@/shared/lib/api";
+import type { IpcaSeriesId } from "@/shared/lib/group-identity";
+
+function Unavailable({ error }: { error: unknown }) {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <CircleAlert />
+        </EmptyMedia>
+        <EmptyTitle>Sem dados para mostrar</EmptyTitle>
+        <EmptyDescription>{getApiErrorMessage(error)}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+/** As seções que dependem do ritmo e da sazonalidade, que a API calcula a partir do
+último mês do período. */
+function InflationSections({ data }: { data: InflationGroups }) {
+  const view = useInflationView();
+  const pace = useInflationPace(data.period.end);
+  const seasonality = useSeasonality(Number(data.period.end.slice(0, 4)));
+
+  function compare(seriesId: IpcaSeriesId) {
+    view.setSeasonGroup(seriesId);
+    document.getElementById("seasonality")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  return (
+    <>
+      <SummaryCards data={data} pace={pace.data} />
+
+      {/* Ritmo da inflação */}
+      {pace.error ? (
+        <Unavailable error={pace.error} />
+      ) : pace.data ? (
+        <>
+          <Rolling12mChart pace={pace.data} />
+          <PaceTable
+            pace={pace.data}
+            window={view.paceWindow}
+            onWindowChange={view.setPaceWindow}
+          />
+        </>
+      ) : (
+        <Skeleton className="h-96 w-full" />
+      )}
+
+      <MonthlyHeatmap data={data} seasonality={seasonality.data} onCompare={compare} />
+
+      {/* Sazonalidade */}
+      {seasonality.error ? (
+        <Unavailable error={seasonality.error} />
+      ) : seasonality.data ? (
+        <SeasonalityChart
+          data={seasonality.data}
+          seriesId={view.seasonGroup ?? defaultSeasonGroup(seasonality.data)}
+          onSelect={view.setSeasonGroup}
+        />
+      ) : (
+        <Skeleton className="h-96 w-full" />
+      )}
+
+      <AccumulatedChart data={data} selected={view.calcGroup} onSelect={view.setCalcGroup} />
+    </>
+  );
+}
 
 export function InflationPage() {
-  const { range, setRange } = useMonthRange();
+  const { mode, range, setRange } = useMonthRange();
   const { data, isPending, error } = useInflationGroups(range);
 
   return (
     <>
       <PageHeader
         title="Inflação por categoria"
-        description="O IPCA é o índice oficial de inflação do país, medido pelo IBGE. Ele se divide em 9 grupos de gasto das famílias, e cada grupo sobe num ritmo diferente."
-        actions={data && <MonthRangeSelect period={data.period} onChange={setRange} />}
+        description="IPCA por grupo de gasto · IBGE, tabela 7060"
+        controls={data && <PeriodPicker period={data.period} mode={mode} onChange={setRange} />}
       />
 
       {error ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <CircleAlert />
-            </EmptyMedia>
-            <EmptyTitle>Sem dados para mostrar</EmptyTitle>
-            <EmptyDescription>{getApiErrorMessage(error)}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <Unavailable error={error} />
       ) : isPending ? (
         <Skeleton className="h-96 w-full" />
       ) : (
         <>
-          {/* Variação mês a mês */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Variação de cada mês</CardTitle>
-              <CardDescription>
-                Quanto os preços de cada grupo mudaram em cada mês. Vermelho é alta e azul é queda;
-                quanto mais forte a cor, maior a mudança. Exemplo: 1,11 em Alimentação quer dizer
-                que a comida ficou 1,11% mais cara naquele mês.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MonthlyHeatmap data={data} />
-            </CardContent>
-          </Card>
-
-          {/* Acumulado no período */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Acumulado no período</CardTitle>
-              <CardDescription>
-                Quanto cada grupo subiu somando o período inteiro, com os meses compostos (1% e
-                depois 2% dão 3,02%, não 3%). Barra que passa da linha tracejada subiu mais que a
-                inflação média. O acumulado compõe as variações mensais publicadas com 2 casas; o
-                número oficial do IBGE sai do índice sem arredondar e pode diferir em até ~0,02
-                ponto percentual (2022: 5,78% aqui, 5,79% oficial).
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <AccumulatedChart data={data} />
-            </CardContent>
-          </Card>
-
-          {/* Acumulado em 12 meses */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Acumulado em 12 meses</CardTitle>
-              <CardDescription>
-                Em cada mês, quanto o grupo subiu nos 12 meses que terminam nele: é o número que
-                aparece no noticiário como "inflação em 12 meses". Linha acima da tracejada é grupo
-                subindo mais rápido que a média.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Rolling12mPanels data={data} />
-            </CardContent>
-          </Card>
+          <InflationSections data={data} />
+          <footer className="text-caption text-muted-foreground border-t pt-5">
+            Fonte: IBGE, tabela 7060 (IPCA por grupo de gasto).
+          </footer>
         </>
       )}
     </>

@@ -21,7 +21,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      <ReactQueryDevtools buttonPosition="bottom-left" />
+      <ReactQueryDevtools buttonPosition="bottom-right" />
     </QueryClientProvider>
   );
 }

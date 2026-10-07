@@ -4,6 +4,11 @@ const percent = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 2,
 });
 
+const wholePercent = new Intl.NumberFormat("pt-BR", {
+  style: "percent",
+  maximumFractionDigits: 0,
+});
+
 const signedPercent = new Intl.NumberFormat("pt-BR", {
   style: "percent",
   minimumFractionDigits: 2,
@@ -11,22 +16,82 @@ const signedPercent = new Intl.NumberFormat("pt-BR", {
   signDisplay: "exceptZero",
 });
 
+const signedNumber = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  signDisplay: "exceptZero",
+});
+
+const decimal = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
 const month = new Intl.DateTimeFormat("pt-BR", {
   month: "short",
   year: "numeric",
   timeZone: "UTC",
 });
 
+const monthName = new Intl.DateTimeFormat("pt-BR", { month: "long", timeZone: "UTC" });
+
+const shortMonthName = new Intl.DateTimeFormat("pt-BR", { month: "short", timeZone: "UTC" });
+
 /** A taxa chega em fração: 0.0579 vira "5,79%". */
 export function formatPercent(rate: number): string {
-  return percent.format(rate);
+  return percent.format(rate).replace("-", "−");
+}
+
+/** Percentual sem casas: 0.213 vira "21%". */
+export function formatWholePercent(rate: number): string {
+  return wholePercent.format(rate);
 }
 
 export function formatSignedPercent(rate: number): string {
-  return signedPercent.format(rate);
+  return signedPercent.format(rate).replace("-", "−");
+}
+
+/** Variação mensal publicada, sem o "%": 0.0052 vira "0,52" e -0.0032 vira "−0,32". */
+export function formatRateNumber(rate: number): string {
+  return decimal.format(rate * 100).replace("-", "−");
+}
+
+/** Diferença entre duas taxas em pontos percentuais: -0.005 vira "−0,50 p.p.". */
+export function formatPoints(difference: number): string {
+  return `${signedNumber.format(difference * 100).replace("-", "−")} p.p.`;
+}
+
+/** Fator de uma taxa com 4 casas: 1.04441 vira "1,0444". */
+export function formatFactor(factor: number, digits = 4): string {
+  return factor.toFixed(digits).replace(".", ",").replace("-", "−");
+}
+
+export function formatMoney(value: number): string {
+  return money.format(value);
 }
 
 // A data chega como "AAAA-MM-DD", que o Date lê em UTC
 export function formatMonth(value: string): string {
   return month.format(new Date(value)).replace(". de ", "/").replace(" de ", "/");
+}
+
+/** "fevereiro" */
+export function formatMonthName(value: string): string {
+  return monthName.format(new Date(value));
+}
+
+/** "fev" */
+export function formatShortMonth(value: string): string {
+  return shortMonthName.format(new Date(value)).replace(".", "");
+}
+
+/** "ago/2026", "jan a ago/2026" ou "set/2025 a ago/2026". */
+export function formatMonthRange(start: string, end: string, separator = " a "): string {
+  if (start === end) return formatMonth(start);
+  if (start.slice(0, 4) === end.slice(0, 4)) {
+    return `${formatShortMonth(start)}${separator}${formatMonth(end)}`;
+  }
+  return `${formatMonth(start)}${separator}${formatMonth(end)}`;
 }

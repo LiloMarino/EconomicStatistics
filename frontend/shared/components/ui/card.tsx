@@ -24,6 +24,9 @@ const cardVariants = cva(
         // Barra fixa no topo da conferência sem borda, com sombra
         sticky:
           "shadow-lg",
+        // Folha sobre o papel: sem borda nem sombra, cantos mais abertos
+        sheet:
+          "rounded-2xl [--card-px:--spacing(6)] [--card-spacing:--spacing(5)]",
       },
     },
     defaultVariants: {
@@ -124,8 +127,23 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+// A bandeja de explicação no pé do cartão, sob uma linha tracejada
+function CardTray({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn(
+        "grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-8 gap-y-5 border-t border-dashed bg-tray px-(--card-px) pt-5 pb-6 text-body",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
 export {
   Card,
+  CardTray,
   CardHeader,
   CardFooter,
   CardTitle,

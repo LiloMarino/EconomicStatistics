@@ -12,6 +12,9 @@ const toggleVariants = cva(
         // Controle segmentado: o item marcado vira um cartão sobre o trilho
         segmented:
           "rounded-md text-ink-2 hover:bg-transparent aria-pressed:bg-card aria-pressed:text-foreground aria-pressed:shadow-[0_0_0_1px_var(--border)] data-[state=on]:bg-card",
+        // Escolha entre grupos: pílula com o chip do grupo, marcada pela borda
+        chip:
+          "h-10 rounded-full border border-border bg-transparent pr-3 pl-1.5 hover:bg-muted aria-pressed:border-foreground aria-pressed:bg-muted",
       },
       size: {
         default:

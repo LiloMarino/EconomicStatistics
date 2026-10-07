@@ -5,6 +5,8 @@ export const queryKeys = {
   series: ["series"] as const,
   seriesStatus: ["series", "status"] as const,
   inflationGroups: ["series", "inflation-groups"] as const,
+  inflationPace: ["series", "inflation-pace"] as const,
+  seasonality: ["series", "seasonality"] as const,
   purchasingPower: ["series", "purchasing-power"] as const,
 };
 

@@ -75,9 +75,16 @@ function DataUntil() {
   const ipca = data?.find((item) => item.series_id === "ipca_general")?.last_ref_date;
 
   return (
-    <p className="text-caption text-muted-foreground px-2.5 group-data-[collapsible=icon]:hidden">
-      {ipca ? `IPCA até ${formatMonth(ipca)}` : "Buscando os dados…"}
-    </p>
+    <div className="text-caption text-muted-foreground flex flex-col gap-1 px-3 group-data-[collapsible=icon]:hidden">
+      {ipca ? (
+        <span>
+          IPCA até <strong className="text-foreground font-semibold">{formatMonth(ipca)}</strong>
+        </span>
+      ) : (
+        <span>Buscando os dados…</span>
+      )}
+      <span>IBGE e Banco Central</span>
+    </div>
   );
 }
 
@@ -93,33 +100,39 @@ export function MainLayout() {
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <Sidebar variant="inset" collapsible="icon">
+        <Sidebar collapsible="icon">
           {/* Nome do app e recolher */}
-          <SidebarHeader>
-            <SidebarMenu>
-              <SidebarMenuItem className="flex items-center gap-0.5">
-                <SidebarMenuButton
-                  className="group-data-[collapsible=icon]:hidden"
-                  render={<NavLink to="/" />}
-                >
-                  <ChartNoAxesCombined />
-                  <span className="font-semibold">Economia BR</span>
-                </SidebarMenuButton>
-                <CollapseButton />
-              </SidebarMenuItem>
-            </SidebarMenu>
+          <SidebarHeader className="px-3 pt-6">
+            <div className="flex items-center justify-between gap-2 pl-2 group-data-[collapsible=icon]:pl-0">
+              <NavLink
+                to="/"
+                className="flex items-center gap-2.5 group-data-[collapsible=icon]:hidden"
+              >
+                <span className="bg-foreground text-background inline-flex size-8 items-center justify-center rounded-lg">
+                  <ChartNoAxesCombined className="size-4.5" />
+                </span>
+                <span className="font-heading text-xl font-bold tracking-tight whitespace-nowrap">
+                  Economia BR
+                </span>
+              </NavLink>
+              <CollapseButton />
+            </div>
           </SidebarHeader>
 
           {/* Navegação */}
           <SidebarContent>
             {navGroups.map((group) => (
-              <SidebarGroup key={group.label} className="py-1">
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+              <SidebarGroup key={group.label} className="px-4 py-3">
+                <SidebarGroupLabel className="text-eyebrow uppercase">
+                  {group.label}
+                </SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
                     {group.items.map(({ to, label, icon: Icon }) => (
                       <SidebarMenuItem key={to}>
                         <SidebarMenuButton
+                          variant="nav"
+                          size="nav"
                           isActive={isActive(to, pathname)}
                           tooltip={label}
                           render={<NavLink to={to} />}
@@ -136,7 +149,7 @@ export function MainLayout() {
           </SidebarContent>
 
           {/* Até quando há dado e tema */}
-          <SidebarFooter className="gap-1.5">
+          <SidebarFooter className="gap-3 px-4 pb-6">
             <DataUntil />
             <ThemeSwitch />
           </SidebarFooter>
@@ -147,8 +160,10 @@ export function MainLayout() {
           <div className="p-3 md:hidden">
             <SidebarTrigger />
           </div>
-          <main className="flex flex-1 flex-col gap-6 p-6">
-            <Outlet />
+          <main className="flex flex-1 flex-col px-6 pt-10 pb-24 md:px-12">
+            <div className="mx-auto flex w-full max-w-280 flex-col gap-10">
+              <Outlet />
+            </div>
           </main>
         </SidebarInset>
         <Toaster richColors />

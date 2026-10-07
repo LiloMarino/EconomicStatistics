@@ -16,6 +16,7 @@ export const cn = createCn({
             "label",
             "table",
             "caption",
+            "small",
             "eyebrow",
             "ticker",
             "2xs",

@@ -147,18 +147,15 @@ export interface components {
         };
         /**
          * GroupPaceDTO
-         * @description O 12 meses do grupo no fim e 1, 3 e 6 meses antes, em fração.
+         * @description O 12 meses do grupo no fim, em fração, e as janelas de 1, 3 e 6 meses que têm
+         *     dado no cache.
          */
         GroupPaceDTO: {
             series_id: components["schemas"]["SeriesId"];
             /** Rolling 12M */
             rolling_12m: number;
-            /** Months Before 1 */
-            months_before_1: number | null;
-            /** Months Before 3 */
-            months_before_3: number | null;
-            /** Months Before 6 */
-            months_before_6: number | null;
+            /** Windows */
+            windows: components["schemas"]["PaceWindowDTO"][];
         };
         /**
          * GroupPurchasingPowerDTO
@@ -211,7 +208,9 @@ export interface components {
         /**
          * InflationPaceDTO
          * @description O ritmo no fim do período. As inclinações são diferenças entre dois 12 meses,
-         *     em fração (-0.005 é -0,50 p.p.); o veredito usa a de 3 meses.
+         *     em fração (-0.005 é -0,50 p.p.); o veredito usa a de 3 meses, e inclinação dentro
+         *     de `steady_band` para cima ou para baixo é estável. `last_months_difference` soma
+         *     as diferenças dos 3 últimos meses contra o ano anterior.
          */
         InflationPaceDTO: {
             /**
@@ -227,11 +226,15 @@ export interface components {
             ceiling: number | null;
             /** Last Months */
             last_months: components["schemas"]["MonthVsYearBeforeDTO"][];
+            /** Last Months Difference */
+            last_months_difference: number;
             /** Change 1M */
             change_1m: number;
             /** Change 3M */
             change_3m: number;
             verdict: components["schemas"]["PaceVerdict"];
+            /** Steady Band */
+            steady_band: number;
             /** Groups */
             groups: components["schemas"]["GroupPaceDTO"][];
         };
@@ -281,6 +284,21 @@ export interface components {
          * @enum {string}
          */
         PaceVerdict: "accelerating" | "steady" | "slowing";
+        /**
+         * PaceWindowDTO
+         * @description O 12 meses `months` meses antes do fim e a inclinação até o fim, em fração;
+         *     `relative_change` é a inclinação como fração do valor de antes (-0.21 é -21%).
+         */
+        PaceWindowDTO: {
+            /** Months */
+            months: number;
+            /** Rolling 12M Before */
+            rolling_12m_before: number;
+            /** Change */
+            change: number;
+            /** Relative Change */
+            relative_change: number;
+        };
         /**
          * PeriodDTO
          * @description Meses datados no dia 1: o período efetivo e o intervalo com dado no cache.

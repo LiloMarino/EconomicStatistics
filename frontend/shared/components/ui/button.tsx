@@ -22,6 +22,12 @@ const buttonVariants = cva(
         "outline-destructive":
           "border-border bg-card text-destructive hover:bg-critical-soft aria-expanded:bg-critical-soft",
         link: "text-primary underline-offset-4 hover:underline",
+        // Abre a explicação de um cartão: pílula com borda, marcada quando aberta
+        pill:
+          "rounded-full border-border bg-transparent font-semibold text-ink-2 hover:text-foreground aria-expanded:border-border-strong aria-expanded:text-foreground",
+        // O "?" redondo que abre a definição de um número
+        hint:
+          "rounded-full border-border bg-transparent font-bold text-ink-2 hover:text-foreground aria-expanded:border-foreground aria-expanded:bg-foreground aria-expanded:text-background",
       },
       size: {
         default:
@@ -35,6 +41,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-control-sm rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        hint: "size-7 text-small",
       },
     },
     defaultVariants: {

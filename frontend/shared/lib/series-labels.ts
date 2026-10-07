@@ -15,4 +15,5 @@ export const seriesLabels: Record<SeriesId, string> = {
   ipca_communication: "Comunicação",
   inpc: "INPC",
   minimum_wage: "Salário mínimo",
+  inflation_target: "Meta de inflação",
 };
