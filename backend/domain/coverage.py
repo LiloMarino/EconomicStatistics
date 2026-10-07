@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
+from backend.core.enum import Periodicity
 from backend.domain.series import SeriesSpec
 
 FETCH_INTERVAL = timedelta(hours=6)
@@ -32,9 +33,13 @@ def month_start(day: date, months_back: int = 0) -> date:
 
 
 def expected_ref_date(spec: SeriesSpec, today: date) -> date:
-    """O mês de referência que já devia estar publicado hoje."""
+    """A referência que já devia estar publicada hoje: o mês, ou o 1º de janeiro do ano
+    numa série anual. A janela de revisão de 12 meses cobre um ano nas duas."""
     months_back = spec.lag_months + (0 if today.day >= spec.release_day else 1)
-    return month_start(today, months_back)
+    expected = month_start(today, months_back)
+    if spec.periodicity is Periodicity.ANNUAL:
+        return date(expected.year, 1, 1)
+    return expected
 
 
 def fetch_request(

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
-from backend.core.enum import Unit
+from backend.core.enum import Periodicity, Unit
 from backend.domain.coverage import month_start
 from backend.domain.series import Observation, SeriesSpec
 
@@ -11,7 +11,7 @@ from backend.domain.series import Observation, SeriesSpec
 @dataclass
 class FakeProvider:
     """Fonte que publica um valor por mês, de `first_date` até o mês de `end`: 0,5% nas
-    séries em % e R$ 1.000 nas em reais."""
+    séries em % ao mês e R$ 1.000 nas em reais. Série anual ganha 3% em cada janeiro."""
 
     name: str = "fake"
     offline: bool = False
@@ -23,6 +23,11 @@ class FakeProvider:
         self.calls.append((spec.code, start, end))
         if self.offline:
             raise ConnectionError("sem rede")
+        if spec.periodicity is Periodicity.ANNUAL:
+            return [
+                Observation(ref_date=date(year, 1, 1), value=3.0)
+                for year in range(max(start, spec.first_date).year, end.year + 1)
+            ]
         value = 0.5 if spec.unit is Unit.PERCENT_MONTH else 1000.0
         observations: list[Observation] = []
         month = month_start(max(start, spec.first_date))

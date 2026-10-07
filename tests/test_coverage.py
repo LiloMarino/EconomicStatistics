@@ -13,6 +13,7 @@ from backend.domain.series import SERIES
 
 IPCA = SERIES[SeriesId.IPCA_FOOD]
 MINIMUM_WAGE = SERIES[SeriesId.MINIMUM_WAGE]
+TARGET = SERIES[SeriesId.INFLATION_TARGET]
 
 
 def test_ipca_month_is_expected_from_day_15_of_the_next_month() -> None:
@@ -24,6 +25,16 @@ def test_ipca_month_is_expected_from_day_15_of_the_next_month() -> None:
 def test_minimum_wage_is_expected_in_its_own_month() -> None:
     """O mínimo vale desde o dia 1 do próprio mês: não tem atraso de publicação."""
     assert expected_ref_date(MINIMUM_WAGE, date(2026, 10, 6)) == date(2026, 10, 1)
+
+
+def test_annual_target_is_expected_from_january_of_its_own_year() -> None:
+    """A meta do ano já é cobrada em janeiro, e com a do ano em cache não há pedido."""
+    assert expected_ref_date(TARGET, date(2027, 1, 2)) == date(2027, 1, 1)
+    assert fetch_request(TARGET, date(2026, 1, 1), None, datetime(2026, 10, 20)) is None
+
+    request = fetch_request(TARGET, date(2026, 1, 1), None, datetime(2027, 1, 2))
+    assert request is not None
+    assert request.start == date(2025, 1, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:

@@ -14,3 +14,4 @@ class SeriesId(StrEnum):
     IPCA_COMMUNICATION = "ipca_communication"
     INPC = "inpc"
     MINIMUM_WAGE = "minimum_wage"
+    INFLATION_TARGET = "inflation_target"

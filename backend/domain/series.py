@@ -6,12 +6,13 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Protocol
 
-from backend.core.enum import SeriesId, Source, Unit
+from backend.core.enum import Periodicity, SeriesId, Source, Unit
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Observation:
-    """Valor na unidade da série, datado no dia 1 do mês de referência."""
+    """Valor na unidade da série, datado no dia 1 do mês de referência. Série anual é
+    datada em 1º de janeiro."""
 
     ref_date: date
     value: float
@@ -20,7 +21,8 @@ class Observation:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class SeriesSpec:
     """`code` é o endereço da série na fonte. A referência do mês M fica disponível
-    `lag_months` meses depois, a partir do dia `release_day`."""
+    `lag_months` meses depois, a partir do dia `release_day`; numa série anual, a do
+    ano que contém esse mês."""
 
     source: Source
     code: str
@@ -28,6 +30,7 @@ class SeriesSpec:
     first_date: date
     lag_months: int
     release_day: int
+    periodicity: Periodicity = Periodicity.MONTHLY
 
 
 class SeriesProvider(Protocol):
@@ -85,7 +88,21 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         lag_months=0,
         release_day=1,
     ),
+    # O CMN fixa a meta antes de o ano começar, então a do ano corrente já existe
+    SeriesId.INFLATION_TARGET: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="13521",
+        unit=Unit.PERCENT_YEAR,
+        first_date=date(2019, 1, 1),
+        lag_months=0,
+        release_day=1,
+        periodicity=Periodicity.ANNUAL,
+    ),
 }
+
+# Intervalo de tolerância em volta da meta, em vigor desde 2017: o teto é a meta mais
+# 1,5 ponto percentual
+TARGET_TOLERANCE = 0.015
 
 IPCA_GROUPS: tuple[SeriesId, ...] = (
     SeriesId.IPCA_FOOD,
