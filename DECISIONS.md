@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-07):** a D6 foi reescrita com a linguagem implementada e o padrão de toda tela nova, depois da segunda rodada de design no canvas.
+> **Última mudança (2026-10-07):** a D4 ganhou a atualização com os ids próprios de conceito e o mapa série → conceito, na implementação do catálogo e da aba Aprender.
 
 ---
 
@@ -117,7 +117,7 @@ Onde se vê o déficit, e se o governo está emitindo moeda para pagar a dívida
 
 A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7060 publica por grupo (no ano e em 12 meses) e encadeá-los. Ela bateria com o oficial no ano cheio, mas dobraria as séries e o código do provider. Ficou de fora pela simplicidade: a composição dos mensais é o que o app Streamlit já fazia.
 
-### D4 — Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta
+### D4 — Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito
 **Status:** ✅ Decidida
 
 **Decisão:**
@@ -134,6 +134,12 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 - O "?" com hover card, a aba Aprender e o card do painel leem o mesmo registro.
 
 **Por quê:** com `Record`, uma série nova sem explicação não compila. Explicar toda métrica (N2) deixa de depender de alguém lembrar. E o texto mora perto de quem o renderiza (markdown e KaTeX).
+
+**Atualização (2026-10-07):** o catálogo foi implementado com duas mudanças em relação à proposta:
+- **Ids próprios:** `ConceptId` é uma lista de ids do front (`ipca`, `ipca-group`, `rolling-12m`…), que vira o endereço da página em `/learn/<id>`. Um segundo registro, `conceptBySeries: Record<SeriesId, ConceptId>`, diz qual conceito explica cada série: os 9 grupos do IPCA apontam para "Grupo do IPCA", que é um conceito só no glossário. Uma série nova sem conceito continua não compilando.
+- **Campos do `Concept`:** são as seções da página de conceito do canvas: resumo de uma linha, o `lead` (que é também o "?" das telas), o que mede, a fórmula com legenda, o exemplo com números reais e datado, como ler, os cuidados, os relacionados, a fonte oficial e as telas em que aparece.
+
+O "?" abre com clique, num balão curto (D6), e não num hover card.
 
 ### D5 — Cada grupo do IPCA tem cor e ícone fixos
 **Status:** ✅ Decidida

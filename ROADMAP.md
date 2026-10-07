@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-07):** Segunda rodada de design: a linha do tempo saiu, a comparação internacional virou casos do simulador da dívida, as contas públicas viraram as telas Déficit e Dívida, e a D6 ganhou o padrão de toda tela nova.
+> **Última mudança (2026-10-07):** Catálogo de conceitos, aba Aprender e busca com Ctrl+K concluídos; a D4 ganhou os ids próprios de conceito.
 
 ## Glossário
 
@@ -16,14 +16,12 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F12, F20, F21, F25 | — |
-| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25 | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F12, F20, F21, F25, F26 | — |
+| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F21, F24 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13, F16 | — |
-| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | — | ⏳ |
-| **F8** | Aba Aprender: glossário e página por conceito | — | ⏳ |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | — | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | — | ⏳ |
 | **F11** | Painel "Visão geral": inflação e juros, contas públicas, atividade e setor externo | — | ⏳ |
@@ -37,28 +35,31 @@
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (18 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (21 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | F1 | ✅ |
 | **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F20 | ✅ |
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25 | ✅ |
-| **D4** | Conceito é um registro único e tipado no front, chaveado pelo id que o backend exporta | F7, F8, F11 | ✅ |
+| **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | F7, F8, F11, F26 | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F12, F13, F14, F16, F17, F22, F23, F24 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F12, F13, F14, F16, F17, F22, F23, F24, F26 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
+| **F7** | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ |
+| **F8** | Aba Aprender: glossário e página por conceito | — | ✅ |
 | **F18** | Linha do tempo histórica com os episódios marcados | — | 🚫 |
 | **F19** | Comparação internacional da dívida (FMI) | — | 🚫 |
 | **F21** | Inflação acelerando ou freando | — | ✅ |
 | **F22** | Rodadas de design no canvas | — | ✅ |
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
 | **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
+| **F26** | Busca com Ctrl+K: telas e conceitos | — | ✅ |
 
 </details>
 
@@ -71,9 +72,9 @@
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
 | **F13** | Tela Déficit: primário, juros e nominal | M4 | 5 | ⏳ |
-| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | M2 | 4 | ⏳ |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | M3 | 2 | ⏳ |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | 1 | ⏳ |
+| **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | M2 | 0 | ⏳ |
 | **F12** | Tela de série: histórico, período e comparação na URL | M3 | 0 | ⏳ |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | 0 | ⏳ |
 
@@ -112,13 +113,21 @@
 >
 > **Serve:** N2
 >
-> **Progresso:** 0/3 concluídas
+> **Progresso:** 3/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | F22 | ⏳ |
-| **F8** | Aba Aprender: glossário e página por conceito | F7 | ⏳ |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | F8 | ⏳ |
+
+<details><summary>Concluído (3 itens)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F7** | Catálogo de conceitos: os textos dos "?" num registro único | F22 | ✅ |
+| **F8** | Aba Aprender: glossário e página por conceito | F7 | ✅ |
+| **F26** | Busca com Ctrl+K: telas e conceitos | F8 | ✅ |
+
+</details>
 
 ### M3 — Painel da economia
 
@@ -205,8 +214,8 @@
 | **F4** | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 | F2 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F5** | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 | F3 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ✅ Concluído |
-| **F7** | Catálogo de conceitos, "?" com hover card e fórmula em KaTeX | N2 | D4, D6 | M2 | F22 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
-| **F8** | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 | F7 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
+| **F7** | Catálogo de conceitos: os textos dos "?" num registro único | N2 | D4, D6 | M2 | F22 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
+| **F8** | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 | F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F9** | Explicadores de mecanismo: inércia, Plano Real, os quatro ciclos, dívida × inflação, r − g | N2, N5 | D6 | M2 | F8 | Médio | Médio | Médio | Bom | ⏳ Pendente |
 | **F10** | Fonte Focus/BCB: expectativas de mercado | N1, N5 | D2 | M3 | F2 | Baixo | Médio | Médio | Bom | ⏳ Pendente |
 | **F11** | Painel "Visão geral": inflação e juros, contas públicas, atividade e setor externo | N1 | D4, D6 | M3 | F4, F7, F10, F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
@@ -221,6 +230,7 @@
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
+| **F26** | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 | F8 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -311,39 +321,40 @@ Os eixos usam ticks "redondos" (`shared/lib/nice-scale.ts`), e cada gráfico tra
 
 **Aceite cumprido:** em 2022, com a referência IPCA geral, Alimentação e bebidas dá −5,24%, no teste e na tela com dados reais. O salário mínimo de 2022 dá reajuste de 10,18%, e o INPC de 2022 dá 5,93%.
 
-**F7 — Catálogo de conceitos e hints.**
+**F7 — Catálogo de conceitos.** Feito.
 
-**Catálogo.** `frontend/shared/concepts/` guarda o `Record<ConceptId, Concept>` (D4).
+**Registro** (`frontend/shared/concepts/`):
+- `concepts: Record<ConceptId, Concept>` com 11 conceitos: IPCA, INPC, grupo do IPCA, acumulado, acumulado em 12 meses, efeito base, sazonalidade, ponto percentual, poder de compra, meta de inflação e salário mínimo;
+- cada `Concept` tem título, sigla, tema, resumo de uma linha, o `lead` de duas ou três frases, palavras-chave, o que mede, a fórmula com legenda, o exemplo datado com números reais, como ler, os cuidados, os relacionados, a fonte oficial e as telas em que aparece;
+- `conceptBySeries: Record<SeriesId, ConceptId>` obriga toda série do backend a ter conceito (D4).
 
-**`<ConceptHint id>`.** Um ícone "?" que abre o hover card no desktop e um popover no toque. Mostra o resumo, o exemplo numérico, o que é bom e o que é ruim, e o link "saiba mais".
+**Nas telas:**
+- o "?" de um número do resumo é o `ConceptHint`: mostra o `lead` do conceito e "Ver em Aprender";
+- o "?" do ritmo continua contextual, porque explica a conta da tela;
+- o bloco da bandeja que trata de um conceito ("O que cada ponto é", "Efeito base", "p.p. não é %", "Sazonalidade", as fórmulas do acumulado e do poder de compra) leva à página dele.
 
-**`<Formula tex>`.** Usa `katex.renderToString` com o CSS do pacote `katex`, mais a legenda das variáveis.
+**Os exemplos** usam os números do banco até ago/2026, calculados com as contas de `backend/domain/rates.py`. Os fatos foram conferidos na fonte: faixa de renda e áreas do IPCA e do INPC (IBGE), meta contínua de 3% ± 1,5 p.p. desde 2025 (CMN) e a regra do mínimo (Lei 14.663/2023, ganho real limitado a 2,5% desde 2025).
 
-**Forma na tela (D6).** O "?" guarda a definição de referência. A explicação do gráfico mora na bandeja "Como ler" ou "Ver a conta" do cartão, com a fórmula separada do exemplo calculado com os números da tela.
+**Limitação:** só os conceitos de inflação. Os de juros, contas públicas, atividade e setor externo entram com as features que os mostram.
 
-**Onde entra primeiro.** Nas telas de F5 e F6. Conceitos iniciais:
-- IPCA, INPC e grupo do IPCA;
-- acumulado (composição) e acumulado de 12 meses;
-- ponto percentual (p.p.) × percentual;
-- poder de compra e salário mínimo.
+**F8 — Aba Aprender.** Feito, a partir das pranchas `Learn` e `Concept` do canvas.
 
-Gatilho: depois da F22, para nascer já na forma aprovada.
+**`/learn`:** o glossário. Tem a busca (ignora acento) e o tema, os dois na URL (`?q=`, `?topic=`). Os conceitos aparecem agrupados por tema, em cartões com título, sigla, resumo e a etiqueta "fórmula".
 
-**F8 — Aba Aprender.** Duas rotas:
-- **`/aprender`:** glossário com busca, agrupado por tema (inflação, juros, fiscal, externo, atividade);
-- **`/aprender/:conceptId`:** a página completa do conceito.
+**`/learn/:conceptId`:** a página do conceito, toda lida do catálogo (F7):
+- a trilha, o título e o `lead`;
+- O que mede, A fórmula, o exemplo datado, É bom ou ruim?, Cuidado ao ler e Relacionados;
+- ao lado, a fonte oficial, a frequência e as telas do app em que o conceito aparece.
 
-A página do conceito traz:
-- a definição;
-- a fórmula com legenda;
-- o exemplo numérico;
-- o link de onde a fonte oficial publica;
-- os conceitos relacionados;
-- o gráfico da série, quando o conceito tem uma (`SeriesId`).
+Um id desconhecido mostra "Conceito não encontrado", com o link para o glossário.
 
-Tudo sai do mesmo registro do F7 (D4).
+**Relação com as telas:** a página é um superset do "?", que mostra o mesmo `lead`. Ela complementa as bandejas "Como ler"/"Ver a conta": as bandejas explicam aquele gráfico com os números da tela, e a página explica o conceito em geral.
 
-**F9 — Explicadores de mecanismo.** Páginas longas em `/aprender`, listadas no glossário (F8) na seção "Como as coisas se ligam", com o tempo de leitura. Uma por tema:
+**Fica para depois:**
+- a seção "Como as coisas se ligam" entra com os explicadores (F9);
+- o número de hoje e o gráfico da série na página do conceito entram com a tela de série (F12); até lá, o exemplo é fixo e datado.
+
+**F9 — Explicadores de mecanismo.** Páginas longas em `/learn`, listadas no glossário (F8) na seção "Como as coisas se ligam", com o tempo de leitura. Uma por tema:
 - inflação inercial e indexação, e por que a inércia não morreu com o Real: hoje ela aparece na inflação de serviços e nas expectativas acima da meta;
 - URV e Plano Real;
 - os quatro ciclos que se alimentam (inflação, juros, dívida e câmbio), num diagrama: inflação → reajustes → inflação; dívida → juros → déficit → dívida; dívida → risco → câmbio → inflação; inflação → juros → dívida;
@@ -549,6 +560,17 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 **Aceite cumprido:** Educação em fev/2026 subiu 5,21%, contra a média de fevereiro de 2021 a 2025 de 4,81%.
 
 **Limitação:** a série por grupo começa em 2020, então a faixa tem no máximo 5 anos até a emenda das tabelas antigas (F20).
+
+**F26 — Busca com Ctrl+K.** Feito, no molde da busca do Finance Manager e da prancha `Nav` do canvas (`layouts/command-search.tsx`, shadcn `command` com cmdk).
+
+- **Abertura:** Ctrl+K (ou Cmd+K) em qualquer tela, ou o botão "Buscar" no topo da sidebar.
+- **Grupos:**
+  - "Conceitos em Aprender", vindos do catálogo (F7), com o resumo como subtítulo; sem nada digitado, os mais buscados (IPCA, acumulado em 12 meses, poder de compra);
+  - "Telas", vindas da navegação, cada uma com descrição e palavras-chave.
+- **Filtro:** ignora acento ("educacao" acha "Grupo do IPCA" pelo nome do grupo), e o resultado que bate no título vem antes.
+- **Teclado:** ↑↓ navegam, Enter abre, Esc fecha; o rodapé leva a "Ver tudo em Aprender".
+
+**Entra depois:** os explicadores (F9) como terceiro grupo, e as séries quando existir a tela de série (F12).
 
 ---
 ## 2. Nice-to-have
