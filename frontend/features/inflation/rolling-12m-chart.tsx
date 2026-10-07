@@ -54,7 +54,7 @@ function HowToRead({ pace }: { pace: InflationPace }) {
 
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(340px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="O que cada ponto é">
+      <TrayItem title="O que cada ponto é" concept="rolling-12m">
         <p>
           A inflação acumulada nos 12 meses que terminam naquele mês. É o número que sai no
           noticiário e o que se compara com a meta.
@@ -151,7 +151,7 @@ function HowToRead({ pace }: { pace: InflationPace }) {
           curva, a linha pula sem nada ter mudado hoje. Três meses diluem isso.
         </p>
       </TrayItem>
-      <TrayItem title="Efeito base">
+      <TrayItem title="Efeito base" concept="base-effect">
         <p>
           Um mês fora da curva há um ano mexe na linha hoje. Em jul a set/2023 ela subiu de 3,16%
           para 5,19% com meses calmos, só porque saíram da conta as quedas de 2022, quando o imposto

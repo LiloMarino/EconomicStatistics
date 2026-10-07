@@ -87,7 +87,7 @@ export function PaceTable({ pace, window, onWindowChange }: PaceTableProps) {
               </p>
             </TrayItem>
             {biggest?.step && isIpcaSeries(biggest.seriesId) && (
-              <TrayItem title="p.p. não é %">
+              <TrayItem title="p.p. não é %" concept="percentage-point">
                 <p>
                   Ponto percentual (p.p.) é a diferença direta entre dois percentuais.{" "}
                   {seriesLabels[biggest.seriesId]} ir de{" "}

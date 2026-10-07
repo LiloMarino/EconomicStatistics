@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -16,6 +17,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/shared/components/ui/collapsible";
+import type { ConceptId } from "@/shared/concepts/concept";
+import { concepts } from "@/shared/concepts/concepts";
 
 interface ExplainedCardProps {
   id?: string;
@@ -81,12 +84,24 @@ export function ExplainedCard({
   );
 }
 
+interface TrayItemProps {
+  title: ReactNode;
+  /** O conceito do catálogo de que o bloco trata; o pé do bloco leva à página dele. */
+  concept?: ConceptId;
+  children: ReactNode;
+}
+
 /** Um bloco da bandeja: o título curto e o texto. */
-export function TrayItem({ title, children }: { title: ReactNode; children: ReactNode }) {
+export function TrayItem({ title, concept, children }: TrayItemProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <h3 className="font-bold">{title}</h3>
       {children}
+      {concept && (
+        <Link to={`/learn/${concept}`} className="text-caption self-start font-semibold">
+          {concepts[concept].title} em Aprender →
+        </Link>
+      )}
     </div>
   );
 }

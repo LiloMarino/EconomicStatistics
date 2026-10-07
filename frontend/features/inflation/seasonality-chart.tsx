@@ -79,7 +79,7 @@ export function SeasonalityChart({ data, seriesId, onSelect }: SeasonalityChartP
         heading: "COMO LER",
         content: (
           <>
-            <TrayItem title="Sazonalidade">
+            <TrayItem title="Sazonalidade" concept="seasonality">
               <p>
                 Alguns preços sobem sempre na mesma época: mensalidade em fevereiro, matrícula do
                 segundo semestre em agosto. Uma alta dessas só é notícia se fugir do padrão. Fora da

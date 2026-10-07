@@ -1,12 +1,13 @@
 import { ArrowDown, CircleAlert, Check } from "lucide-react";
 
-import { HintButton } from "@/features/inflation/hint-button";
 import { verdictLook } from "@/features/inflation/pace-verdict";
 import type { InflationGroups } from "@/features/inflation/use-inflation-groups";
 import type { InflationPace } from "@/features/inflation/use-inflation-pace";
+import { ConceptHint } from "@/shared/components/concept-hint";
 import { GroupChip } from "@/shared/components/group-chip";
+import { HintButton } from "@/shared/components/hint-button";
 import { StatCard } from "@/shared/components/stat-card";
-import { formatMonth, formatMonthRange, formatPercent, formatPoints } from "@/shared/lib/format";
+import { formatMonthRange, formatPercent, formatPoints } from "@/shared/lib/format";
 import { isIpcaSeries } from "@/shared/lib/group-identity";
 
 function TwelveMonthsCard({ pace }: { pace: InflationPace }) {
@@ -16,12 +17,7 @@ function TwelveMonthsCard({ pace }: { pace: InflationPace }) {
   return (
     <StatCard
       label="IPCA em 12 meses"
-      hint={
-        <HintButton label="O que é o acumulado de 12 meses">
-          A inflação dos 12 meses que terminam em {formatMonth(pace.end)}. É o número que se compara
-          com a meta, porque cada janela de 12 meses tem um mês de cada.
-        </HintButton>
-      }
+      hint={<ConceptHint id="rolling-12m" />}
       value={formatPercent(last.rate)}
     >
       {pace.ceiling !== null &&
@@ -110,12 +106,7 @@ export function SummaryCards({ data, pace, onShowPaceMath }: SummaryCardsProps) 
     >
       <StatCard
         label="IPCA no período"
-        hint={
-          <HintButton label="O que é o IPCA">
-            <strong>IPCA</strong> é a inflação oficial: quanto subiram os preços do que as famílias
-            com renda de 1 a 40 salários mínimos compram. O IBGE publica todo mês.
-          </HintButton>
-        }
+        hint={<ConceptHint id="ipca" />}
         value={general && formatPercent(general.rate)}
       >
         <span className="text-caption text-muted-foreground">{periodLabel}</span>
@@ -131,7 +122,7 @@ export function SummaryCards({ data, pace, onShowPaceMath }: SummaryCardsProps) 
           <StatCard label="Ritmo da inflação" />
         </>
       )}
-      <StatCard label="Maior e menor alta">
+      <StatCard label="Maior e menor alta" hint={<ConceptHint id="ipca-group" />}>
         {[highest, lowest].map(
           (item) =>
             item &&

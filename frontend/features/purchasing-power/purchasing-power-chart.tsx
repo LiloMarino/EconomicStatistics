@@ -63,7 +63,7 @@ function Calculation({ data, group }: { data: PurchasingPower; group: Group }) {
             de {label} do que no começo do período.
           </p>
         </TrayItem>
-        <TrayItem title="A fórmula">
+        <TrayItem title="A fórmula" concept="purchasing-power">
           <FormulaBox
             legend={[
               {

@@ -46,7 +46,7 @@ function Calculation({ data, seriesId }: { data: InflationGroups; seriesId: Ipca
         em outro grupo para refazer a conta com os números dele.
       </p>
       <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-        <TrayItem title="A fórmula">
+        <TrayItem title="A fórmula" concept="accumulated">
           <FormulaBox
             legend={[
               {
