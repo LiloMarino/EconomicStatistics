@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { type ReactNode, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Button } from "@/shared/components/ui/button";
@@ -15,27 +15,20 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** Os fatos do conceito ao lado do texto: onde a fonte publica e em que telas ele aparece. */
+/** Os fatos do conceito ao lado do texto: de quanto em quanto tempo o dado sai e em que
+telas ele aparece. */
 function ConceptAside({ id }: { id: ConceptId }) {
-  const { source, screens } = concepts[id];
+  const { frequency, screens } = concepts[id];
   return (
     <aside
       aria-label="Resumo do conceito"
       className="bg-card text-caption flex flex-col gap-4 rounded-xl p-5"
     >
-      {source && (
-        <>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-muted-foreground">Fonte oficial</span>
-            <a href={source.url} target="_blank" rel="noreferrer" className="font-semibold">
-              {source.name} ↗
-            </a>
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-muted-foreground">Frequência</span>
-            <strong>{source.frequency}</strong>
-          </div>
-        </>
+      {frequency && (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-muted-foreground">Frequência</span>
+          <strong>{frequency}</strong>
+        </div>
       )}
       <div className="flex flex-col gap-0.5">
         <span className="text-muted-foreground">No app</span>
@@ -53,6 +46,12 @@ function ConceptAside({ id }: { id: ConceptId }) {
 os cuidados e os relacionados. */
 export function ConceptArticle({ id }: { id: ConceptId }) {
   const concept = concepts[id];
+  const { hash } = useLocation();
+
+  // A busca pode levar a um bloco da página, como o de um grupo do IPCA
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: "start" });
+  }, [hash, id]);
 
   return (
     <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_280px]">
@@ -70,6 +69,10 @@ export function ConceptArticle({ id }: { id: ConceptId }) {
         <Section title="O que mede">
           <div className="flex max-w-prose flex-col gap-3">{concept.measures}</div>
         </Section>
+
+        {concept.details && (
+          <Section title={concept.details.title}>{concept.details.content}</Section>
+        )}
 
         {concept.formula && (
           <Section title="A fórmula">
@@ -114,6 +117,19 @@ export function ConceptArticle({ id }: { id: ConceptId }) {
               </Button>
             ))}
           </div>
+        </Section>
+
+        <Section title="Fontes">
+          <ol className="text-caption flex max-w-prose list-decimal flex-col gap-2 pl-5">
+            {concept.sources.map((source) => (
+              <li key={source.url + source.backs}>
+                <a href={source.url} target="_blank" rel="noreferrer" className="font-semibold">
+                  {source.name} ↗
+                </a>
+                <span className="text-muted-foreground"> · {source.backs}</span>
+              </li>
+            ))}
+          </ol>
         </Section>
       </article>
 

@@ -29,6 +29,14 @@ export function isTopic(value: string): value is Topic {
   return topics.some((topic) => topic === value);
 }
 
+export interface ConceptSource {
+  /** Quem publica e o documento: "IBGE, tabela 7060 do SIDRA". */
+  name: string;
+  url: string;
+  /** O que essa fonte comprova na página. */
+  backs: string;
+}
+
 export interface Concept {
   title: string;
   /** A sigla ou o apelido que aparece ao lado do título: "IBGE", "p.p.". */
@@ -47,8 +55,12 @@ export interface Concept {
   reading: ReactNode;
   cautions?: { title: string; text: ReactNode }[];
   related: ConceptId[];
-  /** Onde a fonte oficial publica; uma convenção de leitura, como o p.p., não tem. */
-  source?: { name: string; frequency: string; url: string };
+  /** Uma seção a mais, depois de "O que mede", para o que o conceito tem de próprio. */
+  details?: { title: string; content: ReactNode };
+  /** Toda página do Aprender cita a fonte oficial de cada fato e de cada número dela. */
+  sources: [ConceptSource, ...ConceptSource[]];
+  /** De quanto em quanto tempo o dado sai, quando o conceito tem série. */
+  frequency?: string;
   /** As telas do app em que o conceito aparece. */
   screens: { to: string; label: string }[];
 }

@@ -18,7 +18,10 @@ import { Kbd } from "@/shared/components/ui/kbd";
 import { SidebarMenuButton } from "@/shared/components/ui/sidebar";
 import { type ConceptId, conceptIds } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
+import { ipcaGroupContents, ipcaGroupIds } from "@/shared/concepts/ipca-group-contents";
 import { conceptSearchText, matches, normalize } from "@/shared/concepts/search-text";
+import { groupIdentity } from "@/shared/lib/group-identity";
+import { seriesLabels } from "@/shared/lib/series-labels";
 
 const screens = navGroups.flatMap((group) => group.items);
 
@@ -119,6 +122,36 @@ export function CommandSearch() {
                 </CommandItem>
               ))}
             </CommandGroup>
+
+            {/* Grupos do IPCA, que levam ao bloco de cada um na página do grupo */}
+            {search.trim() && (
+              <CommandGroup heading="Grupos do IPCA">
+                {ipcaGroupIds.map((id) => {
+                  const group = ipcaGroupContents[id];
+                  return (
+                    <CommandItem
+                      key={id}
+                      value={`grupo ${id}`}
+                      keywords={[
+                        seriesLabels[id],
+                        group.summary,
+                        ...group.subgroups.flatMap((item) => [item.name, ...item.examples]),
+                      ]}
+                      onSelect={() => go(`/learn/ipca-group#${id}`)}
+                    >
+                      <ItemIcon icon={groupIdentity[id].icon} />
+                      <span className="flex min-w-0 flex-col">
+                        <span className="font-semibold">{seriesLabels[id]}</span>
+                        <span className="text-small text-muted-foreground truncate">
+                          {group.summary}
+                        </span>
+                      </span>
+                      <CommandShortcut>Grupo do IPCA</CommandShortcut>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            )}
 
             {/* Telas */}
             <CommandGroup heading="Telas">

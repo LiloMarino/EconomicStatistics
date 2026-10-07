@@ -1,14 +1,29 @@
 import type { Concept, ConceptId } from "@/shared/concepts/concept";
 import { Formula, FormulaBox } from "@/shared/components/formula";
+import { IpcaGroupList } from "@/shared/concepts/ipca-group-list";
 import { MonthsTable } from "@/shared/concepts/months-table";
 
 const inflationScreen = { to: "/inflation", label: "Inflação por categoria" };
 const purchasingPowerScreen = { to: "/purchasing-power", label: "Poder de compra" };
 
-const ibgeIpca = {
-  name: "IBGE, divulgação mensal do IPCA",
-  frequency: "Mensal, por volta do dia 10 do mês seguinte",
-  url: "https://www.ibge.gov.br/estatisticas/economicas/precos-e-custos/9256-indice-nacional-de-precos-ao-consumidor-amplo.html",
+const ipcaFrequency = "Mensal, por volta do dia 10 do mês seguinte";
+
+// As fontes que mais de um conceito cita; cada conceito diz o que ela comprova nele
+const booklet = {
+  name: "IBGE, fascículo do IPCA e do INPC de dezembro de 2025",
+  url: "https://ftp.ibge.gov.br/Precos_Indices_de_Precos_ao_Consumidor/IPCA/Fasciculo_Indicadores_IBGE/2025/ipca-inpc_202512caderno.pdf",
+};
+const sidra7060 = {
+  name: "IBGE, tabela 7060 do SIDRA (IPCA por grupo)",
+  url: "https://sidra.ibge.gov.br/tabela/7060",
+};
+const bcbTarget = {
+  name: "Banco Central, página da meta de inflação",
+  url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
+};
+const minimumWageLaw = {
+  name: "Lei 14.663/2023",
+  url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14663.htm",
 };
 
 const ipcaGroupNames = [
@@ -80,7 +95,14 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["rolling-12m", "ipca-group", "inflation-target", "inpc", "accumulated"],
-    source: ibgeIpca,
+    sources: [
+      {
+        ...booklet,
+        backs: "Quem o IPCA cobre: famílias com renda de 1 a 40 salários mínimos, em 16 áreas.",
+      },
+      { ...sidra7060, backs: "As variações de 2026 usadas no exemplo." },
+    ],
+    frequency: ipcaFrequency,
     screens: [inflationScreen, purchasingPowerScreen],
   },
 
@@ -120,11 +142,20 @@ export const concepts: Record<ConceptId, Concept> = {
       </p>
     ),
     related: ["ipca", "minimum-wage", "purchasing-power"],
-    source: {
-      name: "IBGE, divulgação mensal do INPC",
-      frequency: "Mensal, junto com o IPCA",
-      url: "https://www.ibge.gov.br/estatisticas/economicas/precos-e-custos/9258-indice-nacional-de-precos-ao-consumidor.html",
-    },
+    sources: [
+      {
+        ...booklet,
+        backs:
+          "Quem o INPC cobre: famílias com renda de 1 a 5 salários mínimos e pessoa de referência assalariada.",
+      },
+      {
+        name: "Banco Central, série 188 do SGS (INPC)",
+        url: "https://www3.bcb.gov.br/sgspub/",
+        backs: "O INPC de janeiro a agosto de 2026.",
+      },
+      { ...minimumWageLaw, backs: "O INPC é a inflação que corrige o salário mínimo." },
+    ],
+    frequency: "Mensal, junto com o IPCA",
     screens: [purchasingPowerScreen],
   },
 
@@ -142,14 +173,13 @@ export const concepts: Record<ConceptId, Concept> = {
     ),
     keywords: ["categoria", "categorias", ...ipcaGroupNames],
     measures: (
-      <>
-        <p>Os 9 grupos são: {ipcaGroupNames.join(", ")}.</p>
-        <p>
-          Cada grupo junta itens parecidos. Habitação, por exemplo, tem aluguel, condomínio, energia
-          elétrica, água e gás; Transportes tem combustível, passagem e carro.
-        </p>
-      </>
+      <p>
+        Cada grupo junta itens parecidos, em subgrupos. O IBGE pesquisa o preço de cerca de 380
+        produtos e serviços, e cada um entra no grupo dele com o peso que tem no orçamento das
+        famílias.
+      </p>
     ),
+    details: { title: "O que entra em cada grupo", content: <IpcaGroupList /> },
     example: {
       title: "Com os números de janeiro a agosto de 2026",
       content: (
@@ -178,11 +208,18 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["ipca", "purchasing-power", "seasonality"],
-    source: {
-      name: "IBGE, tabela 7060 do SIDRA (IPCA por grupo)",
-      frequency: "Mensal, junto com o IPCA",
-      url: "https://sidra.ibge.gov.br/tabela/7060",
-    },
+    sources: [
+      {
+        ...sidra7060,
+        backs:
+          "Os 9 grupos, os subgrupos, os itens pesquisados e o peso de cada grupo em agosto de 2026 (variável 66).",
+      },
+      {
+        ...booklet,
+        backs: "Os pesos vêm da Pesquisa de Orçamentos Familiares de 2017 e 2018.",
+      },
+    ],
+    frequency: "Mensal, junto com o IPCA",
     screens: [inflationScreen, purchasingPowerScreen],
   },
 
@@ -258,7 +295,15 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["rolling-12m", "purchasing-power", "percentage-point"],
-    source: ibgeIpca,
+    sources: [
+      {
+        ...booklet,
+        backs:
+          "O IBGE acumula os meses multiplicando: 0,16% em janeiro e 1,31% em fevereiro de 2025 dão 1,47%.",
+      },
+      { ...sidra7060, backs: "As variações de janeiro a agosto de 2026 do exemplo." },
+    ],
+    frequency: ipcaFrequency,
     screens: [inflationScreen],
   },
 
@@ -351,7 +396,14 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["accumulated", "base-effect", "seasonality", "inflation-target", "percentage-point"],
-    source: ibgeIpca,
+    sources: [
+      {
+        ...sidra7060,
+        backs: "O IBGE publica o acumulado em 12 meses (variável 2265), e as variações do exemplo.",
+      },
+      { ...bcbTarget, backs: "A meta de 3%, com tolerância de 1,5 p.p." },
+    ],
+    frequency: ipcaFrequency,
     screens: [inflationScreen],
   },
 
@@ -415,7 +467,15 @@ export const concepts: Record<ConceptId, Concept> = {
       </p>
     ),
     related: ["rolling-12m", "seasonality", "percentage-point"],
-    source: ibgeIpca,
+    sources: [
+      { ...sidra7060, backs: "As variações de julho a setembro de 2022 e de 2023." },
+      {
+        name: "Lei Complementar 194/2022",
+        url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp194.htm",
+        backs: "O teto do ICMS sobre combustível e energia, a partir de junho de 2022.",
+      },
+    ],
+    frequency: ipcaFrequency,
     screens: [inflationScreen],
   },
 
@@ -464,11 +524,8 @@ export const concepts: Record<ConceptId, Concept> = {
       </p>
     ),
     related: ["rolling-12m", "base-effect", "ipca-group"],
-    source: {
-      name: "IBGE, tabela 7060 do SIDRA (IPCA por grupo)",
-      frequency: "Mensal, junto com o IPCA",
-      url: "https://sidra.ibge.gov.br/tabela/7060",
-    },
+    sources: [{ ...sidra7060, backs: "Educação em fevereiro, de 2021 a 2026." }],
+    frequency: ipcaFrequency,
     screens: [inflationScreen],
   },
 
@@ -523,6 +580,14 @@ export const concepts: Record<ConceptId, Concept> = {
       </p>
     ),
     related: ["rolling-12m", "accumulated"],
+    sources: [
+      {
+        ...booklet,
+        backs:
+          "O IBGE compara taxas em p.p.: os 4,26% de 2025 ficaram 0,57 p.p. abaixo dos 4,83% de 2024.",
+      },
+      { ...sidra7060, backs: "O acumulado em 12 meses de julho e agosto de 2026." },
+    ],
     screens: [inflationScreen],
   },
 
@@ -588,6 +653,13 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["accumulated", "ipca-group", "minimum-wage", "inpc"],
+    sources: [
+      {
+        ...sidra7060,
+        backs: "A inflação de Educação e do índice geral de janeiro a agosto de 2026.",
+      },
+      { ...booklet, backs: "As taxas se juntam multiplicando, e não somando." },
+    ],
     screens: [purchasingPowerScreen],
   },
 
@@ -637,11 +709,19 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     related: ["rolling-12m", "ipca"],
-    source: {
-      name: "Banco Central, página da meta de inflação",
-      frequency: "Definida pelo CMN; comparada todo mês",
-      url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
-    },
+    sources: [
+      {
+        name: "Decreto 12.079/2024",
+        url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/decreto/d12079.htm",
+        backs:
+          "A meta contínua e o descumprimento depois de 6 meses seguidos fora do intervalo, com a explicação pública do Banco Central.",
+      },
+      {
+        ...bcbTarget,
+        backs: "O centro de 3%, a tolerância de 1,5 p.p. e as metas dos anos anteriores.",
+      },
+    ],
+    frequency: "Definida pelo CMN; comparada todo mês",
     screens: [inflationScreen],
   },
 
@@ -689,11 +769,23 @@ export const concepts: Record<ConceptId, Concept> = {
       </p>
     ),
     related: ["inpc", "purchasing-power"],
-    source: {
-      name: "Lei 14.663/2023, no Planalto",
-      frequency: "Anual, todo 1º de janeiro",
-      url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14663.htm",
-    },
+    sources: [
+      {
+        ...minimumWageLaw,
+        backs: "A regra: o INPC mais o crescimento real do PIB de dois anos antes.",
+      },
+      {
+        name: "Lei 15.077/2024",
+        url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l15077.htm",
+        backs: "O limite de 2,5% para o ganho real, desde 2025.",
+      },
+      {
+        name: "Decreto 12.797/2025",
+        url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12797.htm",
+        backs: "O salário mínimo de R$ 1.621 em 2026.",
+      },
+    ],
+    frequency: "Anual, todo 1º de janeiro",
     screens: [purchasingPowerScreen],
   },
 };
