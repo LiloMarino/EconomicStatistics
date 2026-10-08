@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** As telas Déficit e Dívida foram concluídas, com a composição da dívida federal do Tesouro e os conceitos de contas públicas no Aprender; o trio da NFSP que fecha é 5727 = 5793 + 5760, e o prazo médio vem da série oficial 10618.
+> **Última mudança (2026-10-08):** As telas Déficit e Dívida foram concluídas, e cada link que elas deixaram para o explicador, o simulador e o estudo do financiamento monetário passou a constar na feature que o faz.
 
 ## Glossário
 
@@ -457,7 +457,7 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 **Links no meio do texto:** o explicador leva ao dado real e ao simulador no ponto em que o assunto aparece. O de r − g liga à tela Dívida e ao simulador com os números do País A e do País B. O cabeçalho cita os conceitos usados, cada um com link para a página dele (F8).
 
-**Links de volta:** as telas que citam um explicador (as bandejas de Déficit, Dívida, Juros, Setor externo e Crédito) nascem antes dele, e é o explicador que, ao entrar, liga cada bandeja a ele. Com o simulador (F24) vale o mesmo: entre os dois, o que for feito por último faz o link para o outro.
+**Links de volta:** as telas que citam um explicador (as bandejas de Déficit, Dívida, Juros, Setor externo e Crédito) nascem antes dele, e é o explicador que, ao entrar, liga cada bandeja a ele. Com o simulador (F24) vale o mesmo: entre os dois, o que for feito por último faz o link para o outro. Já existem, sem o link, a bandeja "Como ler e a conta" da tela Déficit (F13), que leva ao loop da dívida, e a bandeja "Como ler" do gráfico de r e g da tela Dívida (F14), que leva ao explicador de r − g.
 
 **Fonte:** os ciclos de partida estão anotados da conversa com o ChatGPT (seis ciclos, com o que freia cada um). Cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro, Planalto) antes de entrar, como manda a D4. Esse é o motivo do risco médio.
 
@@ -483,7 +483,7 @@ Conferido em 2026-10-07: o IPCA mensal vai até 24 meses à frente (set/2028), q
 
 **F11 — Painel "Visão geral".** A página de estatísticas do BCB refeita com explicação: os mesmos indicadores, em cartões agrupados por bloco. Os códigos citados foram conferidos ao vivo em 2026-10-06; os demais são levantados na implementação.
 - **Inflação e juros:** IPCA 12 meses (13522) × meta (13521), com a expectativa do Focus (F10); Selic meta (432); juro real ex-ante.
-- **Contas públicas:** DLSP/PIB (4513) e DBGG/PIB (13762); o cartão "Resultado do governo em 12 meses", com barras de primário, juros e nominal (F13) e a frase com quanto do déficit é juro.
+- **Contas públicas:** DLSP/PIB (4513) e DBGG/PIB (13762); o cartão "Resultado do governo em 12 meses", com barras de primário, juros e nominal (F13) e a frase com quanto do déficit é juro. Os números já saem do cache pelas telas Déficit (F13) e Dívida (F14), e os cartões levam a `/deficit` e `/debt`.
 - **Atividade:** IBC-Br em 12 meses, PIB em 12 meses como crescimento em % e desemprego da PNAD Contínua (24369).
 - **Setor externo:** os números da tela Setor externo (F31): dólar PTAX (3698, média mensal), reservas internacionais (3546, conceito liquidez), transações correntes e IDP em % do PIB (23079 e 23080) e a posição internacional de investimento (24011 e 24040, sobre o PIB de 12 meses em dólar, 4192).
 - **Crédito:** custo do crédito, concessões de recursos livres e o índice de adequação do patrimônio dos bancos.
@@ -589,7 +589,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Pontos de partida, em dois grupos:**
 - **Casos que aconteceram,** cada um com o período no nome:
-  - **Brasil hoje,** sempre com os valores atuais da tela Dívida (F14), nunca um ano fixo;
+  - **Brasil hoje,** sempre com os valores atuais da tela Dívida (F14), nunca um ano fixo, lidos de `GET /api/debt` (dívida líquida, r, g e o primário feito);
   - **Brasil, Collor (1990):** dívida líquida perto de 40% do PIB, mas curta e numa moeda instável;
   - **Brasil, crise de 2002:** a desvalorização levou a dívida líquida a 56% do PIB;
   - **Brasil, recessão de 2015–2016:** déficit primário e PIB caindo ao mesmo tempo;
@@ -609,6 +609,8 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 - a bandeja "Ver a conta": a fórmula com legenda e o primeiro ano com os números escolhidos.
 
 **Aceite:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos.
+
+**Link de volta:** o cartão "A dívida sobe ou desce?" da tela Dívida (F14) nasceu sem o botão "Mexer nos números no simulador"; o simulador o acrescenta ao entrar, levando os números de hoje.
 
 **F16 — Composição da dívida pública federal.** Feito, embaixo da dinâmica na tela Dívida (F14).
 
@@ -831,6 +833,8 @@ Fica registrado sem prioridade: completa a cobertura da página do BCB, mas é o
 
 **Vem depois da tela Dívida:** a DLSP e a DBGG, conceito e série, entram com a dinâmica da dívida (F14), e a DPF com a composição (F16).
 
+**Link de volta:** a bandeja "Como ler" do gráfico "Dívida líquida e dívida bruta" da tela Dívida (F14) nasceu sem o link; é o explicador que, ao entrar, liga a bandeja a ele.
+
 Os fatos são conferidos no manual de estatísticas fiscais do BCB e no Tesouro (D4).
 
 **F37 — Explicador: por que a dívida não explode.** Página em `/learn` com um diagrama (D7) do que decide se uma dívida é sustentável, além do tamanho:
@@ -845,6 +849,8 @@ Os fatos são conferidos no manual de estatísticas fiscais do BCB e no Tesouro 
 - Brasil, Collor (1990): dívida perto de 40% do PIB, mas curta e numa moeda instável.
 
 Cada caso leva ao simulador já carregado com ele, e a página liga aos vencimentos da tela Dívida (F16). Por isso vem depois dos dois: os casos, os vencimentos e os conceitos de prazo e rolagem já existem quando ela entra. Os números vêm da conversa com o ChatGPT e são conferidos no FMI DataMapper e no BCB antes de entrar (D4).
+
+**Link de volta:** a bandeja "Como ler" do cartão "Quanto vence e quando" da tela Dívida (F16) nasceu sem o link; é o explicador que, ao entrar, liga a bandeja a ele.
 
 **F38 — Diagramas nos conceitos que já existem.** Passar pelos conceitos do catálogo (F7) e decidir, um a um, onde um diagrama explica melhor do que o texto (D7). Candidatos:
 - acumulado em 12 meses: a janela que anda um mês e o mês que sai;
@@ -893,9 +899,11 @@ O canvas está em edição. Os explicadores com diagrama (F9) são implementados
 **F15 — Como medir o financiamento monetário.** As candidatas já têm fonte:
 - **base monetária:** SGS 1788 responde (ago/2026: 432.655.492, provavelmente em R$ mil); falta conferir nome e unidade;
 - **fatores condicionantes da base, operações com títulos públicos:** SGS 1809;
-- **títulos da dívida na carteira do Banco Central:** o CSV de estoque do Tesouro (F16) separa a carteira "Banco Central" da carteira "Mercado".
+- **títulos da dívida na carteira do Banco Central:** o CSV de estoque do Tesouro já está no cache (F16) e separa a carteira "Banco Central" da carteira "Mercado"; a tela Dívida mostra a parcela: 24,3% de todos os títulos federais emitidos em jul/2026. A composição por indexador usa só a carteira "Mercado", e essa parcela usa as duas.
 
 **Na tela:** a seção "Como o déficit é pago" da tela Déficit (F13) fica como esboço no canvas: o fluxo déficit → Tesouro vende títulos → mercado ou carteira do BC, os números da base monetária e da carteira do BC, e a vedação do financiamento direto pela Lei de Responsabilidade Fiscal.
+
+**Link de volta:** o cartão "Na carteira do BC" da tela Dívida (F16) nasceu sem o link para esta seção; ela o acrescenta ao entrar. Na frase final, o X é essa parcela de todos os títulos emitidos, e a frase diz isso.
 
 **O que o spike fecha,** lendo as notas de política monetária do BCB:
 - como separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro;
