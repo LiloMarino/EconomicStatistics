@@ -28,6 +28,11 @@ não "(D3)"; "poder de compra por categoria", e não "F6".
 - `data/` (o banco) é local e ignorado: é cache de dado público, rebaixável da fonte.
 - Toda fonte externa mora em `backend/adapters/`, com fetcher próprio (`urllib` +
   Pydantic); a tela lê só do banco.
+- Dado que uma fonte publica nunca é digitado no código: o app o busca sozinho e o
+  mantém em dia, de forma incremental (a primeira carga traz o histórico, as seguintes
+  pedem só o que falta). Sem API documentada, busca-se onde o site oficial lê o dado.
+  Número digitado só para regra ou convenção, com a fonte escrita ao lado. Antes de
+  entregar uma fonte nova: o que acontece daqui a um ano, sem ninguém editar o código?
 
 ## Backend
 

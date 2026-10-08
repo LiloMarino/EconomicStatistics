@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Concluída a tela Atividade, com o PIB, o IBC-Br e o desemprego e a continuação pelo Focus.
+> **Última mudança (2026-10-08):** Concluída a tela Juros, com a Selic meta diária e o calendário do Copom buscado do site do BCB, e registrada a D8: dado externo se atualiza sozinho, sem número digitado no código.
 
 ## Glossário
 
@@ -16,7 +16,7 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F44 | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F44, F45 | — |
 | **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39, F40, F42 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24, F36, F37, F40, F41, F43 | — |
@@ -28,7 +28,6 @@
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
-| **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | — | 💤 |
 | **F35** | IPCA livres, administrados e serviços | — | ⏳ |
@@ -36,9 +35,11 @@
 | **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ⏳ |
 | **F38** | Diagramas nos conceitos que já existem | — | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
+| **F45** | Tolerância da meta de inflação buscada da fonte | — | ⏳ |
+| **F46** | Juro neutro na tela Juros | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (38 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (40 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -49,6 +50,7 @@
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
 | **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41, F44 | ✅ |
 | **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | F9, F36, F37, F38, F39 | ✅ |
+| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | F45 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | **F3** | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
@@ -73,6 +75,7 @@
 | **F27** | Continuação pelo Focus nos gráficos | — | ✅ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
+| **F30** | Tela Juros: Selic, Copom e juro real | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ |
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
@@ -91,13 +94,14 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F30** | Tela Juros: Selic, Copom e juro real | M8 | 4 | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
+| **F45** | Tolerância da meta de inflação buscada da fonte | — | 0 | ⏳ |
+| **F46** | Juro neutro na tela Juros | M8 | 0 | 🔍 |
 
 ---
 
@@ -256,18 +260,19 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 2/5 concluídas
+> **Progresso:** 3/6 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F30** | Tela Juros: Selic, Copom e juro real | F4, F10 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | F4 | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | F33 | 💤 |
+| **F46** | Juro neutro na tela Juros | F30 | 🔍 |
 
-<details><summary>Concluído (2 itens)</summary>
+<details><summary>Concluído (3 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
+| **F30** | Tela Juros: Selic, Copom e juro real | F4, F10 | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | F4 | ✅ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | F3, F4 | ✅ |
 
@@ -275,11 +280,12 @@
 
 ### Sem marco
 
-> **Progresso:** 3/4 concluídas
+> **Progresso:** 3/5 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F35** | IPCA livres, administrados e serviços | F4, F8 | ⏳ |
+| **F45** | Tolerância da meta de inflação buscada da fonte | F29 | ⏳ |
 
 <details><summary>Concluído (3 itens)</summary>
 
@@ -322,7 +328,7 @@
 | **F27** | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 | F10 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
-| **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | F3, F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | N1, N7 | — | M8 | F4 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
@@ -337,6 +343,7 @@
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 | F8, F29 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ✅ Concluído |
 | **F44** | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — | F13, F14, F31, F28 | Baixo | Baixo | Baixo | Bom | ✅ Concluído |
+| **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | F29 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -787,14 +794,29 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 **Aceite cumprido:** em 2015, meta de 4,5% com limites de 2,5% e 6,5%; em 2026, 3% com 1,5% e 4,5% (`test_tolerance_changes_with_the_period`, e na tela com os dados reais).
 
-**F30 — Tela Juros.** Rota própria para a Selic, o centro da teia (N7): ela freia a inflação, encarece a dívida e o crédito.
+**F30 — Tela Juros.** Feito, a partir da prancha `Juros` do canvas. É a rota `/interest`, no grupo "Juros e expectativas" da navegação (o antigo "Expectativas"), e responde a que juro o Banco Central segura a economia e se esse juro é alto perto da inflação.
 
-- **Resumo:** Selic meta de hoje (SGS 432), a próxima reunião do Copom com a previsão do Focus para ela (F10), e o juro real ex-ante (Selic descontada a inflação esperada em 12 meses, dividindo, D3).
-- **"A Selic e a inflação":** a Selic meta em degraus por reunião e o IPCA em 12 meses no mesmo período, com a distância entre as duas marcada como juro real. A bandeja "Como ler" conta por que o BC sobe o juro quando a inflação passa da meta e por que o efeito demora, e liga ao explicador dos dois loops (F9).
-- **Continuação:** a Selic prevista por reunião, pela continuação do Focus (F27).
-- **Juro neutro:** o juro real comparado com o neutro estimado pelo BC no Relatório de Política Monetária, escrito ao lado e sem cor (D6).
+**Fontes** (conferidas ao vivo em 2026-10-08):
 
-Os conceitos do Aprender entram junto: Selic, Copom, juro real, juro neutro.
+| Dado | Fonte | Unidade |
+|---|---|---|
+| Selic meta | SGS 432, um valor por dia desde 5/mar/1999 | % ao ano |
+| Calendário das reuniões do Copom | JSON público que a página do Copom no site do BCB lê (`/api/servico/sitebcb/calendar/anual`, lista "Reuniões do Copom") | dois dias por reunião |
+| Selic de cada reunião, IPCA esperado para os 12 meses seguintes e IPCA mensal esperado | pesquisa Focus (F10) | % ao ano e % no mês |
+
+O Focus numera as reuniões (`R7/2026`) e não dá a data. O calendário do BCB dá as datas sem número, e a ordem da reunião no ano as liga: a 7ª de 2026 é a de 3 e 4 de novembro.
+
+**Implementação:**
+- o cache ganhou série diária: cada valor é datado no próprio dia, a referência esperada é hoje, e o fetch vai só até hoje (a 432 já traz os próximos dias preenchidos com a meta em vigor). O SGS estoura o tempo numa janela de 10 anos de dado diário, então as janelas do provider passaram a 5 anos;
+- o calendário do Copom tem tabela própria (`copom_meetings`) e refresh próprio: o do ano seguinte é esperado a partir de julho, porque o BCB o divulga até o fim de junho, e a busca só acontece quando ele falta (D8). Reuniões do Focus sem data no calendário, como as de 2028 hoje, ficam fora da tela e entram sozinhas quando o BCB as datar;
+- `GET /api/interest` devolve a Selic de fim de mês, a de hoje com a última mudança, o IPCA em 12 meses no mesmo período, a previsão dos dois, a próxima reunião e o juro real ex-ante. A previsão do IPCA em 12 meses saiu do serviço da inflação para `features/ipca_forecast.py`, que as duas telas usam;
+- a Selic prevista muda de degrau em cada reunião datada, com a mediana do Focus, a partir do dia seguinte à decisão; o juro real divide (D3): 13,75% de Selic sobre 4,59% esperados dão 8,76%, e a subtração daria 9,16%;
+- a tela tem o resumo (Selic meta, próximo Copom e juro real, cada um com o "?") e o gráfico "A Selic e a inflação", com a faixa do juro real entre as duas linhas e a bandeja "Como ler";
+- no Aprender, o tema "Juros" com Selic meta, Copom, juro real e juro neutro, que é só conceito.
+
+**Fica para depois:**
+- o cartão "O juro aperta ou alivia?" da prancha, com o juro real contra o neutro (F46);
+- o link da bandeja para o explicador dos dois loops entra com ele (F9).
 
 **F31 — Tela Setor externo.** Feito, a partir da prancha `External` do canvas. É a rota `/external-sector`, no grupo "Economia real e mundo" da navegação, e responde de onde vem o preço do dólar e se o país depende de dinheiro que foge rápido.
 
@@ -972,6 +994,12 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - **Busca:** o grupo "Telas" vem antes dos conceitos. Ao digitar "dívida", a tela Dívida aparece primeiro, e não abaixo de nove conceitos.
 - **Rodapé da barra lateral:** mostra até quando há dado na tela aberta e quem o publica: "Resultado fiscal até ago/2026 · Banco Central" no Déficit, "Dólar até set/2026 · Banco Central" no Setor externo. Cada item de `navigation.ts` diz a série e as fontes da sua tela. O Focus mostra só a fonte, porque a pesquisa não é série do cache, e o Aprender fica com o IPCA.
 
+**F45 — Tolerância da meta de inflação buscada da fonte.** A faixa da meta (piso e teto) soma uma tolerância à meta que o SGS publica, e essa tolerância está digitada em `backend/domain/inflation_target.py`, a partir das resoluções do CMN (2 p.p. de 1999 a 2002, 2,5 de 2003 a 2005, 2 de 2006 a 2016 e 1,5 desde 2017). Se o CMN a mudar, o app erra sem avisar, o que a D8 não admite.
+
+- **Primeiro passo:** achar onde o BCB publica a tolerância de forma buscável (a página da meta de inflação, uma série do SGS ou o JSON que o site lê), do mesmo jeito que o calendário do Copom foi achado.
+- **Depois:** um fetcher em `backend/adapters/` e a tabela ou série que o alimente, no lugar da constante, com o mesmo mecanismo incremental das outras fontes.
+- **Se não houver fonte buscável:** a constante fica, com a data da última conferência escrita ao lado, e a tela diz de quando é a tolerância.
+
 ---
 ## 2. Nice-to-have
 
@@ -998,6 +1026,7 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 | ID | Resumo | Conexão | Marco | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
 | **F15** | Como medir o financiamento monetário do déficit | Serviria N6; falta separar gestão de liquidez do BC de financiamento do Tesouro | M4 | F13, F16 | 🔍 Em avaliação |
+| **F46** | Juro neutro na tela Juros | Serviria N1 e N2; falta uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária | M8 | F30 | 🔍 Em avaliação |
 
 **F15 — Como medir o financiamento monetário.** As candidatas já têm fonte:
 - **base monetária:** SGS 1788 responde (ago/2026: 432.655.492, provavelmente em R$ mil); falta conferir nome e unidade;
@@ -1012,3 +1041,5 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - como separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro;
 - se a base monetária entra na tela ou só confunde, já que ela cresce também com a economia;
 - a frase final, com os números de verdade, no formato "o déficit é financiado com títulos vendidos ao mercado; a parcela da dívida na carteira do BC é X%".
+
+**F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar.

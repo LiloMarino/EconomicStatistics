@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-08):** a D6 ganhou a regra da bandeja: dois conceitos no mesmo cartão, dois blocos, cada um na cor da sua série.
+> **Última mudança (2026-10-08):** nasceu a D8: dado externo se atualiza sozinho e aos poucos, sem número digitado no código.
 
 ---
 
@@ -126,6 +126,8 @@ Inflação, juros, dívida, câmbio, crédito e emissão de moeda formam uma tei
 **Atualização (2026-10-08):** o Focus tem tabela própria. Toda previsão tem duas datas: quando a pesquisa foi feita e para quando é a previsão (um mês, um trimestre, uma reunião do Copom ou um ano). `observations` guarda uma data por valor, então ela serve para série realizada e não comporta o histórico das pesquisas. O mecanismo é o mesmo: a tela lê do banco, e o refresh só vai à fonte quando falta uma pesquisa que já devia ter saído.
 
 **Atualização (2026-10-08, dívida federal):** o estoque da dívida pública federal do Tesouro também tem tabela própria, uma linha por título, vencimento e carteira. Cada valor tem duas datas, o mês do estoque e o vencimento, e o perfil de vencimentos precisa das duas. O arquivo do Tesouro traz todos os meses de uma vez, então a tabela é trocada inteira a cada arquivo novo, e os agregados (composição, vencimentos, parcela do Banco Central) são calculados na leitura. As fontes que não são série registram as tentativas em `dataset_fetch_log`, com o mesmo papel da `fetch_log`.
+
+**Atualização (2026-10-08, Selic e Copom):** a Selic meta (SGS 432) é a primeira série diária: cada valor é datado no próprio dia, a referência esperada é hoje, e o fetch vai só até hoje, porque a fonte já preenche os dias seguintes com a meta em vigor. O SGS estoura o tempo numa janela de 10 anos de dado diário, e as janelas do provider são de 5 anos. O calendário das reuniões do Copom tem tabela própria, com o refresh só quando falta o calendário que já devia estar publicado.
 
 ### D3 — Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando
 **Status:** ✅ Decidida
@@ -251,3 +253,19 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 - **SVG desenhado à mão:** dá controle total, mas é estático e cada diagrama vira código de desenho.
 
 **Consequências:** o layout de cada diagrama é posicionado à mão, o que dá mais trabalho por diagrama. Os ciclos de partida vêm da conversa com o ChatGPT e passam pela conferência na fonte oficial, como todo fato do Aprender (D4).
+
+### D8 — Dado externo se atualiza sozinho e aos poucos
+**Status:** ✅ Decidida
+
+**Decisão:**
+- Nenhum dado que uma fonte externa publica é digitado no código. O app o busca na fonte, sozinho, e o mantém em dia.
+- A busca é incremental: a primeira carga traz o histórico, e as seguintes pedem só o que falta (a ponta nova e, quando a fonte revisa, a janela final), no máximo uma vez por intervalo e só quando já devia haver dado novo (D2).
+- Fonte sem API documentada não é motivo para digitar: busca-se onde o site oficial lê o dado, como o JSON da página do Copom que traz o calendário das reuniões. O fetcher mora em `backend/adapters/`, como todos.
+- Número digitado no código só quando é regra ou convenção que ninguém publica como dado (a faixa de uma resolução, o prazo em que o BCB divulga um calendário), com a fonte escrita ao lado.
+- Dado sem fonte que dê para buscar fica fora da tela e vira feature em avaliação, em vez de entrar digitado. O juro neutro está nesse caso: o BCB só o publica em texto de PDF.
+
+**Por quê:** o app é para ser usado e se manter sozinho, mês após mês e ano após ano. Dado digitado envelhece em silêncio: a tela continua bonita e errada, e o erro só aparece quando alguém desconfia do número.
+
+**Consequências:**
+- **Revisão de 2026-10-08:** as séries do SGS e do IBGE, a pesquisa Focus, a dívida federal do Tesouro e o calendário do Copom seguem a regra. A única exceção é a tolerância da meta de inflação, que está digitada em `domain/inflation_target.py` a partir das resoluções do CMN, e virou feature.
+- **Teste de uma fonte nova:** o que acontece daqui a um ano? Se a resposta for "alguém precisa lembrar de editar o código", a fonte não está pronta.
