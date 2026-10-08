@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-08):** a D2 ganhou a segunda tabela própria, a do estoque da dívida federal do Tesouro, e o registro de busca das fontes que não são série.
+> **Última mudança (2026-10-08):** a D6 ganhou a regra da bandeja: dois conceitos no mesmo cartão, dois blocos, cada um na cor da sua série.
 
 ---
 
@@ -213,6 +213,7 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 **Padrão de toda tela:**
 - **Resumo:** cartões de número no topo, cada um com um "?" curto: o que o número é e como lê-lo, em duas ou três frases. Quando a conta é longa, o "?" leva até ela em vez de repeti-la.
 - **Cartão de gráfico:** o título diz o que o gráfico mostra, e a linha de apoio dá o período e a unidade. A explicação longa mora na bandeja no pé do cartão, que começa fechada e abre pelo botão "Como ler" ou "Ver a conta" no cabeçalho.
+- **Bandeja:** um bloco por conceito. Quando o cartão mostra dois conceitos, como DLSP e DBGG, transações correntes e IDP ou ativos e passivos, cada um ganha o seu bloco, explicado do zero, e o título do bloco leva um quadradinho na cor da série no gráfico. O que liga os dois, como a pergunta que o gráfico responde, vai num bloco à parte.
 - **Conta:** a fórmula vem separada do exemplo. Primeiro a fórmula, com a legenda de cada símbolo; depois a mesma conta com os números da tela.
 - **Semáforo:** verde, amarelo e vermelho só onde existe faixa oficial, como a meta de inflação. Sem faixa, o número aparece com a referência escrita ao lado.
 - **Grupos do IPCA:** sempre no chip da D5.
@@ -220,6 +221,7 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 **Por quê:**
 - O texto cinza pequeno debaixo do título tem cara de letra miúda, e o olho aprende a pulá-lo. O conteúdo é importante, mas a hierarquia visual diz que não é.
 - A bandeja tira a explicação longa do caminho de quem só quer o número, sem escondê-la: o botão fica no cabeçalho do gráfico que ela explica.
+- Um texto só para dois conceitos obriga o leitor a separar o que é de cada um, e as dúvidas da rodada de ajustes no canvas ("oq é cada um?", "oq seria ativo e passivo?") caíram justamente nesses cartões. A cor no título liga o bloco à linha do gráfico sem precisar da legenda.
 - A fórmula sozinha ensina a regra, e o exemplo com número inventado obriga a traduzi-lo para os números reais. Os dois juntos, com os números da tela, mostram que a regra dá exatamente o número que está ali.
 - Cor de semáforo sem faixa oficial vira opinião do app.
 - O visual herdado do Finance Manager era uma cópia, e o app pede identidade própria.

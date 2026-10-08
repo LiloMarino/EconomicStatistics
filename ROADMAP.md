@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** O marco das expectativas de mercado foi concluído: a continuação pelo Focus entrou nos gráficos de IPCA, dólar, déficit e dívida, e o dólar passou a ser o do fim do mês.
+> **Última mudança (2026-10-08):** Registrados os ajustes da rodada no canvas nas telas Dívida, Setor externo, Déficit e no Aprender, e o cartão de quem faz o déficit, que espera as séries por esfera.
 
 ## Glossário
 
@@ -17,11 +17,11 @@
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35 | — |
-| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39 | — |
+| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39, F40, F42 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
-| **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24, F36, F37 | — |
+| **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24, F36, F37, F40, F41, F43 | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F21, F24, F27, F28, F37 | — |
-| **N6** | Saber como o déficit é financiado | F4, F13, F16 | — |
+| **N6** | Saber como o déficit é financiado | F4, F13, F16, F41, F43 | — |
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | F9, F13, F30, F31, F33, F36, F37, F39 | — |
 | **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | — | ⏳ |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ⏳ |
@@ -37,18 +37,19 @@
 | **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ⏳ |
 | **F38** | Diagramas nos conceitos que já existem | — | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
+| **F43** | Quem faz o déficit: a NFSP por esfera | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (32 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (35 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | F1 | ✅ |
-| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F20 | ✅ |
+| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | F2, F3, F4, F10, F16, F20, F43 | ✅ |
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25, F27, F30 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | F7, F8, F11, F26 | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41 | ✅ |
 | **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | F9, F36, F37, F38, F39 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
@@ -75,6 +76,9 @@
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
+| **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
+| **F41** | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
+| **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
 
 </details>
 
@@ -94,6 +98,7 @@
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
+| **F43** | Quem faz o déficit: a NFSP por esfera | M4 | 0 | ⏳ |
 
 ---
 
@@ -130,7 +135,7 @@
 >
 > **Serve:** N2, N7
 >
-> **Progresso:** 3/8 concluídas
+> **Progresso:** 4/9 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -140,13 +145,14 @@
 | **F38** | Diagramas nos conceitos que já existem | F9 | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
-<details><summary>Concluído (3 itens)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | F22 | ✅ |
 | **F8** | Aba Aprender: glossário e página por conceito | F7 | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | F8 | ✅ |
+| **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | F8, F29 | ✅ |
 
 </details>
 
@@ -168,20 +174,22 @@
 >
 > **Serve:** N4, N6
 >
-> **Progresso:** 3/5 concluídas
+> **Progresso:** 4/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F15** | Como medir o financiamento monetário do déficit | F13, F16 | 🔍 |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | F14 | ⏳ |
+| **F43** | Quem faz o déficit: a NFSP por esfera | F13 | ⏳ |
 
-<details><summary>Concluído (3 itens)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F13** | Tela Déficit: primário, juros e nominal | F4 | ✅ |
 | **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | F13 | ✅ |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | F2 | ✅ |
+| **F41** | Déficit mês a mês, com o nominal numa coluna própria | F13 | ✅ |
 
 </details>
 
@@ -268,17 +276,18 @@
 
 ### Sem marco
 
-> **Progresso:** 1/2 concluídas
+> **Progresso:** 2/3 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F35** | IPCA livres, administrados e serviços | F4, F8 | ⏳ |
 
-<details><summary>Concluído (1 item)</summary>
+<details><summary>Concluído (2 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | F3 | ✅ |
+| **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | F13, F14, F31 | ✅ |
 
 </details>
 
@@ -323,6 +332,10 @@
 | **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | N4, N5, N7 | D7 | M2 | F9, F16, F24 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
 | **F38** | Diagramas nos conceitos que já existem | N2 | D7 | M2 | F9 | Baixo | Baixo | Médio | Bom | ⏳ Pendente |
 | **F39** | Pranchas dos explicadores no canvas | N2, N7 | D6, D7 | M2 | — | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | N2, N4 | D6 | — | F13, F14, F31 | Baixo | Baixo | Médio | Excelente | ✅ Concluído |
+| **F41** | Déficit mês a mês, com o nominal numa coluna própria | N4, N6 | D6 | M4 | F13 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 | F8, F29 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ⏳ Pendente |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -887,6 +900,49 @@ O resultado de cada um fica registrado: diagrama novo na página, ou "o texto ba
 - as cores dos dois loops, das pontes e do que freia cada loop, em claro e escuro.
 
 O canvas está em edição. Os explicadores com diagrama (F9) são implementados a partir destas pranchas, e o das três dívidas (F36), o de por que a dívida não explode (F37) e os diagramas nos conceitos (F38) seguem o mesmo molde.
+
+**F40 — Leitura mais clara nas telas Dívida, Setor externo e Déficit.** Feito, a partir da rodada de ajustes nas telas do app no canvas, que respondeu às dúvidas deixadas em cada cartão.
+
+**Um bloco por conceito na bandeja (D6):** quando o cartão mostra dois conceitos, cada um ganha o seu bloco, com um quadradinho na cor da série no gráfico. O `TrayItem` ganhou a prop `color`.
+- Dívida: DBGG e DLSP em blocos próprios, e um terceiro bloco diz por que a distância entre elas muda.
+- Setor externo, transações correntes e IDP: cada um explicado do zero, e um bloco "As duas juntas" com a pergunta do gráfico e os números. A legenda diz o que é cada linha.
+- Setor externo, ativos e passivos: Ativos, Passivos e Saldo em blocos próprios.
+- Déficit: primário, juros e nominal.
+
+**Dívida, o primário que estabiliza:**
+- o cartão ganhou a linha **Falta**, uma barra que vai do primário feito ao preciso, com a distância escrita: em ago/2026, de −0,62% a 4,20% do PIB, 4,82 pontos percentuais;
+- os rótulos das linhas mostram o valor ("Feito: −0,62%", "Preciso: 4,20%").
+
+**Setor externo:**
+- a posição internacional ganhou uma coluna **Saldo** por ano, ao lado das barras de ativos e passivos;
+- o eixo das reservas diz "US$ 300 bi", e não só "300".
+
+**F41 — Déficit mês a mês, com o nominal numa coluna própria.** Feito, a partir da rodada de ajustes nas telas do app no canvas.
+
+**Nominal em coluna:** no ano a ano, o nominal deixou de ser um traço sobre a pilha e virou uma coluna clara ao lado do par primário + juros, do tamanho da soma das duas. A previsão do Focus segue tracejada.
+
+**Escala Ano a ano / Mês a mês:**
+- um seletor no cabeçalho do cartão, com a escolha na URL (`?scale=months`);
+- o mês a mês mostra as três linhas de 12 meses, um ponto por mês desde nov/2002, para ver as viradas dentro do ano que o fim de dezembro esconde;
+- o `GET /api/deficit` passou a devolver `months`, com todos os pontos que já estavam no cache, sem série nova.
+
+**F42 — Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender.** Feito, a partir da rodada de ajustes nas telas do app no canvas. O texto do "É bom ou ruim?" diz a regra; o gráfico mostra onde o número está agora.
+
+- A página do acumulado em 12 meses mostra os últimos 24 meses do IPCA em 12 meses com a meta, o piso e o teto, e diz se o último mês está dentro do intervalo.
+- O gráfico termina no último mês do IPCA no banco e lê o mesmo `GET /api/inflation/pace` da tela de inflação.
+- O `concept-article.tsx` tem um mapa `readingCharts`, por id de conceito. Outro conceito com série ganha o seu gráfico entrando nesse mapa.
+
+**F43 — Quem faz o déficit: a NFSP por esfera.** O cartão "Quem faz o déficit", na tela Déficit, divide a necessidade de financiamento do setor público (a NFSP, o déficit nominal do Brasil inteiro) entre quem a produz: o governo central (Tesouro, Previdência e Banco Central), os estados e municípios, e as estatais. Para cada esfera, o primário e os juros em 12 meses, em % do PIB.
+
+O desenho do cartão veio da rodada de ajustes nas telas do app no canvas, com números de exemplo, e entra no código junto com os dados de verdade.
+
+**Plano:**
+- pesquisar no SGS as séries de primário e de juros em 12 meses, em % do PIB, de cada esfera, e conferir que, somadas, dão as do setor público consolidado da F13;
+- cadastrar as séries em `backend/domain/series.py`, com o conceito de cada uma;
+- levar os números por esfera para o `GET /api/deficit`;
+- montar o cartão com o dado do banco.
+
+**Aceite:** no último mês, a soma das três esferas bate com o primário e os juros do consolidado, a menos do arredondamento do BCB.
 
 ---
 ## 2. Nice-to-have
