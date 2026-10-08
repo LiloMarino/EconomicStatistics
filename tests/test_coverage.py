@@ -15,6 +15,7 @@ from backend.domain.series import SERIES, code_ranges
 IPCA = SERIES[SeriesId.IPCA_FOOD]
 MINIMUM_WAGE = SERIES[SeriesId.MINIMUM_WAGE]
 TARGET = SERIES[SeriesId.INFLATION_TARGET]
+POSITION = SERIES[SeriesId.IIP_LIABILITIES]
 
 
 def cached_until(spec_first: date, last: date) -> DateRange:
@@ -41,6 +42,14 @@ def test_annual_target_is_expected_from_january_of_its_own_year() -> None:
     request = fetch_request(TARGET, cached, None, datetime(2027, 1, 2))
     assert request is not None
     assert request.start == date(2025, 1, 1)
+
+
+def test_quarterly_position_is_expected_three_months_after_the_quarter() -> None:
+    """O estoque do 2º trimestre, datado em abril, é cobrado a partir de 28 de setembro;
+    antes disso, vale o do 1º."""
+    assert expected_ref_date(POSITION, date(2026, 9, 27)) == date(2026, 1, 1)
+    assert expected_ref_date(POSITION, date(2026, 9, 28)) == date(2026, 4, 1)
+    assert expected_ref_date(POSITION, date(2026, 12, 28)) == date(2026, 7, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:

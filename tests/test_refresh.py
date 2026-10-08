@@ -44,7 +44,7 @@ def test_offline_source_keeps_cache_and_warns_once(session: Session) -> None:
     refresh_series(session, _providers(FakeProvider()), NOW)
     before = last_cached(session)
     offline = FakeProvider(offline=True)
-    later = NOW + timedelta(days=100)
+    later = NOW + timedelta(days=365)
 
     first = refresh_series(session, _providers(offline), later)
     second = refresh_series(session, _providers(offline), later + timedelta(hours=7))

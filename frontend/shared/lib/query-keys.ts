@@ -8,6 +8,7 @@ export const queryKeys = {
   inflationPace: ["series", "inflation-pace"] as const,
   seasonality: ["series", "seasonality"] as const,
   purchasingPower: ["series", "purchasing-power"] as const,
+  externalSector: ["series", "external-sector"] as const,
 };
 
 export function invalidateKeys(queryClient: QueryClient, keys: readonly QueryKey[]): Promise<void> {

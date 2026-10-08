@@ -33,13 +33,22 @@ def month_start(day: date, months_back: int = 0) -> date:
 
 
 def expected_ref_date(spec: SeriesSpec, today: date) -> date:
-    """A referência que já devia estar publicada hoje: o mês, ou o 1º de janeiro do ano
-    numa série anual. A janela de revisão de 12 meses cobre um ano nas duas."""
+    """A referência que já devia estar publicada hoje: o mês, o 1º dia do trimestre
+    numa série trimestral, ou o 1º de janeiro do ano numa anual. A janela de revisão de
+    12 meses cobre um ano nas três."""
     months_back = spec.lag_months + (0 if today.day >= spec.release_day else 1)
     expected = month_start(today, months_back)
-    if spec.periodicity is Periodicity.ANNUAL:
-        return date(expected.year, 1, 1)
-    return expected
+    match spec.periodicity:
+        case Periodicity.ANNUAL:
+            return date(expected.year, 1, 1)
+        case Periodicity.QUARTERLY:
+            return quarter_start(expected)
+        case Periodicity.MONTHLY:
+            return expected
+
+
+def quarter_start(day: date) -> date:
+    return date(day.year, (day.month - 1) // 3 * 3 + 1, 1)
 
 
 def fetch_request(

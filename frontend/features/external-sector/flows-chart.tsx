@@ -1,0 +1,164 @@
+import { BookOpen } from "lucide-react";
+import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts";
+
+import type { ExternalSector } from "@/features/external-sector/use-external-sector";
+import { ChartLegend } from "@/shared/components/chart-legend";
+import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/shared/components/ui/chart";
+import { formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
+import { niceTicks } from "@/shared/lib/nice-scale";
+
+type Flow = ExternalSector["flows"][number];
+
+const chartConfig = {
+  current_account: { label: "Transações correntes", color: "var(--trend-up)" },
+  fdi: { label: "Investimento direto no país", color: "var(--ok)" },
+} satisfies ChartConfig;
+
+const axisPercent = new Intl.NumberFormat("pt-BR", {
+  style: "percent",
+  maximumFractionDigits: 1,
+});
+
+// Rótulo do eixo x em janeiro, a cada 2 anos
+const YEARS_BETWEEN_TICKS = 2;
+
+function HowToRead({ last }: { last: Flow }) {
+  const deficit = -last.current_account;
+  const covered = last.fdi >= deficit;
+  return (
+    <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
+      <TrayItem title="Como ler" concept="current-account">
+        <p>
+          A linha vermelha é o saldo de tudo o que o país compra e vende com o exterior; abaixo de
+          zero, saiu mais dinheiro do que entrou. Quando a linha verde fica acima do tamanho desse
+          déficit, o buraco está financiado por dinheiro que veio para ficar.
+        </p>
+        {deficit > 0 && (
+          <p>
+            Em {formatMonth(last.ref_date)}: déficit de <strong>{formatPercent(deficit)}</strong> do
+            PIB e investimento direto de <strong>{formatPercent(last.fdi)}</strong>.{" "}
+            {covered
+              ? "O investimento direto cobre o déficit."
+              : "O investimento direto não cobre o déficit."}
+          </p>
+        )}
+      </TrayItem>
+      <TrayItem title="Quando preocupa" concept="fdi">
+        <p>
+          Se o déficit cresce e o investimento direto não acompanha, a diferença passa a ser coberta
+          por dinheiro que só aplica em títulos e ações, que vai embora rápido numa crise.
+        </p>
+      </TrayItem>
+    </div>
+  );
+}
+
+/** Transações correntes e investimento direto no país, em % do PIB em 12 meses, nos
+últimos 10 anos, no mesmo gráfico como o Banco Central publica. */
+export function FlowsChart({ flows }: { flows: Flow[] }) {
+  const first = flows.at(0);
+  const last = flows.at(-1);
+  if (!first || !last) return null;
+  const values = flows.flatMap((point) => [point.current_account, point.fdi]);
+  const ticks = niceTicks(Math.min(0, ...values), Math.max(0, ...values), 4);
+  const lastYear = Number(last.ref_date.slice(0, 4));
+  const yearTicks = flows
+    .filter(
+      (point) =>
+        point.ref_date.slice(5, 7) === "01" &&
+        (lastYear - Number(point.ref_date.slice(0, 4))) % YEARS_BETWEEN_TICKS === 0,
+    )
+    .map((point) => point.ref_date);
+
+  return (
+    <ExplainedCard
+      title="De onde vêm e para onde vão os dólares"
+      subtitle={`% do PIB em 12 meses · ${formatMonthRange(first.ref_date, last.ref_date)}`}
+      explain={{
+        label: "Como ler",
+        icon: BookOpen,
+        heading: "COMO LER",
+        content: <HowToRead last={last} />,
+      }}
+    >
+      <div className="flex flex-col gap-2">
+        <ChartLegend
+          entries={[
+            {
+              key: "current_account",
+              label: "Transações correntes",
+              color: "var(--trend-up)",
+              shape: "line",
+            },
+            {
+              key: "fdi",
+              label: "Investimento direto no país",
+              color: "var(--ok)",
+              shape: "line",
+            },
+          ]}
+        />
+        <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
+          <LineChart data={flows} margin={{ left: 0, right: 16, top: 16, bottom: 4 }}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="ref_date"
+              ticks={yearTicks}
+              tickLine={false}
+              axisLine={false}
+              interval={0}
+              tickFormatter={(month: string) => month.slice(0, 4)}
+            />
+            <YAxis
+              domain={[ticks.at(0) ?? -0.01, ticks.at(-1) ?? 0.01]}
+              ticks={ticks}
+              tickLine={false}
+              axisLine={false}
+              width={48}
+              tickFormatter={(value: number) => axisPercent.format(value).replace("-", "−")}
+            />
+            <ReferenceLine y={0} stroke="var(--ink-2)" />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(_, payload) => {
+                    const month: unknown = payload[0]?.payload?.ref_date;
+                    return typeof month === "string" ? formatMonth(month) : null;
+                  }}
+                  formatter={(value, name) => (
+                    <span className="flex w-full items-center justify-between gap-4">
+                      {name === "fdi" ? "Investimento direto" : "Transações correntes"}
+                      <span className="tabular-nums">
+                        {typeof value === "number" ? formatPercent(value) : ""}
+                      </span>
+                    </span>
+                  )}
+                />
+              }
+            />
+            <Line
+              dataKey="current_account"
+              stroke="var(--color-current_account)"
+              strokeWidth={2.5}
+              dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="fdi"
+              stroke="var(--color-fdi)"
+              strokeWidth={2.5}
+              dot={false}
+              isAnimationActive={false}
+            />
+          </LineChart>
+        </ChartContainer>
+      </div>
+    </ExplainedCard>
+  );
+}

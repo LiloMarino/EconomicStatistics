@@ -7,7 +7,7 @@ from datetime import date
 from sqlalchemy.orm import Session
 
 from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
-from backend.core.errors import EconomicError
+from backend.core.errors import EconomicError, MissingDataError
 from backend.domain.coverage import month_start
 from backend.domain.pace import STEADY_BAND, verdict
 from backend.domain.rates import (
@@ -16,6 +16,7 @@ from backend.domain.rates import (
     accumulate,
     monthly_rates,
     real_change,
+    relative_change,
     rolling_12m,
 )
 from backend.domain.seasonality import (
@@ -32,12 +33,6 @@ IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
 
 class InvalidRequestError(EconomicError):
     status = 422
-
-
-class MissingDataError(EconomicError):
-    """O cache não cobre o que o pedido precisa."""
-
-    status = 409
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -345,7 +340,7 @@ def _minimum_wage_raise(observations: list[Observation], period: Period) -> floa
     after = by_month.get(period.end)
     if before is None or after is None:
         raise MissingDataError("O salário mínimo do período não está no cache.")
-    return after / before - 1
+    return relative_change(after, before)
 
 
 # O gráfico mostra 24 meses de 12 meses, e cada 12 meses lê os 11 meses anteriores

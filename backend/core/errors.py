@@ -10,3 +10,9 @@ class EconomicError(Exception):
     """Falha de negócio. Subclasses declaram o `status` que a borda HTTP vai ler."""
 
     status: int = 400
+
+
+class MissingDataError(EconomicError):
+    """O cache não cobre o que o pedido precisa."""
+
+    status = 409

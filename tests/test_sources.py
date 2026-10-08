@@ -115,6 +115,18 @@ def test_sgs_values_become_floats_dated_on_the_first() -> None:
     ]
 
 
+def test_sgs_quarter_is_dated_on_its_first_month() -> None:
+    """O SGS data o estoque trimestral no 1º dia do trimestre: 01/04 é o 2º."""
+    body = b'[{"data":"01/01/2026","valor":"2460430"},{"data":"01/04/2026","valor":"2461469"}]'
+
+    observations = bcb_sgs_provider.to_observations(body)
+
+    assert [item.ref_date for item in observations] == [
+        date(2026, 1, 1),
+        date(2026, 4, 1),
+    ]
+
+
 def test_sgs_window_without_data_is_empty(monkeypatch: pytest.MonkeyPatch) -> None:
     """Janela sem nenhum valor publicado é 404 no SGS, e isso é lista vazia."""
 

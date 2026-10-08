@@ -5,6 +5,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { MainLayout } from "@/layouts/main-layout";
 import { ConceptPage } from "@/pages/concept";
 import { ErrorPage } from "@/pages/error";
+import { ExternalSectorPage } from "@/pages/external-sector";
 import { InflationPage } from "@/pages/inflation";
 import { LearnPage } from "@/pages/learn";
 import { PurchasingPowerPage } from "@/pages/purchasing-power";
@@ -19,6 +20,7 @@ export default function App() {
             <Route index element={<Navigate to="/inflation" replace />} />
             <Route path="inflation" element={<InflationPage />} />
             <Route path="purchasing-power" element={<PurchasingPowerPage />} />
+            <Route path="external-sector" element={<ExternalSectorPage />} />
             <Route path="learn" element={<LearnPage />} />
             <Route path="learn/:conceptId" element={<ConceptPage />} />
             <Route path="*" element={<ErrorPage />} />

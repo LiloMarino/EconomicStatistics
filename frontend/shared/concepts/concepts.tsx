@@ -5,8 +5,10 @@ import { MonthsTable } from "@/shared/concepts/months-table";
 
 const inflationScreen = { to: "/inflation", label: "Inflação por categoria" };
 const purchasingPowerScreen = { to: "/purchasing-power", label: "Poder de compra" };
+const externalScreen = { to: "/external-sector", label: "Setor externo" };
 
 const ipcaFrequency = "Mensal, por volta do dia 10 do mês seguinte";
+const externalNoteFrequency = "Mensal, perto do fim do mês seguinte";
 
 // As fontes que mais de um conceito cita; cada conceito diz o que ela comprova nele
 const booklet = {
@@ -20,6 +22,16 @@ const sidra7060 = {
 const bcbTarget = {
   name: "Banco Central, página da meta de inflação",
   url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
+};
+const sgs = { name: "Banco Central, SGS", url: "https://www3.bcb.gov.br/sgspub/" };
+const sgs3698 = { ...sgs, name: "Banco Central, série 3698 do SGS (dólar, média mensal)" };
+const bcbDollarBulletins = {
+  name: "Banco Central, cotações diárias do dólar no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios",
+};
+const dataset23079 = {
+  name: "Banco Central, série 23079 no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/23079-transacoes-correntes-acumulado-em-12-meses-em-relacao-ao-pib---mensal",
 };
 const minimumWageLaw = {
   name: "Lei 14.663/2023",
@@ -38,8 +50,9 @@ const ipcaGroupNames = [
   "Comunicação",
 ];
 
-// Os números dos exemplos saem do banco do app (IPCA até ago/2026) e foram conferidos
-// contra as telas; os fatos institucionais, contra o IBGE, o Banco Central e a lei.
+// Os números dos exemplos saem do banco do app (IPCA até ago/2026, setor externo até
+// set/2026) e foram conferidos contra as telas e o SGS; os fatos institucionais, contra
+// o IBGE, o Banco Central e a lei.
 export const concepts: Record<ConceptId, Concept> = {
   ipca: {
     title: "IPCA",
@@ -787,5 +800,496 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: "Anual, todo 1º de janeiro",
     screens: [purchasingPowerScreen],
+  },
+
+  "exchange-rate": {
+    title: "Câmbio",
+    topic: "external",
+    summary: "O preço de uma moeda em outra: quantos reais compram um dólar.",
+    lead: (
+      <>
+        Câmbio é o preço de uma moeda em outra. Quando se fala em dólar a R$ 5,14, é a taxa de
+        câmbio: quantos reais é preciso dar por um dólar.
+      </>
+    ),
+    keywords: ["dólar", "taxa de câmbio", "real", "moeda", "desvalorização", "valorização"],
+    measures: (
+      <p>
+        No Brasil o câmbio é livre: o preço sai das compras e vendas de moeda entre bancos, empresas
+        e investidores, e o Banco Central não fixa um valor. Dólar subindo é real perdendo valor;
+        dólar caindo é real ganhando valor.
+      </p>
+    ),
+    example: {
+      title: "Com os números de setembro de 2026",
+      content: (
+        <>
+          <p>
+            Um produto de US$ 100 custava R$ 536,74 com o dólar médio de setembro de 2025 (R$
+            5,3674) e R$ 514,47 com o de setembro de 2026 (R$ 5,1447).
+          </p>
+          <FormulaBox>
+            <Formula flushLeft tex="\dfrac{5{,}1447}{5{,}3674} - 1 = \mathbf{-4{,}15\%}" />
+          </FormulaBox>
+          <p>Em reais, o dólar ficou 4,15% mais barato em 12 meses.</p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Dólar mais caro encarece o que vem de fora, como eletrônicos, remédios e combustível, e
+        ajuda quem exporta. Dólar mais barato faz o contrário. Nenhum dos dois é bom ou ruim
+        sozinho: o que pesa é a velocidade da mudança.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A variação muda conforme o lado.",
+        text: (
+          <>
+            O dólar caiu 4,15% em reais, mas o real subiu 4,33% em dólar (5,3674 ÷ 5,1447 − 1). As
+            duas contas estão certas: cada uma divide pelo ponto de partida dela.
+          </>
+        ),
+      },
+    ],
+    related: ["ptax", "international-reserves", "current-account"],
+    sources: [
+      {
+        ...bcbDollarBulletins,
+        backs: "O câmbio no Brasil é livre: as taxas são pactuadas no mercado desde março de 1990.",
+      },
+      { ...sgs3698, backs: "As médias do dólar em setembro de 2025 e de 2026." },
+    ],
+    screens: [externalScreen],
+  },
+
+  ptax: {
+    title: "PTAX",
+    abbr: "Banco Central",
+    topic: "external",
+    summary: "A taxa de câmbio de referência que o Banco Central calcula todo dia útil.",
+    lead: (
+      <>
+        A PTAX é a taxa de referência do dólar que o Banco Central calcula todo dia útil, a partir
+        de consultas aos bancos que operam câmbio. É ela que aparece nas estatísticas oficiais.
+      </>
+    ),
+    keywords: ["dólar", "câmbio", "taxa de referência", "cotação", "banco central"],
+    measures: (
+      <p>
+        Desde julho de 2011, o Banco Central consulta os dealers de câmbio em quatro janelas ao
+        longo do dia, e a PTAX de fechamento é a média dessas quatro consultas. A tela usa a média
+        da PTAX nos dias úteis de cada mês.
+      </p>
+    ),
+    example: {
+      title: "Com os números de setembro de 2026",
+      content: (
+        <p>
+          A PTAX de venda teve média de <strong>R$ 5,1447</strong> em setembro de 2026, contra R$
+          5,3674 em setembro de 2025.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        É o número para comparar meses e anos, porque é calculado do mesmo jeito todo dia. Para a
+        conta de quem viaja ou compra no exterior, o preço é outro (veja os cuidados).
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Não é o dólar da casa de câmbio.",
+        text: (
+          <>
+            A PTAX é a taxa entre bancos. O dólar em espécie ou no cartão sai mais caro, com a
+            margem de quem vende e os impostos.
+          </>
+        ),
+      },
+      {
+        title: "A média do mês não é o dólar de hoje.",
+        text: <>Num mês agitado, o dólar do último dia pode ficar longe da média.</>,
+      },
+    ],
+    related: ["exchange-rate"],
+    sources: [
+      {
+        ...bcbDollarBulletins,
+        backs:
+          "Desde 1º de julho de 2011 (Circular 3.506), a PTAX é a média das taxas de quatro consultas diárias aos dealers de câmbio.",
+      },
+      { ...sgs3698, backs: "As médias de setembro de 2025 e de 2026." },
+    ],
+    frequency: "Diária; a média do mês sai no primeiro dia útil do seguinte",
+    screens: [externalScreen],
+  },
+
+  "current-account": {
+    title: "Transações correntes",
+    topic: "external",
+    summary: "O saldo de tudo o que o país compra, vende, paga e recebe do exterior.",
+    lead: (
+      <>
+        Transações correntes é o saldo de tudo o que o país compra e vende com o exterior:
+        mercadorias, serviços, juros e lucros. Negativo é déficit: saiu mais dinheiro do que entrou.
+      </>
+    ),
+    keywords: ["conta corrente", "balança comercial", "déficit externo", "balanço de pagamentos"],
+    measures: (
+      <p>
+        Soma quatro contas: a balança comercial (mercadorias vendidas menos compradas), os serviços
+        (como frete, viagens e aluguel de equipamento), a renda primária (juros e lucros que entram
+        e saem) e a renda secundária (transferências sem contrapartida, como dinheiro mandado a
+        parentes).
+      </p>
+    ),
+    formula: {
+      tex: "TC = \\text{bens} + \\text{serviços} + \\text{renda primária} + \\text{renda secundária}",
+      legend: [
+        { symbol: "TC", text: <>saldo das transações correntes, em dólar</> },
+        { symbol: "\\text{bens}", text: <>exportações menos importações de mercadorias</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Nos 12 meses até agosto de 2026, o déficit foi de US$ 63,0 bilhões, com um PIB de US$
+            2.553,9 bilhões no mesmo período.
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\dfrac{-63{,}0}{2.553{,}9} = \mathbf{-2{,}47\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        O Brasil costuma ter déficit, e isso sozinho não é crise: o que importa é quem cobre o
+        buraco. Se o investimento direto no país for maior que o déficit, ele está coberto por
+        dinheiro que veio para ficar.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Em 12 meses e em % do PIB.",
+        text: (
+          <>
+            O saldo de um mês só oscila com a época do ano. Somar 12 meses e dividir pelo PIB
+            permite comparar anos e países de tamanhos diferentes.
+          </>
+        ),
+      },
+    ],
+    related: ["fdi", "share-of-gdp", "exchange-rate"],
+    sources: [
+      {
+        ...dataset23079,
+        backs:
+          "As quatro contas de transações correntes, e por que o saldo de 12 meses se mede em % do PIB.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 23079, 24419 e 4192 do SGS",
+        backs:
+          "O saldo de 12 meses até agosto de 2026 em dólar (24419) e em % do PIB (23079), e o PIB de 12 meses em dólar (4192).",
+      },
+    ],
+    frequency: externalNoteFrequency,
+    screens: [externalScreen],
+  },
+
+  fdi: {
+    title: "Investimento direto no país",
+    abbr: "IDP",
+    topic: "external",
+    summary: "Dinheiro estrangeiro que entra para abrir, comprar ou financiar empresas no Brasil.",
+    lead: (
+      <>
+        O <strong>IDP</strong> é o dinheiro estrangeiro que entra para abrir, comprar ou ampliar
+        empresas no país. Costuma ficar anos, ao contrário do dinheiro que só aplica em títulos e
+        ações.
+      </>
+    ),
+    keywords: ["idp", "investimento estrangeiro", "multinacional", "capital estrangeiro"],
+    measures: (
+      <p>
+        Conta o investimento de quem tem controle ou forte influência sobre a empresa. Tem duas
+        partes: a participação no capital, que é comprar ou aumentar a fatia na empresa, e as
+        operações intercompanhia, que são empréstimos entre empresas do mesmo grupo, como da matriz
+        no exterior para a filial aqui.
+      </p>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Nos 12 meses até agosto de 2026, o investimento direto no país somou{" "}
+          <strong>3,39% do PIB</strong>, mais que o déficit em transações correntes, de 2,47%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Investimento direto maior que o déficit em transações correntes é o caso confortável: o
+        buraco está coberto por quem quer ficar. Se ele encolhe e o déficit cresce, o país passa a
+        depender de dinheiro de curto prazo.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Inclui empréstimo dentro do grupo.",
+        text: (
+          <>
+            Parte do IDP é dívida da filial com a matriz. Ela costuma ser mais estável que o
+            dinheiro de aplicação, mas não é fábrica nova.
+          </>
+        ),
+      },
+    ],
+    related: ["current-account", "international-investment-position", "share-of-gdp"],
+    sources: [
+      {
+        name: "Banco Central, série 22885 no portal de dados abertos",
+        url: "https://dadosabertos.bcb.gov.br/dataset/22885-investimentos-diretos-no-pais---idp---mensal---liquido",
+        backs:
+          "O IDP é investimento com relação de controle ou forte influência, dividido em participação no capital e operações intercompanhia.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 23079 e 23080 do SGS",
+        backs: "O IDP e as transações correntes de 12 meses até agosto de 2026, em % do PIB.",
+      },
+    ],
+    frequency: externalNoteFrequency,
+    screens: [externalScreen],
+  },
+
+  "international-reserves": {
+    title: "Reservas internacionais",
+    topic: "external",
+    summary: "Os dólares e outros ativos externos que o Banco Central guarda de colchão.",
+    lead: (
+      <>
+        As reservas internacionais são os dólares e outros ativos externos que o Banco Central
+        guarda. Servem de colchão quando o dinheiro estrangeiro foge do país.
+      </>
+    ),
+    keywords: ["reservas", "colchão", "banco central", "dólares", "liquidez"],
+    measures: (
+      <p>
+        São ativos no exterior prontamente disponíveis e controlados pelo Banco Central, para cobrir
+        as necessidades de financiamento do país com o exterior, intervir no mercado de câmbio e
+        manter a confiança na moeda. A tela usa a posição do último dia de cada mês.
+      </p>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            No fim de agosto de 2026, as reservas eram de US$ 372,6 bilhões, e o PIB de 12 meses, de
+            US$ 2.553,9 bilhões.
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\dfrac{372{,}6}{2.553{,}9} = \mathbf{14{,}59\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Mais reservas é mais proteção contra uma fuga de dólares, mas guardar tem custo: o dinheiro
+        aplicado lá fora costuma render menos que o juro que o governo paga aqui. Por isso o tamanho
+        certo é discutido, e não há um número oficial de bom.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Dois conceitos.",
+        text: (
+          <>
+            O Banco Central publica as reservas no conceito caixa e no conceito liquidez, que conta
+            também as linhas com recompra e os empréstimos em moeda estrangeira feitos por ele. A
+            tela usa o de liquidez.
+          </>
+        ),
+      },
+    ],
+    related: ["exchange-rate", "share-of-gdp", "international-investment-position"],
+    sources: [
+      {
+        name: "Banco Central, série 13982 no portal de dados abertos",
+        url: "https://dadosabertos.bcb.gov.br/dataset/13982-reservas-internacionais---conceito-liquidez---total---diaria",
+        backs:
+          "O que são as reservas no conceito liquidez, para que servem e o que esse conceito inclui.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 3546 e 4192 do SGS",
+        backs: "As reservas do fim de agosto de 2026 e o PIB de 12 meses em dólar.",
+      },
+    ],
+    frequency: "Mensal, a posição do último dia do mês",
+    screens: [externalScreen],
+  },
+
+  "international-investment-position": {
+    title: "Posição internacional de investimento",
+    abbr: "PII",
+    topic: "external",
+    summary: "O balanço do país com o mundo: o que tem lá fora menos o que estrangeiros têm aqui.",
+    lead: (
+      <>
+        A posição internacional de investimento é o balanço do país com o mundo: tudo o que quem
+        mora no Brasil tem no exterior, menos tudo o que estrangeiros têm aqui, sejam empresas,
+        ações, títulos ou empréstimos.
+      </>
+    ),
+    keywords: ["pii", "passivo externo", "ativo externo", "balanço", "estoque"],
+    measures: (
+      <p>
+        É uma foto do fim de cada trimestre. Os ativos são o investimento direto no exterior, os
+        investimentos em carteira, os derivativos, outros investimentos e as reservas. Os passivos
+        são o investimento direto no país, os investimentos em carteira, os derivativos e outros
+        investimentos.
+      </p>
+    ),
+    formula: {
+      tex: "\\text{saldo} = \\text{ativos} - \\text{passivos}",
+      legend: [
+        { symbol: "\\text{ativos}", text: <>o que quem mora no Brasil tem no exterior</> },
+        { symbol: "\\text{passivos}", text: <>o que quem mora fora tem no Brasil</> },
+      ],
+    },
+    example: {
+      title: "Com os números do 2º trimestre de 2026",
+      content: (
+        <>
+          <p>
+            No fim de junho de 2026: ativos de US$ 1.148,7 bilhões e passivos de US$ 2.461,5
+            bilhões, com um PIB de 12 meses de US$ 2.496,6 bilhões.
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\dfrac{1.148{,}7 - 2.461{,}5}{2.496{,}6} = \mathbf{-52{,}58\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Saldo negativo é comum em país emergente, que recebe mais investimento do que faz lá fora. O
+        que pesa é do que o passivo é feito: fábrica e ação em reais pesam menos numa crise que
+        dívida em dólar de prazo curto.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "O saldo mexe sem ninguém investir.",
+        text: (
+          <>
+            Os passivos incluem ações e empresas brasileiras medidas em dólar. Quando a bolsa ou o
+            real sobem, o passivo cresce, e o saldo piora sem um dólar novo entrar.
+          </>
+        ),
+      },
+    ],
+    related: ["fdi", "international-reserves", "share-of-gdp"],
+    sources: [
+      {
+        name: "Banco Central, série 24040 no portal de dados abertos",
+        url: "https://dadosabertos.bcb.gov.br/dataset/24040-passivo---estoque",
+        backs:
+          "O que entra nos ativos e nos passivos, a metodologia do manual do FMI (BPM6) e a publicação trimestral, em até três meses.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 24011, 24040 e 4192 do SGS",
+        backs: "Ativos e passivos do 2º trimestre de 2026 e o PIB de 12 meses até junho.",
+      },
+    ],
+    frequency: "Trimestral, até três meses depois do fim do trimestre",
+    screens: [externalScreen],
+  },
+
+  "share-of-gdp": {
+    title: "% do PIB",
+    topic: "external",
+    summary: "Um valor dividido por tudo o que o país produziu em 12 meses.",
+    lead: (
+      <>
+        Medir em % do PIB é dividir um valor pelo tamanho da economia: tudo o que o país produziu em
+        12 meses. Assim dá para comparar anos e países diferentes.
+      </>
+    ),
+    keywords: ["pib", "porcentagem do pib", "tamanho da economia", "proporção"],
+    measures: (
+      <p>
+        US$ 63 bilhões de déficit é muito ou pouco? Depende do tamanho de quem deve. Dividir pelo
+        PIB responde: o mesmo valor pesa menos numa economia maior. Valor e PIB precisam estar na
+        mesma moeda e no mesmo período.
+      </p>
+    ),
+    formula: {
+      tex: "\\%\\ \\text{do PIB} = \\dfrac{V}{\\text{PIB}_{12m}}",
+      legend: [
+        { symbol: "V", text: <>o valor medido, em dólar: um saldo de 12 meses ou um estoque</> },
+        { symbol: "\\text{PIB}_{12m}", text: <>o PIB dos 12 meses até o mesmo mês, em dólar</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>Reservas de US$ 372,6 bilhões contra um PIB de 12 meses de US$ 2.553,9 bilhões:</p>
+          <FormulaBox>
+            <Formula flushLeft tex="\dfrac{372{,}6}{2.553{,}9} = \mathbf{14{,}59\%}" />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Serve para comparar, e não diz sozinho se está bom: cada indicador tem a sua leitura. Um
+        déficit de 2,5% do PIB e reservas de 15% do PIB são números de natureza diferente.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Fluxo e estoque.",
+        text: (
+          <>
+            Um saldo de 12 meses (o déficit) e uma foto num dia (as reservas) usam a mesma conta,
+            mas respondem perguntas diferentes: quanto passou no período e quanto há naquele dia.
+          </>
+        ),
+      },
+    ],
+    related: ["current-account", "international-reserves"],
+    sources: [
+      {
+        ...dataset23079,
+        backs: "Medir em % do PIB pondera o resultado pelo tamanho da economia.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 3546 e 4192 do SGS",
+        backs: "As reservas e o PIB de 12 meses em dólar de agosto de 2026.",
+      },
+    ],
+    frequency: externalNoteFrequency,
+    screens: [externalScreen],
   },
 };

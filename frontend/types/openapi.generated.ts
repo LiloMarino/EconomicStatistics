@@ -108,6 +108,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/external-sector": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** External Sector Overview */
+        get: operations["external_sector_overview_api_external_sector_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -127,12 +144,62 @@ export interface components {
             difference: number;
         };
         /**
+         * DollarDTO
+         * @description A média mensal em reais por dólar; `change_12m` em fração contra o mesmo mês do
+         *     ano anterior.
+         */
+        DollarDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            /** Change 12M */
+            change_12m: number | null;
+        };
+        /**
          * ErrorResponse
          * @description O envelope único de erro: todo 4xx/5xx sai assim, com `detail` sempre string.
          */
         ErrorResponse: {
             /** Detail */
             detail: string;
+        };
+        /**
+         * ExternalSectorDTO
+         * @description Cada gráfico na sua janela, terminando no último dado: 24 meses de dólar, 10
+         *     anos de fluxos e de reservas, e um ponto por ano nos últimos 6 anos da posição.
+         */
+        ExternalSectorDTO: {
+            dollar: components["schemas"]["DollarDTO"];
+            /** Flows */
+            flows: components["schemas"]["FlowPointDTO"][];
+            reserves: components["schemas"]["ReservesDTO"];
+            /** Position */
+            position: components["schemas"]["PositionPointDTO"][];
+        };
+        /**
+         * FlowPointDTO
+         * @description Transações correntes e investimento direto no país acumulados nos 12 meses que
+         *     terminam em `ref_date`, em fração do PIB (-0.0247 é um déficit de 2,47% do PIB).
+         */
+        FlowPointDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Current Account */
+            current_account: number;
+            /** Fdi */
+            fdi: number;
+        };
+        /** GdpShareDTO */
+        GdpShareDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Share */
+            share: number;
         };
         /**
          * GroupAccumulatedDTO
@@ -262,6 +329,16 @@ export interface components {
             /** Rate */
             rate: number;
         };
+        /** MonthValueDTO */
+        MonthValueDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Value */
+            value: number;
+        };
         /**
          * MonthVsYearBeforeDTO
          * @description Um mês contra o mesmo mês do ano anterior; `difference` em fração de ponto.
@@ -326,6 +403,24 @@ export interface components {
             last_available: string;
         };
         /**
+         * PositionPointDTO
+         * @description A posição internacional no fim do trimestre que começa em `ref_date`, em fração
+         *     do PIB de 12 meses; `net` é ativos menos passivos.
+         */
+        PositionPointDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Assets */
+            assets: number;
+            /** Liabilities */
+            liabilities: number;
+            /** Net */
+            net: number;
+        };
+        /**
          * PurchasingPowerDTO
          * @description Taxas em fração; os grupos vêm da maior perda ao maior ganho.
          */
@@ -361,6 +456,16 @@ export interface components {
             failed: components["schemas"]["SeriesId"][];
         };
         /**
+         * ReservesDTO
+         * @description O estoque do fim de cada mês em US$ milhões, e a fração do PIB do último mês
+         *     que tem o PIB de 12 meses.
+         */
+        ReservesDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            gdp_share: components["schemas"]["GdpShareDTO"] | null;
+        };
+        /**
          * RollingPointDTO
          * @description O 12 meses que termina em `ref_date` e o teto da meta do ano, em fração.
          */
@@ -388,7 +493,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_monthly" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -591,6 +696,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PurchasingPowerDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    external_sector_overview_api_external_sector_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExternalSectorDTO"];
                 };
             };
             /** @description Unprocessable Content */

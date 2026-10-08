@@ -11,8 +11,8 @@ from backend.core.enum import Periodicity, SeriesId, Source, Unit
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Observation:
-    """Valor na unidade da série, datado no dia 1 do mês de referência. Série anual é
-    datada em 1º de janeiro."""
+    """Valor na unidade da série, datado no dia 1 do mês de referência. Série
+    trimestral é datada no 1º dia do trimestre, e a anual em 1º de janeiro."""
 
     ref_date: date
     value: float
@@ -37,8 +37,9 @@ class CodeRange:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class SeriesSpec:
     """`code` é o endereço da série na fonte. A referência do mês M fica disponível
-    `lag_months` meses depois, a partir do dia `release_day`; numa série anual, a do
-    ano que contém esse mês. `first_date` é o primeiro mês que a fonte publica.
+    `lag_months` meses depois, a partir do dia `release_day`; numa série trimestral ou
+    anual, a do trimestre ou do ano que contém esse mês. `first_date` é o primeiro mês
+    que a fonte publica.
 
     Quando a fonte trocou de tabela, `earlier_codes` traz as tabelas antigas em ordem
     de data, e `code` vale do mês seguinte ao da última delas em diante."""
@@ -111,6 +112,36 @@ def _ipca(category: int) -> SeriesSpec:
     )
 
 
+# A nota de estatísticas do setor externo do BCB sai perto do fim do mês seguinte ao
+# de referência
+EXTERNAL_NOTE_RELEASE_DAY = 28
+
+
+def _external_note(code: str, first_date: date) -> SeriesSpec:
+    return SeriesSpec(
+        source=Source.BCB_SGS,
+        code=code,
+        unit=Unit.PERCENT_GDP,
+        first_date=first_date,
+        lag_months=1,
+        release_day=EXTERNAL_NOTE_RELEASE_DAY,
+    )
+
+
+def _international_position(code: str) -> SeriesSpec:
+    """O BCB publica o estoque do trimestre em até três meses depois do fim dele: o do
+    2º trimestre (abr a jun) é cobrado a partir de 28 de setembro."""
+    return SeriesSpec(
+        source=Source.BCB_SGS,
+        code=code,
+        unit=Unit.USD_MILLION,
+        first_date=date(2002, 1, 1),
+        lag_months=5,
+        release_day=EXTERNAL_NOTE_RELEASE_DAY,
+        periodicity=Periodicity.QUARTERLY,
+    )
+
+
 SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.IPCA_GENERAL: _ipca(7169),
     SeriesId.IPCA_FOOD: _ipca(7170),
@@ -151,6 +182,38 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         release_day=1,
         periodicity=Periodicity.ANNUAL,
     ),
+    # A média do mês sai no primeiro dia útil do seguinte. Começa no Real: antes dele
+    # o valor está em outras moedas.
+    SeriesId.DOLLAR_MONTHLY: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="3698",
+        unit=Unit.BRL_PER_USD,
+        first_date=date(1994, 7, 1),
+        lag_months=1,
+        release_day=5,
+    ),
+    # Os acumulados em 12 meses começam em dez/1995, o primeiro com 12 meses de dado
+    SeriesId.CURRENT_ACCOUNT_GDP: _external_note("23079", date(1995, 12, 1)),
+    SeriesId.FDI_GDP: _external_note("23080", date(1995, 12, 1)),
+    SeriesId.GDP_USD_12M: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="4192",
+        unit=Unit.USD_MILLION,
+        first_date=date(1990, 2, 1),
+        lag_months=1,
+        release_day=EXTERNAL_NOTE_RELEASE_DAY,
+    ),
+    # Reservas no conceito liquidez, a posição do último dia do mês
+    SeriesId.RESERVES: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="3546",
+        unit=Unit.USD_MILLION,
+        first_date=date(1971, 1, 1),
+        lag_months=1,
+        release_day=10,
+    ),
+    SeriesId.IIP_ASSETS: _international_position("24011"),
+    SeriesId.IIP_LIABILITIES: _international_position("24040"),
 }
 
 # Intervalo de tolerância em volta da meta, em vigor desde 2017: o teto é a meta mais

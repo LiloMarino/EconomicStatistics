@@ -41,6 +41,12 @@ def real_change(raise_: float, inflation: float) -> float:
     return (1 + raise_) / (1 + inflation) - 1
 
 
+def relative_change(current: float, before: float) -> float:
+    """Quanto um valor mudou em relação a outro, dividindo: o dólar a R$ 5,14 contra
+    R$ 5,40 um ano antes dá 5,14 / 5,40 - 1 = -4,8%."""
+    return current / before - 1
+
+
 def rolling_12m(rates: Sequence[MonthlyRate]) -> list[MonthlyRate]:
     """O acumulado dos 12 meses que terminam em cada mês, a partir de uma série em
     ordem de data. Mês sem os 11 anteriores em sequência fica de fora."""

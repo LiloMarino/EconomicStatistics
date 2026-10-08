@@ -12,17 +12,25 @@ export const conceptIds = [
   "purchasing-power",
   "inflation-target",
   "minimum-wage",
+  "exchange-rate",
+  "ptax",
+  "current-account",
+  "fdi",
+  "international-reserves",
+  "international-investment-position",
+  "share-of-gdp",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */
 export type ConceptId = (typeof conceptIds)[number];
 
-export const topics = ["inflation"] as const;
+export const topics = ["inflation", "external"] as const;
 
 export type Topic = (typeof topics)[number];
 
 export const topicLabels: Record<Topic, string> = {
   inflation: "Inflação",
+  external: "Setor externo",
 };
 
 export function isTopic(value: string): value is Topic {

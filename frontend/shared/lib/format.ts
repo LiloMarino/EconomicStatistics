@@ -29,6 +29,11 @@ const decimal = new Intl.NumberFormat("pt-BR", {
 
 const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
+const billions = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
+
 const month = new Intl.DateTimeFormat("pt-BR", {
   month: "short",
   year: "numeric",
@@ -72,9 +77,20 @@ export function formatMoney(value: number): string {
   return money.format(value);
 }
 
+/** Estoque em US$ milhões, como o Banco Central publica: 362821 vira "US$ 362,8 bi". */
+export function formatUsdBillions(millions: number): string {
+  return `US$ ${billions.format(millions / 1000)} bi`.replace("-", "−");
+}
+
 // A data chega como "AAAA-MM-DD", que o Date lê em UTC
 export function formatMonth(value: string): string {
   return month.format(new Date(value)).replace(". de ", "/").replace(" de ", "/");
+}
+
+/** O trimestre chega datado no 1º mês dele: "2026-04-01" vira "2º tri/2026". */
+export function formatQuarter(value: string): string {
+  const quarter = Math.floor((Number(value.slice(5, 7)) - 1) / 3) + 1;
+  return `${quarter}º tri/${value.slice(0, 4)}`;
 }
 
 /** "fevereiro" */

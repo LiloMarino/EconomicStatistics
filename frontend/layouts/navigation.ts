@@ -1,4 +1,4 @@
-import { ChartColumn, GraduationCap, type LucideIcon, ShoppingCart } from "lucide-react";
+import { ChartColumn, Globe, GraduationCap, type LucideIcon, ShoppingCart } from "lucide-react";
 
 export interface NavItem {
   to: string;
@@ -28,6 +28,27 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         icon: ShoppingCart,
         description: "Quanto um reajuste compra de cada grupo",
         keywords: ["salário mínimo", "reajuste", "inpc", "ipca", "salário"],
+      },
+    ],
+  },
+  {
+    label: "Economia real e mundo",
+    items: [
+      {
+        to: "/external-sector",
+        label: "Setor externo",
+        icon: Globe,
+        description: "Dólar, transações correntes, IDP e reservas",
+        keywords: [
+          "dólar",
+          "câmbio",
+          "ptax",
+          "reservas",
+          "idp",
+          "investimento direto",
+          "transações correntes",
+          "posição internacional",
+        ],
       },
     ],
   },
