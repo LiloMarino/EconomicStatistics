@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Os limites mínimo e máximo da meta entraram no gráfico do IPCA, com a tolerância de cada ano desde 1999.
+> **Última mudança (2026-10-08):** A tela Focus foi concluída, com a previsão de cada indicador semana a semana e a tabela do relatório.
 
 ## Glossário
 
@@ -29,7 +29,6 @@
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 | **F27** | Continuação pelo Focus nos gráficos | — | ⏳ |
-| **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ⏳ |
 | **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
@@ -41,7 +40,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (30 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (31 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -73,6 +72,7 @@
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
 | **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | — | ✅ |
+| **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
 
@@ -93,7 +93,6 @@
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F27** | Continuação pelo Focus nos gráficos | M7 | 0 | ⏳ |
-| **F28** | Tela Focus: como a expectativa mudou semana a semana | M7 | 0 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 
@@ -228,18 +227,18 @@
 >
 > **Serve:** N1, N5
 >
-> **Progresso:** 2/4 concluídas
+> **Progresso:** 3/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F27** | Continuação pelo Focus nos gráficos | F10 | ⏳ |
-| **F28** | Tela Focus: como a expectativa mudou semana a semana | F10 | ⏳ |
 
-<details><summary>Concluído (2 itens)</summary>
+<details><summary>Concluído (3 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | F2 | ✅ |
+| **F28** | Tela Focus: como a expectativa mudou semana a semana | F10 | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | F21 | ✅ |
 
 </details>
@@ -312,7 +311,7 @@
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F26** | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 | F8 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F27** | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 | F10 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
-| **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
+| **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
@@ -746,14 +745,19 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 **Aceite:** o trecho previsto do IPCA em 12 meses bate com a linha "Focus mais recente" do gráfico do BCB para a mesma data de pesquisa.
 
-**F28 — Tela Focus: como a expectativa mudou.** Rota própria que mostra a evolução da previsão do mercado semana a semana, lida do histórico das pesquisas (F10).
+**F28 — Tela Focus: como a expectativa mudou.** Feito, sem prancha no canvas: segue o padrão da D6 com os componentes das telas que existem. É a rota `/focus`, no grupo novo "Expectativas" da navegação.
 
-- **Escolha:** o indicador e o período previsto (o ano de 2026, a reunião de dezembro do Copom), na URL.
-- **Gráfico:** a mediana daquela previsão a cada sexta, com a meta de inflação quando o indicador é IPCA, e o número de instituições que responderam.
-- **Frase de leitura:** "a previsão do IPCA de 2026 subiu nas últimas 5 semanas, de 4,94% para 5,01%", que é o formato da manchete do relatório Focus.
-- **Tabela:** os indicadores do relatório Focus com a previsão de hoje, a de 4 semanas atrás e a seta de subida ou queda, como o próprio relatório.
+**Tela:**
+- **Escolha:** o ano previsto num seletor abaixo do título (o ano da pesquisa e os 3 seguintes, como o relatório) e o indicador pelo clique numa linha da tabela, os dois na URL (`?indicator=ipca&year=2026`);
+- **resumo:** a previsão de hoje, a de 4 semanas atrás e quantas instituições responderam nos 30 dias, cada uma com o "?";
+- **"Como a previsão mudou":** a mediana daquela previsão em cada pesquisa semanal, com a meta e os dois limites quando o indicador é o IPCA, e os respondentes no tooltip. Em cima, a frase de leitura no formato da manchete do relatório: "A previsão do IPCA para 2026 subiu nas últimas 3 semanas, de 4,90% para 5,01%";
+- **"O relatório Focus para <ano>":** os 12 indicadores do relatório (IPCA, PIB, câmbio, Selic, IGP-M, IPCA administrados, conta corrente, balança comercial, IDP, dívida líquida, primário e nominal) com a previsão de 4 semanas atrás, a da semana passada, a de hoje e a direção da última semana com o número de semanas seguidas. A seta não tem cor, porque subir é bom num indicador e ruim em outro.
 
-Os conceitos do Aprender entram junto: pesquisa Focus, mediana, expectativa desancorada.
+**Backend:** `GET /api/focus/report` e `GET /api/focus/history?indicator=&year=`. A Selic entra pela previsão anual, que é a Selic de fim de ano, e a tela não precisa do calendário do Copom. As taxas vêm em fração, o câmbio em R$/US$ e as contas externas em US$ bilhões; primário e nominal ficam com o sinal do Focus, em que negativo é déficit. A faixa da meta e o seu DTO passaram a ter dois consumidores e subiram para `backend/features/`.
+
+**No Aprender:** o tema novo "Expectativas", com pesquisa Focus, mediana e expectativa desancorada, citando o relatório de 2/out/2026 e os dados abertos do BCB.
+
+**Aceite:** as 24 sequências da pesquisa de 2/out/2026 (12 indicadores em 2026 e 2027) dão a mesma direção e o mesmo número de semanas que os parênteses do relatório do BCB, e as colunas de 1 e 4 semanas antes batem com as do relatório.
 
 **F29 — Limites mínimo e máximo da meta no gráfico do IPCA.** Feito. O gráfico "IPCA em 12 meses e a meta" desenha a meta em linha cheia e os dois limites tracejados, em degrau na virada de cada ano, como o gráfico do BCB.
 
