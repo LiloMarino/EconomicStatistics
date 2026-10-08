@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Os explicadores com diagrama passaram para depois das telas que trazem os conceitos e as séries deles (Déficit, Dívida, Juros, Setor externo), e a página de explicador ganhou uma rodada de design própria no canvas.
+> **Última mudança (2026-10-08):** A tela Setor externo foi concluída, com as reservas no conceito liquidez (SGS 3546), a posição internacional sobre o PIB em dólar e os conceitos de setor externo no Aprender; o dólar diário ficou para depois.
 
 ## Glossário
 
@@ -36,7 +36,6 @@
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ⏳ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ⏳ |
 | **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
-| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | — | 💤 |
@@ -47,7 +46,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (24 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (25 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -75,6 +74,7 @@
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
 | **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | — | ✅ |
+| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
 
 </details>
 
@@ -88,7 +88,6 @@
 | --- | --- | --- | --- | --- |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | M7 | 9 | ⏳ |
 | **F13** | Tela Déficit: primário, juros e nominal | M4 | 9 | ⏳ |
-| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | M8 | 4 | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | 3 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
@@ -235,15 +234,22 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 0/5 concluídas
+> **Progresso:** 1/5 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F30** | Tela Juros: Selic, Copom e juro real | F4, F10 | ⏳ |
-| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | F4 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | F3, F4 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | F4 | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | F33 | 💤 |
+
+<details><summary>Concluído (1 item)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | F4 | ✅ |
+
+</details>
 
 ### Sem marco
 
@@ -293,7 +299,7 @@
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
-| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ⏳ Pendente |
+| **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | F3, F4 | Médio | Médio | Alto | Bom | ⏳ Pendente |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | N1, N7 | — | M8 | F4 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 | **F34** | Mercado imobiliário, na tela Crédito | N1 | — | M8 | F33 | Médio | Médio | Baixo | Médio | 💤 Registrado, sem prioridade |
@@ -472,7 +478,7 @@ Conferido em 2026-10-07: o IPCA mensal vai até 24 meses à frente (set/2028), q
 - **Inflação e juros:** IPCA 12 meses (13522) × meta (13521), com a expectativa do Focus (F10); Selic meta (432); juro real ex-ante.
 - **Contas públicas:** DLSP/PIB (4513) e DBGG/PIB (13762); o cartão "Resultado do governo em 12 meses", com barras de primário, juros e nominal (F13) e a frase com quanto do déficit é juro.
 - **Atividade:** IBC-Br em 12 meses, PIB em 12 meses como crescimento em % e desemprego da PNAD Contínua (24369).
-- **Setor externo:** dólar PTAX (1 diário, 3698 média mensal), reservas internacionais (13621), transações correntes e IDP em % do PIB, posição internacional de investimento.
+- **Setor externo:** os números da tela Setor externo (F31): dólar PTAX (3698, média mensal), reservas internacionais (3546, conceito liquidez), transações correntes e IDP em % do PIB (23079 e 23080) e a posição internacional de investimento (24011 e 24040, sobre o PIB de 12 meses em dólar, 4192).
 - **Crédito:** custo do crédito, concessões de recursos livres e o índice de adequação do patrimônio dos bancos.
 
 Cada cartão traz o último valor, a variação, uma sparkline, o "dado até", a fonte e o "?" (D6). O clique leva à tela temática do bloco (Inflação, Juros, Déficit, Dívida, Setor externo, Atividade, Crédito); enquanto a tela não existe, o cartão fica sem link. O `Record` da D4 obriga a existir conceito para cada cartão. O cabeçalho tem "Atualizar dados" com a hora da última verificação.
@@ -703,7 +709,7 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 - **por reunião do Copom** (Selic): degraus nas datas das reuniões;
 - **trimestre ou ano** (PIB, primário, nominal, dívidas, conta corrente, IDP): um ponto por período no fim dele, sem linha ligando.
 
-**Componente:** um trecho de previsão compartilhado pelos gráficos de linha, ligado primeiro no gráfico do IPCA em 12 meses da tela de inflação. Nas telas que ainda não existem (Juros, Déficit, Dívida, Setor externo, Atividade), entra junto com cada uma.
+**Componente:** um trecho de previsão compartilhado pelos gráficos de linha, ligado primeiro no gráfico do IPCA em 12 meses da tela de inflação. Nas telas que ainda não existem (Juros, Déficit, Dívida, Atividade), entra junto com cada uma. A tela Setor externo (F31) já existe e recebe a continuação quando ela entrar: o câmbio mês a mês no gráfico do dólar, e a conta corrente e o IDP do ano, um ponto cada, no gráfico de transações correntes e IDP.
 
 **Aceite:** o trecho previsto do IPCA em 12 meses bate com a linha "Focus mais recente" do gráfico do BCB para a mesma data de pesquisa.
 
@@ -737,14 +743,31 @@ Os conceitos do Aprender entram junto: pesquisa Focus, mediana, expectativa desa
 
 Os conceitos do Aprender entram junto: Selic, Copom, juro real, juro neutro.
 
-**F31 — Tela Setor externo.** Rota própria com os gráficos de setor externo da página do BCB, todos do SGS. Responde de onde vem o preço do dólar e se o país depende de dinheiro que foge rápido.
+**F31 — Tela Setor externo.** Feito, a partir da prancha `External` do canvas. É a rota `/external-sector`, no grupo "Economia real e mundo" da navegação, e responde de onde vem o preço do dólar e se o país depende de dinheiro que foge rápido.
 
-- **"O dólar":** PTAX diária (SGS 1) e média mensal (3698), com a continuação do Focus (F27).
-- **"De onde vêm e para onde vão os dólares":** transações correntes e IDP em % do PIB, em 12 meses, no mesmo gráfico como o BCB. A bandeja "Como ler": quando o IDP cobre o déficit em conta corrente, o buraco está financiado por dinheiro que veio para ficar.
-- **"O colchão":** reservas internacionais (13621) em US$ e em % do PIB, com a bandeja ligando ao explicador de reservas, câmbio e dívida (F9).
-- **"O balanço com o mundo":** posição internacional de investimento em % do PIB (trimestral), com ativos e passivos separados quando o SGS publicar. A bandeja explica por que um saldo negativo é normal em país emergente e por que pesa do que o passivo é feito (fábrica e ação em reais contra dívida em dólar de prazo curto).
+**Séries do SGS** (conferidas ao vivo em 2026-10-08):
 
-Os códigos de transações correntes, IDP e posição internacional são levantados no catálogo do SGS na implementação. Os conceitos do Aprender entram junto: câmbio, PTAX, reservas, transações correntes, IDP, posição internacional de investimento.
+| Série | Código | Unidade |
+|---|---|---|
+| Dólar, média mensal da PTAX | 3698 | R$ por US$ |
+| Transações correntes em 12 meses | 23079 | % do PIB |
+| Investimento direto no país em 12 meses | 23080 | % do PIB |
+| Reservas internacionais, conceito liquidez, fim do mês | 3546 | US$ milhões |
+| PIB de 12 meses em dólar | 4192 | US$ milhões |
+| Posição internacional: ativos e passivos | 24011 e 24040 | US$ milhões, trimestral |
+
+As reservas usam o conceito liquidez (3546), que é o número que o BCB divulga. A série 13621 é o conceito caixa. O SGS não publica reservas nem posição internacional em % do PIB, então as duas se dividem pelo PIB de 12 meses em dólar: o estoque do trimestre vai contra o PIB do último mês dele. O saldo da posição é ativo − passivo; a série 24010 publica o mesmo número e por isso não entra.
+
+**Implementação:**
+- o cache ganhou série trimestral: o SGS data o trimestre no 1º mês dele, e a referência esperada arredonda para o começo do trimestre (o 2º trimestre é cobrado a partir de 28 de setembro);
+- `GET /api/external-sector` devolve cada gráfico na sua janela, terminando no último dado: 24 meses de dólar com a variação em 12 meses, 10 anos de fluxos e de reservas, e um ponto por ano da posição nos últimos 6 anos;
+- a tela tem o resumo (dólar, transações correntes, investimento direto e reservas, cada um com o "?") e os quatro gráficos da prancha, "O dólar", "De onde vêm e para onde vão os dólares", "O colchão" e "O balanço com o mundo", cada um com a bandeja "Como ler";
+- no Aprender, o tema "Setor externo" com câmbio, PTAX, transações correntes, IDP, reservas internacionais, posição internacional de investimento e % do PIB, que é o conceito da série do PIB em dólar.
+
+**Fica para depois:**
+- o dólar diário (SGS 1): pede que o cache aceite série diária, com a regra de qual dia útil já devia estar publicado. A tela usa a média mensal, como a prancha;
+- a previsão do Focus no gráfico do dólar e no de transações correntes e IDP entra com a continuação pelo Focus (F27);
+- os links das bandejas para os explicadores de câmbio e de reservas entram com os explicadores (F9).
 
 **F32 — Tela Atividade.** Rota própria para quanto a economia produz e quanto emprega.
 
