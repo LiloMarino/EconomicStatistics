@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-08):** revisão das features em aberto. Entrou a N7 (como os números se ligam) e a D7 (diagramas de mecanismo em React Flow). A N1 passou a tomar a página de estatísticas do BCB como mapa de cobertura, e a D2 ganhou a tabela própria do Focus.
+> **Última mudança (2026-10-08):** a D2 ganhou a segunda tabela própria, a do estoque da dívida federal do Tesouro, e o registro de busca das fontes que não são série.
 
 ---
 
@@ -124,6 +124,8 @@ Inflação, juros, dívida, câmbio, crédito e emissão de moeda formam uma tei
 - **Trocar de fonte fica restrito a `adapters/`.**
 
 **Atualização (2026-10-08):** o Focus tem tabela própria. Toda previsão tem duas datas: quando a pesquisa foi feita e para quando é a previsão (um mês, um trimestre, uma reunião do Copom ou um ano). `observations` guarda uma data por valor, então ela serve para série realizada e não comporta o histórico das pesquisas. O mecanismo é o mesmo: a tela lê do banco, e o refresh só vai à fonte quando falta uma pesquisa que já devia ter saído.
+
+**Atualização (2026-10-08, dívida federal):** o estoque da dívida pública federal do Tesouro também tem tabela própria, uma linha por título, vencimento e carteira. Cada valor tem duas datas, o mês do estoque e o vencimento, e o perfil de vencimentos precisa das duas. O arquivo do Tesouro traz todos os meses de uma vez, então a tabela é trocada inteira a cada arquivo novo, e os agregados (composição, vencimentos, parcela do Banco Central) são calculados na leitura. As fontes que não são série registram as tentativas em `dataset_fetch_log`, com o mesmo papel da `fetch_log`.
 
 ### D3 — Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando
 **Status:** ✅ Decidida

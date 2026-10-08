@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** A tela Setor externo foi concluída, com as reservas no conceito liquidez (SGS 3546), a posição internacional sobre o PIB em dólar e os conceitos de setor externo no Aprender; o dólar diário ficou para depois.
+> **Última mudança (2026-10-08):** As telas Déficit e Dívida foram concluídas, com a composição da dívida federal do Tesouro e os conceitos de contas públicas no Aprender; o trio da NFSP que fecha é 5727 = 5793 + 5760, e o prazo médio vem da série oficial 10618.
 
 ## Glossário
 
@@ -26,10 +26,7 @@
 | **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | — | ⏳ |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ⏳ |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ⏳ |
-| **F13** | Tela Déficit: primário, juros e nominal | — | ⏳ |
-| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
-| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ⏳ |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 | **F27** | Continuação pelo Focus nos gráficos | — | ⏳ |
@@ -46,7 +43,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (25 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (28 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -66,6 +63,9 @@
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ✅ |
 | **F12** | Tela de série: histórico, período e comparação na URL | — | 🚫 |
+| **F13** | Tela Déficit: primário, juros e nominal | — | ✅ |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ✅ |
 | **F18** | Linha do tempo histórica com os episódios marcados | — | 🚫 |
 | **F19** | Comparação internacional da dívida (FMI) | — | 🚫 |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ✅ |
@@ -87,10 +87,10 @@
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | M7 | 9 | ⏳ |
-| **F13** | Tela Déficit: primário, juros e nominal | M4 | 9 | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
-| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | 3 | ⏳ |
+| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
+| **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | M7 | 0 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
@@ -168,15 +168,22 @@
 >
 > **Serve:** N4, N6
 >
-> **Progresso:** 0/5 concluídas
+> **Progresso:** 3/5 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F13** | Tela Déficit: primário, juros e nominal | F4 | ⏳ |
-| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | F13 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | F13, F16 | 🔍 |
-| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | F2 | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | F14 | ⏳ |
+
+<details><summary>Concluído (3 itens)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F13** | Tela Déficit: primário, juros e nominal | F4 | ✅ |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | F13 | ✅ |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | F2 | ✅ |
+
+</details>
 
 ### M5 — Saúde da economia
 
@@ -284,12 +291,12 @@
 | **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | N2, N5, N7 | D6, D7 | M2 | F8, F39, F13, F14, F30, F31 | Alto | Médio | Médio | Bom | ⏳ Pendente |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 | F2 | Baixo | Médio | Médio | Bom | ⏳ Pendente |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | N1 | D4, D6 | M3 | F4, F7, F10, F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
-| **F13** | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 | F4 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
-| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 | F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
+| **F13** | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 | F4 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
+| **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 | F13 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F23** | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 | F22, F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | F14 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
-| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | F2 | Médio | Médio | Alto | Bom | ⏳ Pendente |
+| **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | F2 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | F11, F14 | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | F3 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
@@ -487,41 +494,47 @@ O juro real ex-ante é `(1 + Selic) / (1 + IPCA esperado em 12 meses) − 1`: o 
 
 **Detalhe do SGS:** a série 432 publica a Selic meta até a próxima reunião do Copom, e por isso o último ponto tem data futura. O "dado até" do cartão usa a data de hoje.
 
-**F13 — Resultado fiscal decomposto.** A NFSP é a necessidade de financiamento do setor público, ou seja, o déficit. Na convenção da NFSP, valor positivo é déficit.
+**F13 — Resultado fiscal decomposto.** Feito, a partir da prancha `Deficit` do canvas. É a rota `/deficit`, no grupo "Contas públicas" da navegação. Responde "onde se vê o déficit" e quanto dele é juro. A página de estatísticas fiscais do BCB mostra só o último mês publicado; a tela mostra a história desde 2002.
 
-**Séries candidatas** (SGS, % do PIB, 12 meses, setor público consolidado, sem desvalorização cambial): nominal 5727, juros nominais 5728, primário 5793. As três respondem, mas não fecham a conta em ago/2026: 0,62 + 7,83 dá 8,45, e a 5727 diz 9,48. O primeiro passo da implementação é conferir o nome de cada código no catálogo do SGS e achar o trio que fecha `nominal = primário + juros`.
+**Séries do SGS** (NFSP do setor público consolidado, sem desvalorização cambial, % do PIB, 12 meses; conferidas ao vivo em 2026-10-08): nominal 5727, primário 5793 e juros nominais **5760**. O trio fecha a conta: em ago/2026, 0,62 + 8,86 = 9,48. A 5728, candidata antes, é outra série. As três começam em nov/2002. Na convenção da NFSP, valor positivo é déficit.
 
-**Tela "Déficit"** (rota própria, separada da tela Dívida):
-- três números de resumo, cada um com "?": déficit nominal, primário e juros da dívida, com quanto do déficit é juro;
-- o cartão "De onde vem o déficit": barras empilhadas de primário e juros por ano, com o nominal marcado, e a bandeja "Como ler e a conta" (o que é cada parte e a conta do último mês, que aqui é soma porque são valores em % do PIB do mesmo período). A bandeja liga ao loop da dívida no explicador dos dois loops (F9);
-- a previsão do Focus para o primário e o nominal do ano, quando a continuação pelo Focus (F27) existir;
-- a seção "Como o déficit é pago", que fica como esboço até a F15 fechar as séries.
+**Tela:**
+- três números de resumo com "?": déficit nominal, primário e juros, com quanto do déficit é juro (93% em ago/2026);
+- o cartão "De onde vem o déficit": primário e juros empilhados em dezembro de cada ano e no último mês, com o primário negativo (superávit) descendo do zero e o nominal marcado por um traço. A bandeja "Como ler e a conta" traz o que é cada parte e a conta do último mês, que aqui é soma porque são % do PIB do mesmo período.
 
-Responde "onde se vê o déficit" e quanto dele é juro. A página de estatísticas fiscais do BCB mostra só o último mês publicado; a tela mostra a história.
+**Backend:** `GET /api/deficit`, com o último mês, a parte do déficit que é juro e os pontos de cada dezembro.
 
-**No Aprender:** entram no catálogo, com página própria, resultado primário, resultado nominal, juros nominais e NFSP, e as séries entram em `conceptBySeries`. São os conceitos que os explicadores com diagrama (F9) usam nos nós.
+**No Aprender:** NFSP, resultado primário, resultado nominal e juros nominais, no tema novo "Contas públicas", com as séries em `conceptBySeries`.
 
-**Aceite:** o último mês bate com a nota de Estatísticas Fiscais do BCB do mesmo mês, e o primário somado aos juros dá o nominal.
+**Fica para depois:**
+- o link da bandeja para o loop da dívida, que o explicador dos dois loops (F9) faz ao entrar;
+- a previsão do Focus para o primário e o nominal do ano, com a continuação pelo Focus (F27);
+- a seção "Como o déficit é pago", que segue como esboço no canvas até a F15.
 
-**F14 — Dinâmica da dívida.**
+**Aceite:** conferido. O último mês tem o primário mais os juros igual ao nominal (0,62 + 8,86 = 9,48% do PIB em ago/2026), com os números das séries do SGS.
 
-**Definições:**
-- **r**, o juro implícito: juros nominais de 12 meses ÷ dívida líquida média;
-- **g**: crescimento do PIB nominal em 12 meses (SGS 4382).
+**F14 — Dinâmica da dívida.** Feito, a partir da prancha `Debt` do canvas. É a rota `/debt`, no grupo "Contas públicas", com a composição da F16 embaixo.
 
-**Primário que estabiliza a dívida:** `p* = d · (r − g) / (1 + g)`, composto como manda a D3. Comparado com o primário observado, ele diz se a dívida/PIB sobe ou desce.
+**Séries do SGS** (conferidas ao vivo em 2026-10-08): DLSP em % do PIB (4513) e em R$ milhões (4478), DBGG em % do PIB (13762, desde dez/2006), PIB de 12 meses em R$ milhões correntes (4382), além dos juros (5760) e do primário (5793) da F13.
 
-**Exemplo de leitura:** com dívida de 80% do PIB, r = 10% e g = 7%, é preciso cerca de 2,2% do PIB de superávit só para a dívida não crescer.
+**As contas** (em `backend/domain/debt.py`, em fração):
+- **r**, o juro implícito: os juros de 12 meses em reais (a fração do PIB da 5760 vezes o PIB de 12 meses da 4382) divididos pela média da dívida líquida em reais (4478) no fim de cada um dos 12 meses. O BCB não publica essa taxa pronta;
+- **g**: o PIB de 12 meses contra o do mesmo mês do ano anterior, dividindo;
+- **p\*** `= d · (r − g) / (1 + g)`, com d = DLSP/PIB, que é a mesma conta de `d · ((1 + r) / (1 + g) − 1)`. O primário que falta é o p* menos o superávit feito (o primário da NFSP com o sinal trocado).
 
-**Conferência:** a IFI do Senado estima cerca de 2,1% do PIB de primário para estabilizar a dívida bruta (RAF 115, ago/2026). O p* do app usa a dívida líquida e r e g nominais observados, então não precisa bater. A ordem de grandeza serve de conferência, e a tela explica a diferença de conceito.
+Em ago/2026: r = 13,74%, g = 7,23%, p* = 4,20% do PIB e, com déficit primário de 0,62%, faltam 4,82 pontos. É mais que os cerca de 2% da IFI, porque a conta usa r e g observados nos últimos 12 meses sobre a dívida líquida, e a projeção usa juros e crescimento esperados. A bandeja e a página do conceito dizem isso.
 
-**Tela "Dívida"** (rota própria; a composição da F16 fica embaixo):
-- quatro números de resumo com "?": dívida líquida, dívida bruta, r − g e o primário que falta para a dívida parar de subir;
-- "Dívida líquida e dívida bruta": as duas linhas, como no gráfico do BCB, com a bandeja "Como ler" dizendo o que cada uma conta, por que a líquida desconta as reservas e que o Focus pergunta as duas. Liga ao explicador das três dívidas (F36);
-- "A dívida sobe ou desce?": o primário feito contra o p*, a bandeja "Ver a conta" com a fórmula e a conta com os números, e o link para o simulador (F24);
-- "Juro da dívida contra crescimento da economia": r e g em 12 meses, com sombra onde r passa g, e a bandeja "Como ler" com por que r − g decide e o caso de 2021 e 2022, quando a inflação alta fez g passar r. A bandeja liga ao explicador de r − g (F9).
+**Tela:**
+- quatro números com "?": dívida líquida, dívida bruta, r − g e o primário que falta;
+- "Dívida líquida e dívida bruta": as duas linhas desde dez/2006, com a bandeja "Como ler";
+- "A dívida sobe ou desce?": o feito contra o preciso na mesma régua, com a bandeja "Ver a conta" (fórmula, legenda e a conta com os números da tela);
+- "Juro da dívida contra crescimento da economia": r e g desde nov/2002, com sombra onde r passa g, e a bandeja com o caso de 2021 (a DLSP caiu de 61,4% para 55,1% do PIB).
 
-**No Aprender:** entram no catálogo, com página própria, DLSP, DBGG, juro implícito, crescimento nominal, r − g e o primário que estabiliza. As séries da DLSP (SGS 4513) e da DBGG (SGS 13762) entram no cache. São os conceitos que os explicadores com diagrama (F9) e o das três dívidas (F36) usam nos nós.
+**Backend:** `GET /api/debt`, com as duas dívidas, r e g mês a mês e a conta do p* no último mês.
+
+**No Aprender:** DLSP, DBGG, juro implícito, crescimento nominal, r − g e o primário que estabiliza.
+
+**Fica para depois:** os links das bandejas para o explicador das três dívidas (F36), para o de r − g (F9) e para o simulador (F24), que cada um faz ao entrar; a previsão do Focus para as duas dívidas no fim do ano, com a F27.
 
 **F23 — Linguagem visual nas telas que existem.** Feito.
 
@@ -597,28 +610,34 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Aceite:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos.
 
-**F16 — Composição da dívida pública federal.**
+**F16 — Composição da dívida pública federal.** Feito, embaixo da dinâmica na tela Dívida (F14).
 
-**Fonte:** o CSV "Estoque da Dívida Pública Federal" do Tesouro Transparente (CKAN, dataset `estoque-da-divida-publica-federal`). É mensal desde set/2017, tem cerca de 12 MB e traz uma linha por título e mês: título, vencimento, valor, quantidade, mês, carteira ("Mercado" ou "Banco Central") e tipo (interna ou externa). O arquivo vem em latin-1, com separador `;` e decimal com vírgula.
+**Fonte:** o CSV "Estoque da Dívida Pública Federal" do Tesouro Transparente (CKAN, dataset `estoque-da-divida-publica-federal`). O provider pede ao CKAN o endereço do CSV do dia e baixa o arquivo inteiro, de cerca de 12 MB, que vai de set/2017 ao último mês, uma linha por título, vencimento e carteira. Conferido em 2026-10-08: o arquivo vem em **UTF-8** (e não latin-1), com separador `;` e vírgula decimal sem separador de milhar.
 
-**Provider:** baixa o CSV inteiro e agrega por mês no backend. Grava em `observations` uma série derivada por agregado (D2):
-- **composição por indexador**, pelo prefixo do título: LFT → Selic; LTN e NTN-F → prefixado; NTN-B → IPCA; NTN-C → IGP-M; dívida externa → câmbio; títulos legados (TDA, NTN-I, CVS…) → "outros";
-- **prazo médio**, ponderado pelo valor;
-- **vencimentos nos próximos 12 meses**, que é quanto o governo precisa rolar: emitir dívida nova para pagar a que vence;
-- **parcela na carteira do Banco Central**, que alimenta a F15.
+**Tabela própria**, como o Focus (D2): `federal_debt_stock(stock_month, title, maturity, holder, external, value)`, trocada inteira a cada arquivo novo, e `dataset_fetch_log` para as tentativas, no papel da `fetch_log`. O refresh baixa só quando falta o mês esperado: o mês M sai por volta do dia 16 de M + 2, e o app o cobra a partir do dia 25, no máximo a cada 6 h. Roda junto do "Atualizar dados", que avisa a falta como faz com as séries.
 
-**Tela "Dívida",** abaixo da dinâmica (F14):
-- o cartão "Quanto vence e quando": os vencimentos por ano à frente, com a bandeja "Como ler" sobre a rolagem. Prazo curto obriga a rolar muito de uma vez, e é aí que a desconfiança do mercado vira crise; a bandeja liga ao explicador de por que a dívida não explode (F37);
-- o cartão "De que é feita a dívida federal": barras empilhadas por indexador, em dezembro de cada ano, com a bandeja "Como ler" (por que o indexador importa);
-- três números com "?": prazo médio, vencimentos em 12 meses e a parcela na carteira do BC, que liga com a tela Déficit (F15).
+**As contas** (em `backend/domain/federal_debt.py`, calculadas na leitura):
+- **universo:** só a carteira "Mercado". É a dívida federal que o Tesouro reporta: em jul/2026, R$ 9.288,8 bilhões, igual ao Relatório Mensal da Dívida;
+- **indexador** pelo prefixo do título, sem olhar a caixa: LFT (com LFT-TD) é Selic; LTN e NTN-F são prefixado; NTN-B é IPCA; NTN-C é IGP-M; dívida externa é câmbio; o resto é "outros";
+- **vence em 12 meses:** o principal que vence até o fim do 12º mês depois do estoque;
+- **perfil de vencimentos:** o resto do ano do estoque, os 4 anos seguintes um a um, os 5 anos depois deles e o que vence mais tarde;
+- **carteira do BC:** a parte de todos os títulos emitidos que está no Banco Central (24,3% em jul/2026), que alimenta a F15.
 
-A dívida federal (DPF) é um terceiro recorte, ao lado da DLSP e da DBGG, e a tela diz qual é qual pelo explicador das três dívidas (F36).
+**Prazo médio** pela série oficial do SGS **10618** (títulos do Tesouro emitidos, em meses), e não pelo CSV: a medida oficial pesa cada pagamento, cupons inclusive, e dá 47,40 meses (3,95 anos) em jul/2026, igual aos 3,94 anos da DPMFi no Relatório Mensal. Pela data final de cada título, o CSV daria 5,35 anos.
 
-**No Aprender:** entram no catálogo, com página própria, DPF, rolagem, indexador e prazo médio, que os explicadores das três dívidas (F36) e de por que a dívida não explode (F37) usam.
+**Tela Dívida:**
+- o cartão "Quanto vence e quando", com as faixas que começam nos próximos 12 meses em vermelho e a bandeja "Como ler" sobre a rolagem;
+- o cartão "De que é feita a dívida federal", com barras 100% empilhadas por indexador em dezembro de cada ano e no último mês, e três números com "?": prazo médio, vence em 12 meses e a carteira do BC.
 
-**Fora:** detentores e custo médio, que só existem no Relatório Mensal da Dívida (PDF e anexo).
+**Backend:** `GET /api/debt/federal`. A tela pede as duas rotas da Dívida em separado, e cada metade espera a sua fonte.
 
-**Aceite:** a composição por indexador do último mês bate com a do Relatório Mensal da Dívida do mesmo mês.
+**No Aprender:** DPF, rolagem, indexador e prazo médio, com as fontes do Relatório Mensal da Dívida de jul/2026, do CKAN, do SGS e da Lei de Responsabilidade Fiscal.
+
+**Limitação:** o "vence em 12 meses" conta só o principal (16,9% em jul/2026). O Tesouro conta todo pagamento dos 12 meses, juros inclusive, e publica 18,91%; não há série oficial dele no SGS. O número na tela diz "do principal", e a página da rolagem cita os dois.
+
+**Fora:** detentores e custo médio, que só existem no Relatório Mensal (PDF e anexo). O link da bandeja de vencimentos para o explicador de por que a dívida não explode (F37) entra com ele.
+
+**Aceite:** conferido. A composição de jul/2026 bate com o Relatório Mensal da Dívida do mesmo mês: taxa flutuante 51,11% (Selic no app: 51,1%), prefixado 19,22% (19,2%), índice de preços 26,02% (IPCA 25,1% + IGP-M 0,8%) e câmbio 3,65% (3,7%).
 
 **F17 — "Check engine" da economia.** O semáforo só tem cor onde existe faixa oficial. Os outros sinais aparecem com o número e a referência escrita, sem cor, para o semáforo nunca virar opinião.
 
@@ -709,7 +728,7 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 - **por reunião do Copom** (Selic): degraus nas datas das reuniões;
 - **trimestre ou ano** (PIB, primário, nominal, dívidas, conta corrente, IDP): um ponto por período no fim dele, sem linha ligando.
 
-**Componente:** um trecho de previsão compartilhado pelos gráficos de linha, ligado primeiro no gráfico do IPCA em 12 meses da tela de inflação. Nas telas que ainda não existem (Juros, Déficit, Dívida, Atividade), entra junto com cada uma. A tela Setor externo (F31) já existe e recebe a continuação quando ela entrar: o câmbio mês a mês no gráfico do dólar, e a conta corrente e o IDP do ano, um ponto cada, no gráfico de transações correntes e IDP.
+**Componente:** um trecho de previsão compartilhado pelos gráficos de linha, ligado primeiro no gráfico do IPCA em 12 meses da tela de inflação. Nas telas que ainda não existem (Juros, Atividade), entra junto com cada uma. As que já existem recebem a continuação quando ela entrar: na tela Setor externo (F31), o câmbio mês a mês no gráfico do dólar e a conta corrente e o IDP do ano, um ponto cada, no gráfico de transações correntes e IDP; na tela Déficit (F13), o primário e o nominal do ano, uma barra cada; na tela Dívida (F14), a dívida líquida e a bruta do fim do ano, um ponto cada.
 
 **Aceite:** o trecho previsto do IPCA em 12 meses bate com a linha "Focus mais recente" do gráfico do BCB para a mesma data de pesquisa.
 
