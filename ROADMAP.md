@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** A fonte Focus foi concluída, guardando uma pesquisa por semana, a do relatório, em vez de uma por dia útil.
+> **Última mudança (2026-10-08):** Os limites mínimo e máximo da meta entraram no gráfico do IPCA, com a tolerância de cada ano desde 1999.
 
 ## Glossário
 
@@ -30,7 +30,6 @@
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 | **F27** | Continuação pelo Focus nos gráficos | — | ⏳ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ⏳ |
-| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ⏳ |
 | **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
@@ -42,7 +41,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (29 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (30 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -74,6 +73,7 @@
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
 | **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | — | ✅ |
+| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
 
 </details>
@@ -94,7 +94,6 @@
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F27** | Continuação pelo Focus nos gráficos | M7 | 0 | ⏳ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | M7 | 0 | ⏳ |
-| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | M7 | 0 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 
@@ -229,19 +228,19 @@
 >
 > **Serve:** N1, N5
 >
-> **Progresso:** 1/4 concluídas
+> **Progresso:** 2/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F27** | Continuação pelo Focus nos gráficos | F10 | ⏳ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | F10 | ⏳ |
-| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | F21 | ⏳ |
 
-<details><summary>Concluído (1 item)</summary>
+<details><summary>Concluído (2 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | F2 | ✅ |
+| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | F21 | ✅ |
 
 </details>
 
@@ -314,7 +313,7 @@
 | **F26** | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 | F8 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F27** | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 | F10 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
-| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | F3, F4 | Médio | Médio | Alto | Bom | ⏳ Pendente |
@@ -756,17 +755,18 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 Os conceitos do Aprender entram junto: pesquisa Focus, mediana, expectativa desancorada.
 
-**F29 — Limites mínimo e máximo da meta no gráfico do IPCA.** O gráfico do IPCA em 12 meses passa a desenhar a meta, o limite máximo e o limite mínimo, como o gráfico do BCB, com os valores de cada ano.
-
-**Hoje:** o gráfico tem só o teto. O registro da meta (SGS 13521) começa em 2019, e a tolerância é uma constante de 1,5 ponto. Com o histórico desde 1999 (F20), o ritmo vai até 2000, e antes de 2019 a linha some; e entre 1999 e 2016 a tolerância foi outra.
+**F29 — Limites mínimo e máximo da meta no gráfico do IPCA.** Feito. O gráfico "IPCA em 12 meses e a meta" desenha a meta em linha cheia e os dois limites tracejados, em degrau na virada de cada ano, como o gráfico do BCB.
 
 **Mudança:**
-- o registro da meta começa em 1999, que é onde o SGS 13521 começa;
-- a tolerância vira uma tabela por ano no domínio, conferida nas resoluções do CMN: 2 pontos em 1999–2002 e 2006–2016, 2,5 em 2003–2005 e 1,5 desde 2017;
-- o `pace` devolve meta, piso e teto por mês, e o gráfico desenha a meta cheia e os dois limites tracejados;
-- os anos em que a meta foi ajustada depois de fixada (2003 e 2004) são conferidos contra a série e o histórico de metas do BCB.
+- o registro da meta (SGS 13521) começa em 1999, e o refresh trouxe a ponta que faltava sem apagar nada;
+- a tolerância é uma tabela por ano em `backend/domain/inflation_target.py`: 2 pontos em 1999–2002, 2,5 em 2003–2005 (Res. CMN 2.972/2002 e 3.108/2003), 2 em 2006–2016 e 1,5 desde 2017;
+- 2003 e 2004 tiveram a meta revista depois de fixada, e a série já traz a meta ajustada (4% e 5,5%);
+- depois do último ano publicado, a meta contínua (desde 2025) segue valendo, o que dá faixa à previsão do Focus nos anos seguintes;
+- o `pace` devolve a faixa (`band`, com meta, piso e teto) em cada ponto e no fim do período;
+- o cartão do resumo diz se o 12 meses está dentro da meta, acima do teto ou abaixo do piso;
+- a página do conceito de meta de inflação ganhou a tolerância de cada período, com o histórico de metas do BCB como fonte.
 
-**Aceite:** em 2015, meta de 4,5% com limites de 2,5% e 6,5%; em 2026, 3% com 1,5% e 4,5%.
+**Aceite cumprido:** em 2015, meta de 4,5% com limites de 2,5% e 6,5%; em 2026, 3% com 1,5% e 4,5% (`test_tolerance_changes_with_the_period`, e na tela com os dados reais).
 
 **F30 — Tela Juros.** Rota própria para a Selic, o centro da teia (N7): ela freia a inflação, encarece a dívida e o crédito.
 
