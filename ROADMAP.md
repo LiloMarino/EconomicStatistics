@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** As telas Déficit e Dívida foram concluídas, e cada link que elas deixaram para o explicador, o simulador e o estudo do financiamento monetário passou a constar na feature que o faz.
+> **Última mudança (2026-10-08):** A fonte Focus foi concluída, guardando uma pesquisa por semana, a do relatório, em vez de uma por dia útil.
 
 ## Glossário
 
@@ -24,7 +24,6 @@
 | **N6** | Saber como o déficit é financiado | F4, F13, F16 | — |
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | F9, F13, F30, F31, F33, F36, F37, F39 | — |
 | **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | — | ⏳ |
-| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ⏳ |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
@@ -43,7 +42,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (28 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (29 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -62,6 +61,7 @@
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ✅ |
+| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ✅ |
 | **F12** | Tela de série: histórico, período e comparação na URL | — | 🚫 |
 | **F13** | Tela Déficit: primário, juros e nominal | — | ✅ |
 | **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ |
@@ -86,11 +86,14 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | M7 | 9 | ⏳ |
+| **F30** | Tela Juros: Selic, Copom e juro real | M8 | 4 | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
+| **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
+| **F27** | Continuação pelo Focus nos gráficos | M7 | 0 | ⏳ |
+| **F28** | Tela Focus: como a expectativa mudou semana a semana | M7 | 0 | ⏳ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | M7 | 0 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
@@ -226,14 +229,21 @@
 >
 > **Serve:** N1, N5
 >
-> **Progresso:** 0/4 concluídas
+> **Progresso:** 1/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | F2 | ⏳ |
 | **F27** | Continuação pelo Focus nos gráficos | F10 | ⏳ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | F10 | ⏳ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | F21 | ⏳ |
+
+<details><summary>Concluído (1 item)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | F2 | ✅ |
+
+</details>
 
 ### M8 — Cobertura da página de estatísticas do BCB
 
@@ -289,7 +299,7 @@
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | N2 | D4, D6 | M2 | F22 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F8** | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 | F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | N2, N5, N7 | D6, D7 | M2 | F8, F39, F13, F14, F30, F31 | Alto | Médio | Médio | Bom | ⏳ Pendente |
-| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 | F2 | Baixo | Médio | Médio | Bom | ⏳ Pendente |
+| **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 | F2 | Baixo | Médio | Médio | Bom | ✅ Concluído |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | N1 | D4, D6 | M3 | F4, F7, F10, F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F13** | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 | F4 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
 | **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 | F13 | Médio | Médio | Alto | Excelente | ✅ Concluído |
@@ -461,25 +471,28 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 **Fonte:** os ciclos de partida estão anotados da conversa com o ChatGPT (seis ciclos, com o que freia cada um). Cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro, Planalto) antes de entrar, como manda a D4. Esse é o motivo do risco médio.
 
-**F10 — Fonte Focus completa.** Provider da API Olinda do BCB (`https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/`), com todos os indicadores na menor escala que o Focus publica:
+**F10 — Fonte Focus completa.** Feito. Provider da API Olinda do BCB (`backend/adapters/bcb_focus_provider.py`), com os indicadores que o Focus pergunta hoje, na menor escala de cada um:
 
-| Escala da previsão | Endpoint | Indicadores |
+| Escala da previsão | Endpoint | Desde |
 |---|---|---|
-| Mês | `ExpectativaMercadoMensais` | IPCA, IPCA Administrados, Livres, Serviços, Bens industrializados, Alimentação no domicílio, câmbio, IGP-M, taxa de desocupação |
-| Reunião do Copom | `ExpectativasMercadoSelic` | Selic |
-| Trimestre | `ExpectativasMercadoTrimestrais` | PIB Total, além dos mensais (menos IGP-M) |
-| Ano | `ExpectativasMercadoAnuais` | resultado primário e nominal, dívida líquida do setor público, dívida bruta do governo geral, conta corrente, balança comercial, investimento direto no país, PIB e seus componentes |
-| 12 meses à frente | `ExpectativasMercadoInflacao12Meses` | IPCA, para o juro real ex-ante |
+| Mês | `ExpectativaMercadoMensais` | jan/2000 |
+| Trimestre | `ExpectativasMercadoTrimestrais` | nov/2001 |
+| Ano | `ExpectativasMercadoAnuais` | abr/1999 |
+| Reunião do Copom | `ExpectativasMercadoSelic` | nov/2004 |
+| 12 meses à frente | `ExpectativasMercadoInflacao12Meses`, a suavizada | nov/2001 |
 
-Conferido em 2026-10-07: o IPCA mensal vai até 24 meses à frente (set/2028), que é o horizonte da linha "Focus mais recente" da página do BCB.
+**Uma pesquisa por semana,** e não por dia útil: a de sexta, que é a do relatório, ou a do dia útil anterior quando a sexta é feriado. A API publica uma pesquisa por dia útil, com todos os horizontes (cerca de 470 linhas por dia), e guardar o dia a dia daria 2 a 3 milhões de linhas sem tela que o use. O provider pede 25 sextas por consulta, filtrando as datas no `$filter`, e repete a semana sem sexta no dia anterior, até a segunda.
 
-**Tabela própria** (D2): `focus_expectations(indicator, survey_date, target_kind, target, median, respondents)`, em que `target_kind` é mês, trimestre, reunião, ano ou 12 meses, e `target` é o período previsto. Guarda o histórico de todas as pesquisas, dia útil a dia útil, como a API publica; o relatório semanal é a pesquisa de sexta.
+**Conferido na implementação (2026-10-08):**
+- **base de cálculo:** o relatório usa a `baseCalculo` 0, as respostas dos últimos 30 dias; a 1 é a dos últimos 5 dias úteis, a coluna à direita do relatório;
+- **nomes:** só o "í" chega corrompido, e só em parte dos endpoints. O nome vira `FocusIndicator` por uma chave sem os caracteres não ASCII, que é a mesma no nome certo e no corrompido. O indicador que o Focus deixou de perguntar (IPC-Fipe, IGP-DI) fica de fora;
+- **publicação:** os dados de uma semana saem juntos na segunda seguinte, com o relatório. A pesquisa cobrada é a da semana anterior a partir da terça.
 
-**Refresh:** busca quando a última pesquisa em cache é anterior ao último dia útil, no máximo a cada 6 h, como as outras fontes. A primeira carga traz o histórico inteiro de cada endpoint, paginado.
+**Tabela própria** (D2): `focus_expectations(indicator, target_kind, target_year, target_period, survey_date, median, respondents)`. O período previsto é o mês, o trimestre ou a reunião em `target_period`, e 0 no ano; nos 12 meses à frente, ano e período são 0. A mediana fica na unidade em que o Focus publica.
 
-**A conferir na implementação:** qual `baseCalculo` (0 ou 1) o relatório Focus publica, e o encoding dos nomes de indicador, que a API devolve com acentuação corrompida (os nomes viram enum do app, como no IBGE).
+**Refresh:** roda no "Atualizar dados", depois das séries e da dívida federal, com o registro em `dataset_fetch_log`. A primeira carga trouxe 307 mil linhas, 1.431 semanas de abr/1999 a out/2026, em 130 s, e o banco cresceu cerca de 35 MB. Depois dela, o refresh pede a partir da última pesquisa em cache.
 
-**Aceite:** a mediana do IPCA do ano corrente e a da Selic de fim de ano, na pesquisa de uma sexta, batem com o relatório Focus da segunda seguinte.
+**Aceite cumprido:** na pesquisa de 2/out/2026, o IPCA de 2026 dá 5,0129 com 144 respondentes e a Selic de fim de 2026 dá 13,50 com 139, iguais ao relatório Focus da mesma data (5,01 e 13,50).
 
 **F11 — Painel "Visão geral".** A página de estatísticas do BCB refeita com explicação: os mesmos indicadores, em cartões agrupados por bloco. Os códigos citados foram conferidos ao vivo em 2026-10-06; os demais são levantados na implementação.
 - **Inflação e juros:** IPCA 12 meses (13522) × meta (13521), com a expectativa do Focus (F10); Selic meta (432); juro real ex-ante.
