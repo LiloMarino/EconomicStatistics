@@ -16,17 +16,34 @@ from backend.adapters.bcb_focus_provider import (
     to_expectations,
 )
 from backend.core.enum import FocusDirection, FocusIndicator, FocusTargetKind, SeriesId
+from backend.domain.coverage import month_start
 from backend.domain.focus import (
     Expectation,
     expected_survey_week,
+    nfsp_from_balance,
+    rolling_12m_forecast,
     survey_overdue,
     weekly_streak,
 )
+from backend.domain.rates import MonthlyRate
 from backend.domain.series import Observation
 from backend.features.focus.refresh import refresh_focus
 from backend.repository.focus import last_survey_date, upsert_expectations
 from backend.repository.series import upsert_observations
+from tests.data_ipca import seed_ipca
+from tests.data_public_accounts import seed_public_accounts
 from tests.fakes import FakeFocusProvider
+
+
+@pytest.fixture
+def seeded_ipca(session: Session) -> None:
+    seed_ipca(session)
+
+
+@pytest.fixture
+def seeded_public_accounts(session: Session) -> None:
+    seed_public_accounts(session)
+
 
 # Terça, 6/out/2026: a pesquisa da semana de 28/set a 2/out já devia ter saído
 NOW = datetime(2026, 10, 6, 9, 0)
@@ -304,3 +321,103 @@ def test_history_brings_the_target_of_the_year(
     assert body["years"] == [2027]
     assert body["band"]["ceiling"] == pytest.approx(0.045)
     assert (body["direction"], body["streak_weeks"]) == ("down", 1)
+
+
+def _expectation(
+    indicator: FocusIndicator,
+    kind: FocusTargetKind,
+    year: int,
+    period: int,
+    median: float,
+) -> Expectation:
+    return Expectation(
+        indicator=indicator,
+        target_kind=kind,
+        target_year=year,
+        target_period=period,
+        survey_date=date(2026, 10, 2),
+        median=median,
+        respondents=100,
+    )
+
+
+def test_forecast_12m_composes_real_and_expected_months() -> None:
+    """Com 11 meses reais de 0,5% e setembro esperado em 1,0%, o 12 meses de setembro
+    é 1,005^11 * 1,01 - 1 = 6,70%, composto multiplicando como o real."""
+    real = [
+        MonthlyRate(ref_date=month_start(date(2026, 8, 1), 11 - index), rate=0.005)
+        for index in range(12)
+    ]
+
+    points = rolling_12m_forecast(real, {date(2026, 9, 1): 1.0, date(2026, 11, 1): 1.0})
+
+    assert [item.ref_date for item in points] == [date(2026, 9, 1)]
+    assert points[0].rate == pytest.approx(1.005**11 * 1.01 - 1)
+
+
+def test_focus_balance_becomes_nfsp() -> None:
+    """O primário de -0,41% do PIB no Focus é um déficit de 0,41%: 0,0041 na NFSP."""
+    assert nfsp_from_balance(-0.41) == pytest.approx(0.0041)
+
+
+@pytest.mark.usefixtures("seeded_ipca")
+def test_pace_continues_with_the_latest_survey(
+    api: TestClient, session: Session
+) -> None:
+    """O 12 meses segue depois de ago/2026 com o IPCA mensal esperado, e só quando o
+    gráfico termina no último mês publicado."""
+    upsert_expectations(
+        session,
+        [
+            _expectation(FocusIndicator.IPCA, FocusTargetKind.MONTH, 2026, 9, 0.3),
+            _expectation(FocusIndicator.IPCA, FocusTargetKind.MONTH, 2026, 10, 0.4),
+        ],
+    )
+    session.commit()
+
+    latest = api.get("/api/inflation/pace").json()
+    earlier = api.get("/api/inflation/pace", params={"end": "2026-06-01"}).json()
+
+    assert latest["forecast"]["survey_date"] == "2026-10-02"
+    assert [point["ref_date"] for point in latest["forecast"]["points"]] == [
+        "2026-09-01",
+        "2026-10-01",
+    ]
+    assert latest["forecast"]["points"][0]["band"]["ceiling"] == pytest.approx(0.045)
+    assert earlier["forecast"] is None
+
+
+@pytest.mark.usefixtures("seeded_public_accounts")
+def test_deficit_forecast_uses_the_nfsp_sign(api: TestClient, session: Session) -> None:
+    """O Focus espera primário de -0,41% e nominal de -8,88% do PIB em 2026: na tela,
+    déficit de 0,41% e de 8,88%, com 8,47% de juros."""
+    upsert_expectations(
+        session,
+        [
+            _expectation(
+                FocusIndicator.PRIMARY_BALANCE, FocusTargetKind.YEAR, 2026, 0, -0.41
+            ),
+            _expectation(
+                FocusIndicator.NOMINAL_BALANCE, FocusTargetKind.YEAR, 2026, 0, -8.88
+            ),
+        ],
+    )
+    session.commit()
+
+    forecast = api.get("/api/deficit").json()["forecast"]
+
+    assert forecast["years"] == [
+        {
+            "ref_date": "2026-12-01",
+            "nominal": pytest.approx(0.0888),
+            "primary": pytest.approx(0.0041),
+            "interest": pytest.approx(0.0847),
+        }
+    ]
+
+
+@pytest.mark.usefixtures("seeded_public_accounts")
+def test_forecast_is_null_without_a_survey(api: TestClient) -> None:
+    """Sem pesquisa Focus em cache, as telas continuam e só a previsão fica de fora."""
+    assert api.get("/api/deficit").json()["forecast"] is None
+    assert api.get("/api/debt").json()["levels_forecast"] is None

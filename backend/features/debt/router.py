@@ -44,8 +44,17 @@ class StabilizationDTO(BaseDTO):
     primary_gap: float
 
 
+class LevelsForecastDTO(BaseDTO):
+    """A dívida líquida e a bruta que o Focus espera para dezembro de cada ano, em
+    fração do PIB."""
+
+    survey_date: date
+    years: list[DebtLevelDTO]
+
+
 class DebtOverviewDTO(BaseDTO):
     levels: list[DebtLevelDTO]
+    levels_forecast: LevelsForecastDTO | None
     rates: list[DebtRatesDTO]
     stabilization: StabilizationDTO
 

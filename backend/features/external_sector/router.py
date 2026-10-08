@@ -16,12 +16,22 @@ class MonthValueDTO(BaseDTO):
     value: float
 
 
+class MonthlyForecastDTO(BaseDTO):
+    """O valor esperado em cada mês depois do último dado, pela pesquisa Focus de
+    `survey_date`."""
+
+    survey_date: date
+    months: list[MonthValueDTO]
+
+
 class DollarDTO(BaseDTO):
-    """A média mensal em reais por dólar; `change_12m` em fração contra o mesmo mês do
-    ano anterior."""
+    """A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
+    mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
+    espera."""
 
     months: list[MonthValueDTO]
     change_12m: float | None
+    forecast: MonthlyForecastDTO | None
 
 
 class FlowPointDTO(BaseDTO):
@@ -56,12 +66,23 @@ class PositionPointDTO(BaseDTO):
     net: float
 
 
+class FlowsForecastDTO(BaseDTO):
+    """O que o Focus espera para o ano em transações correntes e investimento direto,
+    em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões)."""
+
+    survey_date: date
+    year: int
+    current_account: float
+    fdi: float
+
+
 class ExternalSectorDTO(BaseDTO):
     """Cada gráfico na sua janela, terminando no último dado: 24 meses de dólar, 10
     anos de fluxos e de reservas, e um ponto por ano nos últimos 6 anos da posição."""
 
     dollar: DollarDTO
     flows: list[FlowPointDTO]
+    flows_forecast: FlowsForecastDTO | None
     reserves: ReservesDTO
     position: list[PositionPointDTO]
 

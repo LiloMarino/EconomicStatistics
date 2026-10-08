@@ -58,14 +58,14 @@ def test_position_skips_quarter_without_gdp() -> None:
 
 @pytest.mark.usefixtures("seeded")
 def test_external_sector_reads_each_chart_until_its_last_data(api: TestClient) -> None:
-    """O dólar vai até setembro e cai 4,15% contra set/2025; os fluxos saem em fração
+    """O dólar do fim de setembro cai 2,59% contra o de set/2025; os fluxos saem em fração
     do PIB; as reservas usam o PIB de agosto, o último publicado; e a posição traz um
     ponto por ano, o trimestre mais recente."""
     body = api.get("/api/external-sector").json()
 
     dollar = body["dollar"]
     assert dollar["months"][-1] == {"ref_date": "2026-09-01", "value": DOLLAR[-1]}
-    assert round(dollar["change_12m"] * 100, 2) == -4.15
+    assert round(dollar["change_12m"] * 100, 2) == -2.59
     assert body["flows"][-1] == {
         "ref_date": "2026-08-01",
         "current_account": pytest.approx(-0.0247),

@@ -250,6 +250,7 @@ export interface components {
         DebtOverviewDTO: {
             /** Levels */
             levels: components["schemas"]["DebtLevelDTO"][];
+            levels_forecast: components["schemas"]["LevelsForecastDTO"] | null;
             /** Rates */
             rates: components["schemas"]["DebtRatesDTO"][];
             stabilization: components["schemas"]["StabilizationDTO"];
@@ -280,6 +281,21 @@ export interface components {
             last: components["schemas"]["DeficitPointDTO"];
             /** Interest Share */
             interest_share: number | null;
+            /** Years */
+            years: components["schemas"]["DeficitPointDTO"][];
+            forecast: components["schemas"]["DeficitForecastDTO"] | null;
+        };
+        /**
+         * DeficitForecastDTO
+         * @description O que o Focus espera para dezembro de cada ano, na mesma convenção e fração do
+         *     PIB dos pontos reais; os juros são o nominal menos o primário.
+         */
+        DeficitForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
             /** Years */
             years: components["schemas"]["DeficitPointDTO"][];
         };
@@ -318,14 +334,16 @@ export interface components {
         };
         /**
          * DollarDTO
-         * @description A média mensal em reais por dólar; `change_12m` em fração contra o mesmo mês do
-         *     ano anterior.
+         * @description A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
+         *     mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
+         *     espera.
          */
         DollarDTO: {
             /** Months */
             months: components["schemas"]["MonthValueDTO"][];
             /** Change 12M */
             change_12m: number | null;
+            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
         };
         /**
          * ErrorResponse
@@ -344,6 +362,7 @@ export interface components {
             dollar: components["schemas"]["DollarDTO"];
             /** Flows */
             flows: components["schemas"]["FlowPointDTO"][];
+            flows_forecast: components["schemas"]["FlowsForecastDTO"] | null;
             reserves: components["schemas"]["ReservesDTO"];
             /** Position */
             position: components["schemas"]["PositionPointDTO"][];
@@ -381,6 +400,24 @@ export interface components {
              * Format: date
              */
             ref_date: string;
+            /** Current Account */
+            current_account: number;
+            /** Fdi */
+            fdi: number;
+        };
+        /**
+         * FlowsForecastDTO
+         * @description O que o Focus espera para o ano em transações correntes e investimento direto,
+         *     em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões).
+         */
+        FlowsForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Year */
+            year: number;
             /** Current Account */
             current_account: number;
             /** Fdi */
@@ -551,6 +588,7 @@ export interface components {
             /** General 12M */
             general_12m: components["schemas"]["RollingPointDTO"][];
             band: components["schemas"]["TargetBandDTO"] | null;
+            forecast: components["schemas"]["PaceForecastDTO"] | null;
             /** Last Months */
             last_months: components["schemas"]["MonthVsYearBeforeDTO"][];
             /** Last Months Difference */
@@ -564,6 +602,20 @@ export interface components {
             steady_band: number;
             /** Groups */
             groups: components["schemas"]["GroupPaceDTO"][];
+        };
+        /**
+         * LevelsForecastDTO
+         * @description A dívida líquida e a bruta que o Focus espera para dezembro de cada ano, em
+         *     fração do PIB.
+         */
+        LevelsForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Years */
+            years: components["schemas"]["DebtLevelDTO"][];
         };
         /**
          * MaturityBucketDTO
@@ -634,6 +686,34 @@ export interface components {
             year_before: number;
             /** Difference */
             difference: number;
+        };
+        /**
+         * MonthlyForecastDTO
+         * @description O valor esperado em cada mês depois do último dado, pela pesquisa Focus de
+         *     `survey_date`.
+         */
+        MonthlyForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+        };
+        /**
+         * PaceForecastDTO
+         * @description O 12 meses esperado em cada mês depois do último IPCA publicado, composto com a
+         *     previsão mensal da pesquisa Focus de `survey_date`.
+         */
+        PaceForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Points */
+            points: components["schemas"]["RollingPointDTO"][];
         };
         /**
          * PaceVerdict
@@ -803,7 +883,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_monthly" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.

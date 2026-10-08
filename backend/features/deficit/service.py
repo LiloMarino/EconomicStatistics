@@ -5,10 +5,12 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from backend.core.enum import SeriesId
+from backend.core.enum import FocusIndicator, SeriesId
 from backend.core.errors import MissingDataError
+from backend.domain.focus import annual_expectations, forecast_years, nfsp_from_balance
 from backend.domain.rates import PERCENT
 from backend.domain.series import NFSP_START
+from backend.repository.focus import latest_survey
 from backend.repository.series import last_cached, read_observations
 
 DEFICIT_SERIES = (
@@ -30,6 +32,16 @@ class DeficitPoint:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class DeficitForecast:
+    """O resultado que o Focus espera para dezembro de cada ano, já na convenção da
+    NFSP. Os juros são o nominal menos o primário: as três partes estão em % do PIB do
+    mesmo ano."""
+
+    survey_date: date
+    years: list[DeficitPoint]
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class Deficit:
     """`interest_share` é a fração do déficit nominal que é juro; sem déficit nominal,
     ela não existe. `years` traz dezembro de cada ano e o último mês."""
@@ -37,6 +49,7 @@ class Deficit:
     last: DeficitPoint
     interest_share: float | None
     years: list[DeficitPoint]
+    forecast: DeficitForecast | None
 
 
 def deficit(session: Session) -> Deficit:
@@ -72,4 +85,28 @@ def deficit(session: Session) -> Deficit:
         last=last,
         interest_share=last.interest / last.nominal if last.nominal > 0 else None,
         years=years,
+        forecast=_forecast(session, last.ref_date),
     )
+
+
+def _forecast(session: Session, last: date) -> DeficitForecast | None:
+    survey = latest_survey(
+        session, (FocusIndicator.PRIMARY_BALANCE, FocusIndicator.NOMINAL_BALANCE)
+    )
+    if survey is None:
+        return None
+    survey_date, expectations = survey
+    primary = annual_expectations(expectations, FocusIndicator.PRIMARY_BALANCE)
+    nominal = annual_expectations(expectations, FocusIndicator.NOMINAL_BALANCE)
+    years = [
+        DeficitPoint(
+            ref_date=date(year, 12, 1),
+            nominal=nfsp_from_balance(nominal[year]),
+            primary=nfsp_from_balance(primary[year]),
+            interest=nfsp_from_balance(nominal[year])
+            - nfsp_from_balance(primary[year]),
+        )
+        for year in forecast_years(last)
+        if year in primary and year in nominal
+    ]
+    return DeficitForecast(survey_date=survey_date, years=years) if years else None

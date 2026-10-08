@@ -4,6 +4,8 @@ import { CartesianGrid, Line, LineChart, ReferenceDot, XAxis, YAxis } from "rech
 import { verdictLook } from "@/features/inflation/pace-verdict";
 import type { InflationPace } from "@/features/inflation/use-inflation-pace";
 import { ChartLegend } from "@/shared/components/chart-legend";
+import { forecastLegendEntry } from "@/shared/components/forecast-legend";
+import { ForecastSpan } from "@/shared/components/forecast-span";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Toggle } from "@/shared/components/ui/toggle";
@@ -14,6 +16,7 @@ import {
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
 import {
+  formatDay,
   formatMonth,
   formatMonthRange,
   formatPercent,
@@ -29,6 +32,7 @@ const chartConfig = {
   floor: { label: "Piso da meta", color: "var(--trend-up)" },
   ceiling: { label: "Teto da meta", color: "var(--trend-up)" },
   recent: { label: "Últimos 3 meses", color: "var(--trend-down)" },
+  forecast: { label: "Previsão do Focus", color: "var(--forecast)" },
 } satisfies ChartConfig;
 
 const axisPercent = new Intl.NumberFormat("pt-BR", {
@@ -36,9 +40,12 @@ const axisPercent = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 1,
 });
 
+type RollingPoint = InflationPace["general_12m"][number];
+
 // O trecho destacado são os 3 últimos meses: 4 pontos, do mês de comparação ao fim
 const RECENT_POINTS = 4;
-// Rótulo do eixo x a cada 4 meses
+// Até 8 rótulos no eixo x, a cada 4 meses ou mais
+const MAX_TICKS = 8;
 const TICK_EVERY = 4;
 
 /** O que é a linha, por que ela sobe ou desce e a conta do ritmo com os números do fim
@@ -154,6 +161,15 @@ function HowToRead({ pace }: { pace: InflationPace }) {
           curva, a linha pula sem nada ter mudado hoje. Três meses diluem isso.
         </p>
       </TrayItem>
+      {pace.forecast && (
+        <TrayItem title="A previsão" concept="focus-survey">
+          <p>
+            Depois do último IPCA publicado, a linha tracejada é o 12 meses que o mercado espera: os
+            meses reais compostos com a inflação de cada mês prevista na pesquisa Focus de{" "}
+            {formatDay(pace.forecast.survey_date)}. Em dezembro, ela dá a previsão do ano.
+          </p>
+        </TrayItem>
+      )}
       <TrayItem title="Efeito base" concept="base-effect">
         <p>
           Um mês fora da curva há um ano mexe na linha hoje. Em jul a set/2023 ela subiu de 3,16%
@@ -189,27 +205,47 @@ export function Rolling12mChart({
   const last = points.at(-1);
   if (!first || !last) return null;
   const band = showTarget ? pace.band : null;
-  const rows = points.map((point, index) => ({
-    month: point.ref_date,
-    rate: point.rate,
-    ...(showTarget && point.band ? point.band : { target: null, floor: null, ceiling: null }),
-    recent: index >= points.length - RECENT_POINTS ? point.rate : null,
-  }));
+  const forecast = pace.forecast?.points ?? [];
+  const forecastEnd = forecast.at(-1);
+  const bandOf = (point: RollingPoint) =>
+    showTarget && point.band ? point.band : { target: null, floor: null, ceiling: null };
+  // O último mês real abre também a linha da previsão, para as duas se emendarem
+  const rows = [
+    ...points.map((point, index) => ({
+      month: point.ref_date,
+      rate: point.rate,
+      ...bandOf(point),
+      recent: index >= points.length - RECENT_POINTS ? point.rate : null,
+      forecast: index === points.length - 1 && forecastEnd ? point.rate : null,
+    })),
+    ...forecast.map((point) => ({
+      month: point.ref_date,
+      rate: null,
+      ...bandOf(point),
+      recent: null,
+      forecast: point.rate,
+    })),
+  ];
   const peak = points.reduce((best, point) => (point.rate > best.rate ? point : best), first);
   const recentStart = points.at(-RECENT_POINTS);
-  const values = points.flatMap((point) =>
+  const values = [...points, ...forecast].flatMap((point) =>
     showTarget && point.band ? [point.rate, point.band.floor, point.band.ceiling] : [point.rate],
   );
   const ticks = niceTicks(Math.min(...values), Math.max(...values), 3);
-  const monthTicks = points
-    .filter((_, index) => index % TICK_EVERY === 0 || index === points.length - 1)
-    .map((point) => point.ref_date);
+  const tickEvery = Math.max(TICK_EVERY, Math.ceil(rows.length / MAX_TICKS));
+  const monthTicks = rows
+    .filter((_, index) => index % tickEvery === 0 || index === rows.length - 1)
+    .map((row) => row.month);
 
   return (
     <ExplainedCard
       id="rolling-12m"
       title="IPCA em 12 meses e a meta"
-      subtitle={formatMonthRange(first.ref_date, last.ref_date)}
+      subtitle={
+        forecastEnd
+          ? `${formatMonthRange(first.ref_date, last.ref_date)} e a previsão até ${formatMonth(forecastEnd.ref_date)}`
+          : formatMonthRange(first.ref_date, last.ref_date)
+      }
       open={open}
       onOpenChange={onOpenChange}
       actions={
@@ -263,11 +299,19 @@ export function Rolling12mChart({
               color: look.color,
               shape: "line",
             },
+            ...(forecastEnd ? [forecastLegendEntry("IPCA em 12 meses esperado")] : []),
           ]}
         />
         <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
           <LineChart data={rows} margin={{ left: 0, right: 56, top: 28, bottom: 4 }}>
             <CartesianGrid vertical={false} />
+            {pace.forecast && forecastEnd && (
+              <ForecastSpan
+                from={last.ref_date}
+                to={forecastEnd.ref_date}
+                surveyDate={pace.forecast.survey_date}
+              />
+            )}
             <XAxis
               dataKey="month"
               ticks={monthTicks}
@@ -332,6 +376,14 @@ export function Rolling12mChart({
               dot={false}
               activeDot={false}
               tooltipType="none"
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="forecast"
+              stroke="var(--color-forecast)"
+              strokeWidth={2.5}
+              strokeDasharray="5 4"
+              dot={false}
               isAnimationActive={false}
             />
             <Line

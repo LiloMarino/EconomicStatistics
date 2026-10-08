@@ -22,6 +22,14 @@ class DeficitPointDTO(BaseDTO):
     interest: float
 
 
+class DeficitForecastDTO(BaseDTO):
+    """O que o Focus espera para dezembro de cada ano, na mesma convenção e fração do
+    PIB dos pontos reais; os juros são o nominal menos o primário."""
+
+    survey_date: date
+    years: list[DeficitPointDTO]
+
+
 class DeficitDTO(BaseDTO):
     """`interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
@@ -30,6 +38,7 @@ class DeficitDTO(BaseDTO):
     last: DeficitPointDTO
     interest_share: float | None
     years: list[DeficitPointDTO]
+    forecast: DeficitForecastDTO | None
 
 
 @router.get("", responses=ERROR_RESPONSES)

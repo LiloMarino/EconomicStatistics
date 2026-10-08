@@ -110,3 +110,13 @@ def upsert_expectations(session: Session, expectations: Iterable[Expectation]) -
             },
         )
         session.execute(upsert, rows[start : start + UPSERT_CHUNK])
+
+
+def latest_survey(
+    session: Session, indicators: Collection[FocusIndicator]
+) -> tuple[date, list[Expectation]] | None:
+    """A última pesquisa em cache e as previsões dela para os indicadores pedidos."""
+    last = last_survey_date(session)
+    if last is None:
+        return None
+    return last, read_survey(session, last, indicators)

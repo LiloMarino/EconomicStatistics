@@ -86,6 +86,14 @@ class RollingPointDTO(BaseDTO):
     band: TargetBandDTO | None
 
 
+class PaceForecastDTO(BaseDTO):
+    """O 12 meses esperado em cada mês depois do último IPCA publicado, composto com a
+    previsão mensal da pesquisa Focus de `survey_date`."""
+
+    survey_date: date
+    points: list[RollingPointDTO]
+
+
 class MonthVsYearBeforeDTO(BaseDTO):
     """Um mês contra o mesmo mês do ano anterior; `difference` em fração de ponto."""
 
@@ -123,6 +131,7 @@ class InflationPaceDTO(BaseDTO):
     end: date
     general_12m: list[RollingPointDTO]
     band: TargetBandDTO | None
+    forecast: PaceForecastDTO | None
     last_months: list[MonthVsYearBeforeDTO]
     last_months_difference: float
     change_1m: float

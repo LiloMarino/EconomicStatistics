@@ -30,7 +30,7 @@ export function SummaryCards({ data }: { data: ExternalSector }) {
       >
         {dollar && (
           <span className="text-caption text-muted-foreground">
-            média de {formatMonthName(dollar.ref_date)}
+            fim de {formatMonthName(dollar.ref_date)}
             {data.dollar.change_12m !== null &&
               ` · ${formatSignedPercent(data.dollar.change_12m)} em 12 meses`}
           </span>

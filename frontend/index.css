@@ -20,6 +20,8 @@
   --color-sidebar: var(--sidebar);
   --color-chart-grid: var(--chart-grid);
   --color-chart-band: var(--chart-band);
+  --color-forecast: var(--forecast);
+  --color-forecast-band: var(--forecast-band);
   --color-diverging-mid: var(--diverging-mid);
   --color-diverging-neg-1: var(--diverging-neg-1);
   --color-diverging-neg-2: var(--diverging-neg-2);
@@ -180,6 +182,9 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --ok: #2e8a4d;
   --chart-grid: rgb(0 0 0 / 0.07);
   --chart-band: rgb(0 0 0 / 0.07);
+  /* Previsão do Focus */
+  --forecast: #7d838c;
+  --forecast-band: rgb(0 0 0 / 0.035);
   /* Divergente azul <-> vermelho com cinza no zero: azul é queda, vermelho é alta. Os
   dois braços têm a mesma luminosidade (OKLCH) em cada passo; o texto acompanha o
   fundo de cada passo */
@@ -270,6 +275,8 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --ok: #5bbf7a;
   --chart-grid: rgb(255 255 255 / 0.06);
   --chart-band: rgb(255 255 255 / 0.09);
+  --forecast: #9aa1aa;
+  --forecast-band: rgb(255 255 255 / 0.045);
   /* No escuro a rampa inverte: o passo mais forte é o mais claro */
   --diverging-mid: #2b2c2a;
   --diverging-neg-1: #184f95;

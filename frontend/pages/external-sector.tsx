@@ -43,16 +43,16 @@ export function ExternalSectorPage() {
         <>
           <SummaryCards data={data} />
           <DollarChart dollar={data.dollar} />
-          <FlowsChart flows={data.flows} />
+          <FlowsChart flows={data.flows} forecast={data.flows_forecast} />
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(420px,100%),1fr))] gap-4">
             <ReservesChart reserves={data.reserves} />
             <PositionChart position={data.position} />
           </div>
           <footer className="text-caption text-muted-foreground border-t pt-5">
-            Fonte: Banco Central, séries do SGS 3698 (dólar, média mensal da PTAX), 23079 e 23080
+            Fonte: Banco Central, séries do SGS 3696 (dólar, PTAX do fim do mês), 23079 e 23080
             (transações correntes e investimento direto no país em % do PIB), 3546 (reservas
             internacionais), 4192 (PIB de 12 meses em dólar), 24011 e 24040 (ativos e passivos da
-            posição internacional de investimento).
+            posição internacional de investimento); a previsão vem da pesquisa Focus.
           </footer>
         </>
       )}

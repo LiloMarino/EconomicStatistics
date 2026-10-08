@@ -11,21 +11,21 @@ from backend.core.enum import SeriesId
 from backend.domain.series import Observation
 from backend.repository.series import upsert_observations
 
-# Média mensal da PTAX de set/2025 a set/2026
+# PTAX do fim do mês de set/2025 a set/2026
 DOLLAR = [
-    5.3674,
-    5.3855,
-    5.3409,
-    5.4531,
-    5.3380,
-    5.2006,
-    5.2316,
-    5.0331,
-    4.9837,
-    5.1276,
-    5.1139,
-    5.1532,
-    5.1447,
+    5.3186,
+    5.3843,
+    5.3338,
+    5.5024,
+    5.2301,
+    5.1495,
+    5.2194,
+    4.9886,
+    5.0569,
+    5.1766,
+    5.0773,
+    5.1816,
+    5.1809,
 ]
 # Jun a ago/2026
 CURRENT_ACCOUNT = [-2.37, -2.44, -2.47]
@@ -50,7 +50,7 @@ def months_from(start: date, values: list[float], step: int = 1) -> list[Observa
 
 def seed_external(session: Session) -> None:
     seeds = {
-        SeriesId.DOLLAR_MONTHLY: months_from(date(2025, 9, 1), DOLLAR),
+        SeriesId.DOLLAR_MONTH_END: months_from(date(2025, 9, 1), DOLLAR),
         SeriesId.CURRENT_ACCOUNT_GDP: months_from(date(2026, 6, 1), CURRENT_ACCOUNT),
         SeriesId.FDI_GDP: months_from(date(2026, 6, 1), FDI),
         SeriesId.GDP_USD_12M: months_from(date(2026, 3, 1), GDP_USD_12M),

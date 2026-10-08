@@ -3,13 +3,14 @@ indicador, pesquisa a pesquisa."""
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Protocol
 
 from backend.core.enum import FocusDirection, FocusIndicator, FocusTargetKind, Unit
-from backend.domain.rates import PERCENT
+from backend.domain.coverage import month_start
+from backend.domain.rates import PERCENT, MonthlyRate, rolling_12m
 
 # Os dados de uma semana de pesquisa saem juntos na segunda-feira seguinte, com o
 # relatório; a terça dá a folga
@@ -122,3 +123,58 @@ def weekly_streak(medians: Sequence[float]) -> Streak | None:
     ):
         weeks += 1
     return Streak(direction=direction, weeks=weeks, start=medians[-weeks - 1])
+
+
+# A continuação dos gráficos anuais vai até dezembro do ano seguinte ao do último dado
+FORECAST_YEARS = 2
+
+
+def monthly_expectations(
+    expectations: Iterable[Expectation], indicator: FocusIndicator
+) -> dict[date, float]:
+    """A previsão de cada mês, datada no dia 1, na unidade do Focus."""
+    return {
+        date(item.target_year, item.target_period, 1): item.median
+        for item in expectations
+        if item.indicator is indicator and item.target_kind is FocusTargetKind.MONTH
+    }
+
+
+def annual_expectations(
+    expectations: Iterable[Expectation], indicator: FocusIndicator
+) -> dict[int, float]:
+    return {
+        item.target_year: item.median
+        for item in expectations
+        if item.indicator is indicator and item.target_kind is FocusTargetKind.YEAR
+    }
+
+
+def forecast_years(last_real: date) -> list[int]:
+    """O ano que o último dado ainda não fechou e o seguinte; com dezembro já
+    publicado, os dois anos depois dele."""
+    first = last_real.year + (1 if last_real.month == 12 else 0)
+    return list(range(first, first + FORECAST_YEARS))
+
+
+def rolling_12m_forecast(
+    real: Sequence[MonthlyRate], expected: Mapping[date, float]
+) -> list[MonthlyRate]:
+    """O acumulado de 12 meses dos meses depois do último real, compondo os meses
+    reais com os esperados em % no mês (a composição multiplica, como no real). Os
+    meses esperados seguem em sequência a partir do mês seguinte ao último real."""
+    if not real:
+        return []
+    last = real[-1].ref_date
+    combined = list(real)
+    month = month_start(last, -1)
+    while month in expected:
+        combined.append(MonthlyRate(ref_date=month, rate=expected[month] / PERCENT))
+        month = month_start(month, -1)
+    return [item for item in rolling_12m(combined) if item.ref_date > last]
+
+
+def nfsp_from_balance(balance: float) -> float:
+    """O resultado do Focus, em % do PIB e com negativo para déficit, na convenção da
+    NFSP: fração do PIB e positivo para déficit."""
+    return -balance / PERCENT

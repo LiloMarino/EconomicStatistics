@@ -15,7 +15,7 @@ class SeriesId(StrEnum):
     INPC = "inpc"
     MINIMUM_WAGE = "minimum_wage"
     INFLATION_TARGET = "inflation_target"
-    DOLLAR_MONTHLY = "dollar_monthly"
+    DOLLAR_MONTH_END = "dollar_month_end"
     CURRENT_ACCOUNT_GDP = "current_account_gdp"
     FDI_GDP = "fdi_gdp"
     RESERVES = "reserves"

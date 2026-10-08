@@ -209,11 +209,11 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         release_day=1,
         periodicity=Periodicity.ANNUAL,
     ),
-    # A média do mês sai no primeiro dia útil do seguinte. Começa no Real: antes dele
-    # o valor está em outras moedas.
-    SeriesId.DOLLAR_MONTHLY: SeriesSpec(
+    # A PTAX do último dia útil do mês, a mesma medida que o Focus pergunta. Começa no
+    # Real: antes dele o valor está em outras moedas.
+    SeriesId.DOLLAR_MONTH_END: SeriesSpec(
         source=Source.BCB_SGS,
-        code="3698",
+        code="3696",
         unit=Unit.BRL_PER_USD,
         first_date=date(1994, 7, 1),
         lag_months=1,

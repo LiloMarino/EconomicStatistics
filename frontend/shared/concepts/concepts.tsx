@@ -44,7 +44,7 @@ const bcbTarget = {
   url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
 };
 const sgs = { name: "Banco Central, SGS", url: "https://www3.bcb.gov.br/sgspub/" };
-const sgs3698 = { ...sgs, name: "Banco Central, série 3698 do SGS (dólar, média mensal)" };
+const sgs3696 = { ...sgs, name: "Banco Central, série 3696 do SGS (dólar, fim do mês)" };
 const bcbDollarBulletins = {
   name: "Banco Central, cotações diárias do dólar no portal de dados abertos",
   url: "https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios",
@@ -880,7 +880,7 @@ export const concepts: Record<ConceptId, Concept> = {
     summary: "O preço de uma moeda em outra: quantos reais compram um dólar.",
     lead: (
       <>
-        Câmbio é o preço de uma moeda em outra. Quando se fala em dólar a R$ 5,14, é a taxa de
+        Câmbio é o preço de uma moeda em outra. Quando se fala em dólar a R$ 5,18, é a taxa de
         câmbio: quantos reais é preciso dar por um dólar.
       </>
     ),
@@ -897,13 +897,13 @@ export const concepts: Record<ConceptId, Concept> = {
       content: (
         <>
           <p>
-            Um produto de US$ 100 custava R$ 536,74 com o dólar médio de setembro de 2025 (R$
-            5,3674) e R$ 514,47 com o de setembro de 2026 (R$ 5,1447).
+            Um produto de US$ 100 custava R$ 531,86 com o dólar do fim de setembro de 2025 (R$
+            5,3186) e R$ 518,09 com o do fim de setembro de 2026 (R$ 5,1809).
           </p>
           <FormulaBox>
-            <Formula flushLeft tex="\dfrac{5{,}1447}{5{,}3674} - 1 = \mathbf{-4{,}15\%}" />
+            <Formula flushLeft tex="\dfrac{5{,}1809}{5{,}3186} - 1 = \mathbf{-2{,}59\%}" />
           </FormulaBox>
-          <p>Em reais, o dólar ficou 4,15% mais barato em 12 meses.</p>
+          <p>Em reais, o dólar ficou 2,59% mais barato em 12 meses.</p>
         </>
       ),
     },
@@ -919,7 +919,7 @@ export const concepts: Record<ConceptId, Concept> = {
         title: "A variação muda conforme o lado.",
         text: (
           <>
-            O dólar caiu 4,15% em reais, mas o real subiu 4,33% em dólar (5,3674 ÷ 5,1447 − 1). As
+            O dólar caiu 2,59% em reais, mas o real subiu 2,66% em dólar (5,3186 ÷ 5,1809 − 1). As
             duas contas estão certas: cada uma divide pelo ponto de partida dela.
           </>
         ),
@@ -931,7 +931,7 @@ export const concepts: Record<ConceptId, Concept> = {
         ...bcbDollarBulletins,
         backs: "O câmbio no Brasil é livre: as taxas são pactuadas no mercado desde março de 1990.",
       },
-      { ...sgs3698, backs: "As médias do dólar em setembro de 2025 e de 2026." },
+      { ...sgs3696, backs: "O dólar do fim de setembro de 2025 e de 2026." },
     ],
     screens: [externalScreen],
   },
@@ -951,16 +951,16 @@ export const concepts: Record<ConceptId, Concept> = {
     measures: (
       <p>
         Desde julho de 2011, o Banco Central consulta os dealers de câmbio em quatro janelas ao
-        longo do dia, e a PTAX de fechamento é a média dessas quatro consultas. A tela usa a média
-        da PTAX nos dias úteis de cada mês.
+        longo do dia, e a PTAX de fechamento é a média dessas quatro consultas. A tela usa a PTAX do
+        último dia útil de cada mês, a mesma medida que a pesquisa Focus pergunta.
       </p>
     ),
     example: {
       title: "Com os números de setembro de 2026",
       content: (
         <p>
-          A PTAX de venda teve média de <strong>R$ 5,1447</strong> em setembro de 2026, contra R$
-          5,3674 em setembro de 2025.
+          A PTAX de venda fechou setembro de 2026 em <strong>R$ 5,1809</strong>, contra R$ 5,3186 no
+          fim de setembro de 2025.
         </p>
       ),
     },
@@ -981,8 +981,13 @@ export const concepts: Record<ConceptId, Concept> = {
         ),
       },
       {
-        title: "A média do mês não é o dólar de hoje.",
-        text: <>Num mês agitado, o dólar do último dia pode ficar longe da média.</>,
+        title: "O fim do mês não é a média do mês.",
+        text: (
+          <>
+            Num mês agitado, o último dia pode ficar longe da média: em agosto de 2026, a PTAX
+            fechou em R$ 5,1816, e a média do mês foi R$ 5,1532.
+          </>
+        ),
       },
     ],
     related: ["exchange-rate"],
@@ -992,9 +997,14 @@ export const concepts: Record<ConceptId, Concept> = {
         backs:
           "Desde 1º de julho de 2011 (Circular 3.506), a PTAX é a média das taxas de quatro consultas diárias aos dealers de câmbio.",
       },
-      { ...sgs3698, backs: "As médias de setembro de 2025 e de 2026." },
+      { ...sgs3696, backs: "O fim de setembro de 2025 e de 2026 e o de agosto de 2026." },
+      {
+        ...sgs,
+        name: "Banco Central, série 3698 do SGS (dólar, média mensal)",
+        backs: "A média de agosto de 2026.",
+      },
     ],
-    frequency: "Diária; a média do mês sai no primeiro dia útil do seguinte",
+    frequency: "Diária; a do último dia útil fecha o mês",
     screens: [externalScreen],
   },
 

@@ -39,11 +39,12 @@ export function DeficitPage() {
       ) : (
         <>
           <SummaryCards data={data} />
-          <DeficitChart years={data.years} />
+          <DeficitChart years={data.years} forecast={data.forecast} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: Banco Central, estatísticas fiscais: necessidade de financiamento do setor
             público consolidado, sem desvalorização cambial, em % do PIB e acumulada em 12 meses.
-            Séries do SGS 5727 (nominal), 5793 (primário) e 5760 (juros nominais).
+            Séries do SGS 5727 (nominal), 5793 (primário) e 5760 (juros nominais); a previsão vem da
+            pesquisa Focus.
           </footer>
         </>
       )}

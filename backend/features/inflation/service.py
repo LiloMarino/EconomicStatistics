@@ -6,9 +6,10 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
+from backend.core.enum import FocusIndicator, PaceVerdict, RaiseReference, SeriesId
 from backend.core.errors import EconomicError, MissingDataError
 from backend.domain.coverage import month_start
+from backend.domain.focus import monthly_expectations, rolling_12m_forecast
 from backend.domain.inflation_target import TargetBand
 from backend.domain.pace import STEADY_BAND, verdict
 from backend.domain.rates import (
@@ -27,6 +28,7 @@ from backend.domain.seasonality import (
 )
 from backend.domain.series import IPCA_GROUPS, Observation
 from backend.features.target_bands import target_bands_between
+from backend.repository.focus import latest_survey
 from backend.repository.series import first_cached, last_cached, read_observations
 
 IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
@@ -108,6 +110,15 @@ class RollingPoint:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class PaceForecast:
+    """O 12 meses esperado nos meses depois do último dado, pela pesquisa Focus de
+    `survey_date`, com a faixa da meta de cada ano."""
+
+    survey_date: date
+    points: list[RollingPoint]
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class MonthVsYearBefore:
     """Um mês contra o mesmo mês do ano anterior; `difference` em pontos percentuais."""
 
@@ -142,6 +153,7 @@ class InflationPace:
     end: date
     general_12m: list[RollingPoint]
     band: TargetBand | None
+    forecast: PaceForecast | None
     last_months: list[MonthVsYearBefore]
     last_months_difference: float
     change_1m: float
@@ -350,7 +362,8 @@ PACE_CHART_MONTHS = 24
 def inflation_pace(session: Session, end: date | None) -> InflationPace:
     """O ritmo no fim do período: o 12 meses dos 24 meses até `end`, a inclinação de 1
     e de 3 meses, e o 12 meses de cada grupo no fim e antes dele."""
-    last = resolve_period(session, None, end).end
+    period = resolve_period(session, None, end)
+    last = period.end
     observations = read_observations(
         session, IPCA_SERIES, month_start(last, PACE_CHART_MONTHS + 10), last
     )
@@ -367,7 +380,17 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
             "O ritmo precisa de 15 meses de IPCA no cache até o fim do período."
         )
     chart_start = month_start(last, PACE_CHART_MONTHS - 1)
-    bands = target_bands_between(session, chart_start.year, last.year)
+    # A previsão continua o gráfico só quando ele termina no último IPCA publicado
+    forecast = (
+        _pace_forecast(session, monthly_rates(observations[SeriesId.IPCA_GENERAL]))
+        if last == period.last_available
+        else None
+    )
+    bands = target_bands_between(
+        session,
+        chart_start.year,
+        forecast.points[-1].ref_date.year if forecast else last.year,
+    )
     monthly = {
         item.ref_date: item.rate
         for item in monthly_rates(observations[SeriesId.IPCA_GENERAL])
@@ -384,6 +407,21 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
             if ref_date >= chart_start
         ],
         band=bands.get(last.year),
+        forecast=(
+            None
+            if forecast is None
+            else PaceForecast(
+                survey_date=forecast.survey_date,
+                points=[
+                    RollingPoint(
+                        ref_date=item.ref_date,
+                        rate=item.rate,
+                        band=bands.get(item.ref_date.year),
+                    )
+                    for item in forecast.points
+                ],
+            )
+        ),
         last_months=last_months,
         last_months_difference=sum(item.difference for item in last_months),
         change_1m=general[last] - general[month_start(last, 1)],
@@ -400,6 +438,25 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
             if last in rolling[series_id]
         ],
     )
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class _ExpectedRates:
+    survey_date: date
+    points: list[MonthlyRate]
+
+
+def _pace_forecast(session: Session, real: list[MonthlyRate]) -> _ExpectedRates | None:
+    """O 12 meses esperado depois do último mês real, compondo os meses reais com o
+    IPCA mensal da última pesquisa Focus."""
+    survey = latest_survey(session, (FocusIndicator.IPCA,))
+    if survey is None:
+        return None
+    survey_date, expectations = survey
+    points = rolling_12m_forecast(
+        real, monthly_expectations(expectations, FocusIndicator.IPCA)
+    )
+    return _ExpectedRates(survey_date=survey_date, points=points) if points else None
 
 
 # As janelas que a tela compara: 1, 3 e 6 meses antes do fim

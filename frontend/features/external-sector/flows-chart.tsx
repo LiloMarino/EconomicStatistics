@@ -10,10 +10,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
+import {
+  formatDay,
+  formatMonth,
+  formatMonthRange,
+  formatPercent,
+  formatUsdBillions,
+} from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
 
 type Flow = ExternalSector["flows"][number];
+type FlowsForecast = NonNullable<ExternalSector["flows_forecast"]>;
 
 const chartConfig = {
   current_account: { label: "Transações correntes", color: "var(--trend-up)" },
@@ -49,6 +56,12 @@ function HowToRead({ last }: { last: Flow }) {
           </p>
         )}
       </TrayItem>
+      <TrayItem title="A previsão em dólares" concept="focus-survey">
+        <p>
+          O Focus prevê as transações correntes e o investimento direto do ano em US$ bilhões, e não
+          em % do PIB. Por isso a previsão fica escrita em cima do gráfico, e não na linha.
+        </p>
+      </TrayItem>
       <TrayItem title="Quando preocupa" concept="fdi">
         <p>
           Se o déficit cresce e o investimento direto não acompanha, a diferença passa a ser coberta
@@ -61,7 +74,25 @@ function HowToRead({ last }: { last: Flow }) {
 
 /** Transações correntes e investimento direto no país, em % do PIB em 12 meses, nos
 últimos 10 anos, no mesmo gráfico como o Banco Central publica. */
-export function FlowsChart({ flows }: { flows: Flow[] }) {
+/** A previsão do Focus para o ano, em US$ bilhões. */
+function ForecastSentence({ forecast }: { forecast: FlowsForecast }) {
+  const balance = forecast.current_account < 0 ? "déficit" : "superávit";
+  return (
+    <p>
+      O mercado espera, para {forecast.year}, {balance} de{" "}
+      <strong>{formatUsdBillions(Math.abs(forecast.current_account) * 1000)}</strong> nas transações
+      correntes e <strong>{formatUsdBillions(forecast.fdi * 1000)}</strong> de investimento direto
+      no país (Focus de {formatDay(forecast.survey_date)}).
+    </p>
+  );
+}
+
+interface FlowsChartProps {
+  flows: Flow[];
+  forecast: ExternalSector["flows_forecast"];
+}
+
+export function FlowsChart({ flows, forecast }: FlowsChartProps) {
   const first = flows.at(0);
   const last = flows.at(-1);
   if (!first || !last) return null;
@@ -88,6 +119,7 @@ export function FlowsChart({ flows }: { flows: Flow[] }) {
       }}
     >
       <div className="flex flex-col gap-2">
+        {forecast && <ForecastSentence forecast={forecast} />}
         <ChartLegend
           entries={[
             {

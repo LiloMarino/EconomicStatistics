@@ -52,7 +52,7 @@ export function DebtPage() {
       ) : (
         <>
           <SummaryCards data={debt.data} />
-          <LevelsChart levels={debt.data.levels} />
+          <LevelsChart levels={debt.data.levels} forecast={debt.data.levels_forecast} />
           <StabilizationCard data={debt.data.stabilization} />
           <RatesChart rates={debt.data.rates} />
         </>
@@ -73,7 +73,8 @@ export function DebtPage() {
         Fontes: Banco Central, séries do SGS 4513 e 4478 (dívida líquida do setor público, em % do
         PIB e em reais), 13762 (dívida bruta do governo geral), 4382 (PIB de 12 meses em reais),
         5760 e 5793 (juros nominais e resultado primário) e 10618 (prazo médio da dívida mobiliária
-        federal); Tesouro Nacional, estoque da dívida pública federal no Tesouro Transparente.
+        federal); Tesouro Nacional, estoque da dívida pública federal no Tesouro Transparente; a
+        previsão vem da pesquisa Focus.
       </footer>
     </>
   );

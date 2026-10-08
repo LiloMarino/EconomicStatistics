@@ -13,6 +13,8 @@ import {
 import type { Deficit } from "@/features/deficit/use-deficit";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { forecastLegendEntry } from "@/shared/components/forecast-legend";
+import { ForecastSpan } from "@/shared/components/forecast-span";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import {
   type ChartConfig,
@@ -20,16 +22,20 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatMonth, formatPercent } from "@/shared/lib/format";
+import { formatDay, formatMonth, formatPercent } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
 import { texDecimal } from "@/shared/lib/tex";
 
 type Point = Deficit["years"][number];
+type Forecast = Deficit["forecast"];
 
 const chartConfig = {
   primary: { label: "Primário", color: "var(--fiscal-primary)" },
   interest: { label: "Juros", color: "var(--fiscal-interest)" },
   nominal: { label: "Nominal", color: "var(--foreground)" },
+  forecastPrimary: { label: "Primário esperado", color: "var(--fiscal-primary)" },
+  forecastInterest: { label: "Juros esperados", color: "var(--fiscal-interest)" },
+  forecastNominal: { label: "Nominal esperado", color: "var(--foreground)" },
 } satisfies ChartConfig;
 
 const seriesNames = new Map<string, string>(
@@ -55,10 +61,11 @@ interface MarkProps {
   index?: number;
   count: number;
   label: string;
+  dashed?: boolean;
 }
 
 /** O nominal é a soma das duas barras: um traço sobre a pilha, com o valor no último. */
-function NominalMark({ cx, cy, index, count, label }: MarkProps) {
+function NominalMark({ cx, cy, index, count, label, dashed = false }: MarkProps) {
   if (cx === undefined || cy === undefined) return <g />;
   return (
     <g>
@@ -69,6 +76,7 @@ function NominalMark({ cx, cy, index, count, label }: MarkProps) {
         y2={cy}
         stroke="var(--foreground)"
         strokeWidth={3}
+        strokeDasharray={dashed ? "4 3" : undefined}
       />
       {index === count - 1 && (
         <text
@@ -86,7 +94,20 @@ function NominalMark({ cx, cy, index, count, label }: MarkProps) {
   );
 }
 
-function HowToRead({ last }: { last: Point }) {
+function ForecastTray({ surveyDate }: { surveyDate: string }) {
+  return (
+    <TrayItem title="A previsão" concept="focus-survey">
+      <p>
+        As colunas claras, com contorno tracejado, são o que o mercado espera para dezembro na
+        pesquisa Focus de {formatDay(surveyDate)}. O Focus pergunta o resultado do governo, em que
+        negativo é déficit; aqui o sinal está trocado, como no resto do gráfico. Os juros esperados
+        são o nominal menos o primário.
+      </p>
+    </TrayItem>
+  );
+}
+
+function HowToRead({ last, forecast }: { last: Point; forecast: Forecast }) {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-start gap-x-8 gap-y-5">
       <TrayItem title="Primário" concept="primary-balance">
@@ -116,19 +137,40 @@ function HowToRead({ last }: { last: Point }) {
           crescimento.
         </p>
       </div>
+      {forecast && <ForecastTray surveyDate={forecast.survey_date} />}
     </div>
   );
 }
 
 /** Primário e juros empilhados no fim de cada ano, desde 2002, e o último mês; o traço
 marca o nominal, que é a soma dos dois. Primário negativo (superávit) desce do zero. */
-export function DeficitChart({ years }: { years: Point[] }) {
+export function DeficitChart({ years, forecast }: { years: Point[]; forecast: Forecast }) {
   const last = years.at(-1);
   if (!last) return null;
-  const tops = years.map((point) =>
+  const expected = forecast?.years ?? [];
+  const forecastEnd = expected.at(-1);
+  const rows = [
+    ...years.map((point) => ({
+      ...point,
+      forecastPrimary: null,
+      forecastInterest: null,
+      forecastNominal: null,
+    })),
+    ...expected.map((point) => ({
+      ref_date: point.ref_date,
+      primary: null,
+      interest: null,
+      nominal: null,
+      forecastPrimary: point.primary,
+      forecastInterest: point.interest,
+      forecastNominal: point.nominal,
+    })),
+  ];
+  const all = [...years, ...expected];
+  const tops = all.map((point) =>
     Math.max(point.nominal, point.interest + Math.max(point.primary, 0)),
   );
-  const bottoms = years.map((point) => Math.min(point.primary, 0));
+  const bottoms = all.map((point) => Math.min(point.primary, 0));
   const ticks = niceTicks(Math.min(0, ...bottoms), Math.max(...tops), 5);
 
   return (
@@ -139,7 +181,7 @@ export function DeficitChart({ years }: { years: Point[] }) {
         label: "Como ler e a conta",
         icon: Sigma,
         heading: "COMO LER E A CONTA",
-        content: <HowToRead last={last} />,
+        content: <HowToRead last={last} forecast={forecast} />,
       }}
     >
       <div className="flex flex-col gap-2">
@@ -153,15 +195,23 @@ export function DeficitChart({ years }: { years: Point[] }) {
               color: "var(--foreground)",
               shape: "line",
             },
+            ...(forecastEnd ? [forecastLegendEntry("Previsão de mercado")] : []),
           ]}
         />
         <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
           <ComposedChart
-            data={years}
+            data={rows}
             stackOffset="sign"
             margin={{ left: 0, right: 8, top: 24, bottom: 4 }}
           >
             <CartesianGrid vertical={false} />
+            {forecast && forecastEnd && (
+              <ForecastSpan
+                from={last.ref_date}
+                to={forecastEnd.ref_date}
+                surveyDate={forecast.survey_date}
+              />
+            )}
             <XAxis
               dataKey="ref_date"
               tickLine={false}
@@ -194,6 +244,7 @@ export function DeficitChart({ years }: { years: Point[] }) {
                       </span>
                     </span>
                   )}
+                  filterNull
                 />
               }
             />
@@ -211,6 +262,36 @@ export function DeficitChart({ years }: { years: Point[] }) {
               radius={[2, 2, 0, 0]}
               maxBarSize={28}
               isAnimationActive={false}
+            />
+            {(["forecastPrimary", "forecastInterest"] as const).map((key) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                stackId="deficit"
+                fill={`var(--color-${key})`}
+                fillOpacity={0.35}
+                stroke={`var(--color-${key})`}
+                strokeDasharray="3 2"
+                maxBarSize={28}
+                isAnimationActive={false}
+              />
+            ))}
+            <Line
+              dataKey="forecastNominal"
+              stroke="none"
+              isAnimationActive={false}
+              activeDot={false}
+              dot={(props: DotItemDotProps) => (
+                <NominalMark
+                  key={props.index}
+                  cx={props.cx}
+                  cy={props.cy}
+                  index={props.index}
+                  count={rows.length}
+                  label=""
+                  dashed
+                />
+              )}
             />
             <Line
               dataKey="nominal"

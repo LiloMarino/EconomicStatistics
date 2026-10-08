@@ -18,7 +18,7 @@ export const seriesLabels: Record<SeriesId, string> = {
   inpc: "INPC",
   minimum_wage: "Salário mínimo",
   inflation_target: "Meta de inflação",
-  dollar_monthly: "Dólar (média do mês)",
+  dollar_month_end: "Dólar (fim do mês)",
   current_account_gdp: "Transações correntes",
   fdi_gdp: "Investimento direto no país",
   reserves: "Reservas internacionais",
