@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Registrados os ajustes da rodada no canvas nas telas Dívida, Setor externo, Déficit e no Aprender, e o cartão de quem faz o déficit, que espera as séries por esfera.
+> **Última mudança (2026-10-08):** Concluído o cartão de quem faz o déficit, com o primário e os juros de cada esfera do setor público.
 
 ## Glossário
 
@@ -37,10 +37,9 @@
 | **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ⏳ |
 | **F38** | Diagramas nos conceitos que já existem | — | ⏳ |
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
-| **F43** | Quem faz o déficit: a NFSP por esfera | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (35 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (36 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -79,6 +78,7 @@
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
+| **F43** | Quem faz o déficit: a NFSP por esfera | — | ✅ |
 
 </details>
 
@@ -98,7 +98,6 @@
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
-| **F43** | Quem faz o déficit: a NFSP por esfera | M4 | 0 | ⏳ |
 
 ---
 
@@ -174,15 +173,14 @@
 >
 > **Serve:** N4, N6
 >
-> **Progresso:** 4/7 concluídas
+> **Progresso:** 5/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F15** | Como medir o financiamento monetário do déficit | F13, F16 | 🔍 |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | F14 | ⏳ |
-| **F43** | Quem faz o déficit: a NFSP por esfera | F13 | ⏳ |
 
-<details><summary>Concluído (4 itens)</summary>
+<details><summary>Concluído (5 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -190,6 +188,7 @@
 | **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | F13 | ✅ |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | F2 | ✅ |
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | F13 | ✅ |
+| **F43** | Quem faz o déficit: a NFSP por esfera | F13 | ✅ |
 
 </details>
 
@@ -335,7 +334,7 @@
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | N2, N4 | D6 | — | F13, F14, F31 | Baixo | Baixo | Médio | Excelente | ✅ Concluído |
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | N4, N6 | D6 | M4 | F13 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 | F8, F29 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
-| **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ⏳ Pendente |
+| **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ✅ Concluído |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -932,17 +931,21 @@ O canvas está em edição. Os explicadores com diagrama (F9) são implementados
 - O gráfico termina no último mês do IPCA no banco e lê o mesmo `GET /api/inflation/pace` da tela de inflação.
 - O `concept-article.tsx` tem um mapa `readingCharts`, por id de conceito. Outro conceito com série ganha o seu gráfico entrando nesse mapa.
 
-**F43 — Quem faz o déficit: a NFSP por esfera.** O cartão "Quem faz o déficit", na tela Déficit, divide a necessidade de financiamento do setor público (a NFSP, o déficit nominal do Brasil inteiro) entre quem a produz: o governo central (Tesouro, Previdência e Banco Central), os estados e municípios, e as estatais. Para cada esfera, o primário e os juros em 12 meses, em % do PIB.
+**F43 — Quem faz o déficit: a NFSP por esfera.** Feito, a partir do desenho da rodada de ajustes nas telas do app no canvas. O cartão "Quem faz o déficit", na tela Déficit, divide a necessidade de financiamento do setor público (a NFSP, o déficit nominal do Brasil inteiro) entre quem a produz: o governo central (Tesouro, Previdência e Banco Central), os estados e municípios, e as estatais (sem a Petrobras e os bancos públicos).
 
-O desenho do cartão veio da rodada de ajustes nas telas do app no canvas, com números de exemplo, e entra no código junto com os dados de verdade.
+**Séries do SGS** (NFSP sem desvalorização cambial, % do PIB, 12 meses; conferidas ao vivo em 2026-10-08, todas desde nov/2002 no cache):
+- primário: governo central 5783, estados e municípios 5786, estatais 5789;
+- juros nominais: governo central 5750, estados e municípios 5753, estatais 5756.
 
-**Plano:**
-- pesquisar no SGS as séries de primário e de juros em 12 meses, em % do PIB, de cada esfera, e conferir que, somadas, dão as do setor público consolidado da F13;
-- cadastrar as séries em `backend/domain/series.py`, com o conceito de cada uma;
-- levar os números por esfera para o `GET /api/deficit`;
-- montar o cartão com o dado do banco.
+O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mais os juros.
 
-**Aceite:** no último mês, a soma das três esferas bate com o primário e os juros do consolidado, a menos do arredondamento do BCB.
+**Backend:** `GET /api/deficit` ganhou `spheres`, o último mês dividido entre as três esferas, com o enum `Sphere`.
+
+**Tela:**
+- uma barra por esfera, com primário e juros empilhados como no gráfico do déficit: o superávit primário vai para a esquerda do zero e abate os juros; o nominal da esfera fica à direita;
+- a bandeja "Como ler" explica cada esfera e, num bloco à parte, mostra a soma das três contra o consolidado. Em ago/2026, o governo central pagou 91% dos juros do setor público.
+
+**Aceite:** conferido. Em ago/2026, as três esferas somam 0,61% de primário e 8,86% de juros, contra 0,62% e 8,86% do consolidado; o 0,01 é arredondamento do BCB, e o teste aceita até 0,02 ponto.
 
 ---
 ## 2. Nice-to-have
