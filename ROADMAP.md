@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Concluídos o cartão de quem faz o déficit, com o primário e os juros de cada esfera, e a busca e o rodapé da barra lateral que seguem a tela aberta.
+> **Última mudança (2026-10-08):** Concluída a tela Atividade, com o PIB, o IBC-Br e o desemprego e a continuação pelo Focus.
 
 ## Glossário
 
@@ -29,7 +29,6 @@
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 | **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
-| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | — | 💤 |
 | **F35** | IPCA livres, administrados e serviços | — | ⏳ |
@@ -39,7 +38,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (37 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (38 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -75,6 +74,7 @@
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
+| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ |
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
@@ -97,7 +97,6 @@
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
-| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 
 ---
@@ -257,20 +256,20 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 1/5 concluídas
+> **Progresso:** 2/5 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F30** | Tela Juros: Selic, Copom e juro real | F4, F10 | ⏳ |
-| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | F3, F4 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | F4 | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | F33 | 💤 |
 
-<details><summary>Concluído (1 item)</summary>
+<details><summary>Concluído (2 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | F4 | ✅ |
+| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | F3, F4 | ✅ |
 
 </details>
 
@@ -325,7 +324,7 @@
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
-| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | F3, F4 | Médio | Médio | Alto | Bom | ⏳ Pendente |
+| **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | F3, F4 | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | N1, N7 | — | M8 | F4 | Médio | Baixo | Médio | Bom | ⏳ Pendente |
 | **F34** | Mercado imobiliário, na tela Crédito | N1 | — | M8 | F33 | Médio | Médio | Baixo | Médio | 💤 Registrado, sem prioridade |
 | **F35** | IPCA livres, administrados e serviços | N1, N2 | — | — | F4, F8 | Baixo | Baixo | Médio | Bom | ⏳ Pendente |
@@ -824,13 +823,31 @@ As reservas usam o conceito liquidez (3546), que é o número que o BCB divulga.
 
 **Mudança com a continuação pelo Focus (F27):** o dólar passou da média mensal da PTAX (SGS 3698) para a PTAX do fim do mês (SGS 3696), que é a medida que o Focus pergunta (conferido: na pesquisa de 5/jan/2018, o "Câmbio" da API dá 3,34 para 2018, igual à linha "fim de período" do relatório, e não aos 3,32 da média). Uma migration apagou a série antiga do cache. Em set/2026, o dólar fechou a R$ 5,1809, −2,59% em 12 meses.
 
-**F32 — Tela Atividade.** Rota própria para quanto a economia produz e quanto emprega.
+**F32 — Tela Atividade.** Feito, a partir da prancha `Activity` do canvas. É a rota `/activity`, no grupo "Economia real e mundo" da navegação, e responde se a economia cresce ou encolhe e como está o emprego.
 
-- **"A economia cresce ou encolhe?":** o PIB trimestral do IBGE (variação em 4 trimestres, tabela do SIDRA levantada na implementação, pelo provider do IBGE que já existe) e o IBC-Br mensal do BCB (SGS) no mesmo gráfico. A bandeja "Como ler" diz qual é qual: o PIB do IBGE é o oficial e sai por trimestre; o IBC-Br é a prévia mensal do BCB, para ver antes, e às vezes diverge.
-- **"Desemprego":** a taxa de desocupação da PNAD Contínua (SGS 24369), trimestre móvel, com a continuação do Focus (F27). A bandeja diz que o número do BCB é o mesmo do IBGE: o BCB republica a PNAD.
-- **Continuação:** PIB do ano e por trimestre, pelo Focus.
+**Séries** (conferidas ao vivo em 2026-10-08):
 
-Os conceitos do Aprender entram junto: PIB, IBC-Br, crescimento real e nominal, taxa de desocupação, trimestre móvel.
+| Série | Fonte e código | Unidade |
+|---|---|---|
+| PIB acumulado em 4 trimestres | IBGE, SIDRA `5932/6562/11255/90707` | %, trimestral (período `AAAATT`) |
+| IBC-Br, sem ajuste sazonal | SGS 24363 | índice, mensal |
+| Taxa de desocupação, PNAD Contínua | SGS 24369 | %, trimestre móvel datado no último mês dele |
+
+O IBC-Br não é publicado em variação: o 12 meses é a média do índice nos últimos 12 meses sobre a dos 12 anteriores, menos 1 (a mesma ideia dos 4 trimestres do PIB). Em jul/2026 dá 1,48%, contra 1,32% na série dessazonalizada (24364); a sem ajuste é a comparável ao PIB acumulado. O Banco Central trata o IBC-Br como indicador de tendência, e não como prévia oficial do PIB; a bandeja diz que serve para ver antes, mas não é o PIB.
+
+**Implementação:**
+- o provider do IBGE passou a ler a tabela trimestral (`AAAATT`, `202602` é o 2º trimestre) e data o trimestre no 1º dia dele, como o resto do cache; no registro, o PIB é cobrado a partir do dia 5 do terceiro mês depois do fim do trimestre, o IBC-Br a partir do dia 20 do segundo mês seguinte e a PNAD a partir do dia 30 do mês seguinte;
+- `GET /api/activity` devolve os últimos 4 anos de cada gráfico, com o PIB datado no mês em que o trimestre termina, a diferença da desocupação contra um ano antes em pontos (`change_12m`) e 409 enquanto o cache está vazio;
+- o 12 meses do índice mora em `backend/domain/rates.py` (`index_change_12m`), junto com o resto da conta de taxa;
+- `MonthValue` e `MonthlyForecast`, antes do setor externo, subiram para `backend/features/`, porque a atividade os usa também;
+- a tela tem o resumo (PIB, IBC-Br e desemprego, cada um com o "?"), "A economia cresce ou encolhe?" (IBC-Br em linha, PIB em pontos, um por trimestre) e "Desemprego", cada um com a bandeja "Como ler" e um bloco por conceito;
+- no Aprender, o tema "Atividade" com PIB, IBC-Br, crescimento real e nominal, taxa de desocupação e trimestre móvel.
+
+**Mudança em relação ao card:** a continuação do PIB pelo Focus é só no ano, com um ponto em dezembro do ano corrente e do seguinte, como a prancha desenha. O gráfico é de 4 trimestres, e o Focus trimestral é a taxa contra o mesmo trimestre do ano anterior, outra medida, que não continua a linha sem o nível do PIB; em dezembro, o acumulado de 4 trimestres é o próprio crescimento do ano. O desemprego continua mês a mês, até dezembro do ano seguinte.
+
+**Aceite cumprido:** com os dados de 2/out/2026, o PIB dá 1,9% em 4 trimestres até o 2º tri/2026, igual ao IBGE; o IBC-Br, 1,48% em 12 meses até jul/2026; e a desocupação, 5,3% no trimestre até ago/2026, contra 5,6% um ano antes (−0,3 p.p.), igual à divulgação do IBGE de 29/9. A previsão do Focus de 2/out/2026 traz 1,85% para o PIB de 2026 e 1,40% para o de 2027.
+
+**Fica para depois:** o link "Ver na saúde da economia" da bandeja do desemprego entra com a F17; por enquanto ela leva só ao conceito.
 
 **F33 — Tela Crédito.** Rota própria com os gráficos de crédito da página do BCB, todos do SGS. Liga a Selic à vida real: quanto custa pegar dinheiro emprestado e quanto está sendo emprestado.
 
