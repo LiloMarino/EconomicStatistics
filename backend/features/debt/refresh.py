@@ -1,30 +1,22 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
 from datetime import datetime
 
 from sqlalchemy.orm import Session
 
 from backend.core.enum import Dataset
-from backend.core.models.models import DatasetFetchLog
 from backend.domain.coverage import FETCH_INTERVAL
 from backend.domain.federal_debt import (
     DebtHolding,
     FederalDebtProvider,
     expected_stock_month,
 )
-from backend.repository.federal_debt import dataset_log, last_stock_month, replace_stock
+from backend.features.dataset_refresh import DatasetRefresh, record_attempt
+from backend.repository.dataset_log import dataset_log
+from backend.repository.federal_debt import last_stock_month, replace_stock
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass(frozen=True, slots=True, kw_only=True)
-class DatasetRefresh:
-    """`failed` traz só o problema novo, como na `RefreshReport` das séries."""
-
-    updated: bool
-    failed: bool
 
 
 def refresh_federal_debt(
@@ -49,23 +41,14 @@ def refresh_federal_debt(
         session.flush()
         last = last_stock_month(session)
 
-    gap = last is None or last < expected
-    failed = gap and not (log is not None and log.gap)
-    if log is None:
-        session.add(
-            DatasetFetchLog(
-                dataset=Dataset.FEDERAL_DEBT_STOCK,
-                attempted_at=now,
-                succeeded_at=now if holdings else None,
-                gap=gap,
-            )
-        )
-    else:
-        log.attempted_at = now
-        log.succeeded_at = now if holdings else log.succeeded_at
-        log.gap = gap
-    session.commit()
-    return DatasetRefresh(updated=bool(holdings), failed=failed)
+    return record_attempt(
+        session,
+        Dataset.FEDERAL_DEBT_STOCK,
+        log,
+        now,
+        succeeded=bool(holdings),
+        gap=last is None or last < expected,
+    )
 
 
 def _fetch(provider: FederalDebtProvider) -> list[DebtHolding]:

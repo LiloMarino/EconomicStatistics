@@ -6,8 +6,7 @@ from datetime import date
 from sqlalchemy import delete, func, insert, select
 from sqlalchemy.orm import Session
 
-from backend.core.enum import Dataset
-from backend.core.models.models import DatasetFetchLog, FederalDebtStock
+from backend.core.models.models import FederalDebtStock
 from backend.domain.federal_debt import DebtHolding
 
 
@@ -63,7 +62,3 @@ def replace_stock(session: Session, holdings: Sequence[DebtHolding]) -> None:
             for item in holdings
         ],
     )
-
-
-def dataset_log(session: Session, dataset: Dataset) -> DatasetFetchLog | None:
-    return session.get(DatasetFetchLog, dataset)

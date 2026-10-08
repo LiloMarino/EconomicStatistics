@@ -40,7 +40,7 @@ backend/
 │   ├── enum/         # enums do domínio
 │   └── models/       # models.py: Base e todas as tabelas
 ├── migrations/       # Alembic: env.py e versions/
-├── adapters/         # fontes externas: IBGE, BCB e Tesouro (pyright relaxado)
+├── adapters/         # fontes externas: IBGE, BCB (SGS e Focus) e Tesouro (pyright relaxado)
 ├── domain/           # dataclasses e funções puras
 ├── repository/       # acesso a dados compartilhado; devolve dataclass, nunca Row
 └── features/<dominio>/router.py

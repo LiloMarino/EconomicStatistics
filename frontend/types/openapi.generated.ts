@@ -195,7 +195,7 @@ export interface components {
          * @description Fonte que não cabe em `observations`, com tabela e refresh próprios.
          * @enum {string}
          */
-        Dataset: "federal_debt_stock";
+        Dataset: "federal_debt_stock" | "focus_expectations";
         /**
          * DebtLevelDTO
          * @description Dívida líquida do setor público e bruta do governo geral, em fração do PIB

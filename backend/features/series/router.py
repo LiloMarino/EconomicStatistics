@@ -7,8 +7,14 @@ from fastapi import APIRouter
 from backend.core.database.session import SessionDep
 from backend.core.dto import BaseDTO
 from backend.core.enum import Dataset, SeriesId
+from backend.features.dataset_refresh import DatasetRefresh
 from backend.features.debt.refresh import refresh_federal_debt
-from backend.features.providers import DebtProviderDep, ProvidersDep
+from backend.features.focus.refresh import refresh_focus
+from backend.features.providers import (
+    DebtProviderDep,
+    FocusProviderDep,
+    ProvidersDep,
+)
 from backend.features.series.refresh import refresh_series
 from backend.repository.series import fetch_logs, last_cached
 
@@ -35,18 +41,24 @@ class SeriesStatusDTO(BaseDTO):
 
 @router.post("/refresh")
 def refresh(
-    session: SessionDep, providers: ProvidersDep, debt_provider: DebtProviderDep
+    session: SessionDep,
+    providers: ProvidersDep,
+    debt_provider: DebtProviderDep,
+    focus_provider: FocusProviderDep,
 ) -> RefreshReportDTO:
     """Com o cache em dia, responde sem sair da máquina. Sem rede não é erro: o cache
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
     now = datetime.now()
     report = refresh_series(session, providers, now)
-    debt = refresh_federal_debt(session, debt_provider, now)
+    datasets: dict[Dataset, DatasetRefresh] = {
+        Dataset.FEDERAL_DEBT_STOCK: refresh_federal_debt(session, debt_provider, now),
+        Dataset.FOCUS_EXPECTATIONS: refresh_focus(session, focus_provider, now),
+    }
     return RefreshReportDTO(
         updated=list(report.updated),
         failed=list(report.failed),
-        datasets_updated=[Dataset.FEDERAL_DEBT_STOCK] if debt.updated else [],
-        datasets_failed=[Dataset.FEDERAL_DEBT_STOCK] if debt.failed else [],
+        datasets_updated=[key for key, item in datasets.items() if item.updated],
+        datasets_failed=[key for key, item in datasets.items() if item.failed],
     )
 
 

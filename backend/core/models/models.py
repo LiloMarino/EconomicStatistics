@@ -3,10 +3,16 @@ from __future__ import annotations
 from datetime import date, datetime
 from enum import StrEnum
 
-from sqlalchemy import Enum, MetaData
+from sqlalchemy import Enum, Index, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
-from backend.core.enum import Dataset, DebtHolder, SeriesId
+from backend.core.enum import (
+    Dataset,
+    DebtHolder,
+    FocusIndicator,
+    FocusTargetKind,
+    SeriesId,
+)
 
 # Toda constraint nasce com nome: é o nome que o batch do Alembic usa para recriar a
 # tabela no SQLite.
@@ -103,3 +109,29 @@ class DatasetFetchLog(Base):
     attempted_at: Mapped[datetime]
     succeeded_at: Mapped[datetime | None]
     gap: Mapped[bool]
+
+
+class FocusExpectation(Base):
+    """A mediana de uma pesquisa Focus para um indicador e um período previsto, na
+    unidade em que o Focus publica (% no ano, % no mês, R$/US$, US$ bilhões, % do
+    PIB). Guarda uma pesquisa por semana, a do relatório: a de sexta, ou a do dia útil
+    anterior quando a sexta é feriado.
+
+    `target_period` é o mês (1 a 12), o trimestre (1 a 4) ou a reunião do Copom no ano
+    (1 a 8), e 0 na previsão do ano. Na de 12 meses à frente, que anda com a pesquisa,
+    ano e período são 0."""
+
+    __tablename__ = "focus_expectations"
+    __table_args__ = (Index(None, "survey_date"),)
+
+    indicator: Mapped[FocusIndicator] = mapped_column(
+        _string_enum(FocusIndicator, "focus_indicator"), primary_key=True
+    )
+    target_kind: Mapped[FocusTargetKind] = mapped_column(
+        _string_enum(FocusTargetKind, "focus_target_kind"), primary_key=True
+    )
+    target_year: Mapped[int] = mapped_column(primary_key=True)
+    target_period: Mapped[int] = mapped_column(primary_key=True)
+    survey_date: Mapped[date] = mapped_column(primary_key=True)
+    median: Mapped[float]
+    respondents: Mapped[int]

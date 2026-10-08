@@ -37,4 +37,5 @@ export const seriesLabels: Record<SeriesId, string> = {
 
 export const datasetLabels: Record<Dataset, string> = {
   federal_debt_stock: "Estoque da dívida federal",
+  focus_expectations: "Pesquisa Focus",
 };

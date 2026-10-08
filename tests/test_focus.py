@@ -1,0 +1,207 @@
+"""A pesquisa Focus: o parse do Olinda, a pesquisa de cada semana e o refresh."""
+
+from __future__ import annotations
+
+import json
+import urllib.parse
+from datetime import date, datetime, timedelta
+
+from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
+
+from backend.adapters.bcb_focus_provider import (
+    BcbFocusProvider,
+    FocusRow,
+    to_expectations,
+)
+from backend.core.enum import FocusIndicator, FocusTargetKind
+from backend.domain.focus import expected_survey_week, survey_overdue
+from backend.features.focus.refresh import refresh_focus
+from backend.repository.focus import last_survey_date
+from tests.fakes import FakeFocusProvider
+
+# Terça, 6/out/2026: a pesquisa da semana de 28/set a 2/out já devia ter saído
+NOW = datetime(2026, 10, 6, 9, 0)
+
+# Linhas como o Olinda responde, com o "í" corrompido do endpoint anual
+ANNUAL_BODY = json.dumps(
+    {
+        "value": [
+            {
+                "Indicador": "D�­vida l�­quida do setor público",
+                "IndicadorDetalhe": None,
+                "Data": "2026-10-02",
+                "DataReferencia": "2026",
+                "Mediana": 70.0,
+                "numeroRespondentes": 60,
+                "baseCalculo": 0,
+            },
+            {
+                "Indicador": "Balança comercial",
+                "IndicadorDetalhe": "Saldo",
+                "Data": "2026-10-02",
+                "DataReferencia": "2027",
+                "Mediana": 79.0,
+                "numeroRespondentes": 30,
+                "baseCalculo": 0,
+            },
+            {
+                "Indicador": "IPC-Fipe",
+                "IndicadorDetalhe": None,
+                "Data": "2026-10-02",
+                "DataReferencia": "2026",
+                "Mediana": 4.0,
+                "numeroRespondentes": 10,
+                "baseCalculo": 0,
+            },
+        ]
+    }
+).encode()
+
+
+def _rows(body: bytes) -> list[FocusRow]:
+    return [FocusRow.model_validate(row) for row in json.loads(body)["value"]]
+
+
+def test_corrupted_name_and_detail_become_the_indicator() -> None:
+    """O nome com o "í" corrompido vira o mesmo indicador do nome certo, a balança se
+    separa pelo detalhe e o indicador que o Focus não pergunta mais fica de fora."""
+    expectations = to_expectations(FocusTargetKind.YEAR, _rows(ANNUAL_BODY))
+
+    assert [
+        (item.indicator, item.target_year, item.median, item.respondents)
+        for item in expectations
+    ] == [
+        (FocusIndicator.NET_DEBT, 2026, 70.0, 60),
+        (FocusIndicator.TRADE_BALANCE, 2027, 79.0, 30),
+    ]
+
+
+def test_month_quarter_and_meeting_become_year_and_period() -> None:
+    """`10/2026` é o mês 10, `4/2026` o 4º trimestre e `R8/2026` a 8ª reunião."""
+    base = {
+        "Indicador": "IPCA",
+        "Data": "2026-10-02",
+        "Mediana": 0.31,
+        "numeroRespondentes": 100,
+    }
+    month = to_expectations(
+        FocusTargetKind.MONTH,
+        [FocusRow.model_validate(base | {"DataReferencia": "10/2026"})],
+    )
+    quarter = to_expectations(
+        FocusTargetKind.QUARTER,
+        [FocusRow.model_validate(base | {"DataReferencia": "4/2026"})],
+    )
+    meeting = to_expectations(
+        FocusTargetKind.MEETING,
+        [FocusRow.model_validate(base | {"Indicador": "Selic", "Reuniao": "R8/2026"})],
+    )
+
+    assert (month[0].target_year, month[0].target_period) == (2026, 10)
+    assert (quarter[0].target_year, quarter[0].target_period) == (2026, 4)
+    assert (meeting[0].indicator, meeting[0].target_year, meeting[0].target_period) == (
+        FocusIndicator.SELIC,
+        2026,
+        8,
+    )
+
+
+def test_friday_holiday_falls_back_to_the_day_before() -> None:
+    """Uma consulta pede as sextas de uma vez, na base de 30 dias. A sexta sem pesquisa,
+    como 2/abr/2021 (Sexta-feira Santa), é pedida de novo na quinta."""
+    filters: list[str] = []
+
+    def download(url: str) -> bytes:
+        parts = urllib.parse.urlsplit(url)
+        if not parts.path.endswith("/ExpectativasMercadoAnuais"):
+            return b'{"value": []}'
+        query = urllib.parse.parse_qs(parts.query)
+        filters.append(query["$filter"][0])
+        days = [
+            part.split("'")[1]
+            for part in query["$filter"][0].split(" or ")
+            if "Data eq" in part
+        ]
+        rows = [
+            {
+                "Indicador": "IPCA",
+                "Data": day,
+                "DataReferencia": "2021",
+                "Mediana": 4.0,
+                "numeroRespondentes": 100,
+            }
+            for day in days
+            if day != "2021-04-02"
+        ]
+        return json.dumps({"value": rows}).encode()
+
+    provider = BcbFocusProvider(download=download, today=lambda: date(2021, 4, 10))
+    expectations = provider.get_expectations(date(2021, 3, 26))
+
+    assert [item.survey_date for item in expectations] == [
+        date(2021, 3, 26),
+        date(2021, 4, 9),
+        date(2021, 4, 1),
+    ]
+    assert filters[0].startswith("baseCalculo eq 0 and (")
+    assert "Data eq '2021-04-01'" in filters[1]
+
+
+def test_expected_week_waits_until_tuesday() -> None:
+    """Na segunda, 5/out, a pesquisa cobrada ainda é a da semana de 21/set; a partir
+    da terça, a da semana de 28/set."""
+    assert expected_survey_week(date(2026, 10, 5)) == date(2026, 9, 21)
+    assert expected_survey_week(date(2026, 10, 6)) == date(2026, 9, 28)
+
+
+def test_holiday_survey_counts_for_its_week() -> None:
+    """A pesquisa de quinta, quando a sexta é feriado, cobre a semana dela."""
+    assert not survey_overdue(date(2026, 10, 1), date(2026, 10, 6))
+    assert survey_overdue(date(2026, 9, 25), date(2026, 10, 6))
+
+
+def test_second_refresh_does_not_hit_the_source(session: Session) -> None:
+    """Com a pesquisa da semana em cache, o refresh não volta à fonte, nem 7 horas
+    depois."""
+    provider = FakeFocusProvider()
+
+    first = refresh_focus(session, provider, NOW)
+    refresh_focus(session, provider, NOW + timedelta(hours=7))
+
+    assert first.updated
+    assert provider.calls == [None]
+    assert last_survey_date(session) == date(2026, 10, 2)
+
+
+def test_next_refresh_asks_from_the_last_survey(session: Session) -> None:
+    """Na semana seguinte, o refresh pede a partir da última pesquisa em cache."""
+    provider = FakeFocusProvider(surveys=(date(2026, 10, 2), date(2026, 10, 9)))
+
+    refresh_focus(session, FakeFocusProvider(surveys=(date(2026, 10, 2),)), NOW)
+    refresh_focus(session, provider, NOW + timedelta(weeks=1))
+
+    assert provider.calls == [date(2026, 10, 2)]
+    assert last_survey_date(session) == date(2026, 10, 9)
+
+
+def test_offline_source_keeps_cache_and_warns_once(session: Session) -> None:
+    """Sem rede, o cache fica como estava e a falta é avisada só na primeira vez."""
+    refresh_focus(session, FakeFocusProvider(), NOW)
+    offline = FakeFocusProvider(offline=True)
+    later = NOW + timedelta(weeks=1)
+
+    first = refresh_focus(session, offline, later)
+    second = refresh_focus(session, offline, later + timedelta(hours=7))
+
+    assert last_survey_date(session) == date(2026, 10, 2)
+    assert first.failed
+    assert not second.failed
+    assert len(offline.calls) == 2
+
+
+def test_refresh_endpoint_reports_the_focus(api: TestClient) -> None:
+    """O refresh pela API também busca o Focus e diz que ele foi atualizado."""
+    body = api.post("/api/series/refresh").json()
+
+    assert "focus_expectations" in body["datasets_updated"]

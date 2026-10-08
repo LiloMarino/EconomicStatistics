@@ -3,9 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
-from backend.core.enum import DebtHolder, Periodicity, Unit
+from backend.core.enum import (
+    DebtHolder,
+    FocusIndicator,
+    FocusTargetKind,
+    Periodicity,
+    Unit,
+)
 from backend.domain.coverage import month_start, quarter_start
 from backend.domain.federal_debt import DebtHolding
+from backend.domain.focus import Expectation, week_start
 from backend.domain.series import Observation, SeriesSpec
 
 FAKE_VALUES = {
@@ -75,4 +82,33 @@ class FakeDebtProvider:
                 (DebtHolder.MARKET, 300.0),
                 (DebtHolder.CENTRAL_BANK, 100.0),
             )
+        ]
+
+
+@dataclass
+class FakeFocusProvider:
+    """O Focus com uma pesquisa por sexta em `surveys`, cada uma com a previsão do IPCA
+    do ano dela: 5% mais 0,01 ponto por semana."""
+
+    surveys: tuple[date, ...] = (date(2026, 9, 25), date(2026, 10, 2))
+    name: str = "fake-focus"
+    offline: bool = False
+    calls: list[date | None] = field(default_factory=list[date | None])
+
+    def get_expectations(self, since: date | None) -> list[Expectation]:
+        self.calls.append(since)
+        if self.offline:
+            raise ConnectionError("sem rede")
+        return [
+            Expectation(
+                indicator=FocusIndicator.IPCA,
+                target_kind=FocusTargetKind.YEAR,
+                target_year=survey.year,
+                target_period=0,
+                survey_date=survey,
+                median=5.0 + index * 0.01,
+                respondents=140,
+            )
+            for index, survey in enumerate(self.surveys)
+            if since is None or survey >= week_start(since)
         ]

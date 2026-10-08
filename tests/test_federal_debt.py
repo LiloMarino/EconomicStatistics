@@ -175,5 +175,5 @@ def test_refresh_endpoint_reports_the_federal_debt(api: TestClient) -> None:
     """O refresh pela API também baixa a dívida federal e diz que ela foi atualizada."""
     body = api.post("/api/series/refresh").json()
 
-    assert body["datasets_updated"] == ["federal_debt_stock"]
+    assert "federal_debt_stock" in body["datasets_updated"]
     assert body["datasets_failed"] == []

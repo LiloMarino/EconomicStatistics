@@ -7,11 +7,13 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from backend.adapters.bcb_focus_provider import BcbFocusProvider
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
 from backend.adapters.tesouro_debt_provider import TesouroDebtProvider
 from backend.core.enum import Source
 from backend.domain.federal_debt import FederalDebtProvider
+from backend.domain.focus import FocusProvider
 from backend.domain.series import SeriesProvider
 
 
@@ -27,3 +29,10 @@ def get_debt_provider() -> FederalDebtProvider:
 
 
 DebtProviderDep = Annotated[FederalDebtProvider, Depends(get_debt_provider)]
+
+
+def get_focus_provider() -> FocusProvider:
+    return BcbFocusProvider()
+
+
+FocusProviderDep = Annotated[FocusProvider, Depends(get_focus_provider)]
