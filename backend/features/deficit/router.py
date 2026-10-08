@@ -6,6 +6,7 @@ from fastapi import APIRouter
 
 from backend.core.database.session import SessionDep
 from backend.core.dto import ERROR_RESPONSES, BaseDTO
+from backend.core.enum import Sphere
 from backend.features.deficit.service import deficit
 
 router = APIRouter(prefix="/api/deficit", tags=["deficit"])
@@ -17,6 +18,17 @@ class DeficitPointDTO(BaseDTO):
     primário mais os juros."""
 
     ref_date: date
+    nominal: float
+    primary: float
+    interest: float
+
+
+class SphereDeficitDTO(BaseDTO):
+    """A parte de uma esfera no déficit do último mês, na mesma fração do PIB e
+    convenção do consolidado; o nominal é o primário mais os juros, e as três esferas
+    somam o consolidado, a menos do arredondamento do BCB."""
+
+    sphere: Sphere
     nominal: float
     primary: float
     interest: float
@@ -34,12 +46,13 @@ class DeficitDTO(BaseDTO):
     """`interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
     mês publicado; `months`, os 12 meses que terminam em cada mês desde o começo da
-    série."""
+    série; `spheres`, o último mês dividido entre as esferas."""
 
     last: DeficitPointDTO
     interest_share: float | None
     years: list[DeficitPointDTO]
     months: list[DeficitPointDTO]
+    spheres: list[SphereDeficitDTO]
     forecast: DeficitForecastDTO | None
 
 

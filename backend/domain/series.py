@@ -159,9 +159,10 @@ def _fiscal_note(code: str, unit: Unit, first_date: date) -> SeriesSpec:
     )
 
 
-# A NFSP é a necessidade de financiamento: valor positivo é déficit. As três séries
-# são do setor público consolidado, sem desvalorização cambial, em % do PIB e
-# acumuladas em 12 meses, e fecham a conta nominal = primário + juros.
+# A NFSP é a necessidade de financiamento: valor positivo é déficit. As séries são
+# sem desvalorização cambial, em % do PIB e acumuladas em 12 meses. As três do setor
+# público consolidado fecham a conta nominal = primário + juros, e as de cada esfera
+# somam as do consolidado, a menos do arredondamento do BCB.
 NFSP_START = date(2002, 11, 1)
 # A dívida líquida começa em dez/2001, e o PIB de 12 meses vem um ano antes dela, para
 # o crescimento contra o ano anterior
@@ -244,6 +245,24 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.NOMINAL_DEFICIT: _fiscal_note("5727", Unit.PERCENT_GDP, NFSP_START),
     SeriesId.PRIMARY_DEFICIT: _fiscal_note("5793", Unit.PERCENT_GDP, NFSP_START),
     SeriesId.NOMINAL_INTEREST: _fiscal_note("5760", Unit.PERCENT_GDP, NFSP_START),
+    SeriesId.PRIMARY_DEFICIT_CENTRAL: _fiscal_note(
+        "5783", Unit.PERCENT_GDP, NFSP_START
+    ),
+    SeriesId.PRIMARY_DEFICIT_REGIONAL: _fiscal_note(
+        "5786", Unit.PERCENT_GDP, NFSP_START
+    ),
+    SeriesId.PRIMARY_DEFICIT_STATE_OWNED: _fiscal_note(
+        "5789", Unit.PERCENT_GDP, NFSP_START
+    ),
+    SeriesId.NOMINAL_INTEREST_CENTRAL: _fiscal_note(
+        "5750", Unit.PERCENT_GDP, NFSP_START
+    ),
+    SeriesId.NOMINAL_INTEREST_REGIONAL: _fiscal_note(
+        "5753", Unit.PERCENT_GDP, NFSP_START
+    ),
+    SeriesId.NOMINAL_INTEREST_STATE_OWNED: _fiscal_note(
+        "5756", Unit.PERCENT_GDP, NFSP_START
+    ),
     SeriesId.NET_DEBT: _fiscal_note("4513", Unit.PERCENT_GDP, NET_DEBT_START),
     SeriesId.NET_DEBT_BRL: _fiscal_note("4478", Unit.BRL_MILLION, NET_DEBT_START),
     SeriesId.GROSS_DEBT: _fiscal_note("13762", Unit.PERCENT_GDP, date(2006, 12, 1)),

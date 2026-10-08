@@ -5,7 +5,7 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from backend.core.enum import FocusIndicator, SeriesId
+from backend.core.enum import FocusIndicator, SeriesId, Sphere
 from backend.core.errors import MissingDataError
 from backend.domain.focus import annual_expectations, forecast_years, nfsp_from_balance
 from backend.domain.rates import PERCENT
@@ -13,10 +13,27 @@ from backend.domain.series import NFSP_START
 from backend.repository.focus import latest_survey
 from backend.repository.series import last_cached, read_observations
 
+# O primário e os juros de cada esfera
+SPHERE_SERIES: dict[Sphere, tuple[SeriesId, SeriesId]] = {
+    Sphere.CENTRAL: (
+        SeriesId.PRIMARY_DEFICIT_CENTRAL,
+        SeriesId.NOMINAL_INTEREST_CENTRAL,
+    ),
+    Sphere.REGIONAL: (
+        SeriesId.PRIMARY_DEFICIT_REGIONAL,
+        SeriesId.NOMINAL_INTEREST_REGIONAL,
+    ),
+    Sphere.STATE_OWNED: (
+        SeriesId.PRIMARY_DEFICIT_STATE_OWNED,
+        SeriesId.NOMINAL_INTEREST_STATE_OWNED,
+    ),
+}
+
 DEFICIT_SERIES = (
     SeriesId.NOMINAL_DEFICIT,
     SeriesId.PRIMARY_DEFICIT,
     SeriesId.NOMINAL_INTEREST,
+    *(series_id for pair in SPHERE_SERIES.values() for series_id in pair),
 )
 
 
@@ -26,6 +43,18 @@ class DeficitPoint:
     positivo é déficit. O nominal é o primário mais os juros."""
 
     ref_date: date
+    nominal: float
+    primary: float
+    interest: float
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class SphereDeficit:
+    """A parte de uma esfera no déficit, nos mesmos 12 meses e na mesma convenção do
+    consolidado. O BCB não publica o nominal por esfera: ele é o primário mais os
+    juros."""
+
+    sphere: Sphere
     nominal: float
     primary: float
     interest: float
@@ -45,12 +74,13 @@ class DeficitForecast:
 class Deficit:
     """`interest_share` é a fração do déficit nominal que é juro; sem déficit nominal,
     ela não existe. `years` traz dezembro de cada ano e o último mês; `months`, todos os
-    meses desde o começo da série."""
+    meses desde o começo da série. `spheres` divide o último mês entre as esferas."""
 
     last: DeficitPoint
     interest_share: float | None
     years: list[DeficitPoint]
     months: list[DeficitPoint]
+    spheres: list[SphereDeficit]
     forecast: DeficitForecast | None
 
 
@@ -88,6 +118,18 @@ def deficit(session: Session) -> Deficit:
         interest_share=last.interest / last.nominal if last.nominal > 0 else None,
         years=years,
         months=points,
+        spheres=[
+            SphereDeficit(
+                sphere=sphere,
+                nominal=by_series[primary][last.ref_date]
+                + by_series[interest][last.ref_date],
+                primary=by_series[primary][last.ref_date],
+                interest=by_series[interest][last.ref_date],
+            )
+            for sphere, (primary, interest) in SPHERE_SERIES.items()
+            if last.ref_date in by_series[primary]
+            and last.ref_date in by_series[interest]
+        ],
         forecast=_forecast(session, last.ref_date),
     )
 

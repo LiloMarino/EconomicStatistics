@@ -1,6 +1,7 @@
 import { CircleAlert } from "lucide-react";
 
 import { DeficitChart } from "@/features/deficit/deficit-chart";
+import { SpheresCard } from "@/features/deficit/spheres-card";
 import { SummaryCards } from "@/features/deficit/summary-cards";
 import { useDeficit } from "@/features/deficit/use-deficit";
 import { useDeficitView } from "@/features/deficit/use-deficit-view";
@@ -48,11 +49,13 @@ export function DeficitPage() {
             scale={scale}
             onScaleChange={setScale}
           />
+          <SpheresCard spheres={data.spheres} last={data.last} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: Banco Central, estatísticas fiscais: necessidade de financiamento do setor
-            público consolidado, sem desvalorização cambial, em % do PIB e acumulada em 12 meses.
-            Séries do SGS 5727 (nominal), 5793 (primário) e 5760 (juros nominais); a previsão vem da
-            pesquisa Focus.
+            público, sem desvalorização cambial, em % do PIB e acumulada em 12 meses. Séries do SGS
+            5727 (nominal), 5793 (primário) e 5760 (juros nominais) do setor público consolidado;
+            por esfera, primário e juros do governo central (5783 e 5750), de estados e municípios
+            (5786 e 5753) e das estatais (5789 e 5756). A previsão vem da pesquisa Focus.
           </footer>
         </>
       )}

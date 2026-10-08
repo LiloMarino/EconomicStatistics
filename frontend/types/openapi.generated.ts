@@ -276,7 +276,7 @@ export interface components {
          * @description `interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
          *     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
          *     mês publicado; `months`, os 12 meses que terminam em cada mês desde o começo da
-         *     série.
+         *     série; `spheres`, o último mês dividido entre as esferas.
          */
         DeficitDTO: {
             last: components["schemas"]["DeficitPointDTO"];
@@ -286,6 +286,8 @@ export interface components {
             years: components["schemas"]["DeficitPointDTO"][];
             /** Months */
             months: components["schemas"]["DeficitPointDTO"][];
+            /** Spheres */
+            spheres: components["schemas"]["SphereDeficitDTO"][];
             forecast: components["schemas"]["DeficitForecastDTO"] | null;
         };
         /**
@@ -886,7 +888,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -897,6 +899,29 @@ export interface components {
             last_ref_date: string | null;
             /** Succeeded At */
             succeeded_at: string | null;
+        };
+        /**
+         * Sphere
+         * @description A esfera do setor público em que o BCB divide a NFSP. O governo central é o
+         *     governo federal com o Banco Central; as estatais ficam sem a Petrobras e os bancos
+         *     públicos.
+         * @enum {string}
+         */
+        Sphere: "central" | "regional" | "state_owned";
+        /**
+         * SphereDeficitDTO
+         * @description A parte de uma esfera no déficit do último mês, na mesma fração do PIB e
+         *     convenção do consolidado; o nominal é o primário mais os juros, e as três esferas
+         *     somam o consolidado, a menos do arredondamento do BCB.
+         */
+        SphereDeficitDTO: {
+            sphere: components["schemas"]["Sphere"];
+            /** Nominal */
+            nominal: number;
+            /** Primary */
+            primary: number;
+            /** Interest */
+            interest: number;
         };
         /**
          * StabilizationDTO

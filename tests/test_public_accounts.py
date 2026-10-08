@@ -65,6 +65,30 @@ def test_deficit_is_primary_plus_interest(api: TestClient) -> None:
 
 
 @pytest.mark.usefixtures("seeded")
+def test_spheres_add_up_to_the_consolidated_deficit(api: TestClient) -> None:
+    """Em ago/2026, o governo central, os estados e municípios e as estatais somam
+    0,61% de primário e 8,86% de juros, contra 0,62% e 8,86% do consolidado: o 0,01
+    que falta é arredondamento do BCB. O nominal de cada esfera é a soma das partes."""
+    body = api.get("/api/deficit").json()
+
+    spheres = body["spheres"]
+    assert [sphere["sphere"] for sphere in spheres] == [
+        "central",
+        "regional",
+        "state_owned",
+    ]
+    for sphere in spheres:
+        assert sphere["primary"] + sphere["interest"] == pytest.approx(
+            sphere["nominal"]
+        )
+    last = body["last"]
+    for part in ("primary", "interest", "nominal"):
+        total = sum(sphere[part] for sphere in spheres)
+        assert total == pytest.approx(last[part], abs=0.0002)
+    assert spheres[0]["nominal"] == pytest.approx(0.0859)
+
+
+@pytest.mark.usefixtures("seeded")
 def test_debt_overview_computes_the_stabilizing_primary(api: TestClient) -> None:
     """Em ago/2026, r = 13,74% e g = 7,23% sobre a dívida líquida de 69,26% do PIB pedem
     4,20% do PIB de superávit; com o déficit primário de 0,62%, faltam 4,82 pontos."""

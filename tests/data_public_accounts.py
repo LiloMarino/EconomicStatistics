@@ -23,6 +23,9 @@ FISCAL_MONTHS = [
 NOMINAL = [8.34, 9.99, 9.35, 9.48]
 PRIMARY = [0.43, 1.19, 0.67, 0.62]
 INTEREST = [7.91, 8.80, 8.68, 8.86]
+# Ago/2026, por esfera: governo central, estados e municípios, estatais
+SPHERE_PRIMARY = [0.53, 0.04, 0.04]
+SPHERE_INTEREST = [8.06, 0.75, 0.05]
 # Ago/2026
 NET_DEBT = 69.26
 GROSS_DEBT = 82.86
@@ -69,6 +72,22 @@ def seed_public_accounts(session: Session) -> None:
                 Observation(ref_date=ref_date, value=value)
                 for ref_date, value in zip(FISCAL_MONTHS, values, strict=True)
             ],
+        )
+    spheres = zip(
+        (
+            SeriesId.PRIMARY_DEFICIT_CENTRAL,
+            SeriesId.PRIMARY_DEFICIT_REGIONAL,
+            SeriesId.PRIMARY_DEFICIT_STATE_OWNED,
+            SeriesId.NOMINAL_INTEREST_CENTRAL,
+            SeriesId.NOMINAL_INTEREST_REGIONAL,
+            SeriesId.NOMINAL_INTEREST_STATE_OWNED,
+        ),
+        [*SPHERE_PRIMARY, *SPHERE_INTEREST],
+        strict=True,
+    )
+    for series_id, value in spheres:
+        upsert_observations(
+            session, series_id, [Observation(ref_date=AUGUST, value=value)]
         )
     upsert_observations(
         session, SeriesId.NET_DEBT, [Observation(ref_date=AUGUST, value=NET_DEBT)]
