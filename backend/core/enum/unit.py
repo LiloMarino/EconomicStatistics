@@ -11,3 +11,6 @@ class Unit(StrEnum):
     PERCENT_GDP = "percent_gdp"
     BRL_MILLION = "brl_million"
     MONTHS = "months"
+    PERCENT_4_QUARTERS = "percent_4_quarters"
+    INDEX = "index"
+    PERCENT = "percent"

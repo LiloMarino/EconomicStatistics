@@ -9,6 +9,7 @@ export const queryKeys = {
   seasonality: ["series", "seasonality"] as const,
   purchasingPower: ["series", "purchasing-power"] as const,
   externalSector: ["series", "external-sector"] as const,
+  activity: ["series", "activity"] as const,
   deficit: ["series", "deficit"] as const,
   debt: ["series", "debt"] as const,
   federalDebt: ["series", "federal-debt"] as const,

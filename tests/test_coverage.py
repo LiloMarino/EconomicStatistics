@@ -16,6 +16,8 @@ IPCA = SERIES[SeriesId.IPCA_FOOD]
 MINIMUM_WAGE = SERIES[SeriesId.MINIMUM_WAGE]
 TARGET = SERIES[SeriesId.INFLATION_TARGET]
 POSITION = SERIES[SeriesId.IIP_LIABILITIES]
+GDP = SERIES[SeriesId.GDP_GROWTH_4Q]
+UNEMPLOYMENT = SERIES[SeriesId.UNEMPLOYMENT_RATE]
 
 
 def cached_until(spec_first: date, last: date) -> DateRange:
@@ -50,6 +52,21 @@ def test_quarterly_position_is_expected_three_months_after_the_quarter() -> None
     assert expected_ref_date(POSITION, date(2026, 9, 27)) == date(2026, 1, 1)
     assert expected_ref_date(POSITION, date(2026, 9, 28)) == date(2026, 4, 1)
     assert expected_ref_date(POSITION, date(2026, 12, 28)) == date(2026, 7, 1)
+
+
+def test_gdp_quarter_is_expected_from_the_start_of_the_third_month_after_it() -> None:
+    """O PIB do 2º trimestre, datado em abril, é cobrado a partir de 5 de setembro;
+    antes disso, vale o do 1º."""
+    assert expected_ref_date(GDP, date(2026, 9, 4)) == date(2026, 1, 1)
+    assert expected_ref_date(GDP, date(2026, 9, 5)) == date(2026, 4, 1)
+    assert expected_ref_date(GDP, date(2026, 12, 5)) == date(2026, 7, 1)
+
+
+def test_unemployment_month_is_expected_at_the_end_of_the_next_month() -> None:
+    """A desocupação do trimestre móvel que termina em agosto é cobrada a partir de 30
+    de setembro."""
+    assert expected_ref_date(UNEMPLOYMENT, date(2026, 9, 29)) == date(2026, 7, 1)
+    assert expected_ref_date(UNEMPLOYMENT, date(2026, 9, 30)) == date(2026, 8, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:

@@ -39,6 +39,9 @@ export const seriesLabels: Record<SeriesId, string> = {
   gross_debt: "Dívida bruta",
   gdp_12m: "PIB de 12 meses em reais",
   federal_debt_maturity: "Prazo médio da dívida federal",
+  gdp_growth_4q: "PIB em 4 trimestres",
+  ibc_br: "IBC-Br",
+  unemployment_rate: "Taxa de desocupação",
 };
 
 export const datasetLabels: Record<Dataset, string> = {

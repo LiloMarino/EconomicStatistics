@@ -7,21 +7,9 @@ from fastapi import APIRouter
 from backend.core.database.session import SessionDep
 from backend.core.dto import ERROR_RESPONSES, BaseDTO
 from backend.features.external_sector.service import external_sector
+from backend.features.monthly_forecast_dto import MonthlyForecastDTO, MonthValueDTO
 
 router = APIRouter(prefix="/api/external-sector", tags=["external-sector"])
-
-
-class MonthValueDTO(BaseDTO):
-    ref_date: date
-    value: float
-
-
-class MonthlyForecastDTO(BaseDTO):
-    """O valor esperado em cada mês depois do último dado, pela pesquisa Focus de
-    `survey_date`."""
-
-    survey_date: date
-    months: list[MonthValueDTO]
 
 
 class DollarDTO(BaseDTO):

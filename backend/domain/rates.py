@@ -61,3 +61,22 @@ def rolling_12m(rates: Sequence[MonthlyRate]) -> list[MonthlyRate]:
                 )
             )
     return result
+
+
+def index_change_12m(index: Sequence[Observation]) -> list[MonthlyRate]:
+    """A variação, em fração, da média dos 12 meses que terminam em cada mês sobre a
+    média dos 12 meses anteriores, a partir de um índice mensal em ordem de data: é o
+    acumulado em 12 meses de um indicador de atividade, como o IBC-Br. O mês precisa dos
+    23 anteriores em sequência."""
+    result: list[MonthlyRate] = []
+    for end in range(23, len(index)):
+        window = index[end - 23 : end + 1]
+        if window[0].ref_date == month_start(window[-1].ref_date, 23):
+            before = sum(item.value for item in window[:12]) / 12
+            after = sum(item.value for item in window[12:]) / 12
+            result.append(
+                MonthlyRate(
+                    ref_date=window[-1].ref_date, rate=relative_change(after, before)
+                )
+            )
+    return result

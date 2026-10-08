@@ -82,7 +82,12 @@ WEEKS_BEFORE = 4
 # O relatório compara as medianas com 2 casas, como as publica
 REPORT_DECIMALS = 2
 
-_PERCENT_UNITS = {Unit.PERCENT_YEAR, Unit.PERCENT_MONTH, Unit.PERCENT_GDP}
+_PERCENT_UNITS = {
+    Unit.PERCENT_YEAR,
+    Unit.PERCENT_MONTH,
+    Unit.PERCENT_GDP,
+    Unit.PERCENT,
+}
 
 
 def to_fraction(median: float, unit: Unit) -> float:

@@ -1,6 +1,7 @@
 import {
   ChartColumn,
   ChartColumnStacked,
+  Factory,
   Globe,
   GraduationCap,
   Landmark,
@@ -105,6 +106,26 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
   {
     label: "Economia real e mundo",
     items: [
+      {
+        to: "/activity",
+        label: "Atividade",
+        icon: Factory,
+        description: "PIB, IBC-Br e desemprego",
+        keywords: [
+          "pib",
+          "ibc-br",
+          "desemprego",
+          "desocupação",
+          "pnad",
+          "crescimento",
+          "recessão",
+          "atividade econômica",
+        ],
+        footer: {
+          until: { series: "unemployment_rate", label: "Desemprego" },
+          sources: "IBGE e Banco Central",
+        },
+      },
       {
         to: "/external-sector",
         label: "Setor externo",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
+from backend.features.activity.router import router as activity_router
 from backend.features.debt.router import router as debt_router
 from backend.features.deficit.router import router as deficit_router
 from backend.features.external_sector.router import router as external_sector_router
@@ -16,6 +17,7 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(series_router)
     app.include_router(inflation_router)
     app.include_router(external_sector_router)
+    app.include_router(activity_router)
     app.include_router(deficit_router)
     app.include_router(debt_router)
     app.include_router(focus_router)

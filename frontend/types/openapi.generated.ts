@@ -125,6 +125,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Activity Overview */
+        get: operations["activity_overview_api_activity_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/deficit": {
         parameters: {
             query?: never;
@@ -214,6 +231,15 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * ActivityDTO
+         * @description Cada gráfico nos últimos 4 anos, terminando no último dado da série.
+         */
+        ActivityDTO: {
+            gdp: components["schemas"]["GdpDTO"];
+            ibc: components["schemas"]["IbcDTO"];
+            unemployment: components["schemas"]["UnemploymentDTO"];
+        };
         /** AverageMaturityDTO */
         AverageMaturityDTO: {
             /**
@@ -472,6 +498,17 @@ export interface components {
             /** Rows */
             rows: components["schemas"]["ReportRowDTO"][];
         };
+        /**
+         * GdpDTO
+         * @description O PIB acumulado em 4 trimestres, em fração (0.019 é 1,9%), datado no mês em que
+         *     cada trimestre termina. `forecast` é o PIB do ano que o Focus espera, em dezembro
+         *     do ano corrente e do seguinte.
+         */
+        GdpDTO: {
+            /** Quarters */
+            quarters: components["schemas"]["MonthValueDTO"][];
+            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+        };
         /** GdpShareDTO */
         GdpShareDTO: {
             /**
@@ -550,6 +587,15 @@ export interface components {
             value: number;
             /** Respondents */
             respondents: number;
+        };
+        /**
+         * IbcDTO
+         * @description A variação em 12 meses do IBC-Br, em fração, calculada do índice mensal: média
+         *     dos 12 meses que terminam em `ref_date` sobre a média dos 12 anteriores.
+         */
+        IbcDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
         };
         /**
          * Indexer
@@ -888,7 +934,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -961,10 +1007,23 @@ export interface components {
             ceiling: number;
         };
         /**
+         * UnemploymentDTO
+         * @description A taxa de desocupação do trimestre móvel que termina em cada mês, em fração.
+         *     `change_12m` é a diferença contra o mesmo mês do ano anterior, em fração (-0.008 é
+         *     -0,8 ponto percentual). `forecast` é a taxa que o Focus espera mês a mês.
+         */
+        UnemploymentDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            /** Change 12M */
+            change_12m: number | null;
+            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+        };
+        /**
          * Unit
          * @enum {string}
          */
-        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "months";
+        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "months" | "percent_4_quarters" | "index" | "percent";
         /**
          * YearCompositionDTO
          * @description A fração da dívida federal em mercado de cada indexador no fim do mês.
@@ -1207,6 +1266,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExternalSectorDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    activity_overview_api_activity_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityDTO"];
                 };
             };
             /** @description Unprocessable Content */

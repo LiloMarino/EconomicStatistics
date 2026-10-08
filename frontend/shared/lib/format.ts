@@ -99,7 +99,8 @@ export function formatDay(value: string): string {
   return day.format(new Date(value));
 }
 
-/** O trimestre chega datado no 1º mês dele: "2026-04-01" vira "2º tri/2026". */
+/** O trimestre chega datado num mês dele, o 1º ou o último: "2026-04-01" e "2026-06-01"
+viram "2º tri/2026". */
 export function formatQuarter(value: string): string {
   const quarter = Math.floor((Number(value.slice(5, 7)) - 1) / 3) + 1;
   return `${quarter}º tri/${value.slice(0, 4)}`;

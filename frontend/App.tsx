@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { MainLayout } from "@/layouts/main-layout";
+import { ActivityPage } from "@/pages/activity";
 import { ConceptPage } from "@/pages/concept";
 import { DebtPage } from "@/pages/debt";
 import { DeficitPage } from "@/pages/deficit";
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="purchasing-power" element={<PurchasingPowerPage />} />
             <Route path="deficit" element={<DeficitPage />} />
             <Route path="debt" element={<DebtPage />} />
+            <Route path="activity" element={<ActivityPage />} />
             <Route path="external-sector" element={<ExternalSectorPage />} />
             <Route path="focus" element={<FocusPage />} />
             <Route path="learn" element={<LearnPage />} />

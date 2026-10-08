@@ -273,6 +273,38 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.FEDERAL_DEBT_MATURITY: _fiscal_note(
         "10618", Unit.MONTHS, date(2000, 10, 1)
     ),
+    # O IBGE divulga o PIB do trimestre no começo do terceiro mês depois do fim dele: o
+    # do 2º tri (abr a jun) sai em setembro, e o lag conta do 1º mês do trimestre. A
+    # variável é a taxa acumulada em quatro trimestres contra os quatro anteriores.
+    SeriesId.GDP_GROWTH_4Q: SeriesSpec(
+        source=Source.IBGE,
+        code="5932/6562/11255/90707",
+        unit=Unit.PERCENT_4_QUARTERS,
+        first_date=date(1996, 1, 1),
+        lag_months=5,
+        release_day=5,
+        periodicity=Periodicity.QUARTERLY,
+    ),
+    # O índice do IBC-Br sem ajuste sazonal. O BCB publica o mês perto da metade do
+    # segundo mês seguinte.
+    SeriesId.IBC_BR: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="24363",
+        unit=Unit.INDEX,
+        first_date=date(2003, 1, 1),
+        lag_months=2,
+        release_day=20,
+    ),
+    # A PNAD Contínua é um trimestre móvel e o SGS data cada valor no último mês dele. O
+    # IBGE divulga no fim do mês seguinte.
+    SeriesId.UNEMPLOYMENT_RATE: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="24369",
+        unit=Unit.PERCENT,
+        first_date=date(2012, 3, 1),
+        lag_months=1,
+        release_day=30,
+    ),
 }
 
 IPCA_GROUPS: tuple[SeriesId, ...] = (

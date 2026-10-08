@@ -17,6 +17,7 @@ from backend.domain.focus import (
 )
 from backend.domain.rates import PERCENT, relative_change
 from backend.domain.series import Observation
+from backend.features.monthly_forecast import MonthlyForecast, MonthValue
 from backend.repository.focus import latest_survey
 from backend.repository.series import last_cached, read_observations
 
@@ -34,21 +35,6 @@ EXTERNAL_SERIES = (
 DOLLAR_MONTHS = 24
 HISTORY_MONTHS = 10 * 12
 POSITION_YEARS = 6
-
-
-@dataclass(frozen=True, slots=True, kw_only=True)
-class MonthValue:
-    ref_date: date
-    value: float
-
-
-@dataclass(frozen=True, slots=True, kw_only=True)
-class MonthlyForecast:
-    """O valor esperado em cada mês depois do último dado, pela pesquisa Focus de
-    `survey_date`."""
-
-    survey_date: date
-    months: list[MonthValue]
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

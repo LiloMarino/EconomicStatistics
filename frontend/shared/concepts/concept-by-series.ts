@@ -38,4 +38,7 @@ export const conceptBySeries: Record<SeriesId, ConceptId> = {
   gross_debt: "gross-debt",
   gdp_12m: "nominal-gdp-growth",
   federal_debt_maturity: "average-maturity",
+  gdp_growth_4q: "gdp",
+  ibc_br: "ibc-br",
+  unemployment_rate: "unemployment-rate",
 };

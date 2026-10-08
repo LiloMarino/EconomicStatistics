@@ -36,18 +36,30 @@ export const conceptIds = [
   "focus-survey",
   "median",
   "unanchored-expectations",
+  "gdp",
+  "ibc-br",
+  "real-growth",
+  "unemployment-rate",
+  "moving-quarter",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */
 export type ConceptId = (typeof conceptIds)[number];
 
-export const topics = ["inflation", "public-accounts", "external", "expectations"] as const;
+export const topics = [
+  "inflation",
+  "public-accounts",
+  "activity",
+  "external",
+  "expectations",
+] as const;
 
 export type Topic = (typeof topics)[number];
 
 export const topicLabels: Record<Topic, string> = {
   inflation: "Inflação",
   "public-accounts": "Contas públicas",
+  activity: "Atividade",
   external: "Setor externo",
   expectations: "Expectativas",
 };

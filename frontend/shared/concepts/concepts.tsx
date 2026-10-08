@@ -9,6 +9,7 @@ const externalScreen = { to: "/external-sector", label: "Setor externo" };
 const deficitScreen = { to: "/deficit", label: "Déficit" };
 const debtScreen = { to: "/debt", label: "Dívida" };
 const focusScreen = { to: "/focus", label: "Focus" };
+const activityScreen = { to: "/activity", label: "Atividade" };
 
 const focusFrequency = "Semanal: as previsões da semana saem na segunda seguinte";
 
@@ -76,6 +77,34 @@ const tesouroStock = {
 const rmdJul2026 = {
   name: "Tesouro Nacional, Relatório Mensal da Dívida de julho de 2026",
   url: "https://www.tesourotransparente.gov.br/publicacoes/relatorio-mensal-da-divida-rmd/2026/7",
+};
+const ibgeGdpRelease = {
+  name: "IBGE, PIB cresce 0,5% no segundo trimestre de 2026",
+  url: "https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/47902-pib-cresce-0-5-no-segundo-trimestre-de-2026",
+};
+const sidra5932 = {
+  name: "IBGE, tabela 5932 do SIDRA (taxa de variação do índice de volume trimestral do PIB)",
+  url: "https://sidra.ibge.gov.br/tabela/5932",
+};
+const ibgeQuarterlyAccounts = {
+  name: "IBGE, Sistema de Contas Nacionais Trimestrais",
+  url: "https://www.ibge.gov.br/estatisticas/economicas/industria/9300-contas-nacionais-trimestrais.html",
+};
+const ibcDataset = {
+  name: "Banco Central, série 24363 no portal de dados abertos (IBC-Br)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/24363-indice-de-atividade-economica-do-banco-central---ibc-br",
+};
+const ibcMethodology = {
+  name: "Banco Central, aspectos metodológicos e comparações do IBC-Br e do PIB",
+  url: "https://www.bcb.gov.br/conteudo/relatorioinflacao/estudosespeciais/metodologia_ibc-br_pib_estudos_especiais.pdf",
+};
+const ibgePnadRelease = {
+  name: "IBGE, PNAD Contínua: taxa de desocupação de 5,3% no trimestre encerrado em agosto de 2026",
+  url: "https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/48148-pnad-continua-taxa-de-desocupacao-e-de-5-3-e-taxa-de-subutilizacao-e-de-13-1-no-trimestre-encerrado-em-agosto",
+};
+const sidra6381 = {
+  name: "IBGE, tabela 6381 do SIDRA (taxa de desocupação por trimestre móvel)",
+  url: "https://sidra.ibge.gov.br/tabela/6381",
 };
 const lrf = {
   name: "Lei Complementar 101/2000 (Lei de Responsabilidade Fiscal)",
@@ -2561,5 +2590,413 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: focusFrequency,
     screens: [focusScreen, inflationScreen],
+  },
+
+  gdp: {
+    title: "PIB",
+    abbr: "IBGE",
+    topic: "activity",
+    summary: "Tudo o que o país produz, descontada a inflação, medido pelo IBGE por trimestre.",
+    lead: (
+      <>
+        O <strong>PIB</strong> é tudo o que o país produz num período, em bens e serviços,
+        descontada a inflação. O IBGE publica por trimestre, uns dois meses depois do fim dele, e é
+        o número oficial do crescimento.
+      </>
+    ),
+    keywords: ["produto interno bruto", "crescimento", "recessão", "contas nacionais", "economia"],
+    measures: (
+      <>
+        <p>
+          O valor de tudo o que foi produzido no país, medido em quantidade, e não em reais: o IBGE
+          calcula o PIB em volume, a preços de um ano fixo, para que a inflação não pareça
+          crescimento.
+        </p>
+        <p>
+          A tela usa a taxa acumulada em 4 trimestres, que compara os 4 últimos trimestres com os 4
+          anteriores. Assim a safra, o Natal e as outras oscilações do ano entram dos dois lados da
+          conta.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{PIB em 4 trimestres} = \\dfrac{\\text{volume dos últimos 4 trimestres}}{\\text{volume dos 4 trimestres anteriores}} - 1",
+      legend: [
+        {
+          symbol: "\\text{volume}",
+          text: <>o PIB em quantidade, a preços de um ano fixo, sem a inflação</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com o 2º trimestre de 2026",
+      content: (
+        <>
+          <p>
+            Os 4 trimestres de julho de 2025 a junho de 2026 produziram 1,9% a mais que os de julho
+            de 2024 a junho de 2025. Com os 4 anteriores valendo 100, os últimos valem 101,9:
+          </p>
+          <FormulaBox>
+            <Formula flushLeft tex="\dfrac{101{,}9}{100} - 1 = \mathbf{1{,}9\%}" />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Positivo, o país produziu mais que um ano antes; negativo, menos. Não há número oficial de
+        bom: o que a série conta é o ritmo. Em 4 trimestres, o PIB cresceu 3,6% até o 1º trimestre
+        de 2025, 2,0% até o 1º de 2026 e 1,9% até o 2º de 2026, um ritmo que vem desacelerando.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "O número do noticiário é outro.",
+        text: (
+          <>
+            A manchete do IBGE traz a variação contra o trimestre anterior (0,5% no 2º trimestre de
+            2026). A tela mostra os 4 trimestres, que é o ritmo de um ano inteiro.
+          </>
+        ),
+      },
+      {
+        title: "O PIB é revisado.",
+        text: (
+          <>
+            O IBGE refaz os trimestres passados quando chegam dados melhores, por isso a série
+            baixada hoje pode diferir um pouco da publicada antes.
+          </>
+        ),
+      },
+    ],
+    related: ["ibc-br", "real-growth", "nominal-gdp-growth", "share-of-gdp"],
+    sources: [
+      {
+        ...ibgeGdpRelease,
+        backs:
+          "O PIB acumulado em 4 trimestres de 1,9% até o 2º trimestre de 2026, 2,0% até o 1º, e a alta de 0,5% contra o trimestre anterior.",
+      },
+      {
+        ...sidra5932,
+        backs:
+          "A série da taxa acumulada em 4 trimestres, desde 1996, e os 3,6% do 1º trimestre de 2025.",
+      },
+      {
+        ...ibgeQuarterlyAccounts,
+        backs:
+          "O que as Contas Nacionais Trimestrais medem e a data de divulgação do 3º trimestre.",
+      },
+    ],
+    frequency: "Trimestral, uns dois meses depois do fim do trimestre",
+    screens: [activityScreen],
+  },
+
+  "ibc-br": {
+    title: "IBC-Br",
+    abbr: "BCB",
+    topic: "activity",
+    summary: "O indicador mensal de atividade do Banco Central, que acompanha o PIB mais depressa.",
+    lead: (
+      <>
+        O <strong>IBC-Br</strong> é o índice de atividade econômica do Banco Central. Sai todo mês,
+        uns 45 dias depois do mês medido, e mostra para onde o PIB caminha antes de o IBGE publicar
+        o trimestre. Não é o PIB, e às vezes diverge dele.
+      </>
+    ),
+    keywords: ["índice de atividade", "atividade econômica", "prévia do pib", "banco central"],
+    measures: (
+      <>
+        <p>
+          O Banco Central junta indicadores mensais da produção da agropecuária, da indústria e dos
+          serviços, mais os impostos, com os pesos do Sistema de Contas Nacionais. O resultado é um
+          índice, e a tela mostra a variação dele em 12 meses.
+        </p>
+        <p>
+          O 12 meses compara a média do índice nos últimos 12 meses com a dos 12 anteriores, a mesma
+          ideia dos 4 trimestres do PIB.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{IBC-Br em 12 meses} = \\dfrac{\\text{média do índice nos últimos 12 meses}}{\\text{média do índice nos 12 meses anteriores}} - 1",
+      legend: [
+        {
+          symbol: "\\text{índice}",
+          text: <>o IBC-Br sem ajuste sazonal, como o Banco Central publica (série 24363)</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de julho de 2026",
+      content: (
+        <>
+          <p>
+            A média do índice de agosto de 2025 a julho de 2026 foi 110,02, e a de agosto de 2024 a
+            julho de 2025, 108,42:
+          </p>
+          <FormulaBox>
+            <Formula flushLeft tex="\dfrac{110{,}02}{108{,}42} - 1 = \mathbf{1{,}48\%}" />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Serve para ver a tendência mês a mês, antes do PIB. Como o IBC-Br é mais restrito que o PIB,
+        o Banco Central diz que a comparação em prazos longos, como o ano, é mais fiel que a de um
+        trimestre para o outro. Em julho de 2026 ele marcava 1,48% em 12 meses, e o PIB do 2º
+        trimestre, 1,9% em 4 trimestres.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Não é o PIB.",
+        text: (
+          <>
+            O PIB oficial é o do IBGE. O IBC-Br usa menos informação e não fecha a conta com a
+            demanda, então os dois diferem, em média, em alguns décimos de ponto por ano.
+          </>
+        ),
+      },
+      {
+        title: "Com ou sem ajuste sazonal.",
+        text: (
+          <>
+            A tela usa o índice sem ajuste, que é o que se compara ao PIB acumulado. O Banco Central
+            também publica o dessazonalizado (série 24364), que em julho de 2026 dá 1,32% em 12
+            meses.
+          </>
+        ),
+      },
+    ],
+    related: ["gdp", "real-growth"],
+    sources: [
+      {
+        ...ibcDataset,
+        backs: "O índice do IBC-Br, mês a mês, até julho de 2026.",
+      },
+      {
+        ...ibcMethodology,
+        backs:
+          "Como o índice é calculado, a divulgação cerca de 45 dias depois do mês e a recomendação de comparar com o PIB em prazos longos.",
+      },
+    ],
+    frequency: "Mensal, uns 45 dias depois do mês medido",
+    screens: [activityScreen],
+  },
+
+  "real-growth": {
+    title: "Crescimento real e nominal",
+    topic: "activity",
+    summary: "O real desconta a inflação e mostra se o país produz mais; o nominal não.",
+    lead: (
+      <>
+        O crescimento <strong>nominal</strong> é o do PIB em reais correntes, nos preços de cada
+        época. O <strong>real</strong> tira a inflação e mostra se o país produz mais de verdade. Os
+        gráficos de atividade mostram o real.
+      </>
+    ),
+    keywords: ["pib real", "pib nominal", "deflator", "inflação", "descontada a inflação"],
+    measures: (
+      <p>
+        Um PIB de R$ 13 trilhões num ano e de R$ 14 trilhões no seguinte pode ser só preços mais
+        altos. Para saber se a produção cresceu, o IBGE mede também o PIB em volume. A diferença
+        entre o nominal e o real é a alta dos preços do que o país produz.
+      </p>
+    ),
+    formula: {
+      tex: "1 + g_{\\text{nominal}} = (1 + g_{\\text{real}}) \\times (1 + \\pi)",
+      legend: [
+        { symbol: "g_{\\text{nominal}}", text: <>crescimento do PIB em reais correntes</> },
+        { symbol: "g_{\\text{real}}", text: <>crescimento do PIB em volume, sem a inflação</> },
+        { symbol: "\\pi", text: <>alta dos preços do que o país produz</> },
+      ],
+    },
+    example: {
+      title: "Com os 4 trimestres até junho de 2026",
+      content: (
+        <>
+          <p>
+            O PIB em reais foi de R$ 13.190 bilhões contra R$ 12.305 bilhões nos 4 trimestres
+            anteriores, +7,20%. Em volume, o crescimento foi de 1,9%. O que sobra são os preços:
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\dfrac{1{,}0720}{1{,}019} - 1 = \mathbf{5{,}20\%}\ \text{de alta dos preços}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Para saber se a economia anda, olhe o real. Para a conta da dívida, que está em reais
+        correntes, vale o nominal: na conta r − g, o g é o crescimento nominal.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Os dois se multiplicam, não se somam.",
+        text: (
+          <>
+            1,9% de crescimento real e 5,20% de preços não dão 7,1%, e sim 7,20%, porque os fatores
+            se multiplicam: 1,019 × 1,0520.
+          </>
+        ),
+      },
+    ],
+    related: ["gdp", "nominal-gdp-growth", "r-minus-g"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, série 4382 do SGS (PIB de 12 meses em reais correntes)",
+        backs:
+          "O PIB de R$ 13.190 bilhões até junho de 2026 e de R$ 12.305 bilhões até junho de 2025.",
+      },
+      {
+        ...ibgeGdpRelease,
+        backs: "O crescimento de 1,9% em volume nos 4 trimestres até o 2º trimestre de 2026.",
+      },
+    ],
+    frequency: "Trimestral, junto com o PIB",
+    screens: [activityScreen, debtScreen],
+  },
+
+  "unemployment-rate": {
+    title: "Taxa de desocupação",
+    abbr: "PNAD",
+    topic: "activity",
+    summary: "Quem procurou trabalho e não achou, sobre todos que trabalham ou procuram.",
+    lead: (
+      <>
+        A <strong>taxa de desocupação</strong> é a parcela de quem procurou trabalho e não achou,
+        sobre todos que trabalham ou procuram. Vem da PNAD Contínua do IBGE, e o Banco Central
+        republica o mesmo número.
+      </>
+    ),
+    keywords: ["desemprego", "desocupação", "pnad contínua", "mercado de trabalho", "emprego"],
+    measures: (
+      <>
+        <p>
+          O IBGE entrevista domicílios todas as semanas. Desocupada é a pessoa de 14 anos ou mais
+          que, na semana de referência, não tinha trabalho, procurou e estava disponível para
+          começar. A força de trabalho é ela mais os ocupados.
+        </p>
+        <p>Quem não procura trabalho, por ter desistido ou por estudar, fica fora da conta.</p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{taxa de desocupação} = \\dfrac{\\text{desocupados}}{\\text{ocupados} + \\text{desocupados}}",
+      legend: [
+        {
+          symbol: "\\text{ocupados}",
+          text: <>quem tinha algum trabalho na semana de referência</>,
+        },
+        { symbol: "\\text{desocupados}", text: <>quem não tinha, procurou e podia começar</> },
+      ],
+    },
+    example: {
+      title: "Com o trimestre móvel até agosto de 2026",
+      content: (
+        <p>
+          A taxa foi de 5,3%: a cada 100 pessoas na força de trabalho, 5,3 procuravam emprego sem
+          ter achado. No mesmo trimestre de 2025 eram 5,6%, uma queda de 0,3 ponto percentual.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto menor, mais gente empregada, e não há faixa oficial de bom. Muito baixo também
+        pressiona salários e o preço dos serviços, e o Banco Central olha isso ao decidir a Selic.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "É o mesmo número do IBGE.",
+        text: (
+          <>
+            O Banco Central republica no SGS (série 24369) a taxa da PNAD Contínua, sem refazer a
+            conta.
+          </>
+        ),
+      },
+    ],
+    related: ["moving-quarter", "percentage-point", "gdp"],
+    sources: [
+      {
+        ...ibgePnadRelease,
+        backs: "A taxa de 5,3% no trimestre encerrado em agosto de 2026 e de 5,6% um ano antes.",
+      },
+      {
+        ...sidra6381,
+        backs: "A série da taxa de desocupação por trimestre móvel.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 24369 do SGS (taxa de desocupação)",
+        backs: "Que o Banco Central republica a taxa da PNAD Contínua.",
+      },
+    ],
+    frequency: "Mensal, no fim do mês seguinte ao fim do trimestre móvel",
+    screens: [activityScreen],
+  },
+
+  "moving-quarter": {
+    title: "Trimestre móvel",
+    topic: "activity",
+    summary: "A média de três meses seguidos, que anda um mês por vez.",
+    lead: (
+      <>
+        O <strong>trimestre móvel</strong> é uma janela de três meses seguidos que avança um mês por
+        vez. O que termina em agosto junta junho, julho e agosto; o de setembro troca junho por
+        setembro.
+      </>
+    ),
+    keywords: ["trimestre móvel", "média móvel", "pnad", "janela de três meses"],
+    measures: (
+      <p>
+        O IBGE divulga todo mês a taxa de desocupação do trimestre que termina nele. Cada número
+        reaproveita dois meses do anterior, e por isso a linha é suave e muda devagar.
+      </p>
+    ),
+    example: {
+      title: "Com os números de 2026",
+      content: (
+        <p>
+          O trimestre móvel até maio (março, abril e maio) deu 5,6%, e o até agosto (junho, julho e
+          agosto), 5,3%. Os dois não têm nenhum mês em comum.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        A linha reage com atraso: um mês bom ou ruim só pesa por inteiro três meses depois. Para ver
+        se melhorou de verdade, compare com o mesmo trimestre do ano anterior.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A data é a do último mês.",
+        text: (
+          <>
+            No gráfico, o ponto de agosto é o trimestre de junho a agosto, e não só o mês de agosto.
+          </>
+        ),
+      },
+    ],
+    related: ["unemployment-rate"],
+    sources: [
+      {
+        ...ibgePnadRelease,
+        backs: "A taxa de 5,3% no trimestre encerrado em agosto de 2026 e a divulgação mensal.",
+      },
+      {
+        ...sidra6381,
+        backs: "A série por trimestre móvel e o mês em que cada um termina.",
+      },
+    ],
+    frequency: "Mensal, no fim do mês seguinte ao fim do trimestre móvel",
+    screens: [activityScreen],
   },
 };

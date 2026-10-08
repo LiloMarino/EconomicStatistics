@@ -54,6 +54,7 @@
   --color-fiscal-primary: var(--fiscal-primary);
   --color-fiscal-interest: var(--fiscal-interest);
   --color-debt-net: var(--debt-net);
+  --color-activity-ibc: var(--activity-ibc);
   --color-debt-gross: var(--debt-gross);
   --color-debt-rate: var(--debt-rate);
   --color-debt-growth: var(--debt-growth);
@@ -215,6 +216,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --fiscal-primary: #b9740f;
   --fiscal-interest: #6a55d6;
   --debt-net: #2f6fc4;
+  --activity-ibc: #2f6fc4;
   --debt-gross: #c8423d;
   --debt-rate: #c8423d;
   --debt-growth: #2f6fc4;
@@ -292,6 +294,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --fiscal-primary: #e8a23d;
   --fiscal-interest: #9b8cf0;
   --debt-net: #5b9bea;
+  --activity-ibc: #5b9bea;
   --debt-gross: #e8645f;
   --debt-rate: #e8645f;
   --debt-growth: #5b9bea;

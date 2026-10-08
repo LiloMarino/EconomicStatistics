@@ -36,3 +36,6 @@ class SeriesId(StrEnum):
     GROSS_DEBT = "gross_debt"
     GDP_12M = "gdp_12m"
     FEDERAL_DEBT_MATURITY = "federal_debt_maturity"
+    GDP_GROWTH_4Q = "gdp_growth_4q"
+    IBC_BR = "ibc_br"
+    UNEMPLOYMENT_RATE = "unemployment_rate"

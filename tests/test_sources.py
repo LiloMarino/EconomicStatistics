@@ -15,7 +15,7 @@ import pytest
 from backend.adapters import bcb_sgs_provider, ibge_provider, tesouro_debt_provider
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
-from backend.core.enum import DebtHolder, SeriesId
+from backend.core.enum import DebtHolder, Periodicity, SeriesId
 from backend.domain.series import SERIES
 
 IBGE_BODY = json.dumps(
@@ -83,13 +83,75 @@ class FakeResponse:
 
 def test_ibge_dash_is_zero_and_dots_are_missing() -> None:
     """No IBGE, "-" é zero absoluto e "..." é valor inexistente, que fica de fora."""
-    observations = ibge_provider.to_observations(IBGE_BODY)
+    observations = ibge_provider.to_observations(IBGE_BODY, Periodicity.MONTHLY)
 
     assert [(item.ref_date, item.value) for item in observations] == [
         (date(2022, 1, 1), 1.11),
         (date(2022, 2, 1), 0.0),
         (date(2022, 4, 1), 2.06),
     ]
+
+
+# Tabela trimestral do IBGE (5932), como a SIDRA respondeu em 2026-10-08
+IBGE_GDP_BODY = json.dumps(
+    [
+        {
+            "id": "6562",
+            "variavel": "Taxa acumulada em quatro trimestres",
+            "unidade": "%",
+            "resultados": [
+                {
+                    "classificacoes": [
+                        {
+                            "id": "11255",
+                            "categoria": {"90707": "PIB a preços de mercado"},
+                        }
+                    ],
+                    "series": [
+                        {
+                            "localidade": {"id": "1", "nome": "Brasil"},
+                            "serie": {
+                                "202504": "2.3",
+                                "202601": "2.0",
+                                "202602": "1.9",
+                            },
+                        }
+                    ],
+                }
+            ],
+        }
+    ]
+).encode()
+
+
+def test_ibge_quarter_is_dated_on_the_first_day_of_its_first_month() -> None:
+    """Na tabela trimestral, `202602` é o 2º trimestre e vira 1º de abril."""
+    observations = ibge_provider.to_observations(IBGE_GDP_BODY, Periodicity.QUARTERLY)
+
+    assert [(item.ref_date, item.value) for item in observations] == [
+        (date(2025, 10, 1), 2.3),
+        (date(2026, 1, 1), 2.0),
+        (date(2026, 4, 1), 1.9),
+    ]
+
+
+def test_ibge_quarterly_request_asks_the_quarter_periods(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """O URL da série trimestral pede os períodos como `AAAATT`, e não como `AAAAMM`."""
+    urls: list[str] = []
+
+    def fake_urlopen(url: str, timeout: float) -> FakeResponse:
+        urls.append(url)
+        return FakeResponse(IBGE_GDP_BODY, {})
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    IbgeAggregatesProvider().get_series(
+        SERIES[SeriesId.GDP_GROWTH_4Q], date(2025, 10, 1), date(2026, 10, 8)
+    )
+
+    assert "/5932/periodos/202504-202604/variaveis/6562?" in urls[0]
+    assert "classificacao=11255%5B90707%5D" in urls[0]
 
 
 def test_ibge_request_reads_gzip_and_asks_the_spec_category(
