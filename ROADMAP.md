@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Concluído o cartão de quem faz o déficit, com o primário e os juros de cada esfera do setor público.
+> **Última mudança (2026-10-08):** Concluídos o cartão de quem faz o déficit, com o primário e os juros de cada esfera, e a busca e o rodapé da barra lateral que seguem a tela aberta.
 
 ## Glossário
 
@@ -16,7 +16,7 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35 | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F44 | — |
 | **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39, F40, F42 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24, F36, F37, F40, F41, F43 | — |
@@ -39,7 +39,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (36 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (37 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -48,7 +48,7 @@
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25, F27, F30 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | F7, F8, F11, F26 | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41, F44 | ✅ |
 | **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | F9, F36, F37, F38, F39 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
@@ -79,6 +79,7 @@
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
 | **F43** | Quem faz o déficit: a NFSP por esfera | — | ✅ |
+| **F44** | A busca e o rodapé da barra lateral seguem a tela | — | ✅ |
 
 </details>
 
@@ -275,18 +276,19 @@
 
 ### Sem marco
 
-> **Progresso:** 2/3 concluídas
+> **Progresso:** 3/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F35** | IPCA livres, administrados e serviços | F4, F8 | ⏳ |
 
-<details><summary>Concluído (2 itens)</summary>
+<details><summary>Concluído (3 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | F3 | ✅ |
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | F13, F14, F31 | ✅ |
+| **F44** | A busca e o rodapé da barra lateral seguem a tela | F13, F14, F31, F28 | ✅ |
 
 </details>
 
@@ -335,6 +337,7 @@
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | N4, N6 | D6 | M4 | F13 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 | F8, F29 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ✅ Concluído |
+| **F44** | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — | F13, F14, F31, F28 | Baixo | Baixo | Baixo | Bom | ✅ Concluído |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -946,6 +949,11 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - a bandeja "Como ler" explica cada esfera e, num bloco à parte, mostra a soma das três contra o consolidado. Em ago/2026, o governo central pagou 91% dos juros do setor público.
 
 **Aceite:** conferido. Em ago/2026, as três esferas somam 0,61% de primário e 8,86% de juros, contra 0,62% e 8,86% do consolidado; o 0,01 é arredondamento do BCB, e o teste aceita até 0,02 ponto.
+
+**F44 — A busca e o rodapé da barra lateral seguem a tela.** Feito, a partir das observações da rodada de ajustes nas telas do app no canvas.
+
+- **Busca:** o grupo "Telas" vem antes dos conceitos. Ao digitar "dívida", a tela Dívida aparece primeiro, e não abaixo de nove conceitos.
+- **Rodapé da barra lateral:** mostra até quando há dado na tela aberta e quem o publica: "Resultado fiscal até ago/2026 · Banco Central" no Déficit, "Dólar até set/2026 · Banco Central" no Setor externo. Cada item de `navigation.ts` diz a série e as fontes da sua tela. O Focus mostra só a fonte, porque a pesquisa não é série do cache, e o Aprender fica com o IPCA.
 
 ---
 ## 2. Nice-to-have
