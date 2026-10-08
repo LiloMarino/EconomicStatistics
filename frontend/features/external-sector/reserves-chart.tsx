@@ -96,8 +96,8 @@ export function ReservesChart({ reserves }: { reserves: Reserves }) {
             ticks={ticks}
             tickLine={false}
             axisLine={false}
-            width={40}
-            tickFormatter={(value: number) => axisBillions.format(value / 1000)}
+            width={84}
+            tickFormatter={(value: number) => `US$ ${axisBillions.format(value / 1000)} bi`}
           />
           <ChartTooltip
             content={

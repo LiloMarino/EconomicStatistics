@@ -12,7 +12,7 @@ import {
   type InflationGroups,
   useInflationGroups,
 } from "@/features/inflation/use-inflation-groups";
-import { useInflationPace } from "@/features/inflation/use-inflation-pace";
+import { useInflationPace } from "@/shared/hooks/use-inflation-pace";
 import { useInflationView } from "@/features/inflation/use-inflation-view";
 import { useSeasonality } from "@/features/inflation/use-seasonality";
 import { PageHeader } from "@/shared/components/page-header";

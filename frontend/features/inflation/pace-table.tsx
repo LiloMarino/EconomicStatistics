@@ -1,6 +1,6 @@
 import { BookOpen, TrendingDown, TrendingUp } from "lucide-react";
 
-import type { InflationPace } from "@/features/inflation/use-inflation-pace";
+import type { InflationPace } from "@/shared/hooks/use-inflation-pace";
 import { type PaceWindow, paceWindows } from "@/features/inflation/use-inflation-view";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { GroupChip } from "@/shared/components/group-chip";

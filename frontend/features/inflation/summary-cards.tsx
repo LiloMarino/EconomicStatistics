@@ -2,7 +2,7 @@ import { ArrowDown, CircleAlert, Check } from "lucide-react";
 
 import { verdictLook } from "@/features/inflation/pace-verdict";
 import type { InflationGroups } from "@/features/inflation/use-inflation-groups";
-import type { InflationPace } from "@/features/inflation/use-inflation-pace";
+import type { InflationPace } from "@/shared/hooks/use-inflation-pace";
 import { ConceptHint } from "@/shared/components/concept-hint";
 import { GroupChip } from "@/shared/components/group-chip";
 import { HintButton } from "@/shared/components/hint-button";

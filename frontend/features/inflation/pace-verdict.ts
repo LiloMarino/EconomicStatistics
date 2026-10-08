@@ -1,6 +1,6 @@
 import { type LucideIcon, MoveRight, TrendingDown, TrendingUp } from "lucide-react";
 
-import type { InflationPace } from "@/features/inflation/use-inflation-pace";
+import type { InflationPace } from "@/shared/hooks/use-inflation-pace";
 import type { StatTone } from "@/shared/components/stat-card";
 
 type Verdict = InflationPace["verdict"];

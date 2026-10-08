@@ -275,7 +275,8 @@ export interface components {
          * DeficitDTO
          * @description `interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
          *     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
-         *     mês publicado.
+         *     mês publicado; `months`, os 12 meses que terminam em cada mês desde o começo da
+         *     série.
          */
         DeficitDTO: {
             last: components["schemas"]["DeficitPointDTO"];
@@ -283,6 +284,8 @@ export interface components {
             interest_share: number | null;
             /** Years */
             years: components["schemas"]["DeficitPointDTO"][];
+            /** Months */
+            months: components["schemas"]["DeficitPointDTO"][];
             forecast: components["schemas"]["DeficitForecastDTO"] | null;
         };
         /**

@@ -3,14 +3,16 @@ import {
   Bar,
   CartesianGrid,
   ComposedChart,
-  type DotItemDotProps,
   Line,
+  LineChart,
   ReferenceLine,
   XAxis,
   YAxis,
 } from "recharts";
 
 import type { Deficit } from "@/features/deficit/use-deficit";
+import { type DeficitScale, deficitScales } from "@/features/deficit/use-deficit-view";
+import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { forecastLegendEntry } from "@/shared/components/forecast-legend";
@@ -22,7 +24,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatDay, formatMonth, formatPercent } from "@/shared/lib/format";
+import { formatDay, formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
 import { texDecimal } from "@/shared/lib/tex";
 
@@ -47,51 +49,9 @@ const axisPercent = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
-// Meia largura do traço do nominal, em px, sobre a barra
-const MARK_HALF_WIDTH = 11;
-
 /** Dezembro aparece pelo ano; o último mês, quando não é dezembro, pelo mês. */
 function pointLabel(refDate: string): string {
   return refDate.slice(5, 7) === "12" ? refDate.slice(0, 4) : formatMonth(refDate);
-}
-
-interface MarkProps {
-  cx?: number;
-  cy?: number;
-  index?: number;
-  count: number;
-  label: string;
-  dashed?: boolean;
-}
-
-/** O nominal é a soma das duas barras: um traço sobre a pilha, com o valor no último. */
-function NominalMark({ cx, cy, index, count, label, dashed = false }: MarkProps) {
-  if (cx === undefined || cy === undefined) return <g />;
-  return (
-    <g>
-      <line
-        x1={cx - MARK_HALF_WIDTH}
-        x2={cx + MARK_HALF_WIDTH}
-        y1={cy}
-        y2={cy}
-        stroke="var(--foreground)"
-        strokeWidth={3}
-        strokeDasharray={dashed ? "4 3" : undefined}
-      />
-      {index === count - 1 && (
-        <text
-          x={cx}
-          y={cy - 8}
-          textAnchor="middle"
-          fontSize={13}
-          fontWeight={700}
-          fill="var(--foreground)"
-        >
-          {label}
-        </text>
-      )}
-    </g>
-  );
 }
 
 function ForecastTray({ surveyDate }: { surveyDate: string }) {
@@ -110,17 +70,24 @@ function ForecastTray({ surveyDate }: { surveyDate: string }) {
 function HowToRead({ last, forecast }: { last: Point; forecast: Forecast }) {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Primário" concept="primary-balance">
+      <TrayItem title="Primário" concept="primary-balance" color="var(--fiscal-primary)">
         <p>
           Arrecadação menos gastos, sem os juros. Mostra se o governo cabe no próprio orçamento.
           Abaixo de zero foi superávit e abateu o déficit, como em todos os anos de 2002 a 2013 e em
           2021 e 2022.
         </p>
       </TrayItem>
-      <TrayItem title="Juros" concept="nominal-interest">
+      <TrayItem title="Juros" concept="nominal-interest" color="var(--fiscal-interest)">
         <p>
           O custo da dívida no período. Cresce com a Selic e com o tamanho da dívida, e é a maior
           parte do déficit brasileiro em quase todos os anos desde 2002.
+        </p>
+      </TrayItem>
+      <TrayItem title="Nominal" concept="nominal-balance" color="var(--foreground)">
+        <p>
+          O déficit completo: primário mais juros. No ano a ano, é a coluna clara ao lado de cada
+          par, do tamanho da soma das outras duas; no mês a mês, a linha clara. Quando o primário é
+          superávit, ele desce do zero e abate os juros, e o nominal fica menor que os juros.
         </p>
       </TrayItem>
       <div className="flex flex-col gap-2.5">
@@ -142,9 +109,48 @@ function HowToRead({ last, forecast }: { last: Point; forecast: Forecast }) {
   );
 }
 
-/** Primário e juros empilhados no fim de cada ano, desde 2002, e o último mês; o traço
-marca o nominal, que é a soma dos dois. Primário negativo (superávit) desce do zero. */
-export function DeficitChart({ years, forecast }: { years: Point[]; forecast: Forecast }) {
+const scaleLabels: Record<DeficitScale, string> = { years: "Ano a ano", months: "Mês a mês" };
+
+// Rótulo do eixo x em janeiro, a cada 4 anos, na escala mês a mês
+const YEARS_BETWEEN_TICKS = 4;
+
+const tooltip = (format: (month: string) => string | null) => (
+  <ChartTooltip
+    content={
+      <ChartTooltipContent
+        labelFormatter={(_, payload) => {
+          const month: unknown = payload[0]?.payload?.ref_date;
+          return typeof month === "string" ? format(month) : null;
+        }}
+        formatter={(value, name) => (
+          <span className="flex w-full items-center justify-between gap-4">
+            {seriesNames.get(String(name))}
+            <span className="tabular-nums">
+              {typeof value === "number" ? formatPercent(value) : ""}
+            </span>
+          </span>
+        )}
+        filterNull
+      />
+    }
+  />
+);
+
+const percentAxis = (ticks: number[]) => (
+  <YAxis
+    domain={[ticks.at(0) ?? 0, ticks.at(-1) ?? 0.1]}
+    ticks={ticks}
+    tickLine={false}
+    axisLine={false}
+    width={44}
+    tickFormatter={(value: number) => axisPercent.format(value).replace("-", "−")}
+  />
+);
+
+/** Ano a ano: primário e juros empilhados no fim de cada ano, desde 2002, e o último mês,
+com o nominal numa coluna própria ao lado, do tamanho da soma. Primário negativo
+(superávit) desce do zero. */
+function YearsChart({ years, forecast }: { years: Point[]; forecast: Forecast }) {
   const last = years.at(-1);
   if (!last) return null;
   const expected = forecast?.years ?? [];
@@ -170,147 +176,234 @@ export function DeficitChart({ years, forecast }: { years: Point[]; forecast: Fo
   const tops = all.map((point) =>
     Math.max(point.nominal, point.interest + Math.max(point.primary, 0)),
   );
-  const bottoms = all.map((point) => Math.min(point.primary, 0));
+  const bottoms = all.map((point) => Math.min(point.primary, 0, point.nominal));
   const ticks = niceTicks(Math.min(0, ...bottoms), Math.max(...tops), 5);
+
+  return (
+    <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
+      <ComposedChart
+        data={rows}
+        stackOffset="sign"
+        barGap={2}
+        barCategoryGap="18%"
+        margin={{ left: 0, right: 8, top: 24, bottom: 4 }}
+      >
+        <CartesianGrid vertical={false} />
+        {forecast && forecastEnd && (
+          <ForecastSpan
+            from={last.ref_date}
+            to={forecastEnd.ref_date}
+            surveyDate={forecast.survey_date}
+          />
+        )}
+        <XAxis
+          dataKey="ref_date"
+          tickLine={false}
+          axisLine={false}
+          interval="preserveEnd"
+          minTickGap={12}
+          tickFormatter={pointLabel}
+        />
+        {percentAxis(ticks)}
+        <ReferenceLine y={0} stroke="var(--ink-2)" />
+        {tooltip(pointLabel)}
+        <Bar
+          dataKey="primary"
+          stackId="parts"
+          fill="var(--color-primary)"
+          maxBarSize={16}
+          isAnimationActive={false}
+        />
+        <Bar
+          dataKey="interest"
+          stackId="parts"
+          fill="var(--color-interest)"
+          radius={[2, 2, 0, 0]}
+          maxBarSize={16}
+          isAnimationActive={false}
+        />
+        {(["forecastPrimary", "forecastInterest"] as const).map((key) => (
+          <Bar
+            key={key}
+            dataKey={key}
+            stackId="parts"
+            fill={`var(--color-${key})`}
+            fillOpacity={0.35}
+            stroke={`var(--color-${key})`}
+            strokeDasharray="3 2"
+            maxBarSize={16}
+            isAnimationActive={false}
+          />
+        ))}
+        <Bar
+          dataKey="nominal"
+          stackId="sum"
+          fill="var(--color-nominal)"
+          fillOpacity={0.85}
+          radius={[2, 2, 0, 0]}
+          maxBarSize={16}
+          isAnimationActive={false}
+          label={(props) => {
+            const { x, y, width, index } = props;
+            if (
+              index !== years.length - 1 ||
+              typeof x !== "number" ||
+              typeof y !== "number" ||
+              typeof width !== "number"
+            )
+              return null;
+            return (
+              <text
+                x={x + width / 2}
+                y={y - 8}
+                textAnchor="middle"
+                fontSize={13}
+                fontWeight={700}
+                fill="var(--foreground)"
+              >
+                {formatPercent(last.nominal)}
+              </text>
+            );
+          }}
+        />
+        <Bar
+          dataKey="forecastNominal"
+          stackId="sum"
+          fill="var(--color-forecastNominal)"
+          fillOpacity={0.25}
+          stroke="var(--color-forecastNominal)"
+          strokeDasharray="3 2"
+          maxBarSize={16}
+          isAnimationActive={false}
+        />
+      </ComposedChart>
+    </ChartContainer>
+  );
+}
+
+/** Mês a mês: as três linhas de 12 meses, um ponto por mês, para ver as viradas dentro
+do ano que o fim de dezembro esconde. */
+function MonthsChart({ months }: { months: Point[] }) {
+  const last = months.at(-1);
+  if (!last) return null;
+  const values = months.flatMap((point) => [point.nominal, point.primary, point.interest]);
+  const ticks = niceTicks(Math.min(0, ...values), Math.max(...values), 5);
+  const lastYear = Number(last.ref_date.slice(0, 4));
+  const yearTicks = months
+    .filter(
+      (point) =>
+        point.ref_date.slice(5, 7) === "01" &&
+        (lastYear - Number(point.ref_date.slice(0, 4))) % YEARS_BETWEEN_TICKS === 0,
+    )
+    .map((point) => point.ref_date);
+  return (
+    <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
+      <LineChart data={months} margin={{ left: 0, right: 16, top: 24, bottom: 4 }}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="ref_date"
+          ticks={yearTicks}
+          interval={0}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(month: string) => month.slice(0, 4)}
+        />
+        {percentAxis(ticks)}
+        <ReferenceLine y={0} stroke="var(--ink-2)" />
+        {tooltip(formatMonth)}
+        {(["primary", "interest", "nominal"] as const).map((key) => (
+          <Line
+            key={key}
+            dataKey={key}
+            stroke={`var(--color-${key})`}
+            strokeWidth={key === "nominal" ? 2.5 : 2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        ))}
+      </LineChart>
+    </ChartContainer>
+  );
+}
+
+interface DeficitChartProps {
+  years: Point[];
+  months: Point[];
+  forecast: Forecast;
+  scale: DeficitScale;
+  onScaleChange: (scale: DeficitScale) => void;
+}
+
+/** O déficit e as duas partes dele, ano a ano ou mês a mês. */
+export function DeficitChart({ years, months, forecast, scale, onScaleChange }: DeficitChartProps) {
+  const last = years.at(-1);
+  const first = months.at(0);
+  if (!last || !first) return null;
+  const forecastEnd = forecast?.years.at(-1);
+  const byYear = scale === "years";
 
   return (
     <ExplainedCard
       title="De onde vem o déficit"
-      subtitle="% do PIB em 12 meses, no fim de cada ano · acima de zero é déficit"
+      subtitle={
+        byYear
+          ? "% do PIB em 12 meses, no fim de cada ano · acima de zero é déficit"
+          : `% do PIB em 12 meses, mês a mês · ${formatMonthRange(first.ref_date, last.ref_date)} · acima de zero é déficit`
+      }
+      actions={
+        <ToggleGroup
+          variant="segmented"
+          size="sm"
+          aria-label="Escala"
+          value={[scale]}
+          onValueChange={([next]) => {
+            const chosen = deficitScales.find((item) => item === next);
+            if (chosen) onScaleChange(chosen);
+          }}
+        >
+          {deficitScales.map((item) => (
+            <ToggleGroupItem key={item} value={item}>
+              {scaleLabels[item]}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      }
       explain={{
         label: "Como ler e a conta",
         icon: Sigma,
         heading: "COMO LER E A CONTA",
-        content: <HowToRead last={last} forecast={forecast} />,
+        content: <HowToRead last={last} forecast={byYear ? forecast : null} />,
       }}
     >
       <div className="flex flex-col gap-2">
         <ChartLegend
           entries={[
-            { key: "primary", label: "Primário", color: "var(--fiscal-primary)", shape: "square" },
-            { key: "interest", label: "Juros", color: "var(--fiscal-interest)", shape: "square" },
+            {
+              key: "primary",
+              label: "Primário",
+              color: "var(--fiscal-primary)",
+              shape: byYear ? "square" : "line",
+            },
+            {
+              key: "interest",
+              label: "Juros",
+              color: "var(--fiscal-interest)",
+              shape: byYear ? "square" : "line",
+            },
             {
               key: "nominal",
               label: "Nominal (a soma)",
               color: "var(--foreground)",
-              shape: "line",
+              shape: byYear ? "square" : "line",
             },
-            ...(forecastEnd ? [forecastLegendEntry("Previsão de mercado")] : []),
+            ...(byYear && forecastEnd ? [forecastLegendEntry("Previsão de mercado")] : []),
           ]}
         />
-        <ChartContainer config={chartConfig} className="aspect-auto h-80 w-full">
-          <ComposedChart
-            data={rows}
-            stackOffset="sign"
-            margin={{ left: 0, right: 8, top: 24, bottom: 4 }}
-          >
-            <CartesianGrid vertical={false} />
-            {forecast && forecastEnd && (
-              <ForecastSpan
-                from={last.ref_date}
-                to={forecastEnd.ref_date}
-                surveyDate={forecast.survey_date}
-              />
-            )}
-            <XAxis
-              dataKey="ref_date"
-              tickLine={false}
-              axisLine={false}
-              interval="preserveEnd"
-              minTickGap={12}
-              tickFormatter={pointLabel}
-            />
-            <YAxis
-              domain={[ticks.at(0) ?? 0, ticks.at(-1) ?? 0.1]}
-              ticks={ticks}
-              tickLine={false}
-              axisLine={false}
-              width={44}
-              tickFormatter={(value: number) => axisPercent.format(value).replace("-", "−")}
-            />
-            <ReferenceLine y={0} stroke="var(--ink-2)" />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(_, payload) => {
-                    const month: unknown = payload[0]?.payload?.ref_date;
-                    return typeof month === "string" ? pointLabel(month) : null;
-                  }}
-                  formatter={(value, name) => (
-                    <span className="flex w-full items-center justify-between gap-4">
-                      {seriesNames.get(String(name))}
-                      <span className="tabular-nums">
-                        {typeof value === "number" ? formatPercent(value) : ""}
-                      </span>
-                    </span>
-                  )}
-                  filterNull
-                />
-              }
-            />
-            <Bar
-              dataKey="primary"
-              stackId="deficit"
-              fill="var(--color-primary)"
-              maxBarSize={28}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="interest"
-              stackId="deficit"
-              fill="var(--color-interest)"
-              radius={[2, 2, 0, 0]}
-              maxBarSize={28}
-              isAnimationActive={false}
-            />
-            {(["forecastPrimary", "forecastInterest"] as const).map((key) => (
-              <Bar
-                key={key}
-                dataKey={key}
-                stackId="deficit"
-                fill={`var(--color-${key})`}
-                fillOpacity={0.35}
-                stroke={`var(--color-${key})`}
-                strokeDasharray="3 2"
-                maxBarSize={28}
-                isAnimationActive={false}
-              />
-            ))}
-            <Line
-              dataKey="forecastNominal"
-              stroke="none"
-              isAnimationActive={false}
-              activeDot={false}
-              dot={(props: DotItemDotProps) => (
-                <NominalMark
-                  key={props.index}
-                  cx={props.cx}
-                  cy={props.cy}
-                  index={props.index}
-                  count={rows.length}
-                  label=""
-                  dashed
-                />
-              )}
-            />
-            <Line
-              dataKey="nominal"
-              stroke="none"
-              isAnimationActive={false}
-              activeDot={false}
-              dot={(props: DotItemDotProps) => (
-                <NominalMark
-                  key={props.index}
-                  cx={props.cx}
-                  cy={props.cy}
-                  index={props.index}
-                  count={years.length}
-                  label={formatPercent(last.nominal)}
-                />
-              )}
-            />
-          </ComposedChart>
-        </ChartContainer>
+        {byYear ? (
+          <YearsChart years={years} forecast={forecast} />
+        ) : (
+          <MonthsChart months={months} />
+        )}
       </div>
     </ExplainedCard>
   );

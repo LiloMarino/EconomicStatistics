@@ -38,14 +38,20 @@ const YEARS_BETWEEN_TICKS = 3;
 function HowToRead({ forecast }: { forecast: LevelsForecast }) {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="O que cada uma conta" concept="gross-debt">
+      <TrayItem title="Dívida bruta (DBGG)" concept="gross-debt" color="var(--debt-gross)">
         <p>
-          A bruta soma tudo o que os governos federal, estaduais e municipais devem, sem descontar
-          nada. A líquida inclui o Banco Central e as estatais e desconta o que o setor público tem
-          a receber, como as reservas internacionais.
+          Tudo o que os governos federal, estaduais e municipais devem, sem descontar nada. É a
+          linha vermelha, e a que mais se usa para comparar o Brasil com outros países.
         </p>
       </TrayItem>
-      <TrayItem title="Por que a distância entre elas muda" concept="net-debt">
+      <TrayItem title="Dívida líquida (DLSP)" concept="net-debt" color="var(--debt-net)">
+        <p>
+          O que o setor público deve menos o que tem a receber, como as reservas internacionais.
+          Entram também o Banco Central e as estatais. É a linha azul, e a que entra na conta de
+          quando a dívida para de subir.
+        </p>
+      </TrayItem>
+      <TrayItem title="Por que a distância entre elas muda">
         <p>
           Quando o Banco Central compra dólares para as reservas, a bruta sobe e a líquida não: o
           setor público passa a dever mais e a ter mais a receber.

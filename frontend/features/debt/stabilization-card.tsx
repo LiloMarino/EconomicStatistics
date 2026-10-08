@@ -71,9 +71,9 @@ export function StabilizationCard({ data }: { data: Stabilization }) {
       }}
     >
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-[7.5rem_1fr] items-center gap-x-4 gap-y-3">
+        <div className="grid grid-cols-[10rem_1fr] items-center gap-x-4 gap-y-3">
           <span className="flex flex-col">
-            <strong>Feito</strong>
+            <strong>Feito: {formatPercent(done)}</strong>
             <span className="text-caption text-muted-foreground">{formatMonth(data.ref_date)}</span>
           </span>
           <span
@@ -93,7 +93,7 @@ export function StabilizationCard({ data }: { data: Stabilization }) {
             <span className="bg-ink-2 absolute -inset-y-1 left-(--zero) w-px" />
           </span>
           <span className="flex flex-col">
-            <strong>Preciso</strong>
+            <strong>Preciso: {formatPercent(needed)}</strong>
             <span className="text-caption text-muted-foreground">para estabilizar</span>
           </span>
           <span
@@ -107,6 +107,27 @@ export function StabilizationCard({ data }: { data: Stabilization }) {
             <span className="border-ok absolute inset-y-0 left-(--start) w-(--width) rounded-sm border-2 border-dashed" />
             <span className="bg-ink-2 absolute -inset-y-1 left-(--zero) w-px" />
           </span>
+          {!covered && (
+            <>
+              <span className="flex flex-col">
+                <strong>Falta</strong>
+                <span className="text-caption text-muted-foreground">do feito ao preciso</span>
+              </span>
+              <span
+                className="relative h-8"
+                style={{
+                  "--start": position(done),
+                  "--width": width(needed - done),
+                  "--zero": position(0),
+                }}
+              >
+                <span className="bg-trend-up/25 border-trend-up text-small absolute inset-y-0 left-(--start) flex w-(--width) items-center justify-center rounded-sm border-2 font-bold tabular-nums">
+                  {formatPoints(needed - done).replace("+", "")}
+                </span>
+                <span className="bg-ink-2 absolute -inset-y-1 left-(--zero) w-px" />
+              </span>
+            </>
+          )}
           <span />
           <span className="text-small text-muted-foreground relative h-5">
             {ticks.map((tick) => (

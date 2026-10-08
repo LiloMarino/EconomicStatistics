@@ -88,14 +88,24 @@ interface TrayItemProps {
   title: ReactNode;
   /** O conceito do catálogo de que o bloco trata; o pé do bloco leva à página dele. */
   concept?: ConceptId;
+  /** A cor da série de que o bloco trata, a mesma do gráfico: quando o cartão mostra dois
+  conceitos, cada um ganha o seu bloco, marcado pela cor dele. */
+  color?: string;
   children: ReactNode;
 }
 
 /** Um bloco da bandeja: o título curto e o texto. */
-export function TrayItem({ title, concept, children }: TrayItemProps) {
+export function TrayItem({ title, concept, color, children }: TrayItemProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <h3 className="font-bold">{title}</h3>
+      {color ? (
+        <h3 className="flex items-center gap-2 font-bold" style={{ "--swatch": color }}>
+          <span aria-hidden="true" className="h-3 w-3 shrink-0 rounded-xs bg-(--swatch)" />
+          {title}
+        </h3>
+      ) : (
+        <h3 className="font-bold">{title}</h3>
+      )}
       {children}
       {concept && (
         <Link to={`/learn/${concept}`} className="text-caption self-start font-semibold">

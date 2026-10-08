@@ -40,11 +40,26 @@ function HowToRead({ last }: { last: Flow }) {
   const covered = last.fdi >= deficit;
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Como ler" concept="current-account">
+      <TrayItem title="Transações correntes" concept="current-account" color="var(--trend-up)">
         <p>
-          A linha vermelha é o saldo de tudo o que o país compra e vende com o exterior; abaixo de
-          zero, saiu mais dinheiro do que entrou. Quando a linha verde fica acima do tamanho desse
-          déficit, o buraco está financiado por dinheiro que veio para ficar.
+          O saldo de tudo o que o Brasil compra e vende com o exterior num ano: mercadorias,
+          serviços como frete e viagens, e os lucros e juros que vão e vêm. Acima de zero, entrou
+          mais dólar do que saiu; abaixo, o país gastou mais lá fora do que recebeu e precisa que
+          dinheiro de fora cubra a diferença.
+        </p>
+      </TrayItem>
+      <TrayItem title="Investimento direto no país" concept="fdi" color="var(--ok)">
+        <p>
+          O dinheiro que estrangeiros põem em empresas daqui: abrir uma fábrica, comprar uma
+          participação grande numa empresa, emprestar para a filial. É o que vem para ficar, porque
+          não dá para vender uma fábrica numa tarde de pânico.
+        </p>
+      </TrayItem>
+      <TrayItem title="As duas juntas">
+        <p>
+          A pergunta do gráfico é se a linha verde cobre o buraco da vermelha. Quando o investimento
+          direto é maior que o déficit, o país está pagando o que gasta lá fora com dinheiro que
+          veio para ficar.
         </p>
         {deficit > 0 && (
           <p>
@@ -124,13 +139,13 @@ export function FlowsChart({ flows, forecast }: FlowsChartProps) {
           entries={[
             {
               key: "current_account",
-              label: "Transações correntes",
+              label: "Transações correntes: o saldo com o exterior",
               color: "var(--trend-up)",
               shape: "line",
             },
             {
               key: "fdi",
-              label: "Investimento direto no país",
+              label: "Investimento direto no país: o dinheiro que vem para ficar",
               color: "var(--ok)",
               shape: "line",
             },

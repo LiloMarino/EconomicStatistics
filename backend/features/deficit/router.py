@@ -33,11 +33,13 @@ class DeficitForecastDTO(BaseDTO):
 class DeficitDTO(BaseDTO):
     """`interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
-    mês publicado."""
+    mês publicado; `months`, os 12 meses que terminam em cada mês desde o começo da
+    série."""
 
     last: DeficitPointDTO
     interest_share: float | None
     years: list[DeficitPointDTO]
+    months: list[DeficitPointDTO]
     forecast: DeficitForecastDTO | None
 
 

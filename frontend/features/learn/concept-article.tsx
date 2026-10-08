@@ -1,10 +1,17 @@
 import { type ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { Rolling12mTargetChart } from "@/features/learn/rolling-12m-target-chart";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Button } from "@/shared/components/ui/button";
 import { type ConceptId, topicLabels } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
+
+/** O gráfico com o dado de hoje que acompanha o "É bom ou ruim?" de um conceito com
+série: o texto diz a regra, o gráfico mostra onde o número está agora. */
+const readingCharts: Partial<Record<ConceptId, ReactNode>> = {
+  "rolling-12m": <Rolling12mTargetChart />,
+};
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -90,6 +97,7 @@ export function ConceptArticle({ id }: { id: ConceptId }) {
 
         <Section title="É bom ou ruim?">
           <div className="max-w-prose">{concept.reading}</div>
+          {readingCharts[id]}
         </Section>
 
         {concept.cautions && (

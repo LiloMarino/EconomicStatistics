@@ -3,6 +3,7 @@ import { CircleAlert } from "lucide-react";
 import { DeficitChart } from "@/features/deficit/deficit-chart";
 import { SummaryCards } from "@/features/deficit/summary-cards";
 import { useDeficit } from "@/features/deficit/use-deficit";
+import { useDeficitView } from "@/features/deficit/use-deficit-view";
 import { PageHeader } from "@/shared/components/page-header";
 import {
   Empty,
@@ -16,6 +17,7 @@ import { getApiErrorMessage } from "@/shared/lib/api";
 
 export function DeficitPage() {
   const { data, isPending, error } = useDeficit();
+  const { scale, setScale } = useDeficitView();
 
   return (
     <>
@@ -39,7 +41,13 @@ export function DeficitPage() {
       ) : (
         <>
           <SummaryCards data={data} />
-          <DeficitChart years={data.years} forecast={data.forecast} />
+          <DeficitChart
+            years={data.years}
+            months={data.months}
+            forecast={data.forecast}
+            scale={scale}
+            onScaleChange={setScale}
+          />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: Banco Central, estatísticas fiscais: necessidade de financiamento do setor
             público consolidado, sem desvalorização cambial, em % do PIB e acumulada em 12 meses.

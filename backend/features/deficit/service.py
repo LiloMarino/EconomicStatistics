@@ -44,11 +44,13 @@ class DeficitForecast:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Deficit:
     """`interest_share` é a fração do déficit nominal que é juro; sem déficit nominal,
-    ela não existe. `years` traz dezembro de cada ano e o último mês."""
+    ela não existe. `years` traz dezembro de cada ano e o último mês; `months`, todos os
+    meses desde o começo da série."""
 
     last: DeficitPoint
     interest_share: float | None
     years: list[DeficitPoint]
+    months: list[DeficitPoint]
     forecast: DeficitForecast | None
 
 
@@ -85,6 +87,7 @@ def deficit(session: Session) -> Deficit:
         last=last,
         interest_share=last.interest / last.nominal if last.nominal > 0 else None,
         years=years,
+        months=points,
         forecast=_forecast(session, last.ref_date),
     )
 

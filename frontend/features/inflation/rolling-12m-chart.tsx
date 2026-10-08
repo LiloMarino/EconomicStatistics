@@ -2,7 +2,7 @@ import { BookOpen, Target } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, XAxis, YAxis } from "recharts";
 
 import { verdictLook } from "@/features/inflation/pace-verdict";
-import type { InflationPace } from "@/features/inflation/use-inflation-pace";
+import type { InflationPace } from "@/shared/hooks/use-inflation-pace";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { forecastLegendEntry } from "@/shared/components/forecast-legend";
 import { ForecastSpan } from "@/shared/components/forecast-span";
