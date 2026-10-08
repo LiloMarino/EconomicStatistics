@@ -12,7 +12,8 @@ from backend.core.enum import Periodicity, SeriesId, Source, Unit
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Observation:
     """Valor na unidade da série, datado no dia 1 do mês de referência. Série
-    trimestral é datada no 1º dia do trimestre, e a anual em 1º de janeiro."""
+    trimestral é datada no 1º dia do trimestre, a anual em 1º de janeiro e a diária no
+    próprio dia."""
 
     ref_date: date
     value: float
@@ -209,6 +210,17 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         lag_months=0,
         release_day=1,
         periodicity=Periodicity.ANNUAL,
+    ),
+    # A meta Selic vigente em cada dia corrido. A fonte já preenche os dias seguintes com
+    # a meta em vigor, e o fetch vai só até hoje. `first_date` é o primeiro dia publicado.
+    SeriesId.SELIC_TARGET: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="432",
+        unit=Unit.PERCENT_YEAR,
+        first_date=date(1999, 3, 5),
+        lag_months=0,
+        release_day=1,
+        periodicity=Periodicity.DAILY,
     ),
     # A PTAX do último dia útil do mês, a mesma medida que o Focus pergunta. Começa no
     # Real: antes dele o valor está em outras moedas.

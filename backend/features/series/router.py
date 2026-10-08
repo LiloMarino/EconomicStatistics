@@ -7,10 +7,12 @@ from fastapi import APIRouter
 from backend.core.database.session import SessionDep
 from backend.core.dto import BaseDTO
 from backend.core.enum import Dataset, SeriesId
+from backend.features.copom.refresh import refresh_copom
 from backend.features.dataset_refresh import DatasetRefresh
 from backend.features.debt.refresh import refresh_federal_debt
 from backend.features.focus.refresh import refresh_focus
 from backend.features.providers import (
+    CopomProviderDep,
     DebtProviderDep,
     FocusProviderDep,
     ProvidersDep,
@@ -45,6 +47,7 @@ def refresh(
     providers: ProvidersDep,
     debt_provider: DebtProviderDep,
     focus_provider: FocusProviderDep,
+    copom_provider: CopomProviderDep,
 ) -> RefreshReportDTO:
     """Com o cache em dia, responde sem sair da máquina. Sem rede não é erro: o cache
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
@@ -53,6 +56,7 @@ def refresh(
     datasets: dict[Dataset, DatasetRefresh] = {
         Dataset.FEDERAL_DEBT_STOCK: refresh_federal_debt(session, debt_provider, now),
         Dataset.FOCUS_EXPECTATIONS: refresh_focus(session, focus_provider, now),
+        Dataset.COPOM_MEETINGS: refresh_copom(session, copom_provider, now),
     }
     return RefreshReportDTO(
         updated=list(report.updated),

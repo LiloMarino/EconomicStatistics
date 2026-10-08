@@ -144,3 +144,31 @@ def test_recent_request_uses_only_the_current_table() -> None:
     ranges = code_ranges(IPCA, date(2025, 8, 1), date(2026, 10, 20))
 
     assert [item.code for item in ranges] == ["7060/63/315/7170"]
+
+
+def test_daily_series_is_expected_up_to_today() -> None:
+    """A meta Selic é cobrada até o próprio dia: uma decisão do Copom no meio do mês
+    entra no dia seguinte, e não no mês seguinte."""
+    selic = SERIES[SeriesId.SELIC_TARGET]
+
+    assert expected_ref_date(selic, date(2026, 10, 8)) == date(2026, 10, 8)
+
+
+def test_daily_cache_up_to_today_asks_nothing_and_yesterday_refetches() -> None:
+    """Com o cache da Selic até hoje não há pedido; até ontem, o pedido regrava os 12
+    meses anteriores ao último dia em cache."""
+    selic = SERIES[SeriesId.SELIC_TARGET]
+    now = datetime(2026, 10, 8, 10)
+
+    assert (
+        fetch_request(
+            selic, cached_until(selic.first_date, date(2026, 10, 8)), None, now
+        )
+        is None
+    )
+
+    request = fetch_request(
+        selic, cached_until(selic.first_date, date(2026, 10, 7)), None, now
+    )
+    assert request is not None
+    assert (request.start, request.end) == (date(2025, 10, 1), date(2026, 10, 8))

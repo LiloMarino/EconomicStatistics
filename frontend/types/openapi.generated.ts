@@ -227,6 +227,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/interest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Interest Overview */
+        get: operations["interest_overview_api_interest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -255,7 +272,7 @@ export interface components {
          * @description Fonte que não cabe em `observations`, com tabela e refresh próprios.
          * @enum {string}
          */
-        Dataset: "federal_debt_stock" | "focus_expectations";
+        Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings";
         /**
          * DebtLevelDTO
          * @description Dívida líquida do setor público e bruta do governo geral, em fração do PIB
@@ -571,7 +588,7 @@ export interface components {
         GroupSeasonalityDTO: {
             series_id: components["schemas"]["SeriesId"];
             /** Months */
-            months: components["schemas"]["MonthRateDTO"][];
+            months: components["schemas"]["backend__features__inflation__router__MonthRateDTO"][];
             /** Bands */
             bands: components["schemas"]["MonthBandDTO"][];
             largest_deviation: components["schemas"]["DeviationDTO"] | null;
@@ -608,6 +625,15 @@ export interface components {
             indexer: components["schemas"]["Indexer"];
             /** Share */
             share: number;
+        };
+        /**
+         * InflationDTO
+         * @description O IPCA acumulado em 12 meses, mês a mês, e a continuação pelo Focus.
+         */
+        InflationDTO: {
+            /** Months */
+            months: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
+            forecast: components["schemas"]["RateForecastDTO"] | null;
         };
         /**
          * InflationGroupsDTO
@@ -654,6 +680,13 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["GroupPaceDTO"][];
         };
+        /** InterestDTO */
+        InterestDTO: {
+            selic: components["schemas"]["SelicDTO"];
+            inflation: components["schemas"]["InflationDTO"];
+            next_meeting: components["schemas"]["NextMeetingDTO"] | null;
+            real_rate: components["schemas"]["RealRateDTO"] | null;
+        };
         /**
          * LevelsForecastDTO
          * @description A dívida líquida e a bruta que o Focus espera para dezembro de cada ano, em
@@ -688,6 +721,26 @@ export interface components {
             within_12m: boolean;
         };
         /**
+         * MeetingDTO
+         * @description A reunião de ordem `number` no ano, a `R<number>/<year>` do Focus.
+         */
+        MeetingDTO: {
+            /** Year */
+            year: number;
+            /** Number */
+            number: number;
+            /**
+             * First Day
+             * Format: date
+             */
+            first_day: string;
+            /**
+             * Second Day
+             * Format: date
+             */
+            second_day: string;
+        };
+        /**
          * MonthBandDTO
          * @description A faixa de um mês do calendário (1 a 12) nos anos comparados, em fração.
          */
@@ -700,16 +753,6 @@ export interface components {
             high: number;
             /** Mean */
             mean: number;
-        };
-        /** MonthRateDTO */
-        MonthRateDTO: {
-            /**
-             * Ref Date
-             * Format: date
-             */
-            ref_date: string;
-            /** Rate */
-            rate: number;
         };
         /** MonthValueDTO */
         MonthValueDTO: {
@@ -751,6 +794,23 @@ export interface components {
             survey_date: string;
             /** Months */
             months: components["schemas"]["MonthValueDTO"][];
+        };
+        /**
+         * NextMeetingDTO
+         * @description A próxima reunião, a meta que o mercado espera dela e a diferença para a meta de
+         *     hoje, em fração do ano (-0.0025 é um corte de 0,25 ponto percentual).
+         */
+        NextMeetingDTO: {
+            meeting: components["schemas"]["MeetingDTO"];
+            /** Expected */
+            expected: number;
+            /** Change */
+            change: number;
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
         };
         /**
          * PaceForecastDTO
@@ -850,6 +910,37 @@ export interface components {
          */
         RaiseReference: "ipca" | "inpc" | "minimum_wage" | "custom";
         /**
+         * RateForecastDTO
+         * @description A taxa esperada em cada mês depois do último dado, pela pesquisa Focus de
+         *     `survey_date`.
+         */
+        RateForecastDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Months */
+            months: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
+        };
+        /**
+         * RealRateDTO
+         * @description A meta de hoje dividida pela inflação esperada para os 12 meses seguintes.
+         */
+        RealRateDTO: {
+            /** Rate */
+            rate: number;
+            /** Selic */
+            selic: number;
+            /** Expected Inflation */
+            expected_inflation: number;
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+        };
+        /**
          * ReferenceRaiseDTO
          * @description O reajuste da referência no período; `null` quando o cache não o cobre.
          */
@@ -931,10 +1022,38 @@ export interface components {
             groups: components["schemas"]["GroupSeasonalityDTO"][];
         };
         /**
+         * SelicChangeDTO
+         * @description O dia em que a meta passou de `before` para `after`, ao ano e em fração.
+         */
+        SelicChangeDTO: {
+            /**
+             * Effective Date
+             * Format: date
+             */
+            effective_date: string;
+            /** Before */
+            before: number;
+            /** After */
+            after: number;
+        };
+        /**
+         * SelicDTO
+         * @description A meta ao ano em vigor no fim de cada mês (no último, a de hoje), a de hoje em
+         *     `current` e a previsão de fim de mês que sai das reuniões esperadas.
+         */
+        SelicDTO: {
+            /** Months */
+            months: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
+            /** Current */
+            current: number;
+            last_change: components["schemas"]["SelicChangeDTO"] | null;
+            forecast: components["schemas"]["RateForecastDTO"] | null;
+        };
+        /**
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1036,6 +1155,29 @@ export interface components {
             ref_date: string;
             /** Shares */
             shares: components["schemas"]["IndexerShareDTO"][];
+        };
+        /** MonthRateDTO */
+        backend__features__inflation__router__MonthRateDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Rate */
+            rate: number;
+        };
+        /**
+         * MonthRateDTO
+         * @description A taxa do mês `ref_date`, em fração (0.1375 é 13,75%).
+         */
+        backend__features__interest__router__MonthRateDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Rate */
+            rate: number;
         };
     };
     responses: never;
@@ -1497,6 +1639,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FocusHistoryDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    interest_overview_api_interest_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InterestDTO"];
                 };
             };
             /** @description Unprocessable Content */

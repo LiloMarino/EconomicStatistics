@@ -10,6 +10,7 @@ const deficitScreen = { to: "/deficit", label: "Déficit" };
 const debtScreen = { to: "/debt", label: "Dívida" };
 const focusScreen = { to: "/focus", label: "Focus" };
 const activityScreen = { to: "/activity", label: "Atividade" };
+const interestScreen = { to: "/interest", label: "Juros" };
 
 const focusFrequency = "Semanal: as previsões da semana saem na segunda seguinte";
 
@@ -45,6 +46,10 @@ const bcbTarget = {
   url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
 };
 const sgs = { name: "Banco Central, SGS", url: "https://www3.bcb.gov.br/sgspub/" };
+const copomPage = {
+  name: "Banco Central, página do Copom",
+  url: "https://www.bcb.gov.br/en/monetarypolicy/committee",
+};
 const sgs3696 = { ...sgs, name: "Banco Central, série 3696 do SGS (dólar, fim do mês)" };
 const bcbDollarBulletins = {
   name: "Banco Central, cotações diárias do dólar no portal de dados abertos",
@@ -2998,5 +3003,302 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: "Mensal, no fim do mês seguinte ao fim do trimestre móvel",
     screens: [activityScreen],
+  },
+
+  selic: {
+    title: "Selic meta",
+    abbr: "Copom",
+    topic: "interest",
+    summary: "A taxa básica de juros do país, fixada pelo Copom.",
+    lead: (
+      <>
+        A <strong>Selic meta</strong> é a taxa básica de juros do país, fixada pelo Copom a cada
+        reunião. É o piso do custo do dinheiro: financiamentos, rendimento da renda fixa e parte da
+        dívida pública andam atrás dela.
+      </>
+    ),
+    keywords: ["taxa básica", "juros", "selic over", "banco central", "política monetária"],
+    measures: (
+      <>
+        <p>
+          Quanto o Banco Central quer que os bancos paguem para emprestar dinheiro uns aos outros de
+          um dia para o outro, ao ano. A taxa que se forma no mercado, a Selic <em>over</em>, fica
+          em volta da meta porque o Banco Central compra e vende títulos até ela chegar lá.
+        </p>
+        <p>
+          A meta só muda nas reuniões do Copom, e a tela mostra o valor dela no fim de cada mês, em
+          degraus.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de 8 de outubro de 2026",
+      content: (
+        <p>
+          A meta era <strong>13,75% ao ano</strong>, em vigor desde 17 de setembro de 2026, quando o
+          Copom a cortou em 0,25 ponto percentual, de 14,00%. Em junho de 2025 ela chegou a 15,00%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Juro alto encarece o crédito, segura o consumo e a inflação, e também a atividade e a dívida
+        pública. Juro baixo faz o contrário. O Banco Central sobe a Selic quando a inflação passa da
+        meta e baixa quando ela cede, e o efeito leva de vários meses a mais de um ano para chegar
+        aos preços. Por isso o que importa é a Selic contra a inflação (o juro real), e não o número
+        sozinho.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A meta não é o juro que você paga.",
+        text: (
+          <>
+            O financiamento, o cartão e o cheque especial cobram muito acima da Selic: ela é o ponto
+            de partida do custo do dinheiro, e os bancos somam o risco e a margem deles.
+          </>
+        ),
+      },
+      {
+        title: "É uma taxa ao ano.",
+        text: (
+          <>13,75% ao ano não são 13,75% por mês: compostos mês a mês, são cerca de 1,08% ao mês.</>
+        ),
+      },
+    ],
+    related: ["copom", "real-rate", "inflation-target", "focus-survey", "nominal-interest"],
+    sources: [
+      {
+        ...copomPage,
+        backs: "Que o Copom fixa a meta da Selic, em reuniões ordinárias a cada cerca de 45 dias.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 432 do SGS (meta Selic)",
+        backs:
+          "A meta de 13,75% em 8 de outubro de 2026, as mudanças desde 1999 e o corte de 17 de setembro.",
+      },
+    ],
+    frequency: "Diária no SGS; só muda nas 8 reuniões do Copom por ano",
+    screens: [interestScreen],
+  },
+
+  copom: {
+    title: "Copom",
+    abbr: "BCB",
+    topic: "interest",
+    summary: "O comitê do Banco Central que decide a Selic meta, 8 vezes por ano.",
+    lead: (
+      <>
+        O <strong>Copom</strong> (Comitê de Política Monetária) é o grupo do Banco Central, formado
+        pela diretoria e pelo presidente, que decide a Selic meta. Reúne-se 8 vezes por ano, a cada
+        cerca de 45 dias, em dois dias seguidos.
+      </>
+    ),
+    keywords: ["comitê de política monetária", "reunião", "decisão de juros", "ata", "comunicado"],
+    measures: (
+      <>
+        <p>
+          O Copom analisa a inflação, as expectativas e a atividade e decide se sobe, mantém ou
+          corta a Selic. A decisão sai no comunicado do fim do segundo dia e vale a partir do dia
+          seguinte. A ata, com a discussão, sai na terça-feira da semana seguinte.
+        </p>
+        <p>
+          O Banco Central divulga o calendário do ano seguinte até o fim de junho, e o app o busca
+          sozinho. A pesquisa Focus pergunta a Selic de cada reunião.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com a reunião de novembro de 2026",
+      content: (
+        <p>
+          A próxima reunião é a 7ª do ano, em 3 e 4 de novembro de 2026. A decisão sai no dia 4 e
+          vale a partir do dia 5. Na pesquisa Focus de 2 de outubro, a mediana do mercado esperava
+          13,50%, um corte de 0,25 ponto percentual sobre os 13,75% de hoje.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        O mercado costuma acertar a decisão antes de ela sair, e por isso a notícia está no que o
+        comunicado e a ata dizem sobre as reuniões seguintes: é aí que se lê para onde o Copom
+        caminha.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "O calendário pode mudar.",
+        text: (
+          <>
+            O Banco Central pode ajustar as datas até o fim do ano em que o calendário vale, e pode
+            convocar reunião extraordinária.
+          </>
+        ),
+      },
+    ],
+    related: ["selic", "real-rate", "focus-survey", "inflation-target"],
+    sources: [
+      {
+        ...copomPage,
+        backs: "Quem compõe o Copom, que ele fixa a Selic meta e o calendário de reuniões.",
+      },
+      {
+        name: "Banco Central, histórico do Copom",
+        url: "https://www.bcb.gov.br/htms/copom_normas/a-hist.asp?idpai=co&frame=1",
+        backs:
+          "Que o calendário é divulgado por comunicado até o fim de junho do ano anterior e pode ser ajustado.",
+      },
+      {
+        ...focusData,
+        backs: "A previsão de 13,50% do Focus de 2 de outubro de 2026 para a reunião de novembro.",
+      },
+    ],
+    frequency: "8 reuniões por ano; o calendário do ano seguinte sai até junho",
+    screens: [interestScreen],
+  },
+
+  "real-rate": {
+    title: "Juro real",
+    topic: "interest",
+    summary: "Quanto o juro rende acima da inflação, descontando-a dividindo.",
+    lead: (
+      <>
+        O <strong>juro real</strong> é o que o juro rende acima da inflação. Com a Selic em 13,75% e
+        a inflação esperada em 4,59%, o dinheiro rende 8,76% acima dos preços. É esse juro, e não a
+        Selic sozinha, que segura ou solta a economia.
+      </>
+    ),
+    keywords: [
+      "juro real",
+      "selic real",
+      "ex-ante",
+      "descontar a inflação",
+      "juro acima da inflação",
+    ],
+    measures: (
+      <>
+        <p>
+          A Selic tira da inflação o pedaço que só repõe o preço: o que sobra é o ganho de poder de
+          compra. A tela usa a inflação que o mercado espera para os próximos 12 meses (a pesquisa
+          Focus), o <strong>juro real ex-ante</strong>, porque quem decide hoje olha para a inflação
+          que vem, e não para a que passou.
+        </p>
+        <p>A conta é dividir, e não subtrair, como em todo desconto de taxa.</p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{juro real} = \\dfrac{1 + \\text{Selic}}{1 + \\text{inflação esperada}} - 1",
+      legend: [
+        { symbol: "\\text{Selic}", text: <>a meta ao ano, em fração (13,75% é 0,1375)</> },
+        {
+          symbol: "\\text{inflação esperada}",
+          text: <>a mediana do Focus para o IPCA dos 12 meses seguintes, em fração</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de 2 de outubro de 2026",
+      content: (
+        <>
+          <p>Selic de 13,75% e IPCA esperado de 4,59% nos 12 meses seguintes, segundo o Focus:</p>
+          <FormulaBox>
+            <Formula flushLeft tex="\dfrac{1{,}1375}{1{,}0459} - 1 = \mathbf{8{,}76\%}" />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Juro real alto segura a inflação e também o crescimento, e encarece a dívida pública. Baixo
+        ou negativo estimula o crédito e o consumo. Quanto é alto ou baixo depende do juro neutro, o
+        que não acelera nem freia a economia: acima dele, a política aperta.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Dividir, não subtrair.",
+        text: (
+          <>
+            13,75% menos 4,59% dá 9,16%, mas o ganho de poder de compra é 8,76%. A diferença cresce
+            com as taxas.
+          </>
+        ),
+      },
+      {
+        title: "Ex-ante e ex-post.",
+        text: (
+          <>
+            O ex-post desconta a inflação que já aconteceu, e é o que o gráfico mostra no passado,
+            na distância entre a Selic e o IPCA em 12 meses. O ex-ante desconta a esperada, e é o
+            número do resumo.
+          </>
+        ),
+      },
+    ],
+    related: ["selic", "neutral-rate", "focus-survey", "purchasing-power", "implicit-rate"],
+    sources: [
+      {
+        ...focusData,
+        backs:
+          "A mediana de 4,59% da inflação esperada para os 12 meses seguintes, em 2 de outubro de 2026.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 432 do SGS (meta Selic)",
+        backs: "A meta de 13,75%.",
+      },
+    ],
+    frequency: "Muda toda semana, com a pesquisa Focus, e a cada reunião do Copom",
+    screens: [interestScreen],
+  },
+
+  "neutral-rate": {
+    title: "Juro neutro",
+    topic: "interest",
+    summary: "O juro real que nem acelera nem freia a economia.",
+    lead: (
+      <>
+        O <strong>juro neutro</strong> é o juro real que mantém a economia no ritmo em que ela
+        consegue crescer sem acelerar a inflação: nem esquenta, nem esfria. Ninguém o observa;
+        economistas e o Banco Central o estimam.
+      </>
+    ),
+    keywords: ["taxa neutra", "juro real neutro", "r*", "r-estrela", "política monetária neutra"],
+    measures: (
+      <p>
+        É o patamar de referência para dizer se a política monetária aperta ou alivia: juro real
+        acima do neutro segura a economia, abaixo estimula. O Banco Central estima o neutro por
+        vários métodos, que dão resultados diferentes, e publica a mediana deles.
+      </p>
+    ),
+    reading: (
+      <p>
+        Serve de baliza, não de alvo exato. Se o juro real fica bem acima do neutro por muito tempo,
+        a inflação tende a ceder e a atividade, a esfriar. O neutro também muda: dívida pública
+        alta, por exemplo, empurra o neutro para cima.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "É uma estimativa, não um dado.",
+        text: (
+          <>
+            O Banco Central e as instituições financeiras divergem sobre o valor, e cada relatório
+            pode revisá-lo. Por isso o app não pinta o juro real de verde ou vermelho.
+          </>
+        ),
+      },
+    ],
+    related: ["real-rate", "selic", "inflation-target", "net-debt"],
+    sources: [
+      {
+        name: "Banco Central, Relatório de Inflação de junho de 2024, boxe sobre a taxa de juros real neutra",
+        url: "https://www.bcb.gov.br/content/ri/relatorioinflacao/202406/ri202406b11p.pdf",
+        backs:
+          "Que a taxa neutra é estimada por vários métodos e que as estimativas subiram depois do mínimo da pandemia.",
+      },
+    ],
+    screens: [interestScreen],
   },
 };

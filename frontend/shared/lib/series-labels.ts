@@ -18,6 +18,7 @@ export const seriesLabels: Record<SeriesId, string> = {
   inpc: "INPC",
   minimum_wage: "Salário mínimo",
   inflation_target: "Meta de inflação",
+  selic_target: "Meta Selic",
   dollar_month_end: "Dólar (fim do mês)",
   current_account_gdp: "Transações correntes",
   fdi_gdp: "Investimento direto no país",
@@ -47,4 +48,5 @@ export const seriesLabels: Record<SeriesId, string> = {
 export const datasetLabels: Record<Dataset, string> = {
   federal_debt_stock: "Estoque da dívida federal",
   focus_expectations: "Pesquisa Focus",
+  copom_meetings: "Calendário do Copom",
 };

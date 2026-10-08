@@ -6,6 +6,7 @@ import {
   GraduationCap,
   Landmark,
   type LucideIcon,
+  Percent,
   ShoppingCart,
   Telescope,
 } from "lucide-react";
@@ -149,8 +150,19 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
     ],
   },
   {
-    label: "Expectativas",
+    label: "Juros e expectativas",
     items: [
+      {
+        to: "/interest",
+        label: "Juros",
+        icon: Percent,
+        description: "Selic, Copom e juro real",
+        keywords: ["selic", "copom", "juro real", "juros", "taxa básica", "juro neutro"],
+        footer: {
+          until: { series: "selic_target", label: "Selic" },
+          sources: "Banco Central, pesquisa Focus",
+        },
+      },
       {
         to: "/focus",
         label: "Focus",

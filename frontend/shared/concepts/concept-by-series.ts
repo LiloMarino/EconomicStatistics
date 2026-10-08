@@ -17,6 +17,7 @@ export const conceptBySeries: Record<SeriesId, ConceptId> = {
   inpc: "inpc",
   minimum_wage: "minimum-wage",
   inflation_target: "inflation-target",
+  selic_target: "selic",
   dollar_month_end: "ptax",
   current_account_gdp: "current-account",
   fdi_gdp: "fdi",

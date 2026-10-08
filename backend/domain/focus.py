@@ -155,6 +155,32 @@ def annual_expectations(
     }
 
 
+def meeting_expectations(
+    expectations: Iterable[Expectation], indicator: FocusIndicator
+) -> dict[tuple[int, int], float]:
+    """A previsão de cada reunião do Copom, pelo ano e pela ordem dela no ano."""
+    return {
+        (item.target_year, item.target_period): item.median
+        for item in expectations
+        if item.indicator is indicator and item.target_kind is FocusTargetKind.MEETING
+    }
+
+
+def next_12m_expectation(
+    expectations: Iterable[Expectation], indicator: FocusIndicator
+) -> float | None:
+    """A previsão para os 12 meses à frente da pesquisa, que anda com ela."""
+    return next(
+        (
+            item.median
+            for item in expectations
+            if item.indicator is indicator
+            and item.target_kind is FocusTargetKind.NEXT_12M
+        ),
+        None,
+    )
+
+
 def forecast_years(last_real: date) -> list[int]:
     """O ano que o último dado ainda não fechou e o seguinte; com dezembro já
     publicado, os dois anos depois dele."""

@@ -8,8 +8,9 @@ from pydantic import BaseModel, TypeAdapter
 
 from backend.domain.series import Observation, SeriesSpec
 
-# O SGS recusa (406) janela de série diária maior que 10 anos
-MAX_WINDOW = timedelta(days=3650)
+# O SGS recusa (406) janela de série diária maior que 10 anos, e uma de 10 anos de dado
+# diário estoura o tempo do servidor: 5 anos respondem em segundos
+MAX_WINDOW = timedelta(days=1825)
 TIMEOUT_SECONDS = 30
 
 

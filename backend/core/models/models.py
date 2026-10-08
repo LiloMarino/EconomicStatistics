@@ -135,3 +135,15 @@ class FocusExpectation(Base):
     survey_date: Mapped[date] = mapped_column(primary_key=True)
     median: Mapped[float]
     respondents: Mapped[int]
+
+
+class CopomMeeting(Base):
+    """O calendário das reuniões do Copom: a de ordem `number` no ano, com o 1º e o 2º
+    dia. A ordem é a `R<number>/<year>` da pesquisa Focus."""
+
+    __tablename__ = "copom_meetings"
+
+    year: Mapped[int] = mapped_column(primary_key=True)
+    number: Mapped[int] = mapped_column(primary_key=True)
+    first_day: Mapped[date]
+    second_day: Mapped[date]

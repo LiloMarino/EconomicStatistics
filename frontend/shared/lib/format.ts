@@ -124,3 +124,13 @@ export function formatMonthRange(start: string, end: string, separator = " a "):
   }
   return `${formatMonth(start)}${separator}${formatMonth(end)}`;
 }
+
+/** Os dois dias de uma reunião: "2026-11-03" e "2026-11-04" viram "3 e 4/nov". */
+export function formatDays(first: string, second: string): string {
+  const firstDay = Number(first.slice(8, 10));
+  const secondDay = Number(second.slice(8, 10));
+  if (first.slice(0, 7) === second.slice(0, 7)) {
+    return `${firstDay} e ${secondDay}/${formatShortMonth(second)}`;
+  }
+  return `${firstDay}/${formatShortMonth(first)} e ${secondDay}/${formatShortMonth(second)}`;
+}

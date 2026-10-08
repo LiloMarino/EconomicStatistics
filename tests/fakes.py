@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 
 from backend.core.enum import (
     DebtHolder,
@@ -10,6 +10,7 @@ from backend.core.enum import (
     Periodicity,
     Unit,
 )
+from backend.domain.copom import Meeting
 from backend.domain.coverage import month_start, quarter_start
 from backend.domain.federal_debt import DebtHolding
 from backend.domain.focus import Expectation, week_start
@@ -17,6 +18,7 @@ from backend.domain.series import Observation, SeriesSpec
 
 FAKE_VALUES = {
     Unit.PERCENT_MONTH: 0.5,
+    Unit.PERCENT_YEAR: 15.0,
     Unit.PERCENT_GDP: 2.0,
     Unit.BRL_PER_USD: 5.0,
 }
@@ -26,8 +28,8 @@ FAKE_VALUES = {
 class FakeProvider:
     """Fonte que publica um valor por período, de `first_date` até o período de `end`:
     0,5% nas séries em % ao mês, 2% nas em % do PIB, R$ 5 no dólar e 1.000 nas
-    demais. Série trimestral publica no 1º mês de cada trimestre, e a anual ganha 3% em
-    cada janeiro."""
+    demais. Série trimestral publica no 1º mês de cada trimestre, a anual ganha 3% em
+    cada janeiro e a diária publica 15% ao ano em todos os dias."""
 
     name: str = "fake"
     offline: bool = False
@@ -45,6 +47,15 @@ class FakeProvider:
                 for year in range(max(start, spec.first_date).year, end.year + 1)
             ]
         value = FAKE_VALUES.get(spec.unit, 1000.0)
+        if spec.periodicity is Periodicity.DAILY:
+            days = (end - max(start, spec.first_date)).days
+            return [
+                Observation(
+                    ref_date=max(start, spec.first_date) + timedelta(days=offset),
+                    value=value,
+                )
+                for offset in range(days + 1)
+            ]
         quarterly = spec.periodicity is Periodicity.QUARTERLY
         first = max(start, spec.first_date)
         month = quarter_start(first) if quarterly else month_start(first)
@@ -111,4 +122,29 @@ class FakeFocusProvider:
             )
             for index, survey in enumerate(self.surveys)
             if since is None or survey >= week_start(since)
+        ]
+
+
+@dataclass
+class FakeCopomProvider:
+    """O Copom com duas reuniões por ano pedido, em março e em novembro, nos dias 16 e
+    17 e 3 e 4."""
+
+    name: str = "fake-copom"
+    offline: bool = False
+    calls: list[tuple[int, int]] = field(default_factory=list[tuple[int, int]])
+
+    def get_meetings(self, first_year: int, last_year: int) -> list[Meeting]:
+        self.calls.append((first_year, last_year))
+        if self.offline:
+            raise ConnectionError("sem rede")
+        return [
+            Meeting(
+                year=year,
+                number=number,
+                first_day=date(year, month, day),
+                second_day=date(year, month, day + 1),
+            )
+            for year in range(first_year, last_year + 1)
+            for number, (month, day) in enumerate(((3, 16), (11, 3)), start=1)
         ]

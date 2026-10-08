@@ -6,10 +6,9 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from backend.core.enum import FocusIndicator, PaceVerdict, RaiseReference, SeriesId
+from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
 from backend.core.errors import EconomicError, MissingDataError
 from backend.domain.coverage import month_start
-from backend.domain.focus import monthly_expectations, rolling_12m_forecast
 from backend.domain.inflation_target import TargetBand
 from backend.domain.pace import STEADY_BAND, verdict
 from backend.domain.rates import (
@@ -27,8 +26,8 @@ from backend.domain.seasonality import (
     month_bands,
 )
 from backend.domain.series import IPCA_GROUPS, Observation
+from backend.features.ipca_forecast import ipca_forecast
 from backend.features.target_bands import target_bands_between
-from backend.repository.focus import latest_survey
 from backend.repository.series import first_cached, last_cached, read_observations
 
 IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
@@ -382,7 +381,7 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
     chart_start = month_start(last, PACE_CHART_MONTHS - 1)
     # A previsão continua o gráfico só quando ele termina no último IPCA publicado
     forecast = (
-        _pace_forecast(session, monthly_rates(observations[SeriesId.IPCA_GENERAL]))
+        ipca_forecast(session, monthly_rates(observations[SeriesId.IPCA_GENERAL]))
         if last == period.last_available
         else None
     )
@@ -438,25 +437,6 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
             if last in rolling[series_id]
         ],
     )
-
-
-@dataclass(frozen=True, slots=True, kw_only=True)
-class _ExpectedRates:
-    survey_date: date
-    points: list[MonthlyRate]
-
-
-def _pace_forecast(session: Session, real: list[MonthlyRate]) -> _ExpectedRates | None:
-    """O 12 meses esperado depois do último mês real, compondo os meses reais com o
-    IPCA mensal da última pesquisa Focus."""
-    survey = latest_survey(session, (FocusIndicator.IPCA,))
-    if survey is None:
-        return None
-    survey_date, expectations = survey
-    points = rolling_12m_forecast(
-        real, monthly_expectations(expectations, FocusIndicator.IPCA)
-    )
-    return _ExpectedRates(survey_date=survey_date, points=points) if points else None
 
 
 # As janelas que a tela compara: 1, 3 e 6 meses antes do fim
