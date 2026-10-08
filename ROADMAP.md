@@ -763,6 +763,7 @@ Os conceitos do Aprender entram junto: pesquisa Focus, mediana, expectativa desa
 - 2003 e 2004 tiveram a meta revista depois de fixada, e a série já traz a meta ajustada (4% e 5,5%);
 - depois do último ano publicado, a meta contínua (desde 2025) segue valendo, o que dá faixa à previsão do Focus nos anos seguintes;
 - o `pace` devolve a faixa (`band`, com meta, piso e teto) em cada ponto e no fim do período;
+- o botão "Meta" no cabeçalho do gráfico mostra e esconde a meta e os limites (`?target=hide`), porque os tracejados disputam espaço com os rótulos do ritmo;
 - o cartão do resumo diz se o 12 meses está dentro da meta, acima do teto ou abaixo do piso;
 - a página do conceito de meta de inflação ganhou a tolerância de cada período, com o histórico de metas do BCB como fonte.
 
