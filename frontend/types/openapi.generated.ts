@@ -176,6 +176,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/focus/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Report */
+        get: operations["report_api_focus_report_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/focus/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** History */
+        get: operations["history_api_focus_history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -352,6 +386,50 @@ export interface components {
             /** Fdi */
             fdi: number;
         };
+        /**
+         * FocusDirection
+         * @description Para onde a previsão andou de uma pesquisa semanal para a seguinte.
+         * @enum {string}
+         */
+        FocusDirection: "up" | "down" | "stable";
+        /**
+         * FocusHistoryDTO
+         * @description A previsão para `year` em cada pesquisa semanal, na convenção do relatório.
+         *     `streak_start` é o valor de onde a sequência da última semana saiu; `band` é a
+         *     meta do ano, só no IPCA.
+         */
+        FocusHistoryDTO: {
+            indicator: components["schemas"]["FocusIndicator"];
+            unit: components["schemas"]["Unit"];
+            /** Year */
+            year: number;
+            /** Years */
+            years: number[];
+            /** Points */
+            points: components["schemas"]["HistoryPointDTO"][];
+            direction: components["schemas"]["FocusDirection"] | null;
+            /** Streak Weeks */
+            streak_weeks: number | null;
+            /** Streak Start */
+            streak_start: number | null;
+            band: components["schemas"]["TargetBandDTO"] | null;
+        };
+        /**
+         * FocusIndicator
+         * @description Os indicadores que a pesquisa Focus pergunta hoje.
+         * @enum {string}
+         */
+        FocusIndicator: "ipca" | "ipca_administered" | "ipca_free" | "ipca_services" | "ipca_industrial_goods" | "ipca_food_at_home" | "exchange_rate" | "igpm" | "unemployment" | "selic" | "gdp" | "gdp_agriculture" | "gdp_industry" | "gdp_services" | "gdp_household_consumption" | "gdp_government_consumption" | "gdp_investment" | "gdp_exports" | "gdp_imports" | "primary_balance" | "nominal_balance" | "net_debt" | "gross_debt" | "current_account" | "trade_balance" | "exports" | "imports" | "fdi";
+        /** FocusReportDTO */
+        FocusReportDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Rows */
+            rows: components["schemas"]["ReportRowDTO"][];
+        };
         /** GdpShareDTO */
         GdpShareDTO: {
             /**
@@ -418,6 +496,18 @@ export interface components {
             /** Bands */
             bands: components["schemas"]["MonthBandDTO"][];
             largest_deviation: components["schemas"]["DeviationDTO"] | null;
+        };
+        /** HistoryPointDTO */
+        HistoryPointDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Value */
+            value: number;
+            /** Respondents */
+            respondents: number;
         };
         /**
          * Indexer
@@ -653,6 +743,30 @@ export interface components {
             datasets_failed: components["schemas"]["Dataset"][];
         };
         /**
+         * ReportRowDTO
+         * @description A mediana do Focus para o ano hoje, uma semana e quatro semanas antes. O que o
+         *     Focus publica em % vem em fração (0.0501 é 5,01%), o câmbio em R$/US$ e as contas
+         *     externas em US$ bilhões. Primário e nominal seguem o sinal do Focus: negativo é
+         *     déficit. `streak_weeks` conta as semanas seguidas na `direction` da última.
+         */
+        ReportRowDTO: {
+            indicator: components["schemas"]["FocusIndicator"];
+            unit: components["schemas"]["Unit"];
+            /** Year */
+            year: number;
+            /** Today */
+            today: number;
+            /** Week Before */
+            week_before: number | null;
+            /** Weeks Before */
+            weeks_before: number | null;
+            direction: components["schemas"]["FocusDirection"] | null;
+            /** Streak Weeks */
+            streak_weeks: number | null;
+            /** Respondents */
+            respondents: number;
+        };
+        /**
          * ReservesDTO
          * @description O estoque do fim de cada mês em US$ milhões, e a fração do PIB do último mês
          *     que tem o PIB de 12 meses.
@@ -738,6 +852,11 @@ export interface components {
             /** Ceiling */
             ceiling: number;
         };
+        /**
+         * Unit
+         * @enum {string}
+         */
+        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "months";
         /**
          * YearCompositionDTO
          * @description A fração da dívida federal em mercado de cada indexador no fim do mês.
@@ -1094,6 +1213,85 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FederalDebtDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    report_api_focus_report_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FocusReportDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    history_api_focus_history_get: {
+        parameters: {
+            query: {
+                indicator: components["schemas"]["FocusIndicator"];
+                year?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FocusHistoryDTO"];
                 };
             };
             /** @description Unprocessable Content */

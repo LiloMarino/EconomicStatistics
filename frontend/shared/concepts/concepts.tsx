@@ -8,6 +8,22 @@ const purchasingPowerScreen = { to: "/purchasing-power", label: "Poder de compra
 const externalScreen = { to: "/external-sector", label: "Setor externo" };
 const deficitScreen = { to: "/deficit", label: "Déficit" };
 const debtScreen = { to: "/debt", label: "Dívida" };
+const focusScreen = { to: "/focus", label: "Focus" };
+
+const focusFrequency = "Semanal: as previsões da semana saem na segunda seguinte";
+
+const focusPage = {
+  name: "Banco Central, Focus – Relatório de Mercado",
+  url: "https://www.bcb.gov.br/publicacoes/focus",
+};
+const focusReport = {
+  name: "Banco Central, Focus – Relatório de Mercado de 2 de outubro de 2026",
+  url: "https://www.bcb.gov.br/content/focus/focus/R20261002.pdf",
+};
+const focusData = {
+  name: "Banco Central, dados abertos das expectativas de mercado",
+  url: "https://dadosabertos.bcb.gov.br/dataset/expectativas-mercado",
+};
 
 const ipcaFrequency = "Mensal, por volta do dia 10 do mês seguinte";
 const externalNoteFrequency = "Mensal, perto do fim do mês seguinte";
@@ -2358,5 +2374,182 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: fiscalNoteFrequency,
     screens: [debtScreen],
+  },
+
+  "focus-survey": {
+    title: "Pesquisa Focus",
+    abbr: "Focus",
+    topic: "expectations",
+    summary:
+      "O que bancos, gestoras e consultorias esperam para a economia, perguntado pelo Banco Central.",
+    lead: (
+      <>
+        A pesquisa Focus é o levantamento em que o Banco Central reúne as previsões de cerca de 140
+        instituições do mercado (bancos, gestoras, consultorias) para inflação, juros, câmbio, PIB e
+        contas públicas. O número publicado é a mediana dessas previsões.
+      </>
+    ),
+    keywords: ["focus", "expectativas", "previsão", "mercado", "relatório de mercado", "projeção"],
+    measures: (
+      <p>
+        Cada instituição informa ao Banco Central o que espera para cada indicador e pode atualizar
+        a previsão a qualquer dia. Toda segunda-feira sai o Relatório de Mercado com a mediana das
+        previsões informadas nos 30 dias até a sexta anterior. A pesquisa também publica a mediana
+        dos últimos 5 dias úteis, que reage mais rápido mas junta menos respostas.
+      </p>
+    ),
+    example: {
+      title: "Com a pesquisa de 2 de outubro de 2026",
+      content: (
+        <p>
+          A mediana do IPCA de 2026 foi <strong>5,01%</strong>, com 144 instituições respondendo;
+          uma semana antes era 4,99%, e quatro semanas antes, 5,00%. A da Selic no fim de 2026 foi
+          13,50%, com 139 respostas.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        A pesquisa diz o que o mercado espera, não o que vai acontecer. O mais útil é a direção:
+        previsão de inflação subindo semana após semana mostra que o mercado vê mais pressão de
+        preços do que via antes.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A previsão erra, e muito.",
+        text: (
+          <>
+            Em janeiro de 2022, a mediana para o IPCA de 2026 era 3,00%, com 19 instituições
+            respondendo. Na pesquisa de 2 de outubro de 2026, com o ano quase todo já medido, era
+            5,01%.
+          </>
+        ),
+      },
+      {
+        title: "O sinal das contas públicas é outro.",
+        text: (
+          <>
+            O Focus pergunta o resultado do governo, em que negativo é déficit. As telas de contas
+            públicas usam a necessidade de financiamento, em que positivo é déficit.
+          </>
+        ),
+      },
+    ],
+    related: ["median", "unanchored-expectations", "inflation-target"],
+    sources: [
+      {
+        ...focusPage,
+        backs: "O que a pesquisa é, quem responde e a publicação do relatório toda segunda-feira.",
+      },
+      {
+        ...focusReport,
+        backs:
+          "As medianas do IPCA de 2026 (5,01%, 4,99% e 5,00%) e da Selic de fim de 2026 (13,50%), com o número de respondentes nos 30 dias e nos 5 dias úteis.",
+      },
+      {
+        ...focusData,
+        backs:
+          "A previsão de cada pesquisa desde 1999, incluindo os 3,00% para o IPCA de 2026 em janeiro de 2022.",
+      },
+    ],
+    frequency: focusFrequency,
+    screens: [focusScreen],
+  },
+
+  median: {
+    title: "Mediana",
+    topic: "expectations",
+    summary: "O valor do meio de uma lista ordenada: metade fica acima, metade abaixo.",
+    lead: (
+      <>
+        A mediana é o valor do meio quando as respostas são postas em ordem: metade das instituições
+        espera mais que ela, metade espera menos. Uma previsão muito fora da curva não a puxa, como
+        puxaria a média.
+      </>
+    ),
+    keywords: ["mediana", "média", "valor do meio", "estatística"],
+    measures: (
+      <p>
+        Com as previsões em ordem, a mediana é a do meio; com um número par delas, é a média das
+        duas do meio. Ela diz o que a instituição típica espera.
+      </p>
+    ),
+    example: {
+      title: "Cinco previsões de IPCA",
+      content: (
+        <p>
+          Se cinco instituições preveem 4,8%, 4,9%, 5,0%, 5,1% e 7,0%, a mediana é{" "}
+          <strong>5,0%</strong>, a do meio. A média é 5,36%: a previsão de 7,0% sozinha a puxou para
+          cima. Na pesquisa de 2 de outubro de 2026, as 144 previsões do IPCA de 2026 iam de 4,34% a
+          5,90%, com mediana de 5,01% e média de 5,00%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Mediana e média perto uma da outra quer dizer que as previsões estão bem distribuídas em
+        volta do centro. Quando se afastam, há instituições muito longe das outras de um lado só.
+      </p>
+    ),
+    related: ["focus-survey"],
+    sources: [
+      {
+        ...focusData,
+        backs:
+          "A mediana, a média, a menor e a maior previsão do IPCA de 2026 na pesquisa de 2 de outubro de 2026.",
+      },
+    ],
+    screens: [focusScreen],
+  },
+
+  "unanchored-expectations": {
+    title: "Expectativa desancorada",
+    topic: "expectations",
+    summary: "Quando o mercado espera inflação longe da meta, mesmo para daqui a alguns anos.",
+    lead: (
+      <>
+        A expectativa está desancorada quando o mercado espera inflação longe da meta não só para
+        este ano, mas também para os seguintes. É sinal de que ele duvida que o Banco Central vá
+        trazer a inflação de volta ao centro.
+      </>
+    ),
+    keywords: ["desancoragem", "ancoragem", "expectativas", "credibilidade", "meta"],
+    measures: (
+      <p>
+        Este ano pode estar fora da meta por um choque, como uma seca que encarece alimentos. O que
+        mede a confiança no Banco Central é a previsão para dois ou três anos à frente, quando o
+        choque já passou e a política de juros já teve tempo de agir.
+      </p>
+    ),
+    example: {
+      title: "Com a pesquisa de 2 de outubro de 2026",
+      content: (
+        <p>
+          Com a meta em 3%, a mediana do IPCA era 5,01% para 2026, 4,30% para 2027, 3,80% para 2028
+          e 3,51% para 2029. Mesmo três anos à frente, o mercado esperava inflação acima do centro.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Ancorada é a previsão dos anos à frente perto da meta. Quanto mais longe, mais alto o juro
+        que o Banco Central precisa manter para convencer o mercado, porque quem espera inflação
+        alta já reajusta preços e salários contando com ela.
+      </p>
+    ),
+    related: ["focus-survey", "inflation-target"],
+    sources: [
+      {
+        ...focusReport,
+        backs: "A mediana do IPCA de 2026 a 2029 (5,01%, 4,30%, 3,80% e 3,51%).",
+      },
+      {
+        ...bcbTarget,
+        backs: "A meta contínua de 3% perseguida pelo Banco Central.",
+      },
+    ],
+    frequency: focusFrequency,
+    screens: [focusScreen, inflationScreen],
   },
 };

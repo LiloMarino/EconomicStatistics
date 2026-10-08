@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
 from backend.core.errors import EconomicError, MissingDataError
 from backend.domain.coverage import month_start
-from backend.domain.inflation_target import TargetBand, target_bands
+from backend.domain.inflation_target import TargetBand
 from backend.domain.pace import STEADY_BAND, verdict
 from backend.domain.rates import (
     MonthlyRate,
@@ -26,6 +26,7 @@ from backend.domain.seasonality import (
     month_bands,
 )
 from backend.domain.series import IPCA_GROUPS, Observation
+from backend.features.target_bands import target_bands_between
 from backend.repository.series import first_cached, last_cached, read_observations
 
 IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
@@ -430,16 +431,6 @@ def _vs_year_before(monthly: dict[date, float], ref_date: date) -> MonthVsYearBe
         year_before=year_before,
         difference=monthly[ref_date] - year_before,
     )
-
-
-def target_bands_between(
-    session: Session, first: int, last: int
-) -> dict[int, TargetBand]:
-    """A faixa da meta de cada ano de `first` a `last`, inclusive."""
-    targets = read_observations(
-        session, (SeriesId.INFLATION_TARGET,), date(first, 1, 1), date(last, 1, 1)
-    )[SeriesId.INFLATION_TARGET]
-    return target_bands(targets, range(first, last + 1))
 
 
 def seasonality(session: Session, year: int | None) -> Seasonality:

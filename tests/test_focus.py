@@ -6,6 +6,7 @@ import json
 import urllib.parse
 from datetime import date, datetime, timedelta
 
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
@@ -14,10 +15,17 @@ from backend.adapters.bcb_focus_provider import (
     FocusRow,
     to_expectations,
 )
-from backend.core.enum import FocusIndicator, FocusTargetKind
-from backend.domain.focus import expected_survey_week, survey_overdue
+from backend.core.enum import FocusDirection, FocusIndicator, FocusTargetKind, SeriesId
+from backend.domain.focus import (
+    Expectation,
+    expected_survey_week,
+    survey_overdue,
+    weekly_streak,
+)
+from backend.domain.series import Observation
 from backend.features.focus.refresh import refresh_focus
-from backend.repository.focus import last_survey_date
+from backend.repository.focus import last_survey_date, upsert_expectations
+from backend.repository.series import upsert_observations
 from tests.fakes import FakeFocusProvider
 
 # Terça, 6/out/2026: a pesquisa da semana de 28/set a 2/out já devia ter saído
@@ -205,3 +213,94 @@ def test_refresh_endpoint_reports_the_focus(api: TestClient) -> None:
     body = api.post("/api/series/refresh").json()
 
     assert "focus_expectations" in body["datasets_updated"]
+
+
+def _annual(
+    indicator: FocusIndicator, year: int, medians: list[float]
+) -> list[Expectation]:
+    """Uma pesquisa por sexta, terminando em 2/out/2026."""
+    last = date(2026, 10, 2)
+    return [
+        Expectation(
+            indicator=indicator,
+            target_kind=FocusTargetKind.YEAR,
+            target_year=year,
+            target_period=0,
+            survey_date=last - timedelta(weeks=len(medians) - 1 - index),
+            median=median,
+            respondents=140,
+        )
+        for index, median in enumerate(medians)
+    ]
+
+
+def test_streak_counts_weeks_in_the_same_direction() -> None:
+    """Como no relatório de 2/out/2026: o IPCA de 2026 subiu 3 semanas seguidas, de
+    4,90 para 5,01, e a mudança menor que 0,01 conta como estabilidade."""
+    streak = weekly_streak([4.95, 4.90, 4.92, 4.9915, 5.0129])
+    stable = weekly_streak([13.75, 13.5, 13.5, 13.504])
+
+    assert streak is not None
+    assert (streak.direction, streak.weeks, streak.start) == (
+        FocusDirection.UP,
+        3,
+        4.90,
+    )
+    assert stable is not None
+    assert (stable.direction, stable.weeks) == (FocusDirection.STABLE, 2)
+
+
+def test_report_compares_with_one_and_four_weeks_before(
+    api: TestClient, session: Session
+) -> None:
+    """A linha do IPCA de 2026 traz hoje (5,01%), uma semana antes (4,99%) e quatro
+    semanas antes (5,00%), em fração; o primário mantém o sinal do Focus."""
+    upsert_expectations(
+        session,
+        [
+            *_annual(FocusIndicator.IPCA, 2026, [5.0, 4.90, 4.92, 4.9915, 5.0129]),
+            *_annual(FocusIndicator.PRIMARY_BALANCE, 2026, [-0.5, -0.41]),
+        ],
+    )
+    session.commit()
+
+    body = api.get("/api/focus/report").json()
+
+    ipca = next(row for row in body["rows"] if row["indicator"] == "ipca")
+    primary = next(row for row in body["rows"] if row["indicator"] == "primary_balance")
+    assert body["survey_date"] == "2026-10-02"
+    assert (ipca["today"], ipca["week_before"], ipca["weeks_before"]) == (
+        pytest.approx(0.050129),
+        pytest.approx(0.049915),
+        pytest.approx(0.05),
+    )
+    assert (ipca["direction"], ipca["streak_weeks"]) == ("up", 3)
+    assert primary["today"] == pytest.approx(-0.0041)
+    assert primary["weeks_before"] is None
+
+
+def test_history_brings_the_target_of_the_year(
+    api: TestClient, session: Session
+) -> None:
+    """O histórico do IPCA de 2027 tem uma previsão por semana e a meta contínua de
+    3%, que segue valendo depois do último ano que a série publicou."""
+    upsert_expectations(session, _annual(FocusIndicator.IPCA, 2027, [4.3, 4.31, 4.3]))
+    upsert_observations(
+        session,
+        SeriesId.INFLATION_TARGET,
+        [Observation(ref_date=date(2026, 1, 1), value=3.0)],
+    )
+    session.commit()
+
+    body = api.get(
+        "/api/focus/history", params={"indicator": "ipca", "year": 2027}
+    ).json()
+
+    assert [point["value"] for point in body["points"]] == [
+        pytest.approx(0.043),
+        pytest.approx(0.0431),
+        pytest.approx(0.043),
+    ]
+    assert body["years"] == [2027]
+    assert body["band"]["ceiling"] == pytest.approx(0.045)
+    assert (body["direction"], body["streak_weeks"]) == ("down", 1)

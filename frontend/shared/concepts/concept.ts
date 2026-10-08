@@ -33,12 +33,15 @@ export const conceptIds = [
   "rollover",
   "indexer",
   "average-maturity",
+  "focus-survey",
+  "median",
+  "unanchored-expectations",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */
 export type ConceptId = (typeof conceptIds)[number];
 
-export const topics = ["inflation", "public-accounts", "external"] as const;
+export const topics = ["inflation", "public-accounts", "external", "expectations"] as const;
 
 export type Topic = (typeof topics)[number];
 
@@ -46,6 +49,7 @@ export const topicLabels: Record<Topic, string> = {
   inflation: "Inflação",
   "public-accounts": "Contas públicas",
   external: "Setor externo",
+  expectations: "Expectativas",
 };
 
 export function isTopic(value: string): value is Topic {

@@ -3,11 +3,13 @@ indicador, pesquisa a pesquisa."""
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Protocol
 
-from backend.core.enum import FocusIndicator, FocusTargetKind
+from backend.core.enum import FocusDirection, FocusIndicator, FocusTargetKind, Unit
+from backend.domain.rates import PERCENT
 
 # Os dados de uma semana de pesquisa saem juntos na segunda-feira seguinte, com o
 # relatório; a terça dá a folga
@@ -54,3 +56,69 @@ def survey_overdue(last_survey: date | None, today: date) -> bool:
     """A pesquisa da semana esperada pode ser de qualquer dia útil dela: a de sexta,
     ou a de antes quando a sexta é feriado."""
     return last_survey is None or last_survey < expected_survey_week(today)
+
+
+# Os indicadores do relatório Focus, na ordem da tabela dele, e a unidade em que o
+# Focus publica cada um
+REPORT_UNITS: dict[FocusIndicator, Unit] = {
+    FocusIndicator.IPCA: Unit.PERCENT_YEAR,
+    FocusIndicator.GDP: Unit.PERCENT_YEAR,
+    FocusIndicator.EXCHANGE_RATE: Unit.BRL_PER_USD,
+    FocusIndicator.SELIC: Unit.PERCENT_YEAR,
+    FocusIndicator.IGPM: Unit.PERCENT_YEAR,
+    FocusIndicator.IPCA_ADMINISTERED: Unit.PERCENT_YEAR,
+    FocusIndicator.CURRENT_ACCOUNT: Unit.USD_BILLION,
+    FocusIndicator.TRADE_BALANCE: Unit.USD_BILLION,
+    FocusIndicator.FDI: Unit.USD_BILLION,
+    FocusIndicator.NET_DEBT: Unit.PERCENT_GDP,
+    FocusIndicator.PRIMARY_BALANCE: Unit.PERCENT_GDP,
+    FocusIndicator.NOMINAL_BALANCE: Unit.PERCENT_GDP,
+}
+# A tabela mostra o ano da pesquisa e os 3 seguintes, como o relatório
+REPORT_YEARS = 4
+# O relatório compara com a pesquisa de 4 semanas antes
+WEEKS_BEFORE = 4
+# O relatório compara as medianas com 2 casas, como as publica
+REPORT_DECIMALS = 2
+
+_PERCENT_UNITS = {Unit.PERCENT_YEAR, Unit.PERCENT_MONTH, Unit.PERCENT_GDP}
+
+
+def to_fraction(median: float, unit: Unit) -> float:
+    """O valor na convenção da API: o que o Focus publica em % vira fração."""
+    return median / PERCENT if unit in _PERCENT_UNITS else median
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Streak:
+    """Há quantas semanas seguidas a previsão anda na mesma direção, e o valor de
+    onde ela saiu, na unidade do Focus."""
+
+    direction: FocusDirection
+    weeks: int
+    start: float
+
+
+def _direction(before: float, after: float) -> FocusDirection:
+    change = round(after, REPORT_DECIMALS) - round(before, REPORT_DECIMALS)
+    if round(change, REPORT_DECIMALS) > 0:
+        return FocusDirection.UP
+    if round(change, REPORT_DECIMALS) < 0:
+        return FocusDirection.DOWN
+    return FocusDirection.STABLE
+
+
+def weekly_streak(medians: Sequence[float]) -> Streak | None:
+    """A direção da última semana e há quantas semanas ela se repete, como os
+    parênteses do relatório Focus: subir 3 semanas seguidas é "▲ (3)". Precisa de duas
+    pesquisas."""
+    if len(medians) < 2:
+        return None
+    direction = _direction(medians[-2], medians[-1])
+    weeks = 1
+    while (
+        weeks < len(medians) - 1
+        and _direction(medians[-weeks - 2], medians[-weeks - 1]) is direction
+    ):
+        weeks += 1
+    return Streak(direction=direction, weeks=weeks, start=medians[-weeks - 1])

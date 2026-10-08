@@ -40,6 +40,13 @@ const month = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
 });
 
+const day = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
 const monthName = new Intl.DateTimeFormat("pt-BR", { month: "long", timeZone: "UTC" });
 
 const shortMonthName = new Intl.DateTimeFormat("pt-BR", { month: "short", timeZone: "UTC" });
@@ -85,6 +92,11 @@ export function formatUsdBillions(millions: number): string {
 // A data chega como "AAAA-MM-DD", que o Date lê em UTC
 export function formatMonth(value: string): string {
   return month.format(new Date(value)).replace(". de ", "/").replace(" de ", "/");
+}
+
+/** "02/10/2026" */
+export function formatDay(value: string): string {
+  return day.format(new Date(value));
 }
 
 /** O trimestre chega datado no 1º mês dele: "2026-04-01" vira "2º tri/2026". */

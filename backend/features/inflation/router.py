@@ -13,6 +13,7 @@ from backend.features.inflation.service import (
     purchasing_power,
     seasonality,
 )
+from backend.features.target_band_dto import TargetBandDTO
 
 router = APIRouter(prefix="/api/inflation", tags=["inflation"])
 
@@ -75,14 +76,6 @@ class PurchasingPowerDTO(BaseDTO):
     reference_raise: float
     references: list[ReferenceRaiseDTO]
     groups: list[GroupPurchasingPowerDTO]
-
-
-class TargetBandDTO(BaseDTO):
-    """A meta de inflação do ano e os limites do intervalo de tolerância, em fração."""
-
-    target: float
-    floor: float
-    ceiling: float
 
 
 class RollingPointDTO(BaseDTO):

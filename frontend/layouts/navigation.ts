@@ -6,6 +6,7 @@ import {
   Landmark,
   type LucideIcon,
   ShoppingCart,
+  Telescope,
 } from "lucide-react";
 
 export interface NavItem {
@@ -94,6 +95,26 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           "investimento direto",
           "transações correntes",
           "posição internacional",
+        ],
+      },
+    ],
+  },
+  {
+    label: "Expectativas",
+    items: [
+      {
+        to: "/focus",
+        label: "Focus",
+        icon: Telescope,
+        description: "O que o mercado espera e como a previsão mudou",
+        keywords: [
+          "focus",
+          "expectativas",
+          "previsão",
+          "mercado",
+          "relatório de mercado",
+          "projeção",
+          "mediana",
         ],
       },
     ],

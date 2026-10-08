@@ -8,6 +8,7 @@ import { DebtPage } from "@/pages/debt";
 import { DeficitPage } from "@/pages/deficit";
 import { ErrorPage } from "@/pages/error";
 import { ExternalSectorPage } from "@/pages/external-sector";
+import { FocusPage } from "@/pages/focus";
 import { InflationPage } from "@/pages/inflation";
 import { LearnPage } from "@/pages/learn";
 import { PurchasingPowerPage } from "@/pages/purchasing-power";
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="deficit" element={<DeficitPage />} />
             <Route path="debt" element={<DebtPage />} />
             <Route path="external-sector" element={<ExternalSectorPage />} />
+            <Route path="focus" element={<FocusPage />} />
             <Route path="learn" element={<LearnPage />} />
             <Route path="learn/:conceptId" element={<ConceptPage />} />
             <Route path="*" element={<ErrorPage />} />

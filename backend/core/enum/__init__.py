@@ -1,5 +1,6 @@
 from backend.core.enum.dataset import Dataset
 from backend.core.enum.debt_holder import DebtHolder
+from backend.core.enum.focus_direction import FocusDirection
 from backend.core.enum.focus_indicator import FocusIndicator
 from backend.core.enum.focus_target_kind import FocusTargetKind
 from backend.core.enum.indexer import Indexer
@@ -13,6 +14,7 @@ from backend.core.enum.unit import Unit
 __all__ = [
     "Dataset",
     "DebtHolder",
+    "FocusDirection",
     "FocusIndicator",
     "FocusTargetKind",
     "Indexer",

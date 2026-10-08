@@ -7,6 +7,7 @@ class Unit(StrEnum):
     BRL = "brl"
     BRL_PER_USD = "brl_per_usd"
     USD_MILLION = "usd_million"
+    USD_BILLION = "usd_billion"
     PERCENT_GDP = "percent_gdp"
     BRL_MILLION = "brl_million"
     MONTHS = "months"

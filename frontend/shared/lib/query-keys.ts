@@ -12,6 +12,8 @@ export const queryKeys = {
   deficit: ["series", "deficit"] as const,
   debt: ["series", "debt"] as const,
   federalDebt: ["series", "federal-debt"] as const,
+  focusReport: ["series", "focus-report"] as const,
+  focusHistory: ["series", "focus-history"] as const,
 };
 
 export function invalidateKeys(queryClient: QueryClient, keys: readonly QueryKey[]): Promise<void> {

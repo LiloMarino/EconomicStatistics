@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from backend.features.debt.router import router as debt_router
 from backend.features.deficit.router import router as deficit_router
 from backend.features.external_sector.router import router as external_sector_router
+from backend.features.focus.router import router as focus_router
 from backend.features.inflation.router import router as inflation_router
 from backend.features.series.router import router as series_router
 
@@ -17,3 +18,4 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(external_sector_router)
     app.include_router(deficit_router)
     app.include_router(debt_router)
+    app.include_router(focus_router)
