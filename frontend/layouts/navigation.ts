@@ -9,6 +9,8 @@ import {
   Telescope,
 } from "lucide-react";
 
+import type { SeriesId } from "@/shared/lib/series-labels";
+
 export interface NavItem {
   to: string;
   label: string;
@@ -17,7 +19,16 @@ export interface NavItem {
   description: string;
   /** Termos que levam a esta tela na busca, além do rótulo. */
   keywords: string[];
+  /** O pé da barra lateral com a tela aberta: a série que diz até quando há dado, com o
+  nome curto dela, e quem publica. */
+  footer?: { until?: { series: SeriesId; label: string }; sources: string };
 }
+
+/** O pé da barra lateral fora das telas de dado. */
+export const defaultFooter: NonNullable<NavItem["footer"]> = {
+  until: { series: "ipca_general", label: "IPCA" },
+  sources: "IBGE e Banco Central",
+};
 
 // Paths em inglês acompanham o código; o rótulo é o que aparece pro usuário
 export const navGroups: { label: string; items: NavItem[] }[] = [
@@ -30,6 +41,7 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         icon: ChartColumn,
         description: "IPCA por grupo, ritmo e mês a mês",
         keywords: ["inflação", "ipca", "grupo", "acumulado", "12 meses", "ritmo", "sazonalidade"],
+        footer: { until: { series: "ipca_general", label: "IPCA" }, sources: "IBGE" },
       },
       {
         to: "/purchasing-power",
@@ -37,6 +49,10 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         icon: ShoppingCart,
         description: "Quanto um reajuste compra de cada grupo",
         keywords: ["salário mínimo", "reajuste", "inpc", "ipca", "salário"],
+        footer: {
+          until: { series: "ipca_general", label: "IPCA" },
+          sources: "IBGE e Banco Central",
+        },
       },
     ],
   },
@@ -57,6 +73,10 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           "nfsp",
           "resultado fiscal",
         ],
+        footer: {
+          until: { series: "nominal_deficit", label: "Resultado fiscal" },
+          sources: "Banco Central",
+        },
       },
       {
         to: "/debt",
@@ -75,6 +95,10 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           "rolagem",
           "indexador",
         ],
+        footer: {
+          until: { series: "net_debt", label: "Dívida líquida" },
+          sources: "Banco Central e Tesouro Nacional",
+        },
       },
     ],
   },
@@ -96,6 +120,10 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           "transações correntes",
           "posição internacional",
         ],
+        footer: {
+          until: { series: "dollar_month_end", label: "Dólar" },
+          sources: "Banco Central",
+        },
       },
     ],
   },
@@ -116,6 +144,7 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           "projeção",
           "mediana",
         ],
+        footer: { sources: "Banco Central, pesquisa Focus" },
       },
     ],
   },

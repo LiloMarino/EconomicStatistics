@@ -100,6 +100,25 @@ export function CommandSearch() {
           <CommandList>
             <CommandEmpty>Nada com "{search}". Tente outra palavra.</CommandEmpty>
 
+            {/* Telas */}
+            <CommandGroup heading="Telas">
+              {screens.map(({ to, label, icon: Icon, description, keywords }) => (
+                <CommandItem
+                  key={to}
+                  value={`tela ${to}`}
+                  keywords={[label, description, ...keywords]}
+                  onSelect={() => go(to)}
+                >
+                  <ItemIcon icon={Icon} />
+                  <span className="flex min-w-0 flex-col">
+                    <span className="font-semibold">{label}</span>
+                    <span className="text-small text-muted-foreground truncate">{description}</span>
+                  </span>
+                  <CommandShortcut>Tela</CommandShortcut>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+
             {/* Conceitos */}
             <CommandGroup
               heading={search.trim() ? "Conceitos em Aprender" : "Conceitos mais buscados"}
@@ -152,25 +171,6 @@ export function CommandSearch() {
                 })}
               </CommandGroup>
             )}
-
-            {/* Telas */}
-            <CommandGroup heading="Telas">
-              {screens.map(({ to, label, icon: Icon, description, keywords }) => (
-                <CommandItem
-                  key={to}
-                  value={`tela ${to}`}
-                  keywords={[label, description, ...keywords]}
-                  onSelect={() => go(to)}
-                >
-                  <ItemIcon icon={Icon} />
-                  <span className="flex min-w-0 flex-col">
-                    <span className="font-semibold">{label}</span>
-                    <span className="text-small text-muted-foreground truncate">{description}</span>
-                  </span>
-                  <CommandShortcut>Tela</CommandShortcut>
-                </CommandItem>
-              ))}
-            </CommandGroup>
           </CommandList>
 
           {/* Atalhos */}

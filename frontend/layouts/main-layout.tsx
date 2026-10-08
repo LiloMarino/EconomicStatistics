@@ -6,7 +6,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useRefreshSeries } from "@/features/series/use-refresh-series";
 import { useSeriesStatus } from "@/shared/hooks/use-series-status";
 import { CommandSearch } from "@/layouts/command-search";
-import { isActive, navGroups } from "@/layouts/navigation";
+import { defaultFooter, isActive, navGroups } from "@/layouts/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
   Sidebar,
@@ -71,20 +71,26 @@ function ThemeSwitch() {
   );
 }
 
-function DataUntil() {
+/** Até quando há dado na tela aberta, e quem o publica. */
+function DataUntil({ pathname }: { pathname: string }) {
   const { data } = useSeriesStatus();
-  const ipca = data?.find((item) => item.series_id === "ipca_general")?.last_ref_date;
+  const { until, sources } =
+    navGroups.flatMap((group) => group.items).find((item) => isActive(item.to, pathname))?.footer ??
+    defaultFooter;
+  const last = until && data?.find((item) => item.series_id === until.series)?.last_ref_date;
 
   return (
     <div className="text-caption text-muted-foreground flex flex-col gap-1 px-3 group-data-[collapsible=icon]:hidden">
-      {ipca ? (
-        <span>
-          IPCA até <strong className="text-foreground font-semibold">{formatMonth(ipca)}</strong>
-        </span>
-      ) : (
-        <span>Buscando os dados…</span>
-      )}
-      <span>IBGE e Banco Central</span>
+      {until &&
+        (last ? (
+          <span>
+            {until.label} até{" "}
+            <strong className="text-foreground font-semibold">{formatMonth(last)}</strong>
+          </span>
+        ) : (
+          <span>Buscando os dados…</span>
+        ))}
+      <span>{sources}</span>
     </div>
   );
 }
@@ -156,7 +162,7 @@ export function MainLayout() {
 
           {/* Até quando há dado e tema */}
           <SidebarFooter className="gap-3 px-4 pb-6">
-            <DataUntil />
+            <DataUntil pathname={pathname} />
             <ThemeSwitch />
           </SidebarFooter>
         </Sidebar>

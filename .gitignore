@@ -34,3 +34,6 @@ Thumbs.db
 
 # Build do front servido pelo backend
 backend/static/
+
+# Troca de arquivos com o Cowork
+.claude-tmp/
