@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-07):** a D4 ganhou a regra das fontes no Aprender: toda página cita a fonte oficial de cada fato.
+> **Última mudança (2026-10-08):** revisão das features em aberto. Entrou a N7 (como os números se ligam) e a D7 (diagramas de mecanismo em React Flow). A N1 passou a tomar a página de estatísticas do BCB como mapa de cobertura, e a D2 ganhou a tabela própria do Focus.
 
 ---
 
@@ -42,8 +42,29 @@ O app junta as fontes, faz as contas compostas e explica cada número no ponto d
 **N1. Acompanhar a economia brasileira num lugar só ⭐**
 Ver inflação, juros, dívida, déficit, câmbio, atividade e expectativas atualizados, sem caçar cada número em BCB, IBGE e Tesouro: "as métricas estão todas fragmentadas". Cada número diz até que data é real.
 
+**O mapa de cobertura** é a [página de estatísticas do BCB](https://www.bcb.gov.br/estatisticas), que reúne os gráficos que eu acompanho, junto com as de [estatísticas fiscais](https://www.bcb.gov.br/estatisticas/estatisticasfiscais), [Focus](https://www.bcb.gov.br/publicacoes/focus) e IBC-Br, e com os [indicadores do IBGE](https://www.ibge.gov.br/indicadores) (PIB e desemprego). Todo gráfico dessa página tem uma tela no app que o mostra explicado:
+- IPCA e meta, com o Focus;
+- Selic;
+- desemprego e IBC-Br;
+- transações correntes e IDP, reservas, posição internacional de investimento e câmbio;
+- DLSP e DBGG, resultados primário e nominal;
+- custo do crédito, concessões e solidez dos bancos;
+- mercado imobiliário.
+
+**O que já aconteceu e o que o mercado espera** aparecem no mesmo gráfico, como o BCB faz com o IPCA, sempre com a previsão distinguível do dado real.
+
 **N2. Entender o que cada número significa enquanto olho ⭐**
 Sou leigo em economia. Cada métrica e cada jargão vêm explicados no ponto de uso: o que mede, um exemplo numérico e o que é valor bom ou ruim. A fórmula aparece escrita e explicada. Além disso, quero poder estudar os conceitos por conta própria, fora dos gráficos. É o que torna o app útil enquanto ainda não sei ler os gráficos.
+
+Perguntas que as telas e o Aprender precisam responder, porque são as que eu tenho olhando as páginas do BCB e do IBGE:
+- o que são DLSP e DBGG, por que são diferentes, e qual dívida é a do Focus;
+- o que são resultado primário e nominal;
+- o que são as reservas internacionais e por que elas se ligam ao câmbio e à dívida;
+- o que é a posição internacional de investimento e para que serve medi-la;
+- o que são transações correntes e IDP;
+- o que é IPCA administrado, livre e de serviços;
+- o PIB do IBGE e o IBC-Br do BCB: qual é qual e qual é o oficial;
+- o desemprego do BCB é o mesmo do IBGE?
 
 **N3. Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos ⭐**
 Dado um reajuste, quero ver a perda ou o ganho de poder de compra em cada categoria: alimentação, habitação, transporte… O reajuste pode ser:
@@ -61,6 +82,9 @@ O que faz a dívida crescer sozinha, quanto de superávit seria preciso para est
 
 **N6. Saber como o déficit é financiado**
 Onde se vê o déficit, e se o governo está emitindo moeda para pagar a dívida ou apenas vendendo títulos: "como dá pra saber se o governo tá emitindo dinheiro pra pagar dívida?"
+
+**N7. Entender como os números se ligam ⭐**
+Inflação, juros, dívida, câmbio, crédito e emissão de moeda formam uma teia de ciclos e fluxos, e é essa teia que eu quero entender, não só cada número isolado. A pergunta da conversa que deu origem ao app resume: "dívida e inflação são 2 loops fechados em si mesmos, mas que podem interferir um no outro, enviando uma 'carga' que aumenta a força do loop?". Os mecanismos aparecem desenhados, com o mínimo de texto, e ligados ao dado real de hoje.
 
 ---
 
@@ -98,6 +122,8 @@ Onde se vê o déficit, e se o governo está emitindo moeda para pagar a dívida
 - **O banco só guarda dado público,** que pode ser rebaixado da fonte a qualquer momento. Por isso, diferente do Finance Manager, não há snapshot nem backup. O Alembic continua, para evoluir o schema.
 - **Toda busca rebaixa uma janela final** (os últimos 12 meses), porque PIB e estatística fiscal são revisados depois de publicados.
 - **Trocar de fonte fica restrito a `adapters/`.**
+
+**Atualização (2026-10-08):** o Focus tem tabela própria. Toda previsão tem duas datas: quando a pesquisa foi feita e para quando é a previsão (um mês, um trimestre, uma reunião do Copom ou um ano). `observations` guarda uma data por valor, então ela serve para série realizada e não comporta o histórico das pesquisas. O mecanismo é o mesmo: a tela lê do banco, e o refresh só vai à fonte quando falta uma pesquisa que já devia ter saído.
 
 ### D3 — Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando
 **Status:** ✅ Decidida
@@ -199,3 +225,25 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 **Consequências:**
 - O catálogo de conceitos (F7) guarda os textos dos "?" e das bandejas, que hoje moram nos componentes das telas.
 - Toda tela nova nasce no padrão, a partir da prancha dela no canvas.
+
+### D7 — Mecanismo se explica com diagrama, desenhado em React Flow
+**Status:** ✅ Decidida
+
+**Decisão:**
+- Um mecanismo (ciclo, fluxo, cadeia de causa e efeito) aparece primeiro como diagrama, com o texto curto em volta. O conteúdo de um texto longo continua lá, mas o diagrama carrega a estrutura e o texto só explica cada seta.
+- Os diagramas usam o React Flow (`@xyflow/react`):
+  - cada nó é um componente React no visual da D6;
+  - o nó leva à página do conceito em `/learn/<id>`;
+  - quando existe série, o nó mostra o valor de hoje ("Selic 13,75%").
+- Toda página do Aprender, a que existe e a nova, é avaliada quanto a um diagrama explicar melhor do que o texto. A página nova já nasce com essa avaliação.
+
+**Por quê:**
+- A teia da N7 é feita de ciclos que se alimentam, e o texto corrido obriga o leitor a montar o desenho na cabeça.
+- Texto longo cansa: o diagrama reduz o texto sem perder o conteúdo.
+- O nó com o valor de hoje liga o mecanismo ao dado real, o que um desenho estático não faz.
+
+**Alternativas avaliadas:**
+- **Mermaid:** escreve o diagrama como texto e faz o layout sozinho, mas tem cara genérica, é difícil de deixar no visual da D6 e desenha ciclos tortos.
+- **SVG desenhado à mão:** dá controle total, mas é estático e cada diagrama vira código de desenho.
+
+**Consequências:** o layout de cada diagrama é posicionado à mão, o que dá mais trabalho por diagrama. Os ciclos de partida vêm da conversa com o ChatGPT e passam pela conferência na fonte oficial, como todo fato do Aprender (D4).
