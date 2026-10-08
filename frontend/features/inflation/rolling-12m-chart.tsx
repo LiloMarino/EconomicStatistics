@@ -1,4 +1,4 @@
-import { BookOpen } from "lucide-react";
+import { BookOpen, Target } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, XAxis, YAxis } from "recharts";
 
 import { verdictLook } from "@/features/inflation/pace-verdict";
@@ -6,6 +6,7 @@ import type { InflationPace } from "@/features/inflation/use-inflation-pace";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { Formula, FormulaBox } from "@/shared/components/formula";
+import { Toggle } from "@/shared/components/ui/toggle";
 import {
   type ChartConfig,
   ChartContainer,
@@ -171,26 +172,33 @@ interface Rolling12mChartProps {
   /** A bandeja abre também pelo "?" do ritmo, no resumo. */
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  showTarget: boolean;
+  onShowTargetChange: (show: boolean) => void;
 }
 
-export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartProps) {
+export function Rolling12mChart({
+  pace,
+  open,
+  onOpenChange,
+  showTarget,
+  onShowTargetChange,
+}: Rolling12mChartProps) {
   const look = verdictLook[pace.verdict];
   const points = pace.general_12m;
   const first = points.at(0);
   const last = points.at(-1);
   if (!first || !last) return null;
+  const band = showTarget ? pace.band : null;
   const rows = points.map((point, index) => ({
     month: point.ref_date,
     rate: point.rate,
-    target: point.band?.target ?? null,
-    floor: point.band?.floor ?? null,
-    ceiling: point.band?.ceiling ?? null,
+    ...(showTarget && point.band ? point.band : { target: null, floor: null, ceiling: null }),
     recent: index >= points.length - RECENT_POINTS ? point.rate : null,
   }));
   const peak = points.reduce((best, point) => (point.rate > best.rate ? point : best), first);
   const recentStart = points.at(-RECENT_POINTS);
   const values = points.flatMap((point) =>
-    point.band ? [point.rate, point.band.floor, point.band.ceiling] : [point.rate],
+    showTarget && point.band ? [point.rate, point.band.floor, point.band.ceiling] : [point.rate],
   );
   const ticks = niceTicks(Math.min(...values), Math.max(...values), 3);
   const monthTicks = points
@@ -204,6 +212,19 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
       subtitle={formatMonthRange(first.ref_date, last.ref_date)}
       open={open}
       onOpenChange={onOpenChange}
+      actions={
+        pace.band && (
+          <Toggle
+            variant="pill"
+            pressed={showTarget}
+            onPressedChange={onShowTargetChange}
+            aria-label="Mostrar a meta"
+          >
+            <Target />
+            Meta
+          </Toggle>
+        )
+      }
       explain={{
         label: "Como ler",
         icon: BookOpen,
@@ -220,17 +241,17 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
               color: "var(--foreground)",
               shape: "line",
             },
-            ...(pace.band
+            ...(band
               ? [
                   {
                     key: "target",
-                    label: `Meta de inflação (${formatPercent(pace.band.target)})`,
+                    label: `Meta de inflação (${formatPercent(band.target)})`,
                     color: "var(--ok)",
                     shape: "line" as const,
                   },
                   {
                     key: "limits",
-                    label: `Limites da meta (${formatPercent(pace.band.floor)} e ${formatPercent(pace.band.ceiling)})`,
+                    label: `Limites da meta (${formatPercent(band.floor)} e ${formatPercent(band.ceiling)})`,
                     color: "var(--trend-up)",
                     shape: "dashed" as const,
                   },

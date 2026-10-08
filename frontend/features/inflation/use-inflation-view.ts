@@ -7,16 +7,17 @@ export const paceWindows = [1, 3, 6] as const;
 export type PaceWindow = (typeof paceWindows)[number];
 
 /** O que a tela de inflação está mostrando, além do período, mora na URL: a janela do
-ritmo (`?pace=3`), o grupo da sazonalidade (`?season=`) e o da conta do acumulado
-(`?calc=`). */
+ritmo (`?pace=3`), o grupo da sazonalidade (`?season=`), o da conta do acumulado
+(`?calc=`) e se a meta aparece no gráfico de 12 meses (`?target=hide` a esconde). */
 export function useInflationView() {
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedWindow = Number(searchParams.get("pace"));
   const paceWindow: PaceWindow = paceWindows.find((item) => item === requestedWindow) ?? 3;
   const season = searchParams.get("season");
   const calc = searchParams.get("calc");
+  const showTarget = searchParams.get("target") !== "hide";
 
-  function update(key: "pace" | "season" | "calc", value: string) {
+  function update(key: "pace" | "season" | "calc" | "target", value: string) {
     setSearchParams(
       (params) => {
         params.set(key, value);
@@ -30,8 +31,10 @@ export function useInflationView() {
     paceWindow,
     seasonGroup: season && isIpcaSeries(season) ? season : undefined,
     calcGroup: calc && isIpcaSeries(calc) ? calc : undefined,
+    showTarget,
     setPaceWindow: (value: PaceWindow) => update("pace", String(value)),
     setSeasonGroup: (value: IpcaSeriesId) => update("season", value),
     setCalcGroup: (value: IpcaSeriesId) => update("calc", value),
+    setShowTarget: (value: boolean) => update("target", value ? "show" : "hide"),
   };
 }

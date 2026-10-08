@@ -70,7 +70,13 @@ function InflationSections({ data }: { data: InflationGroups }) {
         <Unavailable error={pace.error} />
       ) : pace.data ? (
         <>
-          <Rolling12mChart pace={pace.data} open={twelveOpen} onOpenChange={setTwelveOpen} />
+          <Rolling12mChart
+            pace={pace.data}
+            open={twelveOpen}
+            onOpenChange={setTwelveOpen}
+            showTarget={view.showTarget}
+            onShowTargetChange={view.setShowTarget}
+          />
           <PaceTable
             pace={pace.data}
             window={view.paceWindow}
