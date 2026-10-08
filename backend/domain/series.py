@@ -198,12 +198,13 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         lag_months=0,
         release_day=1,
     ),
-    # O CMN fixa a meta antes de o ano começar, então a do ano corrente já existe
+    # O CMN fixa a meta antes de o ano começar, então a do ano corrente já existe. A
+    # série começa no primeiro ano do regime de metas
     SeriesId.INFLATION_TARGET: SeriesSpec(
         source=Source.BCB_SGS,
         code="13521",
         unit=Unit.PERCENT_YEAR,
-        first_date=date(2019, 1, 1),
+        first_date=date(1999, 1, 1),
         lag_months=0,
         release_day=1,
         periodicity=Periodicity.ANNUAL,
@@ -254,10 +255,6 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         "10618", Unit.MONTHS, date(2000, 10, 1)
     ),
 }
-
-# Intervalo de tolerância em volta da meta, em vigor desde 2017: o teto é a meta mais
-# 1,5 ponto percentual
-TARGET_TOLERANCE = 0.015
 
 IPCA_GROUPS: tuple[SeriesId, ...] = (
     SeriesId.IPCA_FOOD,

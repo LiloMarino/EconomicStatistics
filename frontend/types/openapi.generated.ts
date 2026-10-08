@@ -460,10 +460,7 @@ export interface components {
             end: string;
             /** General 12M */
             general_12m: components["schemas"]["RollingPointDTO"][];
-            /** Target */
-            target: number | null;
-            /** Ceiling */
-            ceiling: number | null;
+            band: components["schemas"]["TargetBandDTO"] | null;
             /** Last Months */
             last_months: components["schemas"]["MonthVsYearBeforeDTO"][];
             /** Last Months Difference */
@@ -667,7 +664,7 @@ export interface components {
         };
         /**
          * RollingPointDTO
-         * @description O 12 meses que termina em `ref_date` e o teto da meta do ano, em fração.
+         * @description O 12 meses que termina em `ref_date`, em fração, e a faixa da meta do ano.
          */
         RollingPointDTO: {
             /**
@@ -677,8 +674,7 @@ export interface components {
             ref_date: string;
             /** Rate */
             rate: number;
-            /** Ceiling */
-            ceiling: number | null;
+            band: components["schemas"]["TargetBandDTO"] | null;
         };
         /** SeasonalityDTO */
         SeasonalityDTO: {
@@ -729,6 +725,18 @@ export interface components {
             primary_surplus: number;
             /** Primary Gap */
             primary_gap: number;
+        };
+        /**
+         * TargetBandDTO
+         * @description A meta de inflação do ano e os limites do intervalo de tolerância, em fração.
+         */
+        TargetBandDTO: {
+            /** Target */
+            target: number;
+            /** Floor */
+            floor: number;
+            /** Ceiling */
+            ceiling: number;
         };
         /**
          * YearCompositionDTO

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from backend.domain.inflation_target import target_bands
+from backend.domain.series import Observation
 from tests.data_ipca import seed_ipca
 
 AUG_2026 = {"end": "2026-08-01"}
@@ -39,12 +42,55 @@ def test_pace_in_august_2026_is_slowing(api: TestClient) -> None:
 
 
 @pytest.mark.usefixtures("seeded")
-def test_pace_ceiling_follows_the_target_of_each_year(api: TestClient) -> None:
-    """O teto é a meta do ano mais 1,5 ponto: 4,5% em 2025 e 2026."""
+def test_pace_band_follows_the_target_of_each_year(api: TestClient) -> None:
+    """Em 2025 e 2026, a meta é 3% com limites de 1,5% e 4,5%."""
     body = api.get("/api/inflation/pace", params=AUG_2026).json()
 
-    assert body["ceiling"] == pytest.approx(0.045)
-    assert {round(point["ceiling"], 4) for point in body["general_12m"]} == {0.045}
+    assert body["band"] == {
+        "target": pytest.approx(0.03),
+        "floor": pytest.approx(0.015),
+        "ceiling": pytest.approx(0.045),
+    }
+    assert {
+        (round(point["band"]["floor"], 4), round(point["band"]["ceiling"], 4))
+        for point in body["general_12m"]
+    } == {(0.015, 0.045)}
+
+
+def test_tolerance_changes_with_the_period() -> None:
+    """Em 2015, meta de 4,5% com limites de 2,5% e 6,5%; em 2004, a meta ajustada de
+    5,5% com 2,5 pontos para cada lado; em 2026, 3% com 1,5% e 4,5%."""
+    targets = [
+        Observation(ref_date=date(2004, 1, 1), value=5.5),
+        Observation(ref_date=date(2015, 1, 1), value=4.5),
+        Observation(ref_date=date(2026, 1, 1), value=3.0),
+    ]
+
+    bands = target_bands(targets, (2004, 2015, 2026))
+
+    assert [
+        (
+            year,
+            round(band.floor * 100, 2),
+            round(band.target * 100, 2),
+            round(band.ceiling * 100, 2),
+        )
+        for year, band in bands.items()
+    ] == [(2004, 3.0, 5.5, 8.0), (2015, 2.5, 4.5, 6.5), (2026, 1.5, 3.0, 4.5)]
+
+
+def test_continuous_target_holds_after_the_last_published_year() -> None:
+    """A meta contínua, desde 2025, segue valendo nos anos que a série ainda não
+    publicou; antes dela, ano sem meta publicada fica sem faixa."""
+    continuous = target_bands(
+        [Observation(ref_date=date(2026, 1, 1), value=3.0)], (2027, 2028)
+    )
+    calendar = target_bands(
+        [Observation(ref_date=date(2018, 1, 1), value=4.5)], (2019,)
+    )
+
+    assert [round(band.ceiling, 3) for band in continuous.values()] == [0.045, 0.045]
+    assert calendar == {}
 
 
 @pytest.mark.usefixtures("seeded")

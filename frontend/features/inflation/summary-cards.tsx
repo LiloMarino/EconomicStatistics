@@ -13,23 +13,28 @@ import { isIpcaSeries } from "@/shared/lib/group-identity";
 function TwelveMonthsCard({ pace }: { pace: InflationPace }) {
   const last = pace.general_12m.at(-1);
   if (!last) return null;
-  const below = pace.ceiling !== null && last.rate <= pace.ceiling;
+  const band = pace.band;
   return (
     <StatCard
       label="IPCA em 12 meses"
       hint={<ConceptHint id="rolling-12m" />}
       value={formatPercent(last.rate)}
     >
-      {pace.ceiling !== null &&
-        (below ? (
-          <span className="text-caption text-ok inline-flex items-center gap-1.5 font-semibold">
-            <Check className="size-4" />
-            abaixo do teto da meta ({formatPercent(pace.ceiling)})
-          </span>
-        ) : (
+      {band &&
+        (last.rate > band.ceiling ? (
           <span className="text-caption text-trend-up inline-flex items-center gap-1.5 font-semibold">
             <CircleAlert className="size-4" />
-            acima do teto da meta ({formatPercent(pace.ceiling)})
+            acima do teto da meta ({formatPercent(band.ceiling)})
+          </span>
+        ) : last.rate < band.floor ? (
+          <span className="text-caption text-trend-up inline-flex items-center gap-1.5 font-semibold">
+            <CircleAlert className="size-4" />
+            abaixo do piso da meta ({formatPercent(band.floor)})
+          </span>
+        ) : (
+          <span className="text-caption text-ok inline-flex items-center gap-1.5 font-semibold">
+            <Check className="size-4" />
+            dentro da meta ({formatPercent(band.floor)} a {formatPercent(band.ceiling)})
           </span>
         ))}
     </StatCard>

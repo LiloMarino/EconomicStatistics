@@ -77,12 +77,20 @@ class PurchasingPowerDTO(BaseDTO):
     groups: list[GroupPurchasingPowerDTO]
 
 
+class TargetBandDTO(BaseDTO):
+    """A meta de inflação do ano e os limites do intervalo de tolerância, em fração."""
+
+    target: float
+    floor: float
+    ceiling: float
+
+
 class RollingPointDTO(BaseDTO):
-    """O 12 meses que termina em `ref_date` e o teto da meta do ano, em fração."""
+    """O 12 meses que termina em `ref_date`, em fração, e a faixa da meta do ano."""
 
     ref_date: date
     rate: float
-    ceiling: float | None
+    band: TargetBandDTO | None
 
 
 class MonthVsYearBeforeDTO(BaseDTO):
@@ -121,8 +129,7 @@ class InflationPaceDTO(BaseDTO):
 
     end: date
     general_12m: list[RollingPointDTO]
-    target: float | None
-    ceiling: float | None
+    band: TargetBandDTO | None
     last_months: list[MonthVsYearBeforeDTO]
     last_months_difference: float
     change_1m: float

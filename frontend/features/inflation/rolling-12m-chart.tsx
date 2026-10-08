@@ -24,6 +24,8 @@ import { texDecimal } from "@/shared/lib/tex";
 
 const chartConfig = {
   rate: { label: "IPCA em 12 meses", color: "var(--foreground)" },
+  target: { label: "Meta", color: "var(--ok)" },
+  floor: { label: "Piso da meta", color: "var(--trend-up)" },
   ceiling: { label: "Teto da meta", color: "var(--trend-up)" },
   recent: { label: "Últimos 3 meses", color: "var(--trend-down)" },
 } satisfies ChartConfig;
@@ -162,8 +164,8 @@ function HowToRead({ pace }: { pace: InflationPace }) {
   );
 }
 
-/** O IPCA em 12 meses dos 24 meses até o fim do período, com o teto da meta e o trecho
-dos 3 últimos meses na cor do veredito. */
+/** O IPCA em 12 meses dos 24 meses até o fim do período, com a meta e os limites de
+cada ano e o trecho dos 3 últimos meses na cor do veredito. */
 interface Rolling12mChartProps {
   pace: InflationPace;
   /** A bandeja abre também pelo "?" do ritmo, no resumo. */
@@ -180,13 +182,15 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
   const rows = points.map((point, index) => ({
     month: point.ref_date,
     rate: point.rate,
-    ceiling: point.ceiling,
+    target: point.band?.target ?? null,
+    floor: point.band?.floor ?? null,
+    ceiling: point.band?.ceiling ?? null,
     recent: index >= points.length - RECENT_POINTS ? point.rate : null,
   }));
   const peak = points.reduce((best, point) => (point.rate > best.rate ? point : best), first);
   const recentStart = points.at(-RECENT_POINTS);
   const values = points.flatMap((point) =>
-    point.ceiling === null ? [point.rate] : [point.rate, point.ceiling],
+    point.band ? [point.rate, point.band.floor, point.band.ceiling] : [point.rate],
   );
   const ticks = niceTicks(Math.min(...values), Math.max(...values), 3);
   const monthTicks = points
@@ -196,7 +200,7 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
   return (
     <ExplainedCard
       id="rolling-12m"
-      title="IPCA em 12 meses e o teto da meta"
+      title="IPCA em 12 meses e a meta"
       subtitle={formatMonthRange(first.ref_date, last.ref_date)}
       open={open}
       onOpenChange={onOpenChange}
@@ -216,16 +220,22 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
               color: "var(--foreground)",
               shape: "line",
             },
-            ...(pace.ceiling === null
-              ? []
-              : [
+            ...(pace.band
+              ? [
                   {
-                    key: "ceiling",
-                    label: `Teto da meta de inflação (${formatPercent(pace.ceiling)})`,
+                    key: "target",
+                    label: `Meta de inflação (${formatPercent(pace.band.target)})`,
+                    color: "var(--ok)",
+                    shape: "line" as const,
+                  },
+                  {
+                    key: "limits",
+                    label: `Limites da meta (${formatPercent(pace.band.floor)} e ${formatPercent(pace.band.ceiling)})`,
                     color: "var(--trend-up)",
                     shape: "dashed" as const,
                   },
-                ]),
+                ]
+              : []),
             {
               key: "recent",
               label: `últimos 3 meses: ${look.label.toLowerCase()}`,
@@ -262,7 +272,7 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
                   }}
                   formatter={(value, name) => (
                     <span className="flex w-full items-center justify-between gap-4">
-                      {name === "ceiling" ? "Teto da meta" : "IPCA em 12 meses"}
+                      {Object.entries(chartConfig).find(([key]) => key === name)?.[1].label}
                       <span className="tabular-nums">
                         {typeof value === "number" ? formatPercent(value) : ""}
                       </span>
@@ -272,12 +282,23 @@ export function Rolling12mChart({ pace, open, onOpenChange }: Rolling12mChartPro
                 />
               }
             />
+            {(["floor", "ceiling"] as const).map((key) => (
+              <Line
+                key={key}
+                dataKey={key}
+                type="stepAfter"
+                stroke={`var(--color-${key})`}
+                strokeWidth={2}
+                strokeDasharray="6 5"
+                dot={false}
+                isAnimationActive={false}
+              />
+            ))}
             <Line
-              dataKey="ceiling"
+              dataKey="target"
               type="stepAfter"
-              stroke="var(--color-ceiling)"
-              strokeWidth={2}
-              strokeDasharray="6 5"
+              stroke="var(--color-target)"
+              strokeWidth={1.5}
               dot={false}
               isAnimationActive={false}
             />

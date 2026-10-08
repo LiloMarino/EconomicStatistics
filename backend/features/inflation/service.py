@@ -9,9 +9,9 @@ from sqlalchemy.orm import Session
 from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
 from backend.core.errors import EconomicError, MissingDataError
 from backend.domain.coverage import month_start
+from backend.domain.inflation_target import TargetBand, target_bands
 from backend.domain.pace import STEADY_BAND, verdict
 from backend.domain.rates import (
-    PERCENT,
     MonthlyRate,
     accumulate,
     monthly_rates,
@@ -25,7 +25,7 @@ from backend.domain.seasonality import (
     compared_years,
     month_bands,
 )
-from backend.domain.series import IPCA_GROUPS, TARGET_TOLERANCE, Observation
+from backend.domain.series import IPCA_GROUPS, Observation
 from backend.repository.series import first_cached, last_cached, read_observations
 
 IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
@@ -99,11 +99,11 @@ class PurchasingPower:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class RollingPoint:
-    """O 12 meses que termina em `ref_date` e o teto da meta daquele ano."""
+    """O 12 meses que termina em `ref_date` e a faixa da meta daquele ano."""
 
     ref_date: date
     rate: float
-    ceiling: float | None
+    band: TargetBand | None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -140,8 +140,7 @@ class GroupPace:
 class InflationPace:
     end: date
     general_12m: list[RollingPoint]
-    target: float | None
-    ceiling: float | None
+    band: TargetBand | None
     last_months: list[MonthVsYearBefore]
     last_months_difference: float
     change_1m: float
@@ -367,7 +366,7 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
             "O ritmo precisa de 15 meses de IPCA no cache até o fim do período."
         )
     chart_start = month_start(last, PACE_CHART_MONTHS - 1)
-    ceilings = _ceilings(session, chart_start, last)
+    bands = target_bands_between(session, chart_start.year, last.year)
     monthly = {
         item.ref_date: item.rate
         for item in monthly_rates(observations[SeriesId.IPCA_GENERAL])
@@ -379,14 +378,11 @@ def inflation_pace(session: Session, end: date | None) -> InflationPace:
     return InflationPace(
         end=last,
         general_12m=[
-            RollingPoint(
-                ref_date=ref_date, rate=rate, ceiling=ceilings.get(ref_date.year)
-            )
+            RollingPoint(ref_date=ref_date, rate=rate, band=bands.get(ref_date.year))
             for ref_date, rate in general.items()
             if ref_date >= chart_start
         ],
-        target=_target(ceilings.get(last.year)),
-        ceiling=ceilings.get(last.year),
+        band=bands.get(last.year),
         last_months=last_months,
         last_months_difference=sum(item.difference for item in last_months),
         change_1m=general[last] - general[month_start(last, 1)],
@@ -436,21 +432,14 @@ def _vs_year_before(monthly: dict[date, float], ref_date: date) -> MonthVsYearBe
     )
 
 
-def _ceilings(session: Session, start: date, end: date) -> dict[int, float]:
-    """O teto da meta de cada ano entre `start` e `end`, em fração."""
+def target_bands_between(
+    session: Session, first: int, last: int
+) -> dict[int, TargetBand]:
+    """A faixa da meta de cada ano de `first` a `last`, inclusive."""
     targets = read_observations(
-        session,
-        (SeriesId.INFLATION_TARGET,),
-        date(start.year, 1, 1),
-        date(end.year, 1, 1),
+        session, (SeriesId.INFLATION_TARGET,), date(first, 1, 1), date(last, 1, 1)
     )[SeriesId.INFLATION_TARGET]
-    return {
-        item.ref_date.year: item.value / PERCENT + TARGET_TOLERANCE for item in targets
-    }
-
-
-def _target(ceiling: float | None) -> float | None:
-    return None if ceiling is None else ceiling - TARGET_TOLERANCE
+    return target_bands(targets, range(first, last + 1))
 
 
 def seasonality(session: Session, year: int | None) -> Seasonality:

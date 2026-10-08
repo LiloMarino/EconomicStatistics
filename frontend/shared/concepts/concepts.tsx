@@ -753,6 +753,18 @@ export const concepts: Record<ConceptId, Concept> = {
           </>
         ),
       },
+      {
+        title: "A tolerância também mudou.",
+        text: (
+          <>
+            O intervalo em volta do centro foi de 2 p.p. de 1999 a 2002, de 2,5 p.p. de 2003 a 2005,
+            de 2 p.p. de 2006 a 2016 e é de 1,5 p.p. desde 2017. Em 2015, por exemplo, a meta era
+            4,5%, com limites de 2,5% e 6,5%; o IPCA fechou o ano em 10,67%, acima do teto. Em 2003
+            e 2004 o centro foi revisto depois de fixado, e a série do Banco Central traz a meta já
+            ajustada (4% e 5,5%).
+          </>
+        ),
+      },
     ],
     related: ["rolling-12m", "ipca"],
     sources: [
@@ -765,6 +777,17 @@ export const concepts: Record<ConceptId, Concept> = {
       {
         ...bcbTarget,
         backs: "O centro de 3%, a tolerância de 1,5 p.p. e as metas dos anos anteriores.",
+      },
+      {
+        name: "Banco Central, histórico de metas para a inflação",
+        url: "https://www.bcb.gov.br/controleinflacao/historicometas",
+        backs:
+          "A meta e a tolerância de cada ano desde 1999, com as resoluções do CMN que as fixaram.",
+      },
+      {
+        name: "Banco Central, série 13521 do SGS (meta de inflação)",
+        url: "https://www3.bcb.gov.br/sgspub/",
+        backs: "A meta de cada ano desde 1999, com 4% em 2003 e 5,5% em 2004.",
       },
     ],
     frequency: "Definida pelo CMN; comparada todo mês",
