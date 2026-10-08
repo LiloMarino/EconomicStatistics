@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** A tela Focus foi concluída, com a previsão de cada indicador semana a semana e a tabela do relatório.
+> **Última mudança (2026-10-08):** O marco das expectativas de mercado foi concluído: a continuação pelo Focus entrou nos gráficos de IPCA, dólar, déficit e dívida, e o dólar passou a ser o do fim do mês.
 
 ## Glossário
 
@@ -28,7 +28,6 @@
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
-| **F27** | Continuação pelo Focus nos gráficos | — | ⏳ |
 | **F30** | Tela Juros: Selic, Copom e juro real | — | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
@@ -40,7 +39,7 @@
 | **F39** | Pranchas dos explicadores no canvas | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (31 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (32 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -72,6 +71,7 @@
 | **F23** | Linguagem visual nas telas que existem | — | ✅ |
 | **F25** | Comparação com o mesmo mês de outros anos | — | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | — | ✅ |
+| **F27** | Continuação pelo Focus nos gráficos | — | ✅ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | — | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
@@ -92,7 +92,6 @@
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
-| **F27** | Continuação pelo Focus nos gráficos | M7 | 0 | ⏳ |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | M8 | 0 | ⏳ |
 | **F35** | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 
@@ -227,17 +226,18 @@
 >
 > **Serve:** N1, N5
 >
-> **Progresso:** 3/4 concluídas
+> **Progresso:** 4/4 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F27** | Continuação pelo Focus nos gráficos | F10 | ⏳ |
+| — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (3 itens)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | F2 | ✅ |
+| **F27** | Continuação pelo Focus nos gráficos | F10 | ✅ |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | F10 | ✅ |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | F21 | ✅ |
 
@@ -310,7 +310,7 @@
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | F5 | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F26** | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 | F8 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
-| **F27** | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 | F10 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
+| **F27** | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 | F10 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F28** | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 | F10 | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F29** | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 | F21 | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | F4, F10 | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
@@ -519,7 +519,6 @@ O juro real ex-ante é `(1 + Selic) / (1 + IPCA esperado em 12 meses) − 1`: o 
 
 **Fica para depois:**
 - o link da bandeja para o loop da dívida, que o explicador dos dois loops (F9) faz ao entrar;
-- a previsão do Focus para o primário e o nominal do ano, com a continuação pelo Focus (F27);
 - a seção "Como o déficit é pago", que segue como esboço no canvas até a F15.
 
 **Aceite:** conferido. O último mês tem o primário mais os juros igual ao nominal (0,62 + 8,86 = 9,48% do PIB em ago/2026), com os números das séries do SGS.
@@ -545,7 +544,7 @@ Em ago/2026: r = 13,74%, g = 7,23%, p* = 4,20% do PIB e, com déficit primário 
 
 **No Aprender:** DLSP, DBGG, juro implícito, crescimento nominal, r − g e o primário que estabiliza.
 
-**Fica para depois:** os links das bandejas para o explicador das três dívidas (F36), para o de r − g (F9) e para o simulador (F24), que cada um faz ao entrar; a previsão do Focus para as duas dívidas no fim do ano, com a F27.
+**Fica para depois:** os links das bandejas para o explicador das três dívidas (F36), para o de r − g (F9) e para o simulador (F24), que cada um faz ao entrar.
 
 **F23 — Linguagem visual nas telas que existem.** Feito.
 
@@ -729,21 +728,22 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 **Entra depois:** os explicadores (F9) como terceiro grupo, e as séries quando existir a tela de série (F12).
 
-**F27 — Continuação pelo Focus nos gráficos.** O gráfico de uma série segue depois do último dado real com o que o mercado espera, na pesquisa Focus mais recente (F10), como a página de estatísticas do BCB faz com o IPCA.
+**F27 — Continuação pelo Focus nos gráficos.** Feito. O gráfico de uma série segue depois do último dado real com o que o mercado espera na pesquisa Focus mais recente (F10).
 
-**Como a previsão aparece:**
-- uma linha vertical "hoje" separa o real da previsão;
-- a previsão é tracejada, numa cor neutra, sobre uma faixa de fundo clara com o rótulo "previsão de mercado (Focus de <data>)";
-- o destaque dos 3 últimos meses na cor do veredito (acelerando ou freando) fica só na linha real, porque fala de ritmo que já aconteceu.
+**Como a previsão aparece:** uma faixa clara do último dado real até o fim, com o rótulo "previsão (Focus de <data>)", e uma linha vertical pontilhada no último dado. A linha prevista é tracejada, numa cor neutra (`--forecast`, com `--forecast-band` na faixa, em claro e escuro). O destaque dos 3 últimos meses fica só na linha real. O componente é o `ForecastSpan` (`shared/components/forecast-span.tsx`), e cada bandeja ganhou o item "A previsão", que leva à página da pesquisa Focus.
 
-**Por escala do Focus:**
-- **mês a mês** (IPCA, câmbio, desemprego): linha contínua. O IPCA em 12 meses é composto no backend (D3), juntando os meses reais e os esperados até 24 meses à frente;
-- **por reunião do Copom** (Selic): degraus nas datas das reuniões;
-- **trimestre ou ano** (PIB, primário, nominal, dívidas, conta corrente, IDP): um ponto por período no fim dele, sem linha ligando.
+**Onde entrou:**
+- **IPCA em 12 meses** (tela de inflação): o 12 meses composto no backend (D3) com os meses reais e o IPCA mensal esperado, até 24 meses à frente (set/2028), com a faixa da meta continuando. Só aparece quando o gráfico termina no último IPCA publicado;
+- **dólar** (Setor externo): o câmbio de fim de mês esperado, mês a mês. O gráfico passou para a PTAX do fim do mês (SGS 3696), a mesma medida que o Focus pergunta (ver F31);
+- **transações correntes e IDP**: o Focus prevê o ano em US$ bilhões e não prevê o PIB em dólar, então a previsão fica escrita em cima do gráfico em % do PIB ("o mercado espera, para 2026, déficit de US$ 60,0 bi nas transações correntes e US$ 80,0 bi de investimento direto no país");
+- **déficit**: uma coluna para dezembro do ano corrente e do seguinte, com primário e juros nas cores deles, claras e com contorno tracejado, e o nominal marcado. O sinal do Focus (negativo é déficit) é trocado para a convenção da NFSP, e os juros são o nominal menos o primário;
+- **dívida líquida e bruta**: um ponto para cada uma em dezembro do ano corrente e do seguinte, com os meses do meio vazios para o eixo manter a escala do tempo.
 
-**Componente:** um trecho de previsão compartilhado pelos gráficos de linha, ligado primeiro no gráfico do IPCA em 12 meses da tela de inflação. Nas telas que ainda não existem (Juros, Atividade), entra junto com cada uma. As que já existem recebem a continuação quando ela entrar: na tela Setor externo (F31), o câmbio mês a mês no gráfico do dólar e a conta corrente e o IDP do ano, um ponto cada, no gráfico de transações correntes e IDP; na tela Déficit (F13), o primário e o nominal do ano, uma barra cada; na tela Dívida (F14), a dívida líquida e a bruta do fim do ano, um ponto cada.
+**Backend:** os DTOs de `pace`, `external-sector`, `deficit` e `debt` ganharam a previsão, nula quando não há pesquisa em cache. As contas moram em `backend/domain/focus.py` (`rolling_12m_forecast`, `nfsp_from_balance`, `forecast_years`).
 
-**Aceite:** o trecho previsto do IPCA em 12 meses bate com a linha "Focus mais recente" do gráfico do BCB para a mesma data de pesquisa.
+**Fica para depois:** a Selic por reunião e o desemprego entram com as telas Juros (F30) e Atividade (F32), e o IPCA livres, administrados e serviços com a F35.
+
+**Aceite:** na pesquisa de 2/out/2026, o 12 meses esperado para dez/2026 dá 5,01%, igual à mediana anual do IPCA de 2026 no relatório Focus, e o de dez/2027 dá 4,29%, contra a mediana anual de 4,30%; a diferença vem de as medianas mensais não comporem exatamente na mediana do ano. A comparação com a linha "Focus mais recente" do gráfico do BCB fica para conferir na página, que monta o gráfico no navegador.
 
 **F28 — Tela Focus: como a expectativa mudou.** Feito, sem prancha no canvas: segue o padrão da D6 com os componentes das telas que existem. É a rota `/focus`, no grupo novo "Expectativas" da navegação.
 
@@ -805,8 +805,9 @@ As reservas usam o conceito liquidez (3546), que é o número que o BCB divulga.
 
 **Fica para depois:**
 - o dólar diário (SGS 1): pede que o cache aceite série diária, com a regra de qual dia útil já devia estar publicado. A tela usa a média mensal, como a prancha;
-- a previsão do Focus no gráfico do dólar e no de transações correntes e IDP entra com a continuação pelo Focus (F27);
 - os links das bandejas para os explicadores de câmbio e de reservas entram com os explicadores (F9).
+
+**Mudança com a continuação pelo Focus (F27):** o dólar passou da média mensal da PTAX (SGS 3698) para a PTAX do fim do mês (SGS 3696), que é a medida que o Focus pergunta (conferido: na pesquisa de 5/jan/2018, o "Câmbio" da API dá 3,34 para 2018, igual à linha "fim de período" do relatório, e não aos 3,32 da média). Uma migration apagou a série antiga do cache. Em set/2026, o dólar fechou a R$ 5,1809, −2,59% em 12 meses.
 
 **F32 — Tela Atividade.** Rota própria para quanto a economia produz e quanto emprega.
 
