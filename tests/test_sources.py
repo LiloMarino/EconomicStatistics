@@ -12,10 +12,10 @@ from types import TracebackType
 
 import pytest
 
-from backend.adapters import bcb_sgs_provider, ibge_provider
+from backend.adapters import bcb_sgs_provider, ibge_provider, tesouro_debt_provider
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
-from backend.core.enum import SeriesId
+from backend.core.enum import DebtHolder, SeriesId
 from backend.domain.series import SERIES
 
 IBGE_BODY = json.dumps(
@@ -49,6 +49,14 @@ IBGE_BODY = json.dumps(
 SGS_BODY = (
     b'[{"data":"01/12/2021","valor":"1100.00"},{"data":"01/01/2022","valor":"1212.00"}]'
 )
+
+
+TESOURO_CSV = """Titulo/Contrato;Vencimento do Titulo/Contrato;Valor do Estoque;Quantidade do Estoque;Mes do Estoque;Classe da Carteira;Tipo de Divida
+LFT 010327;01/03/2027;105332979214,57;10024063,00;07/2026;Mercado;Dívida Interna
+LFT 010327;01/03/2027;100,43;1,00;07/2026;Mercado;Dívida Interna
+ntn-i 150428;15/04/2028;1136198,09;286596,00;07/2026;Banco Central;Dívida Interna
+Global 2047;21/02/2047;12024419745,52;2789332,00;07/2026;Mercado;Dívida Externa
+""".encode()
 
 
 class FakeResponse:
@@ -141,3 +149,46 @@ def test_sgs_window_without_data_is_empty(monkeypatch: pytest.MonkeyPatch) -> No
         )
         == []
     )
+
+
+def test_tesouro_rows_become_holdings() -> None:
+    """O CSV do Tesouro vem em UTF-8, com vírgula decimal: cada linha vira uma posição
+    datada no dia 1 do mês do estoque, e a linha repetida soma no valor."""
+    holdings = tesouro_debt_provider.to_holdings(TESOURO_CSV)
+
+    assert [
+        (
+            item.title,
+            item.stock_month,
+            item.maturity,
+            item.holder,
+            item.external,
+            item.value,
+        )
+        for item in holdings
+    ] == [
+        (
+            "LFT 010327",
+            date(2026, 7, 1),
+            date(2027, 3, 1),
+            DebtHolder.MARKET,
+            False,
+            pytest.approx(105332979315.0),
+        ),
+        (
+            "ntn-i 150428",
+            date(2026, 7, 1),
+            date(2028, 4, 15),
+            DebtHolder.CENTRAL_BANK,
+            False,
+            pytest.approx(1136198.09),
+        ),
+        (
+            "Global 2047",
+            date(2026, 7, 1),
+            date(2047, 2, 21),
+            DebtHolder.MARKET,
+            True,
+            pytest.approx(12024419745.52),
+        ),
+    ]

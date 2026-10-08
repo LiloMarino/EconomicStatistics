@@ -125,10 +125,149 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/deficit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Deficit Overview */
+        get: operations["deficit_overview_api_deficit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/debt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Debt */
+        get: operations["debt_api_debt_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/debt/federal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Federal */
+        get: operations["federal_api_debt_federal_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AverageMaturityDTO */
+        AverageMaturityDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Years */
+            years: number;
+        };
+        /**
+         * Dataset
+         * @description Fonte que não cabe em `observations`, com tabela e refresh próprios.
+         * @enum {string}
+         */
+        Dataset: "federal_debt_stock";
+        /**
+         * DebtLevelDTO
+         * @description Dívida líquida do setor público e bruta do governo geral, em fração do PIB
+         *     (0.6926 é 69,26%).
+         */
+        DebtLevelDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Net */
+            net: number;
+            /** Gross */
+            gross: number;
+        };
+        /** DebtOverviewDTO */
+        DebtOverviewDTO: {
+            /** Levels */
+            levels: components["schemas"]["DebtLevelDTO"][];
+            /** Rates */
+            rates: components["schemas"]["DebtRatesDTO"][];
+            stabilization: components["schemas"]["StabilizationDTO"];
+        };
+        /**
+         * DebtRatesDTO
+         * @description Os 12 meses que terminam em `ref_date`, em fração: `implicit_rate` é o r, juro
+         *     médio da dívida líquida; `nominal_growth` é o g, crescimento do PIB nominal.
+         */
+        DebtRatesDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Implicit Rate */
+            implicit_rate: number;
+            /** Nominal Growth */
+            nominal_growth: number;
+        };
+        /**
+         * DeficitDTO
+         * @description `interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
+         *     sem déficit nominal. `years` traz dezembro de cada ano e, por último, o último
+         *     mês publicado.
+         */
+        DeficitDTO: {
+            last: components["schemas"]["DeficitPointDTO"];
+            /** Interest Share */
+            interest_share: number | null;
+            /** Years */
+            years: components["schemas"]["DeficitPointDTO"][];
+        };
+        /**
+         * DeficitPointDTO
+         * @description Os 12 meses que terminam em `ref_date`, em fração do PIB (0.0948 é 9,48%). Na
+         *     convenção da NFSP, positivo é déficit e negativo é superávit; o nominal é o
+         *     primário mais os juros.
+         */
+        DeficitPointDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Nominal */
+            nominal: number;
+            /** Primary */
+            primary: number;
+            /** Interest */
+            interest: number;
+        };
         /** DeviationDTO */
         DeviationDTO: {
             /**
@@ -174,6 +313,28 @@ export interface components {
             reserves: components["schemas"]["ReservesDTO"];
             /** Position */
             position: components["schemas"]["PositionPointDTO"][];
+        };
+        /**
+         * FederalDebtDTO
+         * @description O estoque do último mês do Tesouro. As frações são da dívida em mercado, menos
+         *     `central_bank_share`, que é a parte de todos os títulos emitidos na carteira do
+         *     Banco Central. `average_maturity` vem do SGS, `null` antes de ele estar no cache.
+         */
+        FederalDebtDTO: {
+            /**
+             * Stock Month
+             * Format: date
+             */
+            stock_month: string;
+            /** Maturing 12M */
+            maturing_12m: number;
+            /** Central Bank Share */
+            central_bank_share: number;
+            average_maturity: components["schemas"]["AverageMaturityDTO"] | null;
+            /** Composition */
+            composition: components["schemas"]["YearCompositionDTO"][];
+            /** Maturities */
+            maturities: components["schemas"]["MaturityBucketDTO"][];
         };
         /**
          * FlowPointDTO
@@ -259,6 +420,18 @@ export interface components {
             largest_deviation: components["schemas"]["DeviationDTO"] | null;
         };
         /**
+         * Indexer
+         * @description O que corrige o valor de um título até o vencimento.
+         * @enum {string}
+         */
+        Indexer: "selic" | "fixed" | "ipca" | "igpm" | "fx" | "other";
+        /** IndexerShareDTO */
+        IndexerShareDTO: {
+            indexer: components["schemas"]["Indexer"];
+            /** Share */
+            share: number;
+        };
+        /**
          * InflationGroupsDTO
          * @description Taxas em fração (0.0054 é 0,54%). `rolling_12m` só traz os meses com os 12
          *     meses completos no cache.
@@ -304,6 +477,25 @@ export interface components {
             steady_band: number;
             /** Groups */
             groups: components["schemas"]["GroupPaceDTO"][];
+        };
+        /**
+         * MaturityBucketDTO
+         * @description A fração da dívida em mercado que vence de `start` até `end`; sem `end`, de
+         *     `start` em diante. `within_12m` marca as faixas que começam nos 12 meses
+         *     seguintes ao estoque.
+         */
+        MaturityBucketDTO: {
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /** End */
+            end: string | null;
+            /** Share */
+            share: number;
+            /** Within 12M */
+            within_12m: boolean;
         };
         /**
          * MonthBandDTO
@@ -448,12 +640,20 @@ export interface components {
             /** Rate */
             rate: number | null;
         };
-        /** RefreshReportDTO */
+        /**
+         * RefreshReportDTO
+         * @description As séries e as fontes que não são série (`datasets_*`) atualizadas ou com
+         *     falta nova.
+         */
         RefreshReportDTO: {
             /** Updated */
             updated: components["schemas"]["SeriesId"][];
             /** Failed */
             failed: components["schemas"]["SeriesId"][];
+            /** Datasets Updated */
+            datasets_updated: components["schemas"]["Dataset"][];
+            /** Datasets Failed */
+            datasets_failed: components["schemas"]["Dataset"][];
         };
         /**
          * ReservesDTO
@@ -493,7 +693,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_monthly" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "dollar_monthly" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -504,6 +704,44 @@ export interface components {
             last_ref_date: string | null;
             /** Succeeded At */
             succeeded_at: string | null;
+        };
+        /**
+         * StabilizationDTO
+         * @description A conta do primário que estabiliza a dívida/PIB, em fração. `debt` é a dívida
+         *     líquida; `primary_surplus` é o superávit feito (negativo é déficit); `primary_gap`
+         *     é o quanto falta do feito até o `stabilizing_primary`.
+         */
+        StabilizationDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Debt */
+            debt: number;
+            /** Implicit Rate */
+            implicit_rate: number;
+            /** Nominal Growth */
+            nominal_growth: number;
+            /** Stabilizing Primary */
+            stabilizing_primary: number;
+            /** Primary Surplus */
+            primary_surplus: number;
+            /** Primary Gap */
+            primary_gap: number;
+        };
+        /**
+         * YearCompositionDTO
+         * @description A fração da dívida federal em mercado de cada indexador no fim do mês.
+         */
+        YearCompositionDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Shares */
+            shares: components["schemas"]["IndexerShareDTO"][];
         };
     };
     responses: never;
@@ -734,6 +972,120 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExternalSectorDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deficit_overview_api_deficit_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeficitDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    debt_api_debt_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DebtOverviewDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    federal_api_debt_federal_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FederalDebtDTO"];
                 };
             };
             /** @description Unprocessable Content */

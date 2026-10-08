@@ -24,4 +24,12 @@ export const conceptBySeries: Record<SeriesId, ConceptId> = {
   gdp_usd_12m: "share-of-gdp",
   iip_assets: "international-investment-position",
   iip_liabilities: "international-investment-position",
+  nominal_deficit: "nominal-balance",
+  primary_deficit: "primary-balance",
+  nominal_interest: "nominal-interest",
+  net_debt: "net-debt",
+  net_debt_brl: "net-debt",
+  gross_debt: "gross-debt",
+  gdp_12m: "nominal-gdp-growth",
+  federal_debt_maturity: "average-maturity",
 };

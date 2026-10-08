@@ -1,4 +1,12 @@
-import { ChartColumn, Globe, GraduationCap, type LucideIcon, ShoppingCart } from "lucide-react";
+import {
+  ChartColumn,
+  ChartColumnStacked,
+  Globe,
+  GraduationCap,
+  Landmark,
+  type LucideIcon,
+  ShoppingCart,
+} from "lucide-react";
 
 export interface NavItem {
   to: string;
@@ -28,6 +36,44 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         icon: ShoppingCart,
         description: "Quanto um reajuste compra de cada grupo",
         keywords: ["salário mínimo", "reajuste", "inpc", "ipca", "salário"],
+      },
+    ],
+  },
+  {
+    label: "Contas públicas",
+    items: [
+      {
+        to: "/deficit",
+        label: "Déficit",
+        icon: ChartColumnStacked,
+        description: "Primário, juros e nominal em % do PIB",
+        keywords: [
+          "déficit",
+          "superávit",
+          "primário",
+          "juros",
+          "nominal",
+          "nfsp",
+          "resultado fiscal",
+        ],
+      },
+      {
+        to: "/debt",
+        label: "Dívida",
+        icon: Landmark,
+        description: "Dívida líquida e bruta, r − g e de que a dívida federal é feita",
+        keywords: [
+          "dívida pública",
+          "dlsp",
+          "dbgg",
+          "r − g",
+          "juro implícito",
+          "dívida federal",
+          "dpf",
+          "prazo médio",
+          "rolagem",
+          "indexador",
+        ],
       },
     ],
   },

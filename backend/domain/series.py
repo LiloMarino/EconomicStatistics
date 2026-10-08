@@ -142,6 +142,32 @@ def _international_position(code: str) -> SeriesSpec:
     )
 
 
+# A nota de estatísticas fiscais do BCB sai perto do fim do mês seguinte ao de
+# referência; o dia 5 do outro mês dá a folga
+FISCAL_NOTE_LAG_MONTHS = 2
+FISCAL_NOTE_RELEASE_DAY = 5
+
+
+def _fiscal_note(code: str, unit: Unit, first_date: date) -> SeriesSpec:
+    return SeriesSpec(
+        source=Source.BCB_SGS,
+        code=code,
+        unit=unit,
+        first_date=first_date,
+        lag_months=FISCAL_NOTE_LAG_MONTHS,
+        release_day=FISCAL_NOTE_RELEASE_DAY,
+    )
+
+
+# A NFSP é a necessidade de financiamento: valor positivo é déficit. As três séries
+# são do setor público consolidado, sem desvalorização cambial, em % do PIB e
+# acumuladas em 12 meses, e fecham a conta nominal = primário + juros.
+NFSP_START = date(2002, 11, 1)
+# A dívida líquida começa em dez/2001, e o PIB de 12 meses vem um ano antes dela, para
+# o crescimento contra o ano anterior
+NET_DEBT_START = date(2001, 12, 1)
+
+
 SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.IPCA_GENERAL: _ipca(7169),
     SeriesId.IPCA_FOOD: _ipca(7170),
@@ -214,6 +240,19 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     ),
     SeriesId.IIP_ASSETS: _international_position("24011"),
     SeriesId.IIP_LIABILITIES: _international_position("24040"),
+    SeriesId.NOMINAL_DEFICIT: _fiscal_note("5727", Unit.PERCENT_GDP, NFSP_START),
+    SeriesId.PRIMARY_DEFICIT: _fiscal_note("5793", Unit.PERCENT_GDP, NFSP_START),
+    SeriesId.NOMINAL_INTEREST: _fiscal_note("5760", Unit.PERCENT_GDP, NFSP_START),
+    SeriesId.NET_DEBT: _fiscal_note("4513", Unit.PERCENT_GDP, NET_DEBT_START),
+    SeriesId.NET_DEBT_BRL: _fiscal_note("4478", Unit.BRL_MILLION, NET_DEBT_START),
+    SeriesId.GROSS_DEBT: _fiscal_note("13762", Unit.PERCENT_GDP, date(2006, 12, 1)),
+    SeriesId.GDP_12M: _fiscal_note("4382", Unit.BRL_MILLION, date(2000, 12, 1)),
+    # Prazo médio, em meses, dos títulos do Tesouro emitidos no mercado interno, com a
+    # carteira do Banco Central: pesa cada pagamento, cupons inclusive, e não só o
+    # vencimento
+    SeriesId.FEDERAL_DEBT_MATURITY: _fiscal_note(
+        "10618", Unit.MONTHS, date(2000, 10, 1)
+    ),
 }
 
 # Intervalo de tolerância em volta da meta, em vigor desde 2017: o teto é a meta mais

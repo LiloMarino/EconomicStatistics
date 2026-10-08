@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
-from backend.core.enum import Periodicity, Unit
+from backend.core.enum import DebtHolder, Periodicity, Unit
 from backend.domain.coverage import month_start, quarter_start
+from backend.domain.federal_debt import DebtHolding
 from backend.domain.series import Observation, SeriesSpec
 
 FAKE_VALUES = {
@@ -45,3 +46,33 @@ class FakeProvider:
             observations.append(Observation(ref_date=month, value=value))
             month = month_start(month, -3 if quarterly else -1)
         return observations
+
+
+@dataclass
+class FakeDebtProvider:
+    """O Tesouro com o estoque de um mês só, `stock_month`: um título em mercado e um
+    na carteira do Banco Central."""
+
+    stock_month: date = date(2026, 8, 1)
+    name: str = "fake-tesouro"
+    offline: bool = False
+    calls: int = 0
+
+    def get_stock(self) -> list[DebtHolding]:
+        self.calls += 1
+        if self.offline:
+            raise ConnectionError("sem rede")
+        return [
+            DebtHolding(
+                stock_month=self.stock_month,
+                title="LFT 010327",
+                maturity=date(2027, 3, 1),
+                holder=holder,
+                external=False,
+                value=value,
+            )
+            for holder, value in (
+                (DebtHolder.MARKET, 300.0),
+                (DebtHolder.CENTRAL_BANK, 100.0),
+            )
+        ]

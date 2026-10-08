@@ -6,7 +6,7 @@ from enum import StrEnum
 from sqlalchemy import Enum, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
-from backend.core.enum import SeriesId
+from backend.core.enum import Dataset, DebtHolder, SeriesId
 
 # Toda constraint nasce com nome: é o nome que o batch do Alembic usa para recriar a
 # tabela no SQLite.
@@ -29,18 +29,22 @@ def _enum_values(enum_class: type[StrEnum]) -> list[str]:
     return [member.value for member in enum_class]
 
 
-def _series_id_column() -> Enum:
-    """Série gravada pelo valor (`"ipca_food"`), sem CHECK: uma série nova entra no
-    registro sem migration, e quem grava é só o refresh, que lê o próprio registro."""
+def _string_enum(enum_class: type[StrEnum], name: str) -> Enum:
     return Enum(
-        SeriesId,
-        name="series_id",
+        enum_class,
+        name=name,
         native_enum=False,
         create_constraint=False,
         validate_strings=True,
         values_callable=_enum_values,
         length=64,
     )
+
+
+def _series_id_column() -> Enum:
+    """Série gravada pelo valor (`"ipca_food"`), sem CHECK: uma série nova entra no
+    registro sem migration, e quem grava é só o refresh, que lê o próprio registro."""
+    return _string_enum(SeriesId, "series_id")
 
 
 class SeriesObservation(Base):
@@ -65,6 +69,37 @@ class FetchLog(Base):
     __tablename__ = "fetch_log"
 
     series_id: Mapped[SeriesId] = mapped_column(_series_id_column(), primary_key=True)
+    attempted_at: Mapped[datetime]
+    succeeded_at: Mapped[datetime | None]
+    gap: Mapped[bool]
+
+
+class FederalDebtStock(Base):
+    """O estoque da dívida pública federal como o Tesouro publica: uma linha por título,
+    vencimento e carteira no fim de cada mês, em R$. O refresh troca a tabela inteira
+    a cada arquivo novo, então ela é sempre a cópia de um único arquivo da fonte."""
+
+    __tablename__ = "federal_debt_stock"
+
+    stock_month: Mapped[date] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(primary_key=True)
+    maturity: Mapped[date] = mapped_column(primary_key=True)
+    holder: Mapped[DebtHolder] = mapped_column(
+        _string_enum(DebtHolder, "debt_holder"), primary_key=True
+    )
+    external: Mapped[bool]
+    value: Mapped[float]
+
+
+class DatasetFetchLog(Base):
+    """A última consulta de cada fonte que não é série, com o mesmo papel da
+    `FetchLog`."""
+
+    __tablename__ = "dataset_fetch_log"
+
+    dataset: Mapped[Dataset] = mapped_column(
+        _string_enum(Dataset, "dataset"), primary_key=True
+    )
     attempted_at: Mapped[datetime]
     succeeded_at: Mapped[datetime | None]
     gap: Mapped[bool]

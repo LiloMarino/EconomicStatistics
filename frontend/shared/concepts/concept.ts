@@ -19,17 +19,32 @@ export const conceptIds = [
   "international-reserves",
   "international-investment-position",
   "share-of-gdp",
+  "nfsp",
+  "primary-balance",
+  "nominal-interest",
+  "nominal-balance",
+  "net-debt",
+  "gross-debt",
+  "implicit-rate",
+  "nominal-gdp-growth",
+  "r-minus-g",
+  "stabilizing-primary",
+  "federal-debt",
+  "rollover",
+  "indexer",
+  "average-maturity",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */
 export type ConceptId = (typeof conceptIds)[number];
 
-export const topics = ["inflation", "external"] as const;
+export const topics = ["inflation", "public-accounts", "external"] as const;
 
 export type Topic = (typeof topics)[number];
 
 export const topicLabels: Record<Topic, string> = {
   inflation: "Inflação",
+  "public-accounts": "Contas públicas",
   external: "Setor externo",
 };
 

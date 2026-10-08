@@ -8,3 +8,5 @@ class Unit(StrEnum):
     BRL_PER_USD = "brl_per_usd"
     USD_MILLION = "usd_million"
     PERCENT_GDP = "percent_gdp"
+    BRL_MILLION = "brl_million"
+    MONTHS = "months"

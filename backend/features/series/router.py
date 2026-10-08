@@ -6,8 +6,9 @@ from fastapi import APIRouter
 
 from backend.core.database.session import SessionDep
 from backend.core.dto import BaseDTO
-from backend.core.enum import SeriesId
-from backend.features.providers import ProvidersDep
+from backend.core.enum import Dataset, SeriesId
+from backend.features.debt.refresh import refresh_federal_debt
+from backend.features.providers import DebtProviderDep, ProvidersDep
 from backend.features.series.refresh import refresh_series
 from backend.repository.series import fetch_logs, last_cached
 
@@ -15,8 +16,13 @@ router = APIRouter(prefix="/api/series", tags=["series"])
 
 
 class RefreshReportDTO(BaseDTO):
+    """As séries e as fontes que não são série (`datasets_*`) atualizadas ou com
+    falta nova."""
+
     updated: list[SeriesId]
     failed: list[SeriesId]
+    datasets_updated: list[Dataset]
+    datasets_failed: list[Dataset]
 
 
 class SeriesStatusDTO(BaseDTO):
@@ -28,11 +34,20 @@ class SeriesStatusDTO(BaseDTO):
 
 
 @router.post("/refresh")
-def refresh(session: SessionDep, providers: ProvidersDep) -> RefreshReportDTO:
+def refresh(
+    session: SessionDep, providers: ProvidersDep, debt_provider: DebtProviderDep
+) -> RefreshReportDTO:
     """Com o cache em dia, responde sem sair da máquina. Sem rede não é erro: o cache
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
-    report = refresh_series(session, providers, datetime.now())
-    return RefreshReportDTO.model_validate(report)
+    now = datetime.now()
+    report = refresh_series(session, providers, now)
+    debt = refresh_federal_debt(session, debt_provider, now)
+    return RefreshReportDTO(
+        updated=list(report.updated),
+        failed=list(report.failed),
+        datasets_updated=[Dataset.FEDERAL_DEBT_STOCK] if debt.updated else [],
+        datasets_failed=[Dataset.FEDERAL_DEBT_STOCK] if debt.failed else [],
+    )
 
 
 @router.get("/status")

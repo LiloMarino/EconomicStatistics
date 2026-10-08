@@ -6,9 +6,13 @@ import { MonthsTable } from "@/shared/concepts/months-table";
 const inflationScreen = { to: "/inflation", label: "Inflação por categoria" };
 const purchasingPowerScreen = { to: "/purchasing-power", label: "Poder de compra" };
 const externalScreen = { to: "/external-sector", label: "Setor externo" };
+const deficitScreen = { to: "/deficit", label: "Déficit" };
+const debtScreen = { to: "/debt", label: "Dívida" };
 
 const ipcaFrequency = "Mensal, por volta do dia 10 do mês seguinte";
 const externalNoteFrequency = "Mensal, perto do fim do mês seguinte";
+const fiscalNoteFrequency = "Mensal, perto do fim do mês seguinte";
+const tesouroFrequency = "Mensal, cerca de um mês e meio depois do mês do estoque";
 
 // As fontes que mais de um conceito cita; cada conceito diz o que ela comprova nele
 const booklet = {
@@ -33,6 +37,34 @@ const dataset23079 = {
   name: "Banco Central, série 23079 no portal de dados abertos",
   url: "https://dadosabertos.bcb.gov.br/dataset/23079-transacoes-correntes-acumulado-em-12-meses-em-relacao-ao-pib---mensal",
 };
+const nfspDataset = {
+  name: "Banco Central, série 5727 no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/5727-nfsp-sem-desvalorizacao-cambial--pib---fluxo-acumulado-em-12-meses---resultado-nominal---total",
+};
+const dlspDataset = {
+  name: "Banco Central, série 4513 no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/4513-divida-liquida-do-setor-publico--pib---total---setor-publico-consolidado",
+};
+const dbggDataset = {
+  name: "Banco Central, série 13762 no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/13762-divida-bruta-do-governo-geral--pib---metodologia-utilizada-a-partir-de-2008",
+};
+const dpmfDataset = {
+  name: "Banco Central, série 10618 no portal de dados abertos",
+  url: "https://dadosabertos.bcb.gov.br/dataset/10618-divida-mobiliaria-federal---titulos-do-tesouro-nacional---emitidos---prazo-medio---total",
+};
+const tesouroStock = {
+  name: "Tesouro Nacional, estoque da dívida pública federal no Tesouro Transparente",
+  url: "https://www.tesourotransparente.gov.br/ckan/dataset/estoque-da-divida-publica-federal",
+};
+const rmdJul2026 = {
+  name: "Tesouro Nacional, Relatório Mensal da Dívida de julho de 2026",
+  url: "https://www.tesourotransparente.gov.br/publicacoes/relatorio-mensal-da-divida-rmd/2026/7",
+};
+const lrf = {
+  name: "Lei Complementar 101/2000 (Lei de Responsabilidade Fiscal)",
+  url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp101.htm",
+};
 const minimumWageLaw = {
   name: "Lei 14.663/2023",
   url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14663.htm",
@@ -50,9 +82,10 @@ const ipcaGroupNames = [
   "Comunicação",
 ];
 
-// Os números dos exemplos saem do banco do app (IPCA até ago/2026, setor externo até
-// set/2026) e foram conferidos contra as telas e o SGS; os fatos institucionais, contra
-// o IBGE, o Banco Central e a lei.
+// Os números dos exemplos saem do banco do app (IPCA e contas públicas até ago/2026,
+// setor externo até set/2026, dívida federal até jul/2026) e foram conferidos contra as
+// telas, o SGS e o Relatório Mensal da Dívida; os fatos institucionais, contra o IBGE, o
+// Banco Central, o Tesouro e a lei.
 export const concepts: Record<ConceptId, Concept> = {
   ipca: {
     title: "IPCA",
@@ -1291,5 +1324,1016 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: externalNoteFrequency,
     screens: [externalScreen],
+  },
+
+  nfsp: {
+    title: "Necessidade de financiamento do setor público",
+    abbr: "NFSP",
+    topic: "public-accounts",
+    summary: "O nome oficial do déficit: quanto o setor público precisou pedir emprestado.",
+    lead: (
+      <>
+        A <strong>NFSP</strong> é quanto o setor público precisou pedir emprestado para fechar as
+        contas num período. É o nome oficial do déficit: positivo é déficit, negativo é superávit.
+      </>
+    ),
+    keywords: [
+      "déficit público",
+      "superávit",
+      "resultado fiscal",
+      "contas públicas",
+      "abaixo da linha",
+    ],
+    measures: (
+      <>
+        <p>
+          Abrange o governo federal (Tesouro e Previdência), os estados, os municípios, as estatais
+          das três esferas, menos Petrobras e Eletrobras, e o Banco Central.
+        </p>
+        <p>
+          O Banco Central mede pelo lado do financiamento, que ele chama de "abaixo da linha": em
+          vez de somar receitas e despesas, olha quanto a dívida líquida cresceu no período. Daí
+          saem três recortes: o resultado nominal, o primário e os juros.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Nos 12 meses até agosto de 2026, a NFSP foi de <strong>9,48% do PIB</strong>: 0,62% de
+          déficit primário mais 8,86% de juros.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto maior a NFSP, mais rápido a dívida cresce. Negativa, o setor público arrecadou mais
+        do que gastou com tudo, juros inclusive, e pôde abater dívida.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Sem desvalorização cambial.",
+        text: (
+          <>
+            As séries do app tiram dos juros o efeito do dólar sobre a dívida em moeda estrangeira.
+            Assim o número mostra a política fiscal, e não o sobe e desce do câmbio.
+          </>
+        ),
+      },
+      {
+        title: "Sinal ao contrário do noticiário.",
+        text: (
+          <>
+            Na NFSP, positivo é déficit. O noticiário costuma falar em superávit positivo; aqui o
+            mesmo superávit aparece com sinal negativo.
+          </>
+        ),
+      },
+    ],
+    related: ["nominal-balance", "primary-balance", "nominal-interest", "net-debt"],
+    sources: [
+      {
+        ...nfspDataset,
+        backs:
+          "Quem a NFSP abrange, a medida pelo lado do financiamento (abaixo da linha), os três recortes e a exclusão do efeito do câmbio nos juros.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5727, 5793 e 5760 do SGS",
+        backs: "Os 9,48%, 0,62% e 8,86% do PIB nos 12 meses até agosto de 2026.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [deficitScreen],
+  },
+
+  "primary-balance": {
+    title: "Resultado primário",
+    topic: "public-accounts",
+    summary: "Arrecadação menos gastos do setor público, sem contar os juros da dívida.",
+    lead: (
+      <>
+        O resultado primário é o que o setor público arrecada menos o que gasta, sem contar os juros
+        da dívida. Na conta da NFSP, positivo é déficit e negativo é superávit.
+      </>
+    ),
+    keywords: ["primário", "superávit primário", "déficit primário", "meta fiscal", "orçamento"],
+    measures: (
+      <p>
+        Se o governo cabe no próprio orçamento: salários, aposentadorias, saúde, educação e
+        investimento contra impostos e contribuições. É a parte do déficit que depende das escolhas
+        de gasto e de imposto, e não do tamanho da dívida.
+      </p>
+    ),
+    formula: {
+      tex: "\\text{primário} = \\text{nominal} - \\text{juros}",
+      legend: [
+        { symbol: "\\text{nominal}", text: <>o déficit completo, em % do PIB</> },
+        { symbol: "\\text{juros}", text: <>os juros nominais da dívida no mesmo período</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>Nos 12 meses até agosto de 2026:</p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="9{,}48 - 8{,}86 = \mathbf{0{,}62\%}\ \text{do PIB de déficit}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Superávit primário abate parte dos juros e segura a dívida. O setor público fez superávit em
+        todos os anos de 2002 a 2013, déficit de 2014 a 2020 (9,24% do PIB em 2020, ano da
+        pandemia), superávit em 2021 e 2022 e déficit de novo desde 2023.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Caixa, e não competência.",
+        text: (
+          <>
+            O primário conta o dinheiro quando ele entra ou sai do caixa. Os juros contam quando
+            correm, pagos ou não.
+          </>
+        ),
+      },
+    ],
+    related: ["nfsp", "nominal-interest", "nominal-balance", "stabilizing-primary"],
+    sources: [
+      {
+        ...nfspDataset,
+        backs:
+          "O primário é o componente não financeiro do resultado, igual ao nominal menos os juros, e é apurado pelo critério de caixa.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5793 e 5727 do SGS",
+        backs:
+          "O primário de cada dezembro desde 2002 e o de agosto de 2026, e o nominal de 9,48% do mesmo mês.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [deficitScreen, debtScreen],
+  },
+
+  "nominal-interest": {
+    title: "Juros nominais",
+    topic: "public-accounts",
+    summary: "O custo da dívida pública num período, em % do PIB.",
+    lead: (
+      <>
+        Os juros nominais são o custo da dívida pública no período: o quanto o setor público passa a
+        dever a mais só por estar devendo. São a maior parte do déficit brasileiro.
+      </>
+    ),
+    keywords: ["juros da dívida", "custo da dívida", "despesa com juros", "selic"],
+    measures: (
+      <p>
+        Os juros sobre a dívida interna e a externa, com a correção pela inflação. Crescem com a
+        Selic, porque boa parte da dívida é corrigida por ela, e com o tamanho da dívida.
+      </p>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Nos 12 meses até agosto de 2026, os juros foram de <strong>8,86% do PIB</strong>, contra
+            um déficit nominal de 9,48%:
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\dfrac{8{,}86}{9{,}48} = \mathbf{93{,}5\%}\ \text{do déficit é juro}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Desde 2002, só em 2020 o primário pesou mais que os juros no déficit. Juro alto por muito
+        tempo faz a dívida crescer mesmo quando o governo fecha o orçamento do dia a dia.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Competência, e não caixa.",
+        text: (
+          <>
+            O juro entra na conta quando corre, mês a mês, mesmo que o título só seja pago no
+            vencimento.
+          </>
+        ),
+      },
+    ],
+    related: ["nominal-balance", "implicit-rate", "indexer", "nfsp"],
+    sources: [
+      {
+        ...nfspDataset,
+        backs:
+          "Os juros nominais são apropriados por competência sobre a dívida interna e externa, com a correção monetária, e excluem o efeito do câmbio.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5760, 5793 e 5727 do SGS",
+        backs:
+          "Os 8,86% de juros e os 9,48% de nominal até agosto de 2026, e o primário maior que os juros só em dezembro de 2020.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [deficitScreen],
+  },
+
+  "nominal-balance": {
+    title: "Resultado nominal",
+    topic: "public-accounts",
+    summary: "O déficit completo: o primário mais os juros da dívida.",
+    lead: (
+      <>
+        O resultado nominal é o déficit completo: o primário mais os juros da dívida. É quanto a
+        dívida precisou crescer no período para fechar as contas.
+      </>
+    ),
+    keywords: ["déficit nominal", "nominal", "déficit total"],
+    measures: (
+      <p>
+        A variação da dívida líquida no período, descontados os ajustes que não são déficit, como
+        mudanças de método. Junta as duas partes: o que o governo gastou além do que arrecadou e o
+        custo da dívida que ele já tinha.
+      </p>
+    ),
+    formula: {
+      tex: "\\text{nominal} = \\text{primário} + \\text{juros}",
+      legend: [
+        {
+          symbol: "\\text{primário}",
+          text: <>arrecadação menos gastos, sem os juros, em % do PIB</>,
+        },
+        { symbol: "\\text{juros}", text: <>o custo da dívida no mesmo período, em % do PIB</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <FormulaBox>
+          <Formula flushLeft tex="0{,}62 + 8{,}86 = \mathbf{9{,}48\%}\ \text{do PIB}" />
+        </FormulaBox>
+      ),
+    },
+    reading: (
+      <p>
+        Déficit nominal de 9,48% do PIB quer dizer que, em 12 meses, o setor público precisou de
+        dívida nova equivalente a quase um décimo de tudo o que o país produziu.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Aqui é soma mesmo.",
+        text: (
+          <>
+            As três partes estão em % do PIB do mesmo período: são pedaços de um mesmo bolo, e não
+            taxas de crescimento, que se compõem multiplicando.
+          </>
+        ),
+      },
+    ],
+    related: ["primary-balance", "nominal-interest", "nfsp", "net-debt"],
+    sources: [
+      {
+        ...nfspDataset,
+        backs:
+          "O resultado nominal é a variação nominal da dívida líquida, deduzidos os ajustes, e soma o primário e os juros.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5727, 5793 e 5760 do SGS",
+        backs: "Os 9,48%, 0,62% e 8,86% do PIB nos 12 meses até agosto de 2026.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [deficitScreen],
+  },
+
+  "net-debt": {
+    title: "Dívida líquida do setor público",
+    abbr: "DLSP",
+    topic: "public-accounts",
+    summary: "O que o setor público deve menos o que tem a receber, em % do PIB.",
+    lead: (
+      <>
+        A dívida líquida é tudo o que o setor público deve menos o que ele tem a receber, como as
+        reservas internacionais. Inclui o Banco Central e as estatais.
+      </>
+    ),
+    keywords: ["dlsp", "dívida líquida", "dívida pública", "dívida/pib"],
+    measures: (
+      <p>
+        O saldo entre as dívidas e os créditos do governo federal, dos estados, dos municípios, das
+        estatais (menos Petrobras e Eletrobras) e do Banco Central. O Banco Central entra porque o
+        resultado dele vai automaticamente para o Tesouro. É dela que sai a medida do déficit.
+      </p>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Em agosto de 2026, a dívida líquida era de R$ 9,24 trilhões, ou{" "}
+          <strong>69,26% do PIB</strong>.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        O que importa é a direção: dívida/PIB subindo quer dizer que a dívida cresce mais rápido que
+        a economia que paga por ela. A conta do primário que estabiliza diz quanto falta para ela
+        parar.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Desconta créditos.",
+        text: (
+          <>
+            Quando um crédito cresce, a líquida cai sem que a bruta mude. As reservas em dólar valem
+            mais reais quando o dólar sobe, e isso baixa a dívida líquida.
+          </>
+        ),
+      },
+    ],
+    related: ["gross-debt", "implicit-rate", "stabilizing-primary", "nfsp"],
+    sources: [
+      {
+        ...dlspDataset,
+        backs:
+          "A dívida líquida é o saldo entre dívidas e créditos do setor público não financeiro e do Banco Central, que entra por transferir o resultado ao Tesouro, e é a base do déficit abaixo da linha.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 4513 e 4478 do SGS",
+        backs: "Os 69,26% do PIB e os R$ 9,24 trilhões de agosto de 2026.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "gross-debt": {
+    title: "Dívida bruta do governo geral",
+    abbr: "DBGG",
+    topic: "public-accounts",
+    summary: "Tudo o que os governos devem, sem descontar o que têm a receber, em % do PIB.",
+    lead: (
+      <>
+        A dívida bruta soma tudo o que os governos federal, estaduais e municipais devem, sem
+        descontar o que têm a receber. Inclui as operações compromissadas do Banco Central e deixa
+        de fora as estatais.
+      </>
+    ),
+    keywords: ["dbgg", "dívida bruta", "dívida pública", "compromissadas"],
+    measures: (
+      <p>
+        As dívidas dos três níveis de governo com o setor privado, com os bancos públicos e com o
+        exterior, pelo valor cheio. Entram também as operações compromissadas, em que o Banco
+        Central vende títulos do Tesouro com a promessa de recomprá-los, para tirar dinheiro de
+        circulação: segundo o Banco Central, elas têm estreita relação com a dívida do Tesouro.
+      </p>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Em agosto de 2026, a dívida bruta era de <strong>82,86% do PIB</strong>, contra 69,26%
+            da líquida:
+          </p>
+          <FormulaBox>
+            <Formula flushLeft tex="82{,}86 - 69{,}26 = \mathbf{13{,}60}\ \text{pontos do PIB}" />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        A bruta mostra quanto os governos devem a terceiros; a líquida, quanto o setor público deve
+        depois de descontar o que tem a receber. As duas subindo juntas é o sinal mais claro de
+        dívida em alta.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Abrangência diferente da líquida.",
+        text: (
+          <>
+            A bruta não tem as estatais nem o Banco Central, a não ser pelas compromissadas. A
+            diferença entre as duas não é só o que o governo tem a receber.
+          </>
+        ),
+      },
+    ],
+    related: ["net-debt", "federal-debt", "rollover"],
+    sources: [
+      {
+        ...dbggDataset,
+        backs:
+          "Quem a dívida bruta abrange, a inclusão das compromissadas do Banco Central pela estreita relação com a dívida do Tesouro e a exclusão das estatais.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 13762 e 4513 do SGS",
+        backs: "Os 82,86% e os 69,26% do PIB de agosto de 2026.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "implicit-rate": {
+    title: "Juro implícito da dívida",
+    abbr: "r",
+    topic: "public-accounts",
+    summary: "A taxa média que a dívida líquida pagou em 12 meses: juros divididos pela dívida.",
+    lead: (
+      <>
+        O juro implícito é a taxa média que a dívida líquida pagou nos últimos 12 meses: os juros do
+        período divididos pela dívida média. É o r da conta r − g.
+      </>
+    ),
+    keywords: ["r", "taxa implícita", "custo médio", "juro médio da dívida"],
+    measures: (
+      <p>
+        Quanto custou, em média, cada real de dívida líquida no ano. Junta todos os títulos e
+        contratos, cada um com o seu juro, numa taxa só.
+      </p>
+    ),
+    formula: {
+      tex: "r = \\dfrac{j \\times \\text{PIB}_{12m}}{\\bar{D}}",
+      legend: [
+        { symbol: "j", text: <>juros nominais de 12 meses, em fração do PIB</> },
+        { symbol: "\\text{PIB}_{12m}", text: <>o PIB dos mesmos 12 meses, em reais</> },
+        {
+          symbol: "\\bar{D}",
+          text: <>a média da dívida líquida em reais no fim de cada um dos 12 meses</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Juros de 8,86% de um PIB de R$ 13,34 trilhões, sobre uma dívida média de R$ 8,61
+            trilhões de setembro de 2025 a agosto de 2026:
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="r = \dfrac{0{,}0886 \times 13{,}34}{8{,}61} = \dfrac{1{,}18}{8{,}61} = \mathbf{13{,}74\%}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Sozinho ele diz quanto a dívida custa; o que decide a trajetória é compará-lo com o
+        crescimento do PIB nominal, o g.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Conta do app.",
+        text: (
+          <>
+            O Banco Central não publica essa taxa pronta. O app a calcula com as séries de juros
+            (5760), do PIB de 12 meses (4382) e da dívida líquida em reais (4478).
+          </>
+        ),
+      },
+    ],
+    related: ["r-minus-g", "nominal-gdp-growth", "nominal-interest", "net-debt"],
+    sources: [
+      {
+        ...nfspDataset,
+        backs: "Os juros nominais são o fluxo de juros sobre a dívida, em % do PIB de 12 meses.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5760, 4382 e 4478 do SGS",
+        backs:
+          "Os juros de 8,86% do PIB, o PIB de 12 meses de R$ 13,34 trilhões e a dívida líquida de cada mês de setembro de 2025 a agosto de 2026.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "nominal-gdp-growth": {
+    title: "Crescimento do PIB nominal",
+    abbr: "g",
+    topic: "public-accounts",
+    summary: "Quanto o PIB em reais correntes cresceu em 12 meses, inflação inclusive.",
+    lead: (
+      <>
+        O crescimento nominal é quanto o PIB em reais correntes cresceu em 12 meses, somando o
+        crescimento de verdade e a inflação. É o g da conta r − g.
+      </>
+    ),
+    keywords: ["g", "pib nominal", "crescimento", "pib em reais"],
+    measures: (
+      <p>
+        O PIB dos últimos 12 meses contra o dos 12 meses anteriores, nos preços de cada época. A
+        dívida está em reais correntes, e por isso se compara com o PIB em reais correntes.
+      </p>
+    ),
+    formula: {
+      tex: "g = \\dfrac{\\text{PIB}_{12m,\\,t}}{\\text{PIB}_{12m,\\,t-12}} - 1",
+      legend: [
+        { symbol: "\\text{PIB}_{12m,\\,t}", text: <>o PIB dos 12 meses até o mês t, em reais</> },
+        { symbol: "t - 12", text: <>o mesmo mês, um ano antes</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <FormulaBox>
+          <Formula flushLeft tex="g = \dfrac{13{,}34}{12{,}44} - 1 = \mathbf{7{,}23\%}" />
+        </FormulaBox>
+      ),
+    },
+    reading: (
+      <p>
+        Inflação alta empurra o g para cima e ajuda a dívida/PIB a cair: em dezembro de 2021 o PIB
+        nominal crescia 18,4% em 12 meses, contra um juro implícito de 9,4%.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Nominal, e não real.",
+        text: (
+          <>
+            Os 7,23% incluem a inflação. O crescimento real, que é o que aparece no noticiário, é
+            bem menor.
+          </>
+        ),
+      },
+    ],
+    related: ["r-minus-g", "implicit-rate", "share-of-gdp"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, série 4382 do SGS (PIB de 12 meses em reais correntes)",
+        backs:
+          "O PIB de R$ 13,34 trilhões até agosto de 2026 e de R$ 12,44 trilhões até agosto de 2025, e o de dezembro de 2020 e de 2021.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, séries 5760 e 4478 do SGS",
+        backs: "O juro implícito de 9,4% em dezembro de 2021.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "r-minus-g": {
+    title: "r − g",
+    topic: "public-accounts",
+    summary:
+      "O juro da dívida menos o crescimento da economia: se positivo, a dívida/PIB sobe sozinha.",
+    lead: (
+      <>
+        r − g é o juro médio da dívida menos o crescimento do PIB nominal. Positivo, a dívida/PIB
+        sobe sozinha mesmo com o primário zerado; negativo, ela encolhe sozinha.
+      </>
+    ),
+    keywords: ["r menos g", "dinâmica da dívida", "sustentabilidade", "bola de neve"],
+    measures: (
+      <p>
+        A dívida cresce todo ano pelo juro, e o PIB, que é quem paga, cresce pelo g. A dívida/PIB do
+        ano seguinte é a de hoje multiplicada pela razão entre os dois fatores, menos o primário
+        feito no ano.
+      </p>
+    ),
+    formula: {
+      tex: "d_{t+1} = d_t \\times \\dfrac{1 + r}{1 + g} - p",
+      legend: [
+        { symbol: "d_t", text: <>dívida/PIB no ano t, em fração</> },
+        { symbol: "r", text: <>juro implícito da dívida</> },
+        { symbol: "g", text: <>crescimento do PIB nominal</> },
+        { symbol: "p", text: <>superávit primário do ano, em fração do PIB</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>r de 13,74% contra g de 7,23%:</p>
+          <FormulaBox>
+            <Formula flushLeft tex="r - g = 13{,}74 - 7{,}23 = \mathbf{+6{,}51}\ \text{p.p.}" />
+            <Formula
+              flushLeft
+              tex="\dfrac{1{,}1374}{1{,}0723} - 1 = 6{,}07\%\ \text{de alta da dívida/PIB num ano, sem primário}"
+            />
+          </FormulaBox>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Com r acima de g, só superávit primário segura a dívida/PIB. Em 2021 a inflação alta fez g
+        passar r, e a dívida líquida caiu de 61,4% para 55,1% do PIB em um ano.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A diferença é um atalho.",
+        text: (
+          <>
+            r − g em pontos percentuais é o jeito curto de falar. A conta exata divide os fatores,
+            (1 + r) ÷ (1 + g) − 1, e dá um pouco menos: 6,07% contra 6,51 pontos.
+          </>
+        ),
+      },
+    ],
+    related: ["implicit-rate", "nominal-gdp-growth", "stabilizing-primary", "net-debt"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, séries 5760, 4382, 4478 e 4513 do SGS",
+        backs:
+          "O r de 13,74% e o g de 7,23% de agosto de 2026, e a dívida líquida de 61,37% e 55,11% do PIB em dezembro de 2020 e de 2021.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "stabilizing-primary": {
+    title: "Primário que estabiliza a dívida",
+    abbr: "p*",
+    topic: "public-accounts",
+    summary: "O superávit primário que deixaria a dívida/PIB parada.",
+    lead: (
+      <>
+        É o superávit primário, em % do PIB, que deixa a dívida/PIB igual de um ano para o outro. Se
+        o governo faz menos que isso, a dívida/PIB sobe.
+      </>
+    ),
+    keywords: ["p*", "primário necessário", "estabilizar a dívida", "superávit necessário"],
+    measures: (
+      <p>
+        Quanto o governo precisa economizar, antes dos juros, para que a dívida cresça no mesmo
+        ritmo que a economia. Sai da conta de r − g, igualando a dívida/PIB dos dois anos.
+      </p>
+    ),
+    formula: {
+      tex: "p^* = d \\times \\dfrac{r - g}{1 + g}",
+      legend: [
+        { symbol: "p^*", text: <>primário que estabiliza, em fração do PIB</> },
+        { symbol: "d", text: <>dívida líquida em fração do PIB</> },
+        { symbol: "r", text: <>juro implícito da dívida</> },
+        { symbol: "g", text: <>crescimento do PIB nominal</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="p^* = 0{,}6926 \times \dfrac{0{,}1374 - 0{,}0723}{1{,}0723} = \mathbf{4{,}20\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+          <p>
+            O feito foi um déficit primário de 0,62% do PIB: faltam 4,82 pontos do PIB por ano para
+            a dívida/PIB parar de subir.
+          </p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Com dívida de 80% do PIB, r de 10% e g de 7%, seriam 0,8 × 0,03 ÷ 1,07 = 2,24% do PIB.
+        Quanto maior a dívida e o r − g, maior o esforço.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Observado, e não projetado.",
+        text: (
+          <>
+            A conta usa o r e o g dos últimos 12 meses. As projeções oficiais usam o juro e o
+            crescimento esperados para os próximos anos, e chegam a outros números.
+          </>
+        ),
+      },
+      {
+        title: "Sobre a dívida líquida.",
+        text: <>Com a dívida bruta, o d e o r mudam, e o p* também.</>,
+      },
+    ],
+    related: ["r-minus-g", "primary-balance", "net-debt", "implicit-rate"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, séries 4513, 5760, 4382, 4478 e 5793 do SGS",
+        backs:
+          "A dívida líquida de 69,26% do PIB, o r e o g de agosto de 2026 e o déficit primário de 0,62% do PIB.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
+  },
+
+  "federal-debt": {
+    title: "Dívida pública federal",
+    abbr: "DPF",
+    topic: "public-accounts",
+    summary: "A dívida do Tesouro Nacional: títulos e contratos, no Brasil e no exterior.",
+    lead: (
+      <>
+        A dívida pública federal é a dívida do Tesouro Nacional: os títulos vendidos no Brasil e no
+        exterior e os contratos com bancos e organismos internacionais. Em julho de 2026 eram R$
+        9,29 trilhões.
+      </>
+    ),
+    keywords: ["dpf", "dpmfi", "dpfe", "títulos públicos", "tesouro", "dívida mobiliária"],
+    measures: (
+      <>
+        <p>
+          Tem duas partes: a dívida mobiliária interna (DPMFi), que são os títulos em reais, e a
+          externa (DPFe). Conta os títulos com bancos, fundos, previdência e estrangeiros, que é a
+          dívida em mercado.
+        </p>
+        <p>
+          É um terceiro recorte, ao lado da líquida e da bruta: só o governo federal, sem estados
+          nem municípios, e só o que o Tesouro emitiu.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de julho de 2026",
+      content: (
+        <p>
+          Em julho de 2026, a DPF era de R$ 9.288,78 bilhões: R$ 8.948,72 bilhões de dívida interna
+          e R$ 340,06 bilhões de externa.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Mais que o tamanho, que a dívida líquida e a bruta já medem, a DPF mostra de que a dívida é
+        feita: quando vence e a que está atrelada. É isso que decide quanto ela sofre com juro alto
+        ou dólar caro.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A carteira do Banco Central fica de fora.",
+        text: (
+          <>
+            O Banco Central guarda títulos do Tesouro para controlar o dinheiro em circulação: eram
+            24,3% de todos os títulos federais emitidos em julho de 2026. Desde a Lei de
+            Responsabilidade Fiscal, ele só compra título direto do Tesouro para trocar os que
+            vencem na própria carteira, e não emite mais títulos próprios.
+          </>
+        ),
+      },
+    ],
+    related: ["indexer", "average-maturity", "rollover", "gross-debt"],
+    sources: [
+      {
+        ...rmdJul2026,
+        backs: "O estoque de R$ 9.288,78 bilhões em julho de 2026, dividido em DPMFi e DPFe.",
+      },
+      {
+        ...tesouroStock,
+        backs:
+          "Cada título por carteira, em mercado ou no Banco Central, de onde sai a parte de 24,3% na carteira do Banco Central.",
+      },
+      {
+        ...lrf,
+        backs:
+          "O artigo 39 limita a compra direta de títulos pelo Banco Central à troca dos que vencem na carteira dele, e o artigo 34 o proíbe de emitir títulos.",
+      },
+      {
+        ...dpmfDataset,
+        backs:
+          "Os últimos títulos do Banco Central foram resgatados em 2006, pela proibição da lei.",
+      },
+    ],
+    frequency: tesouroFrequency,
+    screens: [debtScreen],
+  },
+
+  rollover: {
+    title: "Rolagem da dívida",
+    topic: "public-accounts",
+    summary: "Pagar os títulos que vencem com o dinheiro de títulos novos.",
+    lead: (
+      <>
+        Rolar a dívida é pagar os títulos que vencem com o dinheiro de títulos novos. Quanto mais
+        vence de uma vez, mais o Tesouro depende das condições do mercado naquele momento.
+      </>
+    ),
+    keywords: ["rolagem", "vencimentos", "refinanciamento", "vence em 12 meses"],
+    measures: (
+      <p>
+        A fatia da dívida que vence logo, normalmente nos 12 meses seguintes. O governo raramente
+        paga dívida com dinheiro do orçamento: ele troca o título que vence por outro.
+      </p>
+    ),
+    example: {
+      title: "Com os números de julho de 2026",
+      content: (
+        <p>
+          Do principal da dívida federal em mercado em julho de 2026, <strong>16,9%</strong> vence
+          até julho de 2027. Contando também os juros que os títulos pagam no caminho, o Tesouro
+          chega a 18,91%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto menor a parte que vence em 12 meses, menos o Tesouro precisa ir ao mercado de uma
+        vez. Prazo curto obriga a rolar muito, e é aí que a desconfiança vira crise: quem compra
+        pede juro maior para continuar emprestando.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Principal, e não fluxo.",
+        text: (
+          <>
+            O app conta o valor de cada título no vencimento, pelo arquivo do Tesouro. O Tesouro
+            conta todo pagamento dos próximos 12 meses, juros inclusive, e por isso chega a um
+            número maior.
+          </>
+        ),
+      },
+    ],
+    related: ["average-maturity", "federal-debt", "indexer"],
+    sources: [
+      {
+        ...rmdJul2026,
+        backs: "Os 18,91% da DPF que vencem nos 12 meses seguintes a julho de 2026.",
+      },
+      {
+        ...tesouroStock,
+        backs: "O vencimento e o valor de cada título, de onde sai o 16,9% do principal.",
+      },
+    ],
+    frequency: tesouroFrequency,
+    screens: [debtScreen],
+  },
+
+  indexer: {
+    title: "Indexador",
+    topic: "public-accounts",
+    summary: "O que corrige o valor de um título: Selic, inflação, dólar ou nada (prefixado).",
+    lead: (
+      <>
+        O indexador é o que corrige o valor de um título até ele vencer: a Selic, a inflação, o
+        dólar, ou nada, no prefixado, que tem a taxa travada no dia da venda.
+      </>
+    ),
+    keywords: [
+      "lft",
+      "ltn",
+      "ntn-b",
+      "ntn-f",
+      "prefixado",
+      "pós-fixado",
+      "taxa flutuante",
+      "selic",
+    ],
+    measures: (
+      <ul className="list-disc pl-5">
+        <li>LFT: corrigida pela Selic (taxa flutuante).</li>
+        <li>LTN e NTN-F: prefixadas, com a taxa fixa desde a venda.</li>
+        <li>NTN-B: corrigida pelo IPCA, mais um juro fixo.</li>
+        <li>NTN-C: corrigida pelo IGP-M.</li>
+        <li>Dívida externa: atrelada ao câmbio.</li>
+      </ul>
+    ),
+    example: {
+      title: "Com os números de julho de 2026",
+      content: (
+        <p>
+          Em julho de 2026, a dívida federal era 51,11% de taxa flutuante, 26,02% de índice de
+          preços, 19,22% de prefixados e 3,65% de câmbio.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto mais Selic, mais rápido uma alta de juros chega ao custo da dívida. O Plano Anual de
+        Financiamento de 2026 mira de 49% a 53% em taxa flutuante, de 21% a 25% em índice de preços,
+        de 20% a 24% em prefixados e de 3% a 7% em câmbio.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "IPCA e IGP-M separados.",
+        text: (
+          <>
+            O Tesouro junta os dois em "índice de preços". O app os mostra separados, e o IGP-M é
+            menos de 1% da dívida.
+          </>
+        ),
+      },
+    ],
+    related: ["federal-debt", "nominal-interest", "average-maturity"],
+    sources: [
+      {
+        ...rmdJul2026,
+        backs:
+          "A composição de julho de 2026 por indexador e as faixas do Plano Anual de Financiamento de 2026.",
+      },
+      {
+        ...tesouroStock,
+        backs: "O nome de cada título, de onde sai o indexador dele.",
+      },
+    ],
+    frequency: tesouroFrequency,
+    screens: [debtScreen],
+  },
+
+  "average-maturity": {
+    title: "Prazo médio da dívida",
+    topic: "public-accounts",
+    summary: "Quanto tempo, em média, falta para a dívida federal ser paga.",
+    lead: (
+      <>
+        O prazo médio diz quanto tempo, em média, falta para a dívida ser paga, pesando cada
+        pagamento pelo valor. Prazo mais longo deixa o Tesouro menos exposto a refinanciar tudo num
+        momento ruim.
+      </>
+    ),
+    keywords: ["prazo médio", "vencimento", "duração", "perfil da dívida"],
+    measures: (
+      <p>
+        Cada pagamento que a dívida ainda vai fazer, o principal e os juros do caminho, pesa pelo
+        valor dele. Um prazo médio de 4 anos quer dizer que, em média, o Tesouro troca a dívida
+        inteira a cada 4 anos.
+      </p>
+    ),
+    example: {
+      title: "Com os números de julho de 2026",
+      content: (
+        <p>
+          Em julho de 2026, o prazo médio da dívida federal era de 4,05 anos, e o da dívida interna,
+          de 3,94 anos. A série do Banco Central dava 47,40 meses, os mesmos 3,95 anos, e passou a
+          47,99 meses em agosto.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Mais longo é melhor. O Plano Anual de Financiamento de 2026 mira um prazo médio da dívida
+        federal entre 3,8 e 4,2 anos.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Conta os juros do caminho.",
+        text: (
+          <>
+            Pela data final de cada título, sem os juros pagos antes, a conta com o arquivo do
+            Tesouro dá 5,35 anos em julho de 2026. A medida oficial pesa também os cupons e chega a
+            menos.
+          </>
+        ),
+      },
+    ],
+    related: ["rollover", "federal-debt", "indexer"],
+    sources: [
+      {
+        ...rmdJul2026,
+        backs:
+          "O prazo médio de 4,05 anos da DPF e de 3,94 anos da DPMFi em julho de 2026, e a faixa de 3,8 a 4,2 anos do Plano Anual de Financiamento.",
+      },
+      {
+        ...dpmfDataset,
+        backs:
+          "O prazo médio dos títulos do Tesouro, de 47,40 meses em julho e 47,99 em agosto de 2026.",
+      },
+      {
+        ...tesouroStock,
+        backs: "O vencimento e o valor de cada título, de onde sai a conta de 5,35 anos.",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [debtScreen],
   },
 };

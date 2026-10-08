@@ -13,9 +13,10 @@ from backend.core.database.engine import create_engine_for
 from backend.core.database.migrate import migrate
 from backend.core.database.session import get_session
 from backend.core.enum import Source
+from backend.domain.federal_debt import FederalDebtProvider
 from backend.domain.series import SeriesProvider
-from backend.features.providers import get_providers
-from tests.fakes import FakeProvider
+from backend.features.providers import get_debt_provider, get_providers
+from tests.fakes import FakeDebtProvider, FakeProvider
 
 
 @pytest.fixture
@@ -50,7 +51,14 @@ def fake_provider() -> FakeProvider:
 
 
 @pytest.fixture
-def api(engine: Engine, fake_provider: FakeProvider) -> TestClient:
+def fake_debt_provider() -> FakeDebtProvider:
+    return FakeDebtProvider()
+
+
+@pytest.fixture
+def api(
+    engine: Engine, fake_provider: FakeProvider, fake_debt_provider: FakeDebtProvider
+) -> TestClient:
     """App com a sessão apontando para o banco do teste e as fontes trocadas pelo
     fake: teste nenhum sai para a rede."""
 
@@ -61,7 +69,11 @@ def api(engine: Engine, fake_provider: FakeProvider) -> TestClient:
     def providers_override() -> dict[Source, SeriesProvider]:
         return {Source.IBGE: fake_provider, Source.BCB_SGS: fake_provider}
 
+    def debt_provider_override() -> FederalDebtProvider:
+        return fake_debt_provider
+
     app = create_app()
     app.dependency_overrides[get_session] = session_override
     app.dependency_overrides[get_providers] = providers_override
+    app.dependency_overrides[get_debt_provider] = debt_provider_override
     return TestClient(app)

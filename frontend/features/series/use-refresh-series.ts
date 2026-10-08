@@ -3,17 +3,20 @@ import { toast } from "sonner";
 
 import { getApiErrorMessage, post } from "@/shared/lib/api";
 import { invalidateKeys, queryKeys } from "@/shared/lib/query-keys";
-import { seriesLabels } from "@/shared/lib/series-labels";
+import { datasetLabels, seriesLabels } from "@/shared/lib/series-labels";
 
 export function useRefreshSeries() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => post("/api/series/refresh"),
-    onSuccess: ({ failed }) => {
+    onSuccess: ({ failed, datasets_failed }) => {
       void invalidateKeys(queryClient, [queryKeys.series]);
-      if (failed.length > 0) {
-        const names = failed.map((id) => seriesLabels[id]).join(", ");
+      const names = [
+        ...failed.map((id) => seriesLabels[id]),
+        ...datasets_failed.map((id) => datasetLabels[id]),
+      ].join(", ");
+      if (names) {
         toast.warning(`A fonte ainda não entregou o último mês de: ${names}.`);
       }
     },
