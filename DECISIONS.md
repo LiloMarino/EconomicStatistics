@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-08):** nasceu a D8: dado externo se atualiza sozinho e aos poucos, sem número digitado no código.
+> **Última mudança (2026-10-09):** a D8 ganhou a revisão do índice de Basileia, somado do IF.data no lugar do PDF do relatório.
 
 ---
 
@@ -269,4 +269,5 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 **Consequências:**
 - **Revisão de 2026-10-08:** as séries do SGS e do IBGE, a pesquisa Focus, a dívida federal do Tesouro e o calendário do Copom seguem a regra. A tolerância da meta de inflação, que estava digitada a partir das resoluções do CMN, passou a vir do site do Banco Central: a tabela do histórico das metas e a frase da regra em vigor.
 - **Revisão de 2026-10-08, parâmetros dos casos do simulador:** dívida, juro, crescimento e primário de cada caso que aconteceu (Japão nos anos 2010, Grécia em 2010, Argentina em 2001 e 2023, o Brasil de 2002 e de 2015-2016) ficam digitados em `domain/debt_cases.py`. São retratos de um período que passou e não têm série publicada por caso, então entram como convenção, com a fonte e o período escritos ao lado. O que muda com o tempo vem da fonte: o Brasil hoje lê a tela Dívida e a seção histórica lê o FMI, que o app busca sozinho.
+- **Revisão de 2026-10-09, índice de Basileia:** o número que o Banco Central divulga no Relatório de Estabilidade Financeira, um PDF, vem da soma do IF.data no serviço Olinda: o patrimônio de referência e os ativos ponderados pelo risco de todas as instituições, trimestre a trimestre, divididos no backend. A soma fica a menos de 0,1 ponto do relatório. Os mínimos (8% e o adicional de conservação de 2,5%) são regra da Resolução CMN 4.958 e entram digitados, com o artigo ao lado.
 - **Teste de uma fonte nova:** o que acontece daqui a um ano? Se a resposta for "alguém precisa lembrar de editar o código", a fonte não está pronta.

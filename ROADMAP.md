@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-09):** Concluídos os explicadores sem prancha (inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal) e os diagramas nos conceitos
+> **Última mudança (2026-10-09):** Concluída a Basileia dos bancos na tela Crédito e no painel, somada do IF.data
 
 ## Glossário
 
@@ -16,7 +16,7 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F5](#f5), [F10](#f10), [F11](#f11), [F20](#f20), [F21](#f21), [F25](#f25), [F26](#f26), [F27](#f27), [F28](#f28), [F29](#f29), [F30](#f30), [F31](#f31), [F32](#f32), [F33](#f33), [F34](#f34), [F35](#f35), [F44](#f44), [F45](#f45) | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F5](#f5), [F10](#f10), [F11](#f11), [F20](#f20), [F21](#f21), [F25](#f25), [F26](#f26), [F27](#f27), [F28](#f28), [F29](#f29), [F30](#f30), [F31](#f31), [F32](#f32), [F33](#f33), [F34](#f34), [F35](#f35), [F44](#f44), [F45](#f45), [F47](#f47) | — |
 | **N2** | Entender o que cada número significa enquanto olho | [F1](#f1), [F7](#f7), [F8](#f8), [F9](#f9), [F22](#f22), [F23](#f23), [F25](#f25), [F26](#f26), [F29](#f29), [F31](#f31), [F32](#f32), [F35](#f35), [F36](#f36), [F38](#f38), [F39](#f39), [F40](#f40), [F42](#f42), [F48](#f48) | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F6](#f6), [F20](#f20), [F23](#f23) | — |
 | **N4** | Saber se a dívida pública está sob controle | [F4](#f4), [F13](#f13), [F14](#f14), [F16](#f16), [F24](#f24), [F36](#f36), [F37](#f37), [F40](#f40), [F41](#f41), [F43](#f43) | — |
@@ -25,10 +25,9 @@
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48) | — |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
-| [**F47**](#f47) | Basileia dos bancos na tela Crédito | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (53 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (54 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -37,9 +36,9 @@
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | [F2](#f2), [F5](#f5), [F6](#f6), [F14](#f14), [F21](#f21), [F24](#f24), [F25](#f25), [F27](#f27), [F30](#f30) | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | [F7](#f7), [F8](#f8), [F11](#f11), [F26](#f26) | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | [F21](#f21), [F23](#f23), [F25](#f25) | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F48](#f48) | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F47](#f47), [F48](#f48) | ✅ |
 | **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | [F9](#f9), [F15](#f15), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48) | ✅ |
-| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F15](#f15), [F45](#f45) | ✅ |
+| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F15](#f15), [F45](#f45), [F47](#f47) | ✅ |
 | [**F1**](#f1) | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | [**F2**](#f2) | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | [**F3**](#f3) | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
@@ -84,6 +83,7 @@
 | [**F43**](#f43) | Quem faz o déficit: a NFSP por esfera | — | ✅ |
 | [**F44**](#f44) | A busca e o rodapé da barra lateral seguem a tela | — | ✅ |
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | ✅ |
+| [**F47**](#f47) | Basileia dos bancos na tela Crédito e no painel | — | ✅ |
 | [**F48**](#f48) | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ✅ |
 
 </details>
@@ -97,7 +97,6 @@
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
 | [**F46**](#f46) | Juro neutro na tela Juros | M8 | 0 | 🔍 |
-| [**F47**](#f47) | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
 
 ---
 
@@ -275,15 +274,14 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 4/7 concluídas
+> **Progresso:** 5/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | [F33](#f33) | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | [F30](#f30) | 🔍 |
-| [**F47**](#f47) | Basileia dos bancos na tela Crédito | [F33](#f33) | 🔍 |
 
-<details><summary>Concluído (4 itens)</summary>
+<details><summary>Concluído (5 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -291,6 +289,7 @@
 | [**F31**](#f31) | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | [F4](#f4) | ✅ |
 | [**F32**](#f32) | Tela Atividade: PIB, IBC-Br e desemprego | [F3](#f3), [F4](#f4) | ✅ |
 | [**F33**](#f33) | Tela Crédito: custo do crédito, spread e concessões | [F4](#f4) | ✅ |
+| [**F47**](#f47) | Basileia dos bancos na tela Crédito e no painel | [F33](#f33) | ✅ |
 
 </details>
 
@@ -363,6 +362,7 @@
 | **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | [F29](#f29) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 | [F9](#f9) | Alto | Médio | Médio | Bom | ✅ Concluído |
 | **F15** | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | N6 | D6, D7, D8 | M4 | [F13](#f13), [F16](#f16) | Médio | Médio | Alto | Bom | ✅ Concluído |
+| **F47** | Basileia dos bancos na tela Crédito e no painel | N1 | D6, D8 | M8 | [F33](#f33) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -1150,6 +1150,24 @@ O diagrama, que a tela Déficit passou a usar junto com os explicadores e os con
 
 **Fica de fora:** a transferência do resultado do Banco Central ao Tesouro (Lei 13.820/2019), outro canal entre os dois, que pede uma fonte própria.
 
+<a id="f47"></a>
+**F47 — Basileia dos bancos.** Feito: o bloco "Os bancos aguentam?" da prancha `Credit` entrou na tela Crédito (F33), com o cartão "Índice de Basileia" no resumo, e no Painel (F11), no bloco Crédito.
+
+**A fonte:** o IF.data, no serviço Olinda (`IfDataValores`), relatório 5 ("Informações de Capital"), tipo de instituição 1 (conglomerados prudenciais e instituições independentes, sem dupla contagem). O app soma sobre todas as instituições a conta **79649** (patrimônio de referência) e a **79665** (ativos ponderados pelo risco), um pedido por trimestre filtrado pela conta, e divide uma pela outra no backend. O código das contas não mudou quando o BC trocou as letras dos rótulos, em 2024. A série começa em mar/2015; o trimestre que ainda não saiu volta vazio, e o refresh o cobra a partir de 1º de outubro para o de abr a jun. A primeira carga leva cerca de 70 segundos (46 trimestres em duas contas).
+
+**O que a tela mostra:**
+- o cartão com o último trimestre e o mínimo de 10,5% escrito ao lado;
+- o gráfico com o histórico desde 2015 e as linhas de 8% (o mínimo do patrimônio de referência, art. 4º da Resolução CMN 4.958) e de 10,5% (com o adicional de conservação de 2,5%, art. 8º), sem semáforo;
+- a bandeja "Como ler": capital para cada real em risco, o mínimo da regra e por que o número difere um pouco do relatório do BC;
+- no Aprender, o conceito "Índice de Basileia" no tema Crédito, com a conta de dez/2025 e as fontes (IF.data, a Resolução CMN 4.958 e o Relatório de Estabilidade Financeira). Sem diagrama: é uma razão, não um mecanismo.
+
+**Mudança em relação ao card:**
+- o número vem da soma do IF.data, e não do PDF do Relatório de Estabilidade Financeira;
+- a soma cobre o sistema todo (bancos, cooperativas e financeiras), que é o número que o BC divulga hoje. Só os bancos comerciais e múltiplos dariam 16,0% em dez/2025, perto da série antiga do SGS (21424), que parou em jun/2023;
+- o Olinda repete linhas idênticas em parte dos trimestres (o de set/2025 vem com cada instituição três vezes), e o adapter soma uma linha por instituição.
+
+**Aceite cumprido:** com os dados de 9/out/2026, a soma dá 17,21% em dez/2024 (o relatório diz 17,22%), 17,39% em jun/2025 (17,32%, revisado) e 17,33% em dez/2025 (17,24%): a diferença fica abaixo de 0,1 ponto. O último trimestre, jun/2026, dá 16,98%.
+
 ---
 ## 2. Nice-to-have
 
@@ -1179,12 +1197,6 @@ O diagrama, que a tela Déficit passou a usar junto com os explicadores e os con
 | ID | Resumo | Conexão | Marco | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
 | **F46** | Juro neutro na tela Juros | Serviria N1 e N2; falta uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária | M8 | [F30](#f30) | 🔍 Em avaliação |
-| **F47** | Basileia dos bancos na tela Crédito | Serviria N1; falta uma fonte que dê para baixar: a série do SGS parou em jun/2023, e o BC publica o número no Relatório de Estabilidade Financeira, semestral, e no IF.data, por instituição | M8 | [F33](#f33) | 🔍 Em avaliação |
 
 <a id="f46"></a>
 **F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar.
-
-<a id="f47"></a>
-**F47 — Basileia dos bancos.** O bloco "Os bancos aguentam?" da prancha `Credit` do canvas: o índice de Basileia do sistema bancário (quanto capital próprio os bancos têm para cada real emprestado, ponderado pelo risco), com o mínimo regulatório escrito ao lado. Ficou de fora da F33: a série do SGS (21424) parou em jun/2023, e o Banco Central hoje só publica o número no Relatório de Estabilidade Financeira, semestral (17,24% em dez/2025), e no IF.data, por instituição.
-
-Dois caminhos a avaliar: ler o número do relatório, que é um PDF e envelheceria sem ninguém editar (D8), ou somar o patrimônio de referência e os ativos ponderados pelo risco de todas as instituições, por trimestre, no serviço Olinda do IF.data, e dividir, o que pede um adapter novo e pode divergir um pouco do número do relatório. O mínimo é regra e entra digitado com a fonte: 8% de patrimônio de referência mais 2,5% de adicional de conservação de capital, na Resolução CMN 4.958, a confirmar no texto da norma. Volta quando uma das fontes se mostrar baixável.
