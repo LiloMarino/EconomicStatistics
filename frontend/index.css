@@ -38,6 +38,7 @@
   --color-power-loss: var(--trend-up);
   --color-power-gain: var(--trend-down);
   --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
   --color-highlight: var(--highlight);
   --color-highlight-foreground: var(--highlight-foreground);
   --color-tray: var(--tray);
@@ -203,6 +204,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --trend-up: #c8423d;
   --trend-down: #2f6fc4;
   --ok: #2e8a4d;
+  --ok-soft: #e3f3e8;
   --chart-grid: rgb(0 0 0 / 0.07);
   --chart-band: rgb(0 0 0 / 0.07);
   /* Previsão do Focus */
@@ -321,6 +323,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --trend-up: #e8645f;
   --trend-down: #5b9bea;
   --ok: #5bbf7a;
+  --ok-soft: #17301f;
   --chart-grid: rgb(255 255 255 / 0.06);
   --chart-band: rgb(255 255 255 / 0.09);
   --forecast: #9aa1aa;

@@ -1,5 +1,3 @@
-import { CircleAlert } from "lucide-react";
-
 import { CompositionCard } from "@/features/debt/composition-card";
 import { LevelsChart } from "@/features/debt/levels-chart";
 import { MaturitiesCard } from "@/features/debt/maturities-card";
@@ -7,30 +5,9 @@ import { RatesChart } from "@/features/debt/rates-chart";
 import { StabilizationCard } from "@/features/debt/stabilization-card";
 import { SummaryCards } from "@/features/debt/summary-cards";
 import { useDebt, useFederalDebt } from "@/features/debt/use-debt";
+import { NoData } from "@/shared/components/no-data";
 import { PageHeader } from "@/shared/components/page-header";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/shared/components/ui/empty";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { getApiErrorMessage } from "@/shared/lib/api";
-
-function NoData({ error }: { error: Error }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CircleAlert />
-        </EmptyMedia>
-        <EmptyTitle>Sem dados para mostrar</EmptyTitle>
-        <EmptyDescription>{getApiErrorMessage(error)}</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
-  );
-}
 
 /** A dinâmica da dívida sai das séries do Banco Central e a composição, do arquivo do
 Tesouro: cada metade da tela espera a sua fonte. */

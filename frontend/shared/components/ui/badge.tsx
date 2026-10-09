@@ -21,6 +21,7 @@ const badgeVariants = cva(
         buy: "bg-buy-soft text-buy",
         sell: "bg-sell-soft text-sell",
         gain: "bg-gain-soft text-gain",
+        ok: "bg-ok-soft text-ok",
         critical: "bg-critical-soft text-destructive",
         warning: "bg-warning-soft text-warning",
         count: "h-[18px] min-w-[18px] bg-muted px-[5px] text-xs text-ink-2",

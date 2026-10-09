@@ -52,6 +52,8 @@ const day = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
 });
 
+const dateTime = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
+
 const monthName = new Intl.DateTimeFormat("pt-BR", { month: "long", timeZone: "UTC" });
 
 const shortMonthName = new Intl.DateTimeFormat("pt-BR", { month: "short", timeZone: "UTC" });
@@ -112,6 +114,11 @@ export function formatMonth(value: string): string {
 /** "02/10/2026" */
 export function formatDay(value: string): string {
   return day.format(new Date(value));
+}
+
+/** O instante de uma consulta, na hora do computador: "09/10/2026, 14:32". */
+export function formatDateTime(value: string): string {
+  return dateTime.format(new Date(value));
 }
 
 /** O trimestre chega datado num mês dele, o 1º ou o último: "2026-04-01" e "2026-06-01"

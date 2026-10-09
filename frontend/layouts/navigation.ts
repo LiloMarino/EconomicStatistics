@@ -6,6 +6,7 @@ import {
   Globe,
   GraduationCap,
   Landmark,
+  LayoutDashboard,
   type LucideIcon,
   Percent,
   ShoppingCart,
@@ -36,6 +37,19 @@ export const defaultFooter: NonNullable<NavItem["footer"]> = {
 
 // Paths em inglês acompanham o código; o rótulo é o que aparece pro usuário
 export const navGroups: { label: string; items: NavItem[] }[] = [
+  {
+    label: "Painel",
+    items: [
+      {
+        to: "/",
+        label: "Visão geral",
+        icon: LayoutDashboard,
+        description: "Os indicadores de todas as telas, num cartão cada",
+        keywords: ["painel", "resumo", "estatísticas", "indicadores", "início", "home"],
+        footer: { sources: "IBGE e Banco Central" },
+      },
+    ],
+  },
   {
     label: "Inflação",
     items: [
@@ -238,5 +252,6 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
 
 /** O item fica ativo na tela dele e nos detalhes abaixo dela. */
 export function isActive(to: string, pathname: string): boolean {
+  if (to === "/") return pathname === to;
   return pathname === to || pathname.startsWith(`${to}/`);
 }

@@ -333,6 +333,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Overview View */
+        get: operations["overview_view_api_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -367,6 +384,14 @@ export interface components {
             /** Story */
             story: string;
         };
+        /**
+         * ChangeKind
+         * @description Como a variação de um indicador é medida: `POINTS` é a diferença entre duas
+         *     taxas (0.003 são 0,3 ponto percentual) e `RELATIVE` é a mudança de um nível sobre
+         *     o valor de antes (-0.041 são -4,1%).
+         * @enum {string}
+         */
+        ChangeKind: "points" | "relative";
         /**
          * ConcessionsDTO
          * @description A variação em 12 meses das concessões de recursos livres, em fração (0.062 é
@@ -770,6 +795,26 @@ export interface components {
             share: number;
         };
         /**
+         * GovernmentResultDTO
+         * @description Os 12 meses até `ref_date`, em fração do PIB e na convenção da NFSP: positivo é
+         *     déficit. `interest_share` é a fração do déficit nominal que é juro.
+         */
+        GovernmentResultDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Primary */
+            primary: number;
+            /** Interest */
+            interest: number;
+            /** Nominal */
+            nominal: number;
+            /** Interest Share */
+            interest_share: number | null;
+        };
+        /**
          * GroupAccumulatedDTO
          * @description `simple_sum` soma as variações mensais: a conta errada, só para contraste.
          */
@@ -858,6 +903,35 @@ export interface components {
             indexer: components["schemas"]["Indexer"];
             /** Share */
             share: number;
+        };
+        /**
+         * IndicatorDTO
+         * @description O último valor de um indicador: taxas em fração (0.0422 é 4,22%), o dólar em
+         *     reais e as reservas em US$ milhões. `change` é a diferença para `change_months`
+         *     meses antes, em fração se `change_kind` é `points` (0.003 são 0,3 ponto
+         *     percentual) ou relativa se é `relative` (-0.041 são -4,1%). `sparkline` traz até
+         *     os últimos 24 pontos. `band` e `within_band` dizem a faixa oficial e se o valor está
+         *     dentro dela, e só existem onde há faixa.
+         */
+        IndicatorDTO: {
+            indicator: components["schemas"]["OverviewIndicator"];
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Value */
+            value: number;
+            /** Change */
+            change: number | null;
+            change_kind: components["schemas"]["ChangeKind"];
+            /** Change Months */
+            change_months: number | null;
+            /** Sparkline */
+            sparkline: number[];
+            band: components["schemas"]["TargetBandDTO"] | null;
+            /** Within Band */
+            within_band: boolean | null;
         };
         /**
          * InflationDTO
@@ -1045,6 +1119,22 @@ export interface components {
              */
             survey_date: string;
         };
+        /**
+         * OverviewDTO
+         * @description Um indicador some da lista quando o cache não tem o dado dele: o real, que
+         *     depende da pesquisa Focus, e o IPCA esperado.
+         */
+        OverviewDTO: {
+            /** Indicators */
+            indicators: components["schemas"]["IndicatorDTO"][];
+            government_result: components["schemas"]["GovernmentResultDTO"];
+        };
+        /**
+         * OverviewIndicator
+         * @description Os indicadores que a Visão geral mostra, um cartão para cada.
+         * @enum {string}
+         */
+        OverviewIndicator: "ipca_12m" | "expected_ipca" | "selic" | "real_rate" | "net_debt" | "gross_debt" | "ibc_br" | "gdp" | "unemployment" | "dollar" | "reserves" | "current_account" | "fdi" | "international_position" | "credit_cost" | "household_concessions";
         /**
          * PaceForecastDTO
          * @description O 12 meses esperado em cada mês depois do último IPCA publicado, composto com a
@@ -2161,6 +2251,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InterestDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    overview_view_api_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverviewDTO"];
                 };
             };
             /** @description Unprocessable Content */

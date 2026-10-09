@@ -1,32 +1,9 @@
-import { CircleAlert } from "lucide-react";
-
 import { HistorySection } from "@/features/simulator/history-section";
 import { Simulator } from "@/features/simulator/simulator";
 import { useDebtCases, useDebtCountries } from "@/features/simulator/use-simulator";
+import { NoData } from "@/shared/components/no-data";
 import { PageHeader } from "@/shared/components/page-header";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/shared/components/ui/empty";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { getApiErrorMessage } from "@/shared/lib/api";
-
-function NoData({ error }: { error: Error }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CircleAlert />
-        </EmptyMedia>
-        <EmptyTitle>Sem dados para mostrar</EmptyTitle>
-        <EmptyDescription>{getApiErrorMessage(error)}</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
-  );
-}
 
 /** Os pontos de partida vêm das séries do Banco Central e a seção histórica, do FMI: cada
 metade da tela espera a sua fonte. */

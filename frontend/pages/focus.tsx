@@ -1,35 +1,12 @@
-import { CircleAlert } from "lucide-react";
-
 import { HistoryChart } from "@/features/focus/history-chart";
 import { ReportTable } from "@/features/focus/report-table";
 import { SummaryCards } from "@/features/focus/summary-cards";
 import { useFocusHistory, useFocusReport } from "@/features/focus/use-focus";
 import { useFocusView } from "@/features/focus/use-focus-view";
+import { NoData } from "@/shared/components/no-data";
 import { PageHeader } from "@/shared/components/page-header";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/shared/components/ui/empty";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
-import { getApiErrorMessage } from "@/shared/lib/api";
-
-function NoData({ error }: { error: Error }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CircleAlert />
-        </EmptyMedia>
-        <EmptyTitle>Sem dados para mostrar</EmptyTitle>
-        <EmptyDescription>{getApiErrorMessage(error)}</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
-  );
-}
 
 /** A previsão escolhida na URL vem do histórico, e a tabela do relatório, da última
 pesquisa: cada metade da tela espera a sua consulta. */

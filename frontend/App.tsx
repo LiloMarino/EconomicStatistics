@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { MainLayout } from "@/layouts/main-layout";
 import { ActivityPage } from "@/pages/activity";
@@ -15,6 +15,7 @@ import { FocusPage } from "@/pages/focus";
 import { InflationPage } from "@/pages/inflation";
 import { InterestPage } from "@/pages/interest";
 import { LearnPage } from "@/pages/learn";
+import { OverviewPage } from "@/pages/overview";
 import { PurchasingPowerPage } from "@/pages/purchasing-power";
 import { SimulatorPage } from "@/pages/simulator";
 import { queryClient } from "@/shared/lib/query-client";
@@ -25,7 +26,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<MainLayout />}>
-            <Route index element={<Navigate to="/inflation" replace />} />
+            <Route index element={<OverviewPage />} />
             <Route path="inflation" element={<InflationPage />} />
             <Route path="purchasing-power" element={<PurchasingPowerPage />} />
             <Route path="deficit" element={<DeficitPage />} />
