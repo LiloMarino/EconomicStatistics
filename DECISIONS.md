@@ -268,4 +268,5 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 
 **Consequências:**
 - **Revisão de 2026-10-08:** as séries do SGS e do IBGE, a pesquisa Focus, a dívida federal do Tesouro e o calendário do Copom seguem a regra. A única exceção é a tolerância da meta de inflação, que está digitada em `domain/inflation_target.py` a partir das resoluções do CMN, e virou feature.
+- **Revisão de 2026-10-08, parâmetros dos casos do simulador:** dívida, juro, crescimento e primário de cada caso que aconteceu (Japão nos anos 2010, Grécia em 2010, Argentina em 2001 e 2023, o Brasil de 2002 e de 2015-2016) ficam digitados em `domain/debt_cases.py`. São retratos de um período que passou e não têm série publicada por caso, então entram como convenção, com a fonte e o período escritos ao lado. O que muda com o tempo vem da fonte: o Brasil hoje lê a tela Dívida e a seção histórica lê o FMI, que o app busca sozinho.
 - **Teste de uma fonte nova:** o que acontece daqui a um ano? Se a resposta for "alguém precisa lembrar de editar o código", a fonte não está pronta.

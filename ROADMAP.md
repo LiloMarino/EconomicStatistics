@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-08):** Concluída a tela Juros, com a Selic meta diária e o calendário do Copom buscado do site do BCB, e registrada a D8: dado externo se atualiza sozinho, sem número digitado no código.
+> **Última mudança (2026-10-09):** Concluído o simulador da dívida, com os casos que aconteceram, a comparação lado a lado e a dívida bruta de Japão, Grécia, Argentina e Brasil buscada do FMI.
 
 ## Glossário
 
@@ -27,7 +27,6 @@
 | [**F11**](#f11) | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ⏳ |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | — | 🔍 |
 | [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | — | ⏳ |
-| [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | — | ⏳ |
 | [**F36**](#f36) | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ⏳ |
@@ -39,7 +38,7 @@
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (41 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (42 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -70,6 +69,7 @@
 | [**F21**](#f21) | Inflação acelerando ou freando | — | ✅ |
 | [**F22**](#f22) | Rodadas de design no canvas | — | ✅ |
 | [**F23**](#f23) | Linguagem visual nas telas que existem | — | ✅ |
+| [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | — | ✅ |
 | [**F25**](#f25) | Comparação com o mesmo mês de outros anos | — | ✅ |
 | [**F26**](#f26) | Busca com Ctrl+K: telas e conceitos | — | ✅ |
 | [**F27**](#f27) | Continuação pelo Focus nos gráficos | — | ✅ |
@@ -97,7 +97,6 @@
 | --- | --- | --- | --- | --- |
 | [**F39**](#f39) | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
 | [**F11**](#f11) | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
-| [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | 0 | ⏳ |
@@ -178,20 +177,20 @@
 >
 > **Serve:** N4, N6
 >
-> **Progresso:** 5/7 concluídas
+> **Progresso:** 6/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | [F13](#f13), [F16](#f16) | 🔍 |
-| [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | [F14](#f14) | ⏳ |
 
-<details><summary>Concluído (5 itens)</summary>
+<details><summary>Concluído (6 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F13**](#f13) | Tela Déficit: primário, juros e nominal | [F4](#f4) | ✅ |
 | [**F14**](#f14) | Tela Dívida: r, g, r − g e o primário que estabiliza | [F13](#f13) | ✅ |
 | [**F16**](#f16) | Composição da dívida pública federal (Tesouro), na tela Dívida | [F2](#f2) | ✅ |
+| [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | [F14](#f14) | ✅ |
 | [**F41**](#f41) | Déficit mês a mês, com o nominal numa coluna própria | [F13](#f13) | ✅ |
 | [**F43**](#f43) | Quem faz o déficit: a NFSP por esfera | [F13](#f13) | ✅ |
 
@@ -320,7 +319,7 @@
 | **F14** | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 | [F13](#f13) | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F23** | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 | [F22](#f22), [F7](#f7) | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | [F5](#f5) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
-| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | [F14](#f14) | Médio | Baixo | Alto | Excelente | ⏳ Pendente |
+| **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | [F14](#f14) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | [F2](#f2) | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | [F11](#f11), [F14](#f14) | Médio | Baixo | Alto | Bom | ⏳ Pendente |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | [F3](#f3) | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
@@ -632,34 +631,29 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 **Limitação:** o ritmo precisa de 15 meses de IPCA antes do fim do período, então começa em mar/2021.
 
 <a id="f24"></a>
-**F24 — Simulador da trajetória da dívida.** Partir de um caso que aconteceu ou de um exemplo, mexer em juros, crescimento e primário e ver a dívida/PIB dos próximos 10 anos. Responde por que uma dívida de 200% do PIB pode estar "de boa" e outra de 40% não.
+**F24 — Simulador da dívida.** Feito, a partir da prancha `Simulator` do canvas, que foi além do desenho original da feature: o cenário do usuário disputa o gráfico com os pontos de partida que ele ligar, e a tela ganhou a seção "O que aconteceu de verdade", com a dívida bruta de quatro países. É a rota `/simulator`, no grupo "Contas públicas" da navegação. Responde por que uma dívida de 200% do PIB pode estar "de boa" e outra de 40% não.
 
-**Backend:** `GET /api/debt/simulation?debt=&r=&g=&primary=&years=` devolve a trajetória ano a ano, com `d(t+1) = d(t) · (1 + r) / (1 + g) − p`, composta dividindo (D3), e o `p*` que estabiliza.
+**Backend:**
+- `GET /api/debt/simulation?debt=&r=&g=&primary=&years=` devolve a trajetória ano a ano, com `d(t+1) = d(t) · (1 + r) / (1 + g) − p`, composta dividindo (D3), o `p*` que estabiliza, o quanto falta dele até o primário escolhido, o r − g e a conta do 1º ano. Tudo em fração. Juro ou crescimento de −100%, dívida negativa e horizonte fora de 1 a 50 anos dão 422;
+- `GET /api/debt/simulation/cases` devolve os pontos de partida já com a trajetória de 10 anos. O Brasil hoje traz sempre os números atuais da tela Dívida (dívida líquida, r, g e o primário feito);
+- `GET /api/debt/simulation/countries` devolve a dívida bruta do governo geral de Japão, Grécia, Argentina e Brasil, ano a ano, e a inflação do último ano com dado. Só entram os anos fechados: do ano corrente em diante o FMI projeta.
 
-**Pontos de partida, em dois grupos:**
-- **Casos que aconteceram,** cada um com o período no nome:
-  - **Brasil hoje,** sempre com os valores atuais da tela Dívida (F14), nunca um ano fixo, lidos de `GET /api/debt` (dívida líquida, r, g e o primário feito);
-  - **Brasil, Collor (1990):** dívida líquida perto de 40% do PIB, mas curta e numa moeda instável;
-  - **Brasil, crise de 2002:** a desvalorização levou a dívida líquida a 56% do PIB;
-  - **Brasil, recessão de 2015–2016:** déficit primário e PIB caindo ao mesmo tempo;
-  - **Japão, anos 2010:** dívida acima de 200% do PIB, longa, em moeda própria e com credores de dentro;
-  - **Grécia, 2010:** o mercado se recusa a rolar a dívida, e o país precisa de resgate;
-  - **Argentina, 2001–2002:** calote da dívida e fim da paridade com o dólar;
-  - **Argentina, 2023:** a moeda perde a confiança e a inflação passa de 200% ao ano.
+**Casos:** Brasil hoje; Brasil, Collor (1990); Brasil, crise de 2002; Brasil, 2015-2016; Japão, anos 2010; Grécia, 2010; Argentina, 2001-2002; Argentina, 2023; e os exemplos País A (dívida de 120%, r 2%, g 6%, primário zero) e País B (60%, r 15%, g 3%, déficit de 1%). Cada caso abre o painel "Ponto de partida" (moeda, prazo, quem empresta e o que aconteceu), que avisa quando o usuário mexe nos números. Os parâmetros são convenção digitada em `domain/debt_cases.py`, com a fonte ao lado, por serem retratos de um período que passou: dívida líquida do SGS 4513 nos casos do Brasil, e juro (juros pagos do ano sobre a dívida bruta do ano anterior), crescimento nominal (PIB real com a inflação) e primário do FMI nos demais. O Collor usa juro e PIB reais, porque com inflação de 2.900% ao ano a conta nominal não diz nada.
 
-  Os parâmetros (dívida, r, g e primário) são conferidos na implementação: os de fora com o FMI DataMapper, os do Brasil com as séries históricas do BCB (a DLSP do SGS 4513 começa em dez/2001; a de 1990 vem de uma série histórica a levantar). Escolher um caso abre o painel de contexto: moeda da dívida, prazo, quem empresta e o que aconteceu de verdade. Quando o usuário mexe nos números, o painel avisa que eles partiram daquele caso.
-- **Exemplos para entender a conta:** País A (dívida de 120%, r 2%, g 6%, primário zero) e País B (dívida de 60%, r 15%, g 3%, déficit de 1%).
+**FMI:** o DataMapper (`/external/datamapper/api/v1/<indicador>`) é a fonte nova, com `GGXWDG_NGDP` (dívida bruta) e `PCPIPCH` (inflação). A API devolve os 226 países de uma vez e ignora o filtro de país e o `periods`, então a busca incremental é de agenda e de escrita: o refresh só vai à fonte depois do dia 20 de abril ou de outubro, quando o WEO novo já devia estar publicado, e grava por upsert, que pega as revisões dos anos passados (D8). Tabela `imf_observations`, dataset `imf_countries`, e o refresh sai no mesmo `POST /api/series/refresh`. A Akamai do FMI recusa o User-Agent de navegador e aceita o padrão do `urllib`.
 
 **Tela:**
-- quatro controles, com o caso e os números na URL: dívida inicial (% do PIB), juro nominal efetivo, crescimento nominal do PIB, que aceita valor negativo, e primário (% do PIB, positivo é superávit);
-- a linha da dívida/PIB por 10 anos;
-- dois resultados, cada um com "?": a dívida em 10 anos, com a frase de que sobe ou desce, e o primário que estabiliza, com a distância para o primário escolhido;
-- a bandeja "Como funciona": a corrida entre r e g; o que o simulador não vê (juro e câmbio que reagem à desconfiança, como na Argentina em 2002); por que o tamanho não basta (prazo, moeda e credores), com o link para os explicadores de r − g (F9) e de por que a dívida não explode (F37);
-- a bandeja "Ver a conta": a fórmula com legenda e o primeiro ano com os números escolhidos.
+- a lista "Seu cenário" e "Comparar com", com o olho que põe a linha no gráfico e o "Copiar para o meu cenário";
+- os dois resultados, cada um com "?": a dívida em 10 anos, com a frase de que sobe, cai ou fica parada, e o primário que estabiliza, com a distância para o primário escolhido;
+- o gráfico da dívida/PIB, com o cenário em linha cheia e as comparações tracejadas;
+- os quatro controles deslizantes (dívida, r, g e primário) e a tabela "Lado a lado";
+- as bandejas "Como funciona" e "Ver a conta", as duas no mesmo cartão (o `ExplainedCard` passou a aceitar várias explicações);
+- a seção "O que aconteceu de verdade", com a dívida bruta dos quatro países, os marcos de 2010, 2012 e 2020 e a tabela "O que separa os países", que reaproveita o contexto dos casos;
+- o cenário, o caso de partida, as comparações ligadas e os países da seção histórica moram na URL.
 
-**Aceite:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos.
+**Aceite cumprido:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos (`test_debt_stays_put_at_the_stabilizing_primary`).
 
-**Link de volta:** o cartão "A dívida sobe ou desce?" da tela Dívida (F14) nasceu sem o botão "Mexer nos números no simulador"; o simulador o acrescenta ao entrar, levando os números de hoje.
+**Fica para depois:** os links da bandeja "Como funciona" para o explicador de r − g (F9) e para o de por que a dívida não explode (F37), que cada um faz ao entrar.
 
 <a id="f16"></a>
 **F16 — Composição da dívida pública federal.** Feito, embaixo da dinâmica na tela Dívida (F14).
