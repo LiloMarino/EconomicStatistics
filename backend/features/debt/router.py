@@ -88,11 +88,13 @@ class MaturityBucketDTO(BaseDTO):
 
 
 class FederalDebtDTO(BaseDTO):
-    """O estoque do último mês do Tesouro. As frações são da dívida em mercado, menos
+    """O estoque do último mês do Tesouro. `stock_total` é o valor em R$ dos títulos
+    em mercado, sem a carteira do Banco Central. As frações são da dívida em mercado, menos
     `central_bank_share`, que é a parte de todos os títulos emitidos na carteira do
     Banco Central. `average_maturity` vem do SGS, `null` antes de ele estar no cache."""
 
     stock_month: date
+    stock_total: float
     maturing_12m: float
     central_bank_share: float
     average_maturity: AverageMaturityDTO | None

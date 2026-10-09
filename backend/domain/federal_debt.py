@@ -181,3 +181,9 @@ def central_bank_share(holdings: Sequence[DebtHolding]) -> float:
         item.value for item in holdings if item.holder is DebtHolder.CENTRAL_BANK
     )
     return held / total
+
+
+def stock_total(holdings: Iterable[DebtHolding]) -> float:
+    """O valor em R$ dos títulos federais em mercado, sem a carteira do Banco Central:
+    a mesma base da composição e dos vencimentos."""
+    return sum(item.value for item in _market(holdings))

@@ -15,6 +15,7 @@ from backend.domain.federal_debt import (
     indexer_of,
     maturing_within_12m,
     maturity_profile,
+    stock_total,
 )
 from backend.features.debt.refresh import refresh_federal_debt
 from backend.repository.federal_debt import last_stock_month, replace_stock
@@ -116,6 +117,12 @@ def test_central_bank_share_is_over_every_title() -> None:
     assert round(central_bank_share(STOCK) * 100, 1) == 23.1
 
 
+def test_stock_total_leaves_out_the_central_bank_portfolio() -> None:
+    """O estoque soma só os títulos em mercado: dos 130 emitidos, 30 estão na carteira do
+    Banco Central e ficam de fora."""
+    assert stock_total(STOCK) == pytest.approx(100.0)
+
+
 def test_expected_stock_month_waits_until_the_25th() -> None:
     """O estoque de agosto passa a ser cobrado em 25 de outubro."""
     assert expected_stock_month(date(2026, 10, 24)) == JULY
@@ -162,6 +169,7 @@ def test_federal_debt_endpoint_reads_the_last_stock(
     body = api.get("/api/debt/federal").json()
 
     assert body["stock_month"] == "2026-07-01"
+    assert body["stock_total"] == pytest.approx(100.0)
     assert body["maturing_12m"] == pytest.approx(0.60)
     assert round(body["central_bank_share"] * 100, 1) == 23.1
     assert body["average_maturity"] == {

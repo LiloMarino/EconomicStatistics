@@ -77,7 +77,12 @@ function HowToRead({ last, forecast }: { last: Point; forecast: Forecast }) {
           2021 e 2022.
         </p>
       </TrayItem>
-      <TrayItem title="Juros" concept="nominal-interest" color="var(--fiscal-interest)">
+      <TrayItem
+        title="Juros"
+        concept="nominal-interest"
+        explainer="loops-and-bridges"
+        color="var(--fiscal-interest)"
+      >
         <p>
           O custo da dívida no período. Cresce com a Selic e com o tamanho da dívida, e é a maior
           parte do déficit brasileiro em quase todos os anos desde 2002.

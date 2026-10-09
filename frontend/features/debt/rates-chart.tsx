@@ -49,7 +49,7 @@ function rateAboveGrowth(rates: Rates[]): { start: string; end: string }[] {
 function HowToRead() {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Por que r − g decide" concept="r-minus-g">
+      <TrayItem title="Por que r − g decide" concept="r-minus-g" explainer="why-r-minus-g">
         <p>
           A dívida cresce todo ano pelo juro (r), e o PIB, que é o tamanho da economia, cresce por
           g. Se r passa g, a dívida/PIB sobe sozinha, mesmo com o primário zerado; para segurá-la, o

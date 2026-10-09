@@ -2,6 +2,7 @@ import { type ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { Rolling12mTargetChart } from "@/features/learn/rolling-12m-target-chart";
+import { SourceList } from "@/features/learn/source-list";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Button } from "@/shared/components/ui/button";
 import { type ConceptId, topicLabels } from "@/shared/concepts/concept";
@@ -128,16 +129,7 @@ export function ConceptArticle({ id }: { id: ConceptId }) {
         </Section>
 
         <Section title="Fontes">
-          <ol className="text-caption flex max-w-prose list-decimal flex-col gap-2 pl-5">
-            {concept.sources.map((source) => (
-              <li key={source.url + source.backs}>
-                <a href={source.url} target="_blank" rel="noreferrer" className="font-semibold">
-                  {source.name} ↗
-                </a>
-                <span className="text-muted-foreground"> · {source.backs}</span>
-              </li>
-            ))}
-          </ol>
+          <SourceList sources={concept.sources} />
         </Section>
       </article>
 

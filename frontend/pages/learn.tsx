@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 
+import { ExplainerList } from "@/features/learn/explainer-list";
 import { Glossary } from "@/features/learn/glossary";
 import { type TopicFilter, useLearnView } from "@/features/learn/use-learn-view";
 import { PageHeader } from "@/shared/components/page-header";
@@ -50,6 +51,8 @@ export function LearnPage() {
           </div>
         }
       />
+      {/* Os explicadores só aparecem na lista inteira, sem busca nem tema */}
+      {!query.trim() && topic === "all" && <ExplainerList />}
       <Glossary query={query} topic={topic} />
     </>
   );

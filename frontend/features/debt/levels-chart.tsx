@@ -51,7 +51,7 @@ function HowToRead({ forecast }: { forecast: LevelsForecast }) {
           quando a dívida para de subir.
         </p>
       </TrayItem>
-      <TrayItem title="Por que a distância entre elas muda">
+      <TrayItem title="Por que a distância entre elas muda" explainer="three-debts">
         <p>
           Quando o Banco Central compra dólares para as reservas, a bruta sobe e a líquida não: o
           setor público passa a dever mais e a ter mais a receber.

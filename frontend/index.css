@@ -76,6 +76,11 @@
   --color-sim-argentina-2023: var(--sim-argentina-2023);
   --color-sim-country-a: var(--sim-country-a);
   --color-sim-country-b: var(--sim-country-b);
+  --color-loop-debt: var(--loop-debt);
+  --color-loop-inflation: var(--loop-inflation);
+  --color-bridge-fx: var(--bridge-fx);
+  --color-bridge-money: var(--bridge-money);
+  --color-bridge-rate: var(--bridge-rate);
   --color-indexer-selic: var(--indexer-selic);
   --color-indexer-fixed: var(--indexer-fixed);
   --color-indexer-ipca: var(--indexer-ipca);
@@ -263,6 +268,12 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --sim-argentina-2023: #9c5b2e;
   --sim-country-a: #1f7f76;
   --sim-country-b: #6b7588;
+  /* Explicadores: o loop da dívida, o da inflação e as três pontes entre eles */
+  --loop-debt: #8a4fc0;
+  --loop-inflation: #b85e1c;
+  --bridge-fx: #2f6fc4;
+  --bridge-money: #c8423d;
+  --bridge-rate: #2e8a4d;
   --card-shadow: none;
   --popover-shadow: 0 12px 28px rgb(0 0 0 / 0.16);
   --sidebar: #f4f4f0;
@@ -358,6 +369,11 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --sim-argentina-2023: #d9a47a;
   --sim-country-a: #2fb3a6;
   --sim-country-b: #8e9aaf;
+  --loop-debt: #b07ad9;
+  --loop-inflation: #e8853d;
+  --bridge-fx: #5b9bea;
+  --bridge-money: #e8645f;
+  --bridge-rate: #4fb061;
   --popover-shadow: 0 12px 32px rgb(0 0 0 / 0.28);
   --sidebar: #111316;
   --sidebar-foreground: #aeb3ba;

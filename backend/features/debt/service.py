@@ -15,6 +15,7 @@ from backend.domain.federal_debt import (
     composition,
     maturing_within_12m,
     maturity_profile,
+    stock_total,
 )
 from backend.domain.focus import annual_expectations, forecast_years
 from backend.domain.rates import PERCENT
@@ -93,6 +94,7 @@ class FederalDebt:
     estar num mês diferente do estoque."""
 
     stock_month: date
+    stock_total: float
     maturing_12m: float
     central_bank_share: float
     average_maturity: AverageMaturity | None
@@ -200,6 +202,7 @@ def federal_debt(session: Session) -> FederalDebt:
     )[SeriesId.FEDERAL_DEBT_MATURITY]
     return FederalDebt(
         stock_month=last,
+        stock_total=stock_total(current),
         maturing_12m=maturing_within_12m(current, last),
         central_bank_share=central_bank_share(current),
         average_maturity=(

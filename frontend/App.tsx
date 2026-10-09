@@ -9,6 +9,7 @@ import { ConceptPage } from "@/pages/concept";
 import { DebtPage } from "@/pages/debt";
 import { DeficitPage } from "@/pages/deficit";
 import { ErrorPage } from "@/pages/error";
+import { ExplainerPage } from "@/pages/explainer";
 import { ExternalSectorPage } from "@/pages/external-sector";
 import { FocusPage } from "@/pages/focus";
 import { InflationPage } from "@/pages/inflation";
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="external-sector" element={<ExternalSectorPage />} />
             <Route path="focus" element={<FocusPage />} />
             <Route path="learn" element={<LearnPage />} />
+            <Route path="learn/explainers/:explainerId" element={<ExplainerPage />} />
             <Route path="learn/:conceptId" element={<ConceptPage />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>

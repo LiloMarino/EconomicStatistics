@@ -19,6 +19,7 @@ import {
 } from "@/shared/components/ui/collapsible";
 import type { ConceptId } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
+import { type ExplainerId, explainers } from "@/shared/concepts/explainers";
 
 interface Explanation {
   /** O texto do botão: "Como ler", "Ver a conta". */
@@ -113,6 +114,8 @@ interface TrayItemProps {
   title: ReactNode;
   /** O conceito do catálogo de que o bloco trata; o pé do bloco leva à página dele. */
   concept?: ConceptId;
+  /** O explicador de mecanismo que aprofunda o bloco; o pé leva à página dele. */
+  explainer?: ExplainerId;
   /** A cor da série de que o bloco trata, a mesma do gráfico: quando o cartão mostra dois
   conceitos, cada um ganha o seu bloco, marcado pela cor dele. */
   color?: string;
@@ -120,7 +123,7 @@ interface TrayItemProps {
 }
 
 /** Um bloco da bandeja: o título curto e o texto. */
-export function TrayItem({ title, concept, color, children }: TrayItemProps) {
+export function TrayItem({ title, concept, explainer, color, children }: TrayItemProps) {
   return (
     <div className="flex flex-col gap-1.5">
       {color ? (
@@ -135,6 +138,14 @@ export function TrayItem({ title, concept, color, children }: TrayItemProps) {
       {concept && (
         <Link to={`/learn/${concept}`} className="text-caption self-start font-semibold">
           {concepts[concept].title} em Aprender →
+        </Link>
+      )}
+      {explainer && (
+        <Link
+          to={`/learn/explainers/${explainer}`}
+          className="text-caption self-start font-semibold"
+        >
+          {explainers[explainer].title} em Aprender →
         </Link>
       )}
     </div>

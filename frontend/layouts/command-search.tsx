@@ -1,7 +1,8 @@
-import { BookOpen, type LucideIcon, Search } from "lucide-react";
+import { BookOpen, type LucideIcon, Search, Workflow } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { explainerIds, explainers } from "@/shared/concepts/explainers";
 import { navGroups } from "@/layouts/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -141,6 +142,32 @@ export function CommandSearch() {
                 </CommandItem>
               ))}
             </CommandGroup>
+
+            {/* Explicadores, as leituras de mecanismo em Aprender */}
+            {search.trim() && (
+              <CommandGroup heading="Como as coisas se ligam">
+                {explainerIds.map((id) => {
+                  const explainer = explainers[id];
+                  return (
+                    <CommandItem
+                      key={id}
+                      value={`explicador ${id}`}
+                      keywords={[explainer.title, explainer.summary, ...explainer.keywords]}
+                      onSelect={() => go(`/learn/explainers/${id}`)}
+                    >
+                      <ItemIcon icon={Workflow} />
+                      <span className="flex min-w-0 flex-col">
+                        <span className="font-semibold">{explainer.title}</span>
+                        <span className="text-small text-muted-foreground truncate">
+                          {explainer.summary}
+                        </span>
+                      </span>
+                      <CommandShortcut>Explicador</CommandShortcut>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            )}
 
             {/* Grupos do IPCA, que levam ao bloco de cada um na página do grupo */}
             {search.trim() && (

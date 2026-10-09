@@ -636,7 +636,8 @@ export interface components {
         };
         /**
          * FederalDebtDTO
-         * @description O estoque do último mês do Tesouro. As frações são da dívida em mercado, menos
+         * @description O estoque do último mês do Tesouro. `stock_total` é o valor em R$ dos títulos
+         *     em mercado, sem a carteira do Banco Central. As frações são da dívida em mercado, menos
          *     `central_bank_share`, que é a parte de todos os títulos emitidos na carteira do
          *     Banco Central. `average_maturity` vem do SGS, `null` antes de ele estar no cache.
          */
@@ -646,6 +647,8 @@ export interface components {
              * Format: date
              */
             stock_month: string;
+            /** Stock Total */
+            stock_total: number;
             /** Maturing 12M */
             maturing_12m: number;
             /** Central Bank Share */

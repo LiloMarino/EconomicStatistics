@@ -94,6 +94,11 @@ export function formatMoney(value: number): string {
   return money.format(value);
 }
 
+/** Valor em reais, em trilhões: 8912345678901 vira "R$ 8,9 tri". */
+export function formatBrlTrillions(value: number): string {
+  return `R$ ${billions.format(value / 1e12)} tri`.replace("-", "−");
+}
+
 /** Estoque em US$ milhões, como o Banco Central publica: 362821 vira "US$ 362,8 bi". */
 export function formatUsdBillions(millions: number): string {
   return `US$ ${billions.format(millions / 1000)} bi`.replace("-", "−");

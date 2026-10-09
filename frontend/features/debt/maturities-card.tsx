@@ -23,7 +23,7 @@ function bucketLabel(bucket: Bucket): string {
 function HowToRead() {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Rolar a dívida" concept="rollover">
+      <TrayItem title="Rolar a dívida" concept="rollover" explainer="debt-sustainability">
         <p>
           Quando um título vence, o Tesouro em geral emite outro para pagá-lo. Prazo curto obriga a
           rolar muito de uma vez, e é aí que a desconfiança do mercado vira crise: quem compra pede
