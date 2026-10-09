@@ -55,6 +55,9 @@
   --color-fiscal-interest: var(--fiscal-interest);
   --color-debt-net: var(--debt-net);
   --color-activity-ibc: var(--activity-ibc);
+  --color-price-free: var(--price-free);
+  --color-price-administered: var(--price-administered);
+  --color-price-services: var(--price-services);
   --color-credit-cost: var(--credit-cost);
   --color-credit-business: var(--credit-business);
   --color-credit-households: var(--credit-households);
@@ -231,6 +234,9 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --fiscal-interest: #6a55d6;
   --debt-net: #2f6fc4;
   --activity-ibc: #2f6fc4;
+  --price-free: #2f6fc4;
+  --price-administered: #b85e1c;
+  --price-services: #8a4fc0;
   --credit-cost: #b85e1c;
   --credit-business: #2f6fc4;
   --credit-households: #b85e1c;
@@ -324,6 +330,9 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --fiscal-interest: #9b8cf0;
   --debt-net: #5b9bea;
   --activity-ibc: #5b9bea;
+  --price-free: #5b9bea;
+  --price-administered: #e8853d;
+  --price-services: #b07ad9;
   --credit-cost: #e8853d;
   --credit-business: #5b9bea;
   --credit-households: #e8853d;

@@ -19,6 +19,7 @@ POSITION = SERIES[SeriesId.IIP_LIABILITIES]
 GDP = SERIES[SeriesId.GDP_GROWTH_4Q]
 UNEMPLOYMENT = SERIES[SeriesId.UNEMPLOYMENT_RATE]
 CREDIT_COST = SERIES[SeriesId.CREDIT_COST]
+IPCA_FREE = SERIES[SeriesId.FREE_PRICES]
 
 
 def cached_until(spec_first: date, last: date) -> DateRange:
@@ -74,6 +75,13 @@ def test_credit_month_is_expected_at_the_end_of_the_next_month() -> None:
     """O custo do crédito de agosto é cobrado a partir de 28 de setembro."""
     assert expected_ref_date(CREDIT_COST, date(2026, 9, 27)) == date(2026, 7, 1)
     assert expected_ref_date(CREDIT_COST, date(2026, 9, 28)) == date(2026, 8, 1)
+
+
+def test_ipca_cut_month_is_expected_with_the_ipca_of_the_ibge() -> None:
+    """O IPCA livres de setembro, como o IPCA geral, só é cobrado a partir de 15 de
+    outubro."""
+    assert expected_ref_date(IPCA_FREE, date(2026, 10, 14)) == date(2026, 8, 1)
+    assert expected_ref_date(IPCA_FREE, date(2026, 10, 15)) == date(2026, 9, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:

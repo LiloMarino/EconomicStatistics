@@ -113,6 +113,22 @@ def _ipca(category: int) -> SeriesSpec:
     )
 
 
+# Os cortes do IPCA pela forma como o preço se forma (livres, administrados e
+# serviços) saem no SGS junto com o IPCA do IBGE, e começam no regime de metas.
+PRICE_CUTS_START = date(1999, 1, 1)
+
+
+def _ipca_cut(code: str) -> SeriesSpec:
+    return SeriesSpec(
+        source=Source.BCB_SGS,
+        code=code,
+        unit=Unit.PERCENT_MONTH,
+        first_date=PRICE_CUTS_START,
+        lag_months=1,
+        release_day=IPCA_RELEASE_DAY,
+    )
+
+
 # A nota de estatísticas do setor externo do BCB sai perto do fim do mês seguinte ao
 # de referência
 EXTERNAL_NOTE_RELEASE_DAY = 28
@@ -185,6 +201,9 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.IPCA_PERSONAL: _ipca(7712),
     SeriesId.IPCA_EDUCATION: _ipca(7766),
     SeriesId.IPCA_COMMUNICATION: _ipca(7786),
+    SeriesId.FREE_PRICES: _ipca_cut("11428"),
+    SeriesId.ADMINISTERED_PRICES: _ipca_cut("4449"),
+    SeriesId.SERVICES_PRICES: _ipca_cut("10844"),
     SeriesId.INPC: SeriesSpec(
         source=Source.BCB_SGS,
         code="188",

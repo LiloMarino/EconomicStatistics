@@ -6,6 +6,8 @@ import { MonthlyHeatmap } from "@/features/inflation/monthly-heatmap";
 import { PaceTable } from "@/features/inflation/pace-table";
 import { Rolling12mChart } from "@/features/inflation/rolling-12m-chart";
 import { defaultSeasonGroup } from "@/features/inflation/default-season-group";
+import { PriceCutsChart } from "@/features/price-cuts/price-cuts-chart";
+import { usePriceCuts } from "@/features/price-cuts/use-price-cuts";
 import { SeasonalityChart } from "@/features/inflation/seasonality-chart";
 import { SummaryCards } from "@/features/inflation/summary-cards";
 import {
@@ -48,6 +50,7 @@ function Unavailable({ error }: { error: unknown }) {
 function InflationSections({ data }: { data: InflationGroups }) {
   const view = useInflationView();
   const pace = useInflationPace(data.period.end);
+  const priceCuts = usePriceCuts();
   const seasonality = useSeasonality(Number(data.period.end.slice(0, 4)));
   const [twelveOpen, setTwelveOpen] = useState(false);
 
@@ -83,6 +86,15 @@ function InflationSections({ data }: { data: InflationGroups }) {
             onWindowChange={view.setPaceWindow}
           />
         </>
+      ) : (
+        <Skeleton className="h-96 w-full" />
+      )}
+
+      {/* Livres, administrados e serviços */}
+      {priceCuts.error ? (
+        <Unavailable error={priceCuts.error} />
+      ) : priceCuts.data ? (
+        <PriceCutsChart data={priceCuts.data} />
       ) : (
         <Skeleton className="h-96 w-full" />
       )}

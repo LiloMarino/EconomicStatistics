@@ -47,6 +47,26 @@ const bcbTarget = {
   url: "https://www.bcb.gov.br/controleinflacao/metainflacao",
 };
 const sgs = { name: "Banco Central, SGS", url: "https://www3.bcb.gov.br/sgspub/" };
+const bcbNote57 = {
+  name: "Banco Central, Nota Técnica 57: núcleos de inflação e outras séries analíticas derivadas do IPCA",
+  url: "https://www.bcb.gov.br/content/publicacoes/notastecnicas/NT_57_202512.pdf",
+};
+const bcbInflationReport2024 = {
+  name: "Banco Central, Relatório de Inflação de março de 2024, boxe “Decomposição da inflação de 2023”",
+  url: "https://www.bcb.gov.br/content/ri/relatorioinflacao/202403/ri202403b4p.pdf",
+};
+const sgsFree = {
+  name: "Banco Central, série 11428 no portal de dados abertos (IPCA, itens livres)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/11428-indice-nacional-de-precos-ao-consumidor---amplo-ipca---itens-livres",
+};
+const sgsAdministered = {
+  name: "Banco Central, série 4449 no portal de dados abertos (IPCA, preços monitorados)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/4449-indice-nacional-de-precos-ao-consumidor-amplo-ipca---precos-monitorados---total",
+};
+const sgsServices = {
+  name: "Banco Central, série 10844 no portal de dados abertos (IPCA, serviços)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/10844-indice-de-precos-ao-consumidor-amplo-ipca---servicos",
+};
 const copomPage = {
   name: "Banco Central, página do Copom",
   url: "https://www.bcb.gov.br/en/monetarypolicy/committee",
@@ -758,6 +778,243 @@ export const concepts: Record<ConceptId, Concept> = {
       { ...booklet, backs: "As taxas se juntam multiplicando, e não somando." },
     ],
     screens: [purchasingPowerScreen],
+  },
+
+  "free-prices": {
+    title: "Preços livres",
+    topic: "inflation",
+    summary: "Os preços que o mercado forma, pela oferta e pela demanda: a maior parte do IPCA.",
+    lead: (
+      <>
+        Os <strong>preços livres</strong> são os do IPCA que o mercado forma, pela oferta e pela
+        demanda. São a maior parte da cesta, e dentro deles ficam os alimentos em casa, os bens
+        industriais e os serviços.
+      </>
+    ),
+    keywords: ["ipca livres", "itens livres", "mercado", "oferta e demanda", "corte do ipca"],
+    measures: (
+      <>
+        <p>
+          O Banco Central divide o IPCA em dois pedaços. Os <strong>administrados</strong> são os
+          preços sob a influência de governo ou de agência reguladora. Os <strong>livres</strong>{" "}
+          são todo o resto, com preços mais sensíveis às condições usuais de oferta e demanda.
+        </p>
+        <p>
+          Dentro dos livres, cada produto cai em um só de três segmentos: alimentação no domicílio,
+          serviços e bens industriais.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Os livres acumulam <strong>4,11%</strong> em 12 meses, perto dos 4,22% do IPCA inteiro,
+          como se espera de um pedaço que é cerca de três quartos dele (75,2% em 2023, pelo Banco
+          Central). Em agosto, o mês, os livres subiram 0,01%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        É o corte que a política monetária alcança: quando o Banco Central sobe a Selic, é nos
+        livres que o efeito aparece. Não há faixa oficial de bom, e a referência é o IPCA inteiro
+        contra a meta.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A divisão é analítica.",
+        text: (
+          <>
+            O próprio Banco Central diz que as definições têm fins analíticos e não são estritas:
+            alguns preços administrados têm dinâmica de mercado, mesmo que em parte.
+          </>
+        ),
+      },
+    ],
+    related: ["administered-prices", "services-inflation", "ipca", "rolling-12m"],
+    sources: [
+      {
+        ...bcbNote57,
+        backs:
+          "A definição de livres e administrados, e a divisão dos livres em alimentação no domicílio, serviços e bens industriais.",
+      },
+      {
+        ...bcbInflationReport2024,
+        backs: "O peso de 75,2% dos livres no IPCA de 2023.",
+      },
+      {
+        ...sgsFree,
+        backs: "A variação mensal dos livres, que compõe os 4,11% em 12 meses até agosto de 2026.",
+      },
+    ],
+    frequency: ipcaFrequency,
+    screens: [inflationScreen],
+  },
+
+  "administered-prices": {
+    title: "Preços administrados",
+    abbr: "monitorados",
+    topic: "inflation",
+    summary: "Os preços sob influência de governo ou de agência reguladora, como energia e ônibus.",
+    lead: (
+      <>
+        Os <strong>preços administrados</strong> (ou monitorados) são os do IPCA que sofrem a
+        influência de governo ou de agência reguladora, como a tarifa de energia elétrica, o
+        transporte público e o plano de saúde. Mudam por reajuste e por decisão.
+      </>
+    ),
+    keywords: [
+      "monitorados",
+      "ipca administrados",
+      "tarifa",
+      "energia elétrica",
+      "gasolina",
+      "plano de saúde",
+      "regulados",
+    ],
+    measures: (
+      <>
+        <p>
+          Segundo o Banco Central, administrados são os componentes do IPCA sob influência,
+          potencial ou efetiva, de órgão público ou agência reguladora. Em 2023 pesavam 24,8% do
+          índice.
+        </p>
+        <p>
+          São exemplos a tarifa de energia elétrica, as tarifas de transporte público e os planos de
+          saúde. Em 2023, o Banco Central destacou também a gasolina.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Os administrados acumulam <strong>4,42%</strong> em 12 meses, contra 4,22% do IPCA
+          inteiro. Em agosto, o mês, caíram 1,25%: um único mês de reajuste pode mexer sozinho no
+          IPCA.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        A Selic pouco alcança esses preços, porque quem os decide é o governo, a agência ou o
+        contrato. Por isso o Banco Central separa os dois cortes: um administrado que dispara não
+        indica, sozinho, que a demanda esquentou.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Contrato pode copiar a inflação passada.",
+        text: (
+          <>
+            Planos de saúde e medicamentos têm reajuste ligado à inflação passada, e é por esse
+            caminho que a inflação de ontem chega aos administrados de hoje.
+          </>
+        ),
+      },
+    ],
+    related: ["free-prices", "services-inflation", "ipca", "selic"],
+    sources: [
+      {
+        ...bcbNote57,
+        backs: "A definição de preços administrados e os exemplos de energia, transporte e saúde.",
+      },
+      {
+        ...bcbInflationReport2024,
+        backs:
+          "O peso de 24,8% no IPCA de 2023, o destaque da gasolina e o reajuste de planos de saúde e medicamentos ligado à inflação passada.",
+      },
+      {
+        ...sgsAdministered,
+        backs:
+          "A variação mensal dos administrados: 4,42% em 12 meses até agosto de 2026 e −1,25% em agosto.",
+      },
+    ],
+    frequency: ipcaFrequency,
+    screens: [inflationScreen],
+  },
+
+  "services-inflation": {
+    title: "Inflação de serviços",
+    topic: "inflation",
+    summary: "O IPCA do que é intangível, como aluguel e manutenção: o corte que o BC mais vigia.",
+    lead: (
+      <>
+        A <strong>inflação de serviços</strong> é a do que se compra sem levar nada para casa, como
+        aluguel e manutenção. É um pedaço dos preços livres, e o Banco Central a vigia porque ela
+        reflete salários e demora a ceder.
+      </>
+    ),
+    keywords: [
+      "serviços",
+      "ipca serviços",
+      "inércia",
+      "salários",
+      "não comercializáveis",
+      "cabeleireiro",
+      "aluguel",
+    ],
+    measures: (
+      <>
+        <p>
+          O Banco Central define serviços como os produtos intangíveis dos preços livres, como
+          manutenção e aluguel. Os outros dois segmentos dos livres são a alimentação no domicílio e
+          os bens industriais, que são os produtos tangíveis.
+        </p>
+        <p>
+          Serviços pesaram 35% do IPCA em 2023, a maior fatia entre os cortes que o Banco Central
+          destaca.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Os serviços acumulam <strong>5,46%</strong> em 12 meses: acima dos livres (4,11%), dos
+          administrados (4,42%) e dos 4,22% do IPCA inteiro. Em agosto, o mês, subiram 0,03%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Serviços acima do restante por muito tempo é sinal de inflação enraizada: o preço de um
+        serviço segue em boa parte o salário de quem o presta, e isso muda devagar. Não há faixa
+        oficial, e a referência é o próprio IPCA.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "São pouco expostos ao mundo.",
+        text: (
+          <>
+            Um corte de cabelo ou uma consulta não são importados, então serviços reagem menos ao
+            dólar e à concorrência de fora do que os bens, e o Banco Central os trata como não
+            comercializáveis.
+          </>
+        ),
+      },
+    ],
+    related: ["free-prices", "administered-prices", "unemployment-rate", "selic"],
+    sources: [
+      {
+        ...bcbNote57,
+        backs:
+          "A definição de serviços como produtos intangíveis e a classificação como não comercializáveis, com os exemplos de cabeleireiro e serviços médicos.",
+      },
+      {
+        ...bcbInflationReport2024,
+        backs: "O peso de 35% dos serviços no IPCA de 2023.",
+      },
+      {
+        ...sgsServices,
+        backs: "A variação mensal dos serviços: 5,46% em 12 meses até agosto de 2026.",
+      },
+    ],
+    frequency: ipcaFrequency,
+    screens: [inflationScreen],
   },
 
   "inflation-target": {

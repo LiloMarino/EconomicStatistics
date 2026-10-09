@@ -108,6 +108,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/price-cuts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Price Cuts Overview */
+        get: operations["price_cuts_overview_api_price_cuts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/external-sector": {
         parameters: {
             query?: never;
@@ -1104,6 +1121,26 @@ export interface components {
             net: number;
         };
         /**
+         * PriceCutDTO
+         * @description O IPCA em 12 meses do corte, em fração (0.0412 é 4,12%), nos últimos 24 meses.
+         *     `forecast` continua a linha pelo Focus, até 12 meses depois do último dado.
+         */
+        PriceCutDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+        };
+        /**
+         * PriceCutsDTO
+         * @description O IPCA dividido pela forma como o preço se forma: livres (o mercado forma),
+         *     administrados (dependem de governo ou contrato) e serviços (parte dos livres).
+         */
+        PriceCutsDTO: {
+            free: components["schemas"]["PriceCutDTO"];
+            administered: components["schemas"]["PriceCutDTO"];
+            services: components["schemas"]["PriceCutDTO"];
+        };
+        /**
          * PurchasingPowerDTO
          * @description Taxas em fração; os grupos vêm da maior perda ao maior ganho.
          */
@@ -1266,7 +1303,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1618,6 +1655,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PurchasingPowerDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    price_cuts_overview_api_price_cuts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriceCutsDTO"];
                 };
             };
             /** @description Unprocessable Content */
