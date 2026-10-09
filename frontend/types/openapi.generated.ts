@@ -422,7 +422,7 @@ export interface components {
          * @description Fonte que não cabe em `observations`, com tabela e refresh próprios.
          * @enum {string}
          */
-        Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings" | "imf_countries";
+        Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings" | "imf_countries" | "inflation_tolerance";
         /**
          * DebtCaseDTO
          * @description Um ponto de partida: dívida, juro, crescimento e primário em fração, a

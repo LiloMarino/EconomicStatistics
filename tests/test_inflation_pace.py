@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from backend.domain.inflation_target import target_bands
 from backend.domain.series import Observation
-from tests.data_ipca import seed_ipca
+from tests.data_ipca import TOLERANCES, seed_ipca
 
 AUG_2026 = {"end": "2026-08-01"}
 
@@ -66,7 +66,7 @@ def test_tolerance_changes_with_the_period() -> None:
         Observation(ref_date=date(2026, 1, 1), value=3.0),
     ]
 
-    bands = target_bands(targets, (2004, 2015, 2026))
+    bands = target_bands(targets, (2004, 2015, 2026), TOLERANCES)
 
     assert [
         (
@@ -83,10 +83,10 @@ def test_continuous_target_holds_after_the_last_published_year() -> None:
     """A meta contínua, desde 2025, segue valendo nos anos que a série ainda não
     publicou; antes dela, ano sem meta publicada fica sem faixa."""
     continuous = target_bands(
-        [Observation(ref_date=date(2026, 1, 1), value=3.0)], (2027, 2028)
+        [Observation(ref_date=date(2026, 1, 1), value=3.0)], (2027, 2028), TOLERANCES
     )
     calendar = target_bands(
-        [Observation(ref_date=date(2018, 1, 1), value=4.5)], (2019,)
+        [Observation(ref_date=date(2018, 1, 1), value=4.5)], (2019,), TOLERANCES
     )
 
     assert [round(band.ceiling, 3) for band in continuous.values()] == [0.045, 0.045]

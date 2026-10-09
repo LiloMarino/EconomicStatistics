@@ -17,6 +17,7 @@ from backend.domain.copom import CopomProvider
 from backend.domain.federal_debt import FederalDebtProvider
 from backend.domain.focus import FocusProvider
 from backend.domain.imf import ImfProvider
+from backend.domain.inflation_target import InflationToleranceProvider
 from backend.domain.series import SeriesProvider
 from backend.features.providers import (
     get_copom_provider,
@@ -24,6 +25,7 @@ from backend.features.providers import (
     get_focus_provider,
     get_imf_provider,
     get_providers,
+    get_tolerance_provider,
 )
 from tests.fakes import (
     FakeCopomProvider,
@@ -31,6 +33,7 @@ from tests.fakes import (
     FakeFocusProvider,
     FakeImfProvider,
     FakeProvider,
+    FakeToleranceProvider,
 )
 
 
@@ -81,6 +84,11 @@ def fake_copom_provider() -> FakeCopomProvider:
 
 
 @pytest.fixture
+def fake_tolerance_provider() -> FakeToleranceProvider:
+    return FakeToleranceProvider()
+
+
+@pytest.fixture
 def fake_imf_provider() -> FakeImfProvider:
     return FakeImfProvider()
 
@@ -93,6 +101,7 @@ def api(
     fake_focus_provider: FakeFocusProvider,
     fake_copom_provider: FakeCopomProvider,
     fake_imf_provider: FakeImfProvider,
+    fake_tolerance_provider: FakeToleranceProvider,
 ) -> TestClient:
     """App com a sessão apontando para o banco do teste e as fontes trocadas pelo
     fake: teste nenhum sai para a rede."""
@@ -116,6 +125,9 @@ def api(
     def imf_provider_override() -> ImfProvider:
         return fake_imf_provider
 
+    def tolerance_provider_override() -> InflationToleranceProvider:
+        return fake_tolerance_provider
+
     app = create_app()
     app.dependency_overrides[get_session] = session_override
     app.dependency_overrides[get_providers] = providers_override
@@ -123,4 +135,5 @@ def api(
     app.dependency_overrides[get_focus_provider] = focus_provider_override
     app.dependency_overrides[get_copom_provider] = copom_provider_override
     app.dependency_overrides[get_imf_provider] = imf_provider_override
+    app.dependency_overrides[get_tolerance_provider] = tolerance_provider_override
     return TestClient(app)

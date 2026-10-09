@@ -2,23 +2,32 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
+from typing import Protocol
 
 from backend.domain.rates import PERCENT
 from backend.domain.series import Observation
 
-# A tolerância em pontos percentuais, do primeiro ano em que passou a valer, como as
-# resoluções do CMN fixaram: 2 p.p. de 1999 a 2002, 2,5 de 2003 a 2005, 2 de 2006 a
-# 2016 e 1,5 desde 2017
-TOLERANCE_SINCE: tuple[tuple[int, float], ...] = (
-    (1999, 0.02),
-    (2003, 0.025),
-    (2006, 0.02),
-    (2017, 0.015),
-)
 # Desde 2025 a meta é contínua: vale até o CMN mudá-la, sem ano final
 CONTINUOUS_SINCE = 2025
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Tolerance:
+    """A distância do piso e do teto até a meta, em fração (0.015 é 1,5 p.p.), válida
+    desde `year` até o ano anterior ao da tolerância seguinte."""
+
+    year: int
+    width: float
+
+
+class InflationToleranceProvider(Protocol):
+    name: str
+
+    def get_tolerances(self, *, history: bool) -> list[Tolerance]:
+        """A tolerância em vigor; com `history`, também a de cada ano desde 1999."""
+        ...
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -30,15 +39,20 @@ class TargetBand:
     ceiling: float
 
 
-def tolerance(year: int) -> float:
-    return next(value for start, value in reversed(TOLERANCE_SINCE) if year >= start)
+def tolerance(tolerances: Iterable[Tolerance], year: int) -> float | None:
+    """A tolerância do ano: a do último ponto que começou até ele."""
+    started = [item for item in tolerances if item.year <= year]
+    return max(started, key=lambda item: item.year).width if started else None
 
 
 def target_bands(
-    targets: Iterable[Observation], years: Iterable[int]
+    targets: Iterable[Observation],
+    years: Iterable[int],
+    tolerances: Sequence[Tolerance],
 ) -> dict[int, TargetBand]:
-    """A faixa de cada ano pedido que tem meta. A série publica a meta em % no ano,
-    datada em janeiro; depois do último ano publicado, a meta contínua segue valendo."""
+    """A faixa de cada ano pedido que tem meta e tolerância. A série publica a meta em %
+    no ano, datada em janeiro; depois do último ano publicado, a meta contínua segue
+    valendo."""
     by_year = {item.ref_date.year: item.value / PERCENT for item in targets}
     last = max(by_year, default=None)
     bands: dict[int, TargetBand] = {}
@@ -46,9 +60,9 @@ def target_bands(
         target = by_year.get(year)
         if target is None and last is not None and CONTINUOUS_SINCE <= last < year:
             target = by_year[last]
-        if target is None:
+        width = tolerance(tolerances, year)
+        if target is None or width is None:
             continue
-        width = tolerance(year)
         bands[year] = TargetBand(
             target=target, floor=target - width, ceiling=target + width
         )

@@ -17,7 +17,9 @@ from backend.domain.coverage import month_start, quarter_start
 from backend.domain.federal_debt import DebtHolding
 from backend.domain.focus import Expectation, week_start
 from backend.domain.imf import CountryObservation
+from backend.domain.inflation_target import Tolerance
 from backend.domain.series import Observation, SeriesSpec
+from tests.data_ipca import TOLERANCES
 
 FAKE_VALUES = {
     Unit.PERCENT_MONTH: 0.5,
@@ -151,6 +153,22 @@ class FakeCopomProvider:
             for year in range(first_year, last_year + 1)
             for number, (month, day) in enumerate(((3, 16), (11, 3)), start=1)
         ]
+
+
+@dataclass
+class FakeToleranceProvider:
+    """A tolerância do Banco Central: o histórico inteiro, ou só a regra em vigor,
+    que é o último ponto."""
+
+    name: str = "fake-target"
+    offline: bool = False
+    calls: list[bool] = field(default_factory=list[bool])
+
+    def get_tolerances(self, *, history: bool) -> list[Tolerance]:
+        self.calls.append(history)
+        if self.offline:
+            raise ConnectionError("sem rede")
+        return list(TOLERANCES) if history else TOLERANCES[-1:]
 
 
 @dataclass

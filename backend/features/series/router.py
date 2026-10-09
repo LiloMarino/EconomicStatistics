@@ -11,12 +11,14 @@ from backend.features.copom.refresh import refresh_copom
 from backend.features.dataset_refresh import DatasetRefresh
 from backend.features.debt.refresh import refresh_federal_debt
 from backend.features.focus.refresh import refresh_focus
+from backend.features.inflation.tolerance_refresh import refresh_tolerance
 from backend.features.providers import (
     CopomProviderDep,
     DebtProviderDep,
     FocusProviderDep,
     ImfProviderDep,
     ProvidersDep,
+    ToleranceProviderDep,
 )
 from backend.features.series.refresh import refresh_series
 from backend.features.simulator.refresh import refresh_imf
@@ -51,6 +53,7 @@ def refresh(
     focus_provider: FocusProviderDep,
     copom_provider: CopomProviderDep,
     imf_provider: ImfProviderDep,
+    tolerance_provider: ToleranceProviderDep,
 ) -> RefreshReportDTO:
     """Com o cache em dia, responde sem sair da máquina. Sem rede não é erro: o cache
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
@@ -61,6 +64,9 @@ def refresh(
         Dataset.FOCUS_EXPECTATIONS: refresh_focus(session, focus_provider, now),
         Dataset.COPOM_MEETINGS: refresh_copom(session, copom_provider, now),
         Dataset.IMF_COUNTRIES: refresh_imf(session, imf_provider, now),
+        Dataset.INFLATION_TOLERANCE: refresh_tolerance(
+            session, tolerance_provider, now
+        ),
     }
     return RefreshReportDTO(
         updated=list(report.updated),

@@ -8,3 +8,4 @@ class Dataset(StrEnum):
     FOCUS_EXPECTATIONS = "focus_expectations"
     COPOM_MEETINGS = "copom_meetings"
     IMF_COUNTRIES = "imf_countries"
+    INFLATION_TOLERANCE = "inflation_tolerance"

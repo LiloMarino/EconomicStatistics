@@ -8,7 +8,9 @@ from datetime import date
 from sqlalchemy.orm import Session
 
 from backend.core.enum import SeriesId
+from backend.domain.inflation_target import Tolerance
 from backend.domain.series import Observation
+from backend.repository.inflation_tolerance import replace_tolerances
 from backend.repository.series import upsert_observations
 
 FIRST_MONTH = date(2020, 1, 1)
@@ -847,6 +849,16 @@ INFLATION_TARGET = {
     2026: 3.0,
 }
 
+# A tolerância como o Banco Central a publica: 2 p.p. de 1999, 2,5 de 2003, 2 de 2006 e
+# 1,5 de 2017, e a regra em vigor desde 2025
+TOLERANCES = [
+    Tolerance(year=1999, width=0.02),
+    Tolerance(year=2003, width=0.025),
+    Tolerance(year=2006, width=0.02),
+    Tolerance(year=2017, width=0.015),
+    Tolerance(year=2025, width=0.015),
+]
+
 
 def _month(index: int) -> date:
     return date(FIRST_MONTH.year + index // 12, index % 12 + 1, 1)
@@ -867,4 +879,9 @@ def seed_ipca(session: Session) -> None:
             for year, value in INFLATION_TARGET.items()
         ],
     )
+    seed_tolerances(session)
+
+
+def seed_tolerances(session: Session) -> None:
+    replace_tolerances(session, TOLERANCES)
     session.commit()

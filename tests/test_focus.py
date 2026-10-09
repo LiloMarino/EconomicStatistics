@@ -30,7 +30,7 @@ from backend.domain.series import Observation
 from backend.features.focus.refresh import refresh_focus
 from backend.repository.focus import last_survey_date, upsert_expectations
 from backend.repository.series import upsert_observations
-from tests.data_ipca import seed_ipca
+from tests.data_ipca import seed_ipca, seed_tolerances
 from tests.data_public_accounts import seed_public_accounts
 from tests.fakes import FakeFocusProvider
 
@@ -307,7 +307,7 @@ def test_history_brings_the_target_of_the_year(
         SeriesId.INFLATION_TARGET,
         [Observation(ref_date=date(2026, 1, 1), value=3.0)],
     )
-    session.commit()
+    seed_tolerances(session)
 
     body = api.get(
         "/api/focus/history", params={"indicator": "ipca", "year": 2027}

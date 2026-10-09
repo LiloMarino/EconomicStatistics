@@ -151,6 +151,16 @@ class CopomMeeting(Base):
     second_day: Mapped[date]
 
 
+class InflationTolerance(Base):
+    """A distância da meta de inflação ao piso e ao teto, em fração, válida desde
+    `year` até o ano anterior ao da linha seguinte."""
+
+    __tablename__ = "inflation_tolerances"
+
+    year: Mapped[int] = mapped_column(primary_key=True)
+    width: Mapped[float]
+
+
 class ImfObservation(Base):
     """O valor de um indicador do FMI para um país em um ano (% do PIB ou % ao ano). Os
     anos a partir do corrente são projeção do FMI."""

@@ -53,4 +53,5 @@ export const datasetLabels: Record<Dataset, string> = {
   focus_expectations: "Pesquisa Focus",
   copom_meetings: "Calendário do Copom",
   imf_countries: "Dívida e inflação dos países (FMI)",
+  inflation_tolerance: "Tolerância da meta de inflação",
 };

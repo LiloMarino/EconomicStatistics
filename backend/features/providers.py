@@ -10,6 +10,7 @@ from fastapi import Depends
 from backend.adapters.bcb_copom_provider import BcbCopomProvider
 from backend.adapters.bcb_focus_provider import BcbFocusProvider
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
+from backend.adapters.bcb_target_provider import BcbTargetProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
 from backend.adapters.imf_provider import ImfDataMapperProvider
 from backend.adapters.tesouro_debt_provider import TesouroDebtProvider
@@ -18,6 +19,7 @@ from backend.domain.copom import CopomProvider
 from backend.domain.federal_debt import FederalDebtProvider
 from backend.domain.focus import FocusProvider
 from backend.domain.imf import ImfProvider
+from backend.domain.inflation_target import InflationToleranceProvider
 from backend.domain.series import SeriesProvider
 
 
@@ -47,6 +49,15 @@ def get_copom_provider() -> CopomProvider:
 
 
 CopomProviderDep = Annotated[CopomProvider, Depends(get_copom_provider)]
+
+
+def get_tolerance_provider() -> InflationToleranceProvider:
+    return BcbTargetProvider()
+
+
+ToleranceProviderDep = Annotated[
+    InflationToleranceProvider, Depends(get_tolerance_provider)
+]
 
 
 def get_imf_provider() -> ImfProvider:
