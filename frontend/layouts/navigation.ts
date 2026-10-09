@@ -1,6 +1,7 @@
 import {
   ChartColumn,
   ChartColumnStacked,
+  CreditCard,
   Factory,
   Globe,
   GraduationCap,
@@ -144,6 +145,26 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         ],
         footer: {
           until: { series: "dollar_month_end", label: "Dólar" },
+          sources: "Banco Central",
+        },
+      },
+      {
+        to: "/credit",
+        label: "Crédito",
+        icon: CreditCard,
+        description: "Custo do crédito, spread e concessões",
+        keywords: [
+          "crédito",
+          "icc",
+          "custo do crédito",
+          "spread",
+          "concessões",
+          "empréstimo",
+          "financiamento",
+          "juros do banco",
+        ],
+        footer: {
+          until: { series: "credit_cost", label: "Custo do crédito" },
           sources: "Banco Central",
         },
       },

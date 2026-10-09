@@ -43,6 +43,9 @@ export const seriesLabels: Record<SeriesId, string> = {
   gdp_growth_4q: "PIB em 4 trimestres",
   ibc_br: "IBC-Br",
   unemployment_rate: "Taxa de desocupação",
+  credit_cost: "Custo do crédito",
+  concessions_business: "Concessões a empresas",
+  concessions_households: "Concessões a famílias",
 };
 
 export const datasetLabels: Record<Dataset, string> = {

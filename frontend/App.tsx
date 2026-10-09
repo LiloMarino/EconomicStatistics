@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { MainLayout } from "@/layouts/main-layout";
 import { ActivityPage } from "@/pages/activity";
+import { CreditPage } from "@/pages/credit";
 import { ConceptPage } from "@/pages/concept";
 import { DebtPage } from "@/pages/debt";
 import { DeficitPage } from "@/pages/deficit";
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="deficit" element={<DeficitPage />} />
             <Route path="debt" element={<DebtPage />} />
             <Route path="activity" element={<ActivityPage />} />
+            <Route path="credit" element={<CreditPage />} />
             <Route path="interest" element={<InterestPage />} />
             <Route path="external-sector" element={<ExternalSectorPage />} />
             <Route path="focus" element={<FocusPage />} />

@@ -65,9 +65,10 @@ def rolling_12m(rates: Sequence[MonthlyRate]) -> list[MonthlyRate]:
 
 def index_change_12m(index: Sequence[Observation]) -> list[MonthlyRate]:
     """A variação, em fração, da média dos 12 meses que terminam em cada mês sobre a
-    média dos 12 meses anteriores, a partir de um índice mensal em ordem de data: é o
-    acumulado em 12 meses de um indicador de atividade, como o IBC-Br. O mês precisa dos
-    23 anteriores em sequência."""
+    média dos 12 meses anteriores, a partir de uma série mensal em ordem de data: é o
+    acumulado em 12 meses de um índice de atividade, como o IBC-Br. Num fluxo, como as
+    concessões de crédito, a razão das médias é a razão das somas de 12 meses. O mês
+    precisa dos 23 anteriores em sequência."""
     result: list[MonthlyRate] = []
     for end in range(23, len(index)):
         window = index[end - 23 : end + 1]

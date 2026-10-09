@@ -11,6 +11,7 @@ const debtScreen = { to: "/debt", label: "Dívida" };
 const focusScreen = { to: "/focus", label: "Focus" };
 const activityScreen = { to: "/activity", label: "Atividade" };
 const interestScreen = { to: "/interest", label: "Juros" };
+const creditScreen = { to: "/credit", label: "Crédito" };
 
 const focusFrequency = "Semanal: as previsões da semana saem na segunda seguinte";
 
@@ -3300,5 +3301,284 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     screens: [interestScreen],
+  },
+
+  "credit-cost": {
+    title: "Custo do crédito",
+    abbr: "ICC",
+    topic: "credit",
+    summary: "Quanto, em média, os bancos cobram por ano por todo o crédito em aberto.",
+    lead: (
+      <>
+        O <strong>indicador de custo do crédito (ICC)</strong> é o custo médio, ao ano, de todo o
+        crédito que as famílias e as empresas devem aos bancos hoje. Mostra o que o crédito custa na
+        prática, bem acima da Selic.
+      </>
+    ),
+    keywords: ["icc", "juros do crédito", "custo médio", "empréstimo", "financiamento", "banco"],
+    measures: (
+      <>
+        <p>
+          O custo médio das operações de crédito em aberto no sistema financeiro, em % ao ano:
+          empréstimos, financiamentos e arrendamento mercantil, de qualquer data de contratação.
+        </p>
+        <p>
+          Como pesa o que já foi emprestado, e não só o crédito novo, o ICC anda devagar: uma
+          mudança da Selic leva meses para aparecer nele inteira.
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          O ICC foi de <strong>24,19% ao ano</strong>, contra 23,39% em agosto de 2025. No fim de
+          agosto a Selic meta era de 14,00%: o crédito custou 10,19 pontos percentuais a mais que a
+          taxa básica.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto maior, mais caro é se endividar e mais o juro pesa no orçamento de quem deve. Compare
+        sempre com a Selic: se o ICC sobe e a Selic não, a conta do banco aumentou por outro motivo,
+        como calote esperado ou margem. Não há faixa certa; o que informa é a direção e a distância
+        para a Selic.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "É uma média de tudo.",
+        text: (
+          <>
+            O ICC mistura o cartão rotativo, de juro altíssimo, com o financiamento de imóvel, bem
+            mais barato. Quase ninguém paga exatamente a média.
+          </>
+        ),
+      },
+      {
+        title: "É uma taxa ao ano.",
+        text: <>24,19% ao ano não são 24,19% por mês: compostos mês a mês, são cerca de 1,82%.</>,
+      },
+    ],
+    related: ["credit-spread", "selic", "credit-concessions", "free-and-directed-credit"],
+    sources: [
+      {
+        name: "Banco Central, indicador de custo do crédito (ICC)",
+        url: "https://www.bcb.gov.br/estabilidadefinanceira/indicadorcustocredito",
+        backs: "O que o indicador mede e que ele cobre as operações em aberto da carteira.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 25351 do SGS (ICC, total)",
+        url: "https://dadosabertos.bcb.gov.br/dataset/25351-indicador-de-custo-do-credito---icc",
+        backs: "Os 24,19% de agosto de 2026 e os 23,39% de agosto de 2025.",
+      },
+    ],
+    frequency: "Mensal, perto do fim do mês seguinte",
+    screens: [creditScreen],
+  },
+
+  "credit-spread": {
+    title: "Spread",
+    abbr: "ICC − Selic",
+    topic: "credit",
+    summary: "A distância entre o que o crédito custa e a Selic.",
+    lead: (
+      <>
+        O <strong>spread</strong> é a diferença entre o custo do crédito e a Selic. A Selic é o
+        começo da conta do banco; o spread é o resto: risco de calote, impostos, custos e lucro.
+      </>
+    ),
+    keywords: ["margem", "spread bancário", "diferença", "juros do banco", "calote"],
+    measures: (
+      <>
+        <p>
+          Aqui, o ICC menos a Selic meta em vigor no fim do mesmo mês, em pontos percentuais. Na
+          tela é a faixa sombreada entre as duas linhas.
+        </p>
+        <p>
+          É a medida simples do app, e não o spread bancário do Banco Central, que compara o que o
+          banco cobra com o que ele paga para captar o dinheiro.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{spread} = \\text{ICC} - \\text{Selic}",
+      legend: [
+        { symbol: "ICC", text: "o custo do crédito do mês, ao ano" },
+        { symbol: "Selic", text: "a meta em vigor no fim do mês, ao ano" },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          ICC de 24,19% menos Selic de 14,00%: <strong>spread de 10,19 pontos percentuais</strong>.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Spread largo significa que o crédito é caro mesmo com a Selic cedendo, e é por isso que
+        cortar a Selic não derruba o juro do cartão na mesma proporção. Se o spread aumenta quando a
+        Selic cai, os bancos estão embolsando o corte ou esperando mais calote.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Mais caro não é só lucro do banco.",
+        text: (
+          <>
+            Uma parte do spread cobre quem não paga: quanto maior a inadimplência, mais largo o
+            spread necessário para o banco empatar.
+          </>
+        ),
+      },
+    ],
+    related: ["credit-cost", "selic", "percentage-point"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, séries 25351 (ICC) e 432 (meta Selic) do SGS",
+        url: "https://dadosabertos.bcb.gov.br/dataset/25351-indicador-de-custo-do-credito---icc",
+        backs: "Os 24,19% do ICC de agosto de 2026 e os 14,00% da meta em vigor no fim do mês.",
+      },
+    ],
+    frequency: "Mensal, junto com o ICC",
+    screens: [creditScreen],
+  },
+
+  "credit-concessions": {
+    title: "Concessões de crédito",
+    topic: "credit",
+    summary: "O crédito novo que os bancos liberaram no mês.",
+    lead: (
+      <>
+        As <strong>concessões</strong> são o dinheiro novo que os bancos emprestaram no mês. Diferem
+        do saldo, que soma tudo o que ainda se deve, e mostram se o crédito está acelerando ou
+        freando.
+      </>
+    ),
+    keywords: [
+      "crédito novo",
+      "empréstimos",
+      "financiamentos",
+      "liberações",
+      "famílias",
+      "empresas",
+    ],
+    measures: (
+      <>
+        <p>
+          O valor das operações de crédito contratadas no mês, em R$. O app mostra as de recursos
+          livres, de empresas e de famílias, e a variação em 12 meses.
+        </p>
+        <p>
+          A conta soma os 12 meses que terminam no mês e compara com a soma dos 12 anteriores,
+          porque as concessões variam muito de um mês para o outro (dezembro é sempre forte, por
+          exemplo).
+        </p>
+      </>
+    ),
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          As famílias tomaram R$ 826,6 bilhões nos 12 meses até agosto, contra R$ 732,4 bilhões nos
+          12 meses anteriores: <strong>+12,9%</strong>. As empresas, <strong>+11,6%</strong>. O
+          valor é nominal, sem descontar a inflação.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Variação positiva e crescente indica crédito acelerando; negativa, freando. Juros altos
+        costumam frear o crédito com alguns meses de atraso. Como o valor é nominal, uma variação de
+        12% com inflação de 4% no período é um crescimento real de cerca de 7,7%.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "As famílias não incluem o rotativo do cartão.",
+        text: (
+          <>
+            O rotativo gira todo mês e infla o valor sem ser dinheiro novo de verdade. A tela usa a
+            série das famílias sem ele, como a página do Banco Central.
+          </>
+        ),
+      },
+      {
+        title: "Concessão não é dívida.",
+        text: (
+          <>
+            Parte do que se empresta em um mês é paga no mesmo ano. O saldo da dívida das famílias é
+            outra série.
+          </>
+        ),
+      },
+    ],
+    related: ["free-and-directed-credit", "credit-cost", "rolling-12m"],
+    sources: [
+      {
+        name: "Banco Central, estatísticas monetárias e de crédito",
+        url: "https://www.bcb.gov.br/estatisticas/estatisticasmonetariascredito",
+        backs: "Que as concessões são as operações novas do mês, separadas por tipo de recurso.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 20635 do SGS (concessões de recursos livres, empresas)",
+        url: "https://dadosabertos.bcb.gov.br/dataset/20635-concessoes-de-credito-com-recursos-livres---pessoas-juridicas---total",
+        backs: "As concessões das empresas e a variação de 11,6% em 12 meses até agosto de 2026.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 20663 do SGS (concessões de recursos livres, famílias, não rotativo)",
+        url: "https://dadosabertos.bcb.gov.br/dataset/20663-concessoes-de-credito-com-recursos-livres-nao-rotativo---pessoas-fisicas",
+        backs: "As concessões das famílias e a variação de 12,9% em 12 meses até agosto de 2026.",
+      },
+    ],
+    frequency: "Mensal, perto do fim do mês seguinte",
+    screens: [creditScreen],
+  },
+
+  "free-and-directed-credit": {
+    title: "Recursos livres e direcionados",
+    topic: "credit",
+    summary: "Crédito com juro negociado entre banco e cliente, e crédito com regra definida.",
+    lead: (
+      <>
+        No <strong>crédito livre</strong>, banco e cliente negociam o juro. No{" "}
+        <strong>direcionado</strong>, a lei define a origem do dinheiro e o juro, como no crédito
+        rural e no imobiliário com a poupança.
+      </>
+    ),
+    keywords: ["livre", "direcionado", "crédito rural", "financiamento imobiliário", "bndes"],
+    measures: (
+      <>
+        <p>
+          Os recursos <strong>livres</strong> seguem o mercado: cartão, cheque especial, crédito
+          pessoal, capital de giro. Os <strong>direcionados</strong> têm regra, e muitas vezes juro
+          mais baixo, como o crédito rural, o imobiliário e o do BNDES.
+        </p>
+        <p>A tela mostra só o livre, que é o que reage à Selic.</p>
+      </>
+    ),
+    reading: (
+      <p>
+        O crédito livre sente a Selic e o ciclo da economia com mais força, e por isso é o melhor
+        termômetro do efeito da política monetária. O direcionado anda mais pelas regras e pelos
+        programas do governo.
+      </p>
+    ),
+    related: ["credit-concessions", "credit-cost", "selic"],
+    sources: [
+      {
+        name: "Banco Central, estatísticas monetárias e de crédito",
+        url: "https://www.bcb.gov.br/estatisticas/estatisticasmonetariascredito",
+        backs: "A divisão do crédito em recursos livres e direcionados.",
+      },
+    ],
+    screens: [creditScreen],
   },
 };

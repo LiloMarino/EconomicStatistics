@@ -42,4 +42,7 @@ export const conceptBySeries: Record<SeriesId, ConceptId> = {
   gdp_growth_4q: "gdp",
   ibc_br: "ibc-br",
   unemployment_rate: "unemployment-rate",
+  credit_cost: "credit-cost",
+  concessions_business: "credit-concessions",
+  concessions_households: "credit-concessions",
 };

@@ -40,3 +40,6 @@ class SeriesId(StrEnum):
     GDP_GROWTH_4Q = "gdp_growth_4q"
     IBC_BR = "ibc_br"
     UNEMPLOYMENT_RATE = "unemployment_rate"
+    CREDIT_COST = "credit_cost"
+    CONCESSIONS_BUSINESS = "concessions_business"
+    CONCESSIONS_HOUSEHOLDS = "concessions_households"

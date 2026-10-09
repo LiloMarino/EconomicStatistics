@@ -142,6 +142,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/credit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Credit Overview */
+        get: operations["credit_overview_api_credit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/deficit": {
         parameters: {
             query?: never;
@@ -266,6 +283,50 @@ export interface components {
             ref_date: string;
             /** Years */
             years: number;
+        };
+        /**
+         * ConcessionsDTO
+         * @description A variação em 12 meses das concessões de recursos livres, em fração (0.062 é
+         *     6,2%), dos últimos 24 meses: a soma dos 12 meses que terminam em `ref_date` sobre a
+         *     dos 12 anteriores. `households` não conta o rotativo do cartão.
+         */
+        ConcessionsDTO: {
+            /** Business */
+            business: components["schemas"]["MonthValueDTO"][];
+            /** Households */
+            households: components["schemas"]["MonthValueDTO"][];
+        };
+        /**
+         * CostDTO
+         * @description Os últimos 24 meses com ICC e Selic. `spread` é o ICC menos a Selic do último
+         *     mês, em fração (0.09 é 9 pontos percentuais).
+         */
+        CostDTO: {
+            /** Months */
+            months: components["schemas"]["CostMonthDTO"][];
+            /** Spread */
+            spread: number;
+        };
+        /**
+         * CostMonthDTO
+         * @description O custo do crédito (ICC) e a Selic meta de fim do mês `ref_date`, ao ano e em
+         *     fração (0.2419 é 24,19% ao ano).
+         */
+        CostMonthDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Cost */
+            cost: number;
+            /** Selic */
+            selic: number;
+        };
+        /** CreditDTO */
+        CreditDTO: {
+            cost: components["schemas"]["CostDTO"];
+            concessions: components["schemas"]["ConcessionsDTO"];
         };
         /**
          * Dataset
@@ -1053,7 +1114,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1446,6 +1507,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ActivityDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    credit_overview_api_credit_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreditDTO"];
                 };
             };
             /** @description Unprocessable Content */

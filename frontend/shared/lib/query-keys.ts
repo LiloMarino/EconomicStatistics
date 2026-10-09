@@ -11,6 +11,7 @@ export const queryKeys = {
   externalSector: ["series", "external-sector"] as const,
   activity: ["series", "activity"] as const,
   interest: ["series", "interest"] as const,
+  credit: ["series", "credit"] as const,
   deficit: ["series", "deficit"] as const,
   debt: ["series", "debt"] as const,
   federalDebt: ["series", "federal-debt"] as const,

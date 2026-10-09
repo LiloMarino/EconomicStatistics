@@ -18,6 +18,7 @@ TARGET = SERIES[SeriesId.INFLATION_TARGET]
 POSITION = SERIES[SeriesId.IIP_LIABILITIES]
 GDP = SERIES[SeriesId.GDP_GROWTH_4Q]
 UNEMPLOYMENT = SERIES[SeriesId.UNEMPLOYMENT_RATE]
+CREDIT_COST = SERIES[SeriesId.CREDIT_COST]
 
 
 def cached_until(spec_first: date, last: date) -> DateRange:
@@ -67,6 +68,12 @@ def test_unemployment_month_is_expected_at_the_end_of_the_next_month() -> None:
     de setembro."""
     assert expected_ref_date(UNEMPLOYMENT, date(2026, 9, 29)) == date(2026, 7, 1)
     assert expected_ref_date(UNEMPLOYMENT, date(2026, 9, 30)) == date(2026, 8, 1)
+
+
+def test_credit_month_is_expected_at_the_end_of_the_next_month() -> None:
+    """O custo do crédito de agosto é cobrado a partir de 28 de setembro."""
+    assert expected_ref_date(CREDIT_COST, date(2026, 9, 27)) == date(2026, 7, 1)
+    assert expected_ref_date(CREDIT_COST, date(2026, 9, 28)) == date(2026, 8, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:

@@ -160,6 +160,10 @@ def _fiscal_note(code: str, unit: Unit, first_date: date) -> SeriesSpec:
     )
 
 
+# A nota de estatísticas monetárias e de crédito do BCB sai perto do fim do mês
+# seguinte ao de referência
+CREDIT_NOTE_RELEASE_DAY = 28
+
 # A NFSP é a necessidade de financiamento: valor positivo é déficit. As séries são
 # sem desvalorização cambial, em % do PIB e acumuladas em 12 meses. As três do setor
 # público consolidado fecham a conta nominal = primário + juros, e as de cada esfera
@@ -316,6 +320,33 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         first_date=date(2012, 3, 1),
         lag_months=1,
         release_day=30,
+    ),
+    # O indicador de custo do crédito (ICC) do BCB, total, em % ao ano
+    SeriesId.CREDIT_COST: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="25351",
+        unit=Unit.PERCENT_YEAR,
+        first_date=date(2013, 1, 1),
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
+    ),
+    # Concessões de recursos livres: pessoas jurídicas (total) e pessoas físicas sem o
+    # rotativo do cartão, em R$ milhões no mês
+    SeriesId.CONCESSIONS_BUSINESS: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="20635",
+        unit=Unit.BRL_MILLION,
+        first_date=date(2011, 3, 1),
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
+    ),
+    SeriesId.CONCESSIONS_HOUSEHOLDS: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="20663",
+        unit=Unit.BRL_MILLION,
+        first_date=date(2011, 3, 1),
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
     ),
 }
 

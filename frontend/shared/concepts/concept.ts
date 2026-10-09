@@ -45,6 +45,10 @@ export const conceptIds = [
   "copom",
   "real-rate",
   "neutral-rate",
+  "credit-cost",
+  "credit-spread",
+  "credit-concessions",
+  "free-and-directed-credit",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */
@@ -54,6 +58,7 @@ export const topics = [
   "inflation",
   "public-accounts",
   "interest",
+  "credit",
   "activity",
   "external",
   "expectations",
@@ -65,6 +70,7 @@ export const topicLabels: Record<Topic, string> = {
   inflation: "Inflação",
   "public-accounts": "Contas públicas",
   interest: "Juros",
+  credit: "Crédito",
   activity: "Atividade",
   external: "Setor externo",
   expectations: "Expectativas",
