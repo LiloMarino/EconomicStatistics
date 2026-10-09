@@ -10,6 +10,7 @@ from backend.core.enum.focus_indicator import FocusIndicator
 from backend.core.enum.focus_target_kind import FocusTargetKind
 from backend.core.enum.imf_indicator import ImfIndicator
 from backend.core.enum.indexer import Indexer
+from backend.core.enum.lamp import Lamp
 from backend.core.enum.overview_indicator import OverviewIndicator
 from backend.core.enum.pace_verdict import PaceVerdict
 from backend.core.enum.periodicity import Periodicity
@@ -32,6 +33,7 @@ __all__ = [
     "FocusTargetKind",
     "ImfIndicator",
     "Indexer",
+    "Lamp",
     "OverviewIndicator",
     "PaceVerdict",
     "Periodicity",
