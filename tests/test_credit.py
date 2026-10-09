@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from backend.domain.basel import basel_ratios
+from backend.domain.series import Observation
 from tests.data_credit import seed_credit
 
 
@@ -58,6 +62,37 @@ def test_concessions_compare_the_last_12_months_sum_with_the_12_before(
     assert [item["value"] for item in concessions["households"]] == [
         pytest.approx(0.1154, abs=5e-6),
         pytest.approx(0.12862, abs=5e-6),
+    ]
+
+
+@pytest.mark.usefixtures("seeded")
+def test_basel_divides_the_capital_by_the_risk_weighted_assets(api: TestClient) -> None:
+    """Cada trimestre, datado no último mês dele, é o patrimônio de referência sobre os
+    ativos ponderados pelo risco: 17,33% em dez/2025 e 16,98% em jun/2026, contra o
+    mínimo de 8% e de 10,5% com o adicional de conservação."""
+    basel = api.get("/api/credit").json()["basel"]
+
+    by_quarter = {item["ref_date"]: item["value"] for item in basel["quarters"]}
+    assert len(by_quarter) == 8
+    assert basel["quarters"][0]["ref_date"] == "2024-09-01"
+    assert by_quarter["2025-12-01"] == pytest.approx(0.1733, abs=5e-5)
+    assert by_quarter["2026-06-01"] == pytest.approx(0.1698, abs=5e-5)
+    assert basel["minimum"] == pytest.approx(0.08)
+    assert basel["minimum_with_buffer"] == pytest.approx(0.105)
+
+
+def test_basel_skips_a_quarter_without_both_accounts() -> None:
+    """Trimestre com o patrimônio e sem os ativos ponderados fica de fora."""
+    capital = [
+        Observation(ref_date=date(2026, 1, 1), value=17.0),
+        Observation(ref_date=date(2026, 4, 1), value=18.0),
+    ]
+    risk_weighted = [Observation(ref_date=date(2026, 1, 1), value=100.0)]
+
+    ratios = basel_ratios(capital, risk_weighted)
+
+    assert [(item.ref_date, item.ratio) for item in ratios] == [
+        (date(2026, 1, 1), pytest.approx(0.17))
     ]
 
 

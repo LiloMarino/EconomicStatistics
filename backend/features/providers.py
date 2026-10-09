@@ -9,6 +9,7 @@ from fastapi import Depends
 
 from backend.adapters.bcb_copom_provider import BcbCopomProvider
 from backend.adapters.bcb_focus_provider import BcbFocusProvider
+from backend.adapters.bcb_ifdata_provider import BcbIfDataProvider
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
 from backend.adapters.bcb_target_provider import BcbTargetProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
@@ -24,7 +25,11 @@ from backend.domain.series import SeriesProvider
 
 
 def get_providers() -> Mapping[Source, SeriesProvider]:
-    return {Source.IBGE: IbgeAggregatesProvider(), Source.BCB_SGS: BcbSgsProvider()}
+    return {
+        Source.IBGE: IbgeAggregatesProvider(),
+        Source.BCB_SGS: BcbSgsProvider(),
+        Source.BCB_IFDATA: BcbIfDataProvider(),
+    }
 
 
 ProvidersDep = Annotated[Mapping[Source, SeriesProvider], Depends(get_providers)]

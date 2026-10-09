@@ -63,6 +63,7 @@
   --color-credit-cost: var(--credit-cost);
   --color-credit-business: var(--credit-business);
   --color-credit-households: var(--credit-households);
+  --color-credit-basel: var(--credit-basel);
   --color-debt-gross: var(--debt-gross);
   --color-debt-rate: var(--debt-rate);
   --color-debt-growth: var(--debt-growth);
@@ -252,6 +253,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --credit-cost: #b85e1c;
   --credit-business: #2f6fc4;
   --credit-households: #b85e1c;
+  --credit-basel: #1f8a7f;
   --debt-gross: #c8423d;
   --debt-rate: #c8423d;
   --debt-growth: #2f6fc4;
@@ -360,6 +362,7 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --credit-cost: #e8853d;
   --credit-business: #5b9bea;
   --credit-households: #e8853d;
+  --credit-basel: #2fb3a6;
   --debt-gross: #e8645f;
   --debt-rate: #e8645f;
   --debt-growth: #5b9bea;

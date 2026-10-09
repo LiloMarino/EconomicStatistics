@@ -52,6 +52,8 @@ export const seriesLabels: Record<SeriesId, string> = {
   credit_cost: "Custo do crédito",
   concessions_business: "Concessões a empresas",
   concessions_households: "Concessões a famílias",
+  basel_capital: "Patrimônio de referência (Basileia)",
+  basel_rwa: "Ativos ponderados pelo risco (Basileia)",
 };
 
 export const datasetLabels: Record<Dataset, string> = {

@@ -38,9 +38,21 @@ class ConcessionsDTO(BaseDTO):
     households: list[MonthValueDTO]
 
 
+class BaselDTO(BaseDTO):
+    """O índice de Basileia do sistema, o patrimônio de referência sobre os ativos
+    ponderados pelo risco, em fração (0.1733 é 17,33%), em cada trimestre desde 2015,
+    datado no último mês dele. `minimum` é o mínimo da regra (8%) e
+    `minimum_with_buffer` soma o adicional de conservação (10,5%)."""
+
+    quarters: list[MonthValueDTO]
+    minimum: float
+    minimum_with_buffer: float
+
+
 class CreditDTO(BaseDTO):
     cost: CostDTO
     concessions: ConcessionsDTO
+    basel: BaselDTO
 
 
 @router.get("", responses=ERROR_RESPONSES)

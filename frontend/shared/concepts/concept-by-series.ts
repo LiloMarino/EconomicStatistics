@@ -51,4 +51,6 @@ export const conceptBySeries: Record<SeriesId, ConceptId> = {
   credit_cost: "credit-cost",
   concessions_business: "credit-concessions",
   concessions_households: "credit-concessions",
+  basel_capital: "basel-ratio",
+  basel_rwa: "basel-ratio",
 };

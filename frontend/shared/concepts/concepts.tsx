@@ -4257,4 +4257,114 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     screens: [creditScreen],
   },
+  "basel-ratio": {
+    title: "Índice de Basileia",
+    abbr: "PR / RWA",
+    topic: "credit",
+    summary: "Quanto capital próprio os bancos têm para cada real que está em risco.",
+    lead: (
+      <>
+        O <strong>índice de Basileia</strong> divide o capital próprio dos bancos pelo que eles
+        emprestaram e investiram, com o mais arriscado pesando mais. 17% quer dizer R$ 17 de capital
+        para cada R$ 100 em risco; a regra exige no mínimo 8%, ou 10,5% com o colchão.
+      </>
+    ),
+    keywords: [
+      "Basileia",
+      "capital",
+      "patrimônio de referência",
+      "ativos ponderados pelo risco",
+      "solvência",
+      "bancos",
+      "colchão",
+    ],
+    measures: (
+      <>
+        <p>
+          O <strong>patrimônio de referência</strong> é o capital que pode absorver perda: o
+          dinheiro dos sócios, o lucro guardado e as dívidas que só são pagas depois de todos os
+          outros credores. Os <strong>ativos ponderados pelo risco</strong> são os empréstimos e
+          investimentos do banco, cada um multiplicado por um peso: um título do governo pesa pouco,
+          um empréstimo sem garantia pesa mais.
+        </p>
+        <p>
+          O índice é um contra o outro. Ele diz quanto do que o banco tem em risco poderia virar
+          calote antes de o prejuízo comer o dinheiro dos depositantes. Aqui, é o do sistema todo: a
+          soma do capital e a soma do risco de todos os bancos, cooperativas e financeiras.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{Basileia} = \\frac{\\text{PR}}{\\text{RWA}}",
+      legend: [
+        { symbol: "PR", text: "o patrimônio de referência, o capital que absorve perda" },
+        {
+          symbol: "RWA",
+          text: "os ativos ponderados pelo risco, a sigla em inglês de risk-weighted assets",
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de dezembro de 2025",
+      content: (
+        <p>
+          O sistema tinha R$ 1.748,7 bilhões de patrimônio de referência e R$ 10.090,5 bilhões de
+          ativos ponderados pelo risco: 1.748,7 / 10.090,5 ={" "}
+          <strong>17,33% de índice de Basileia</strong>, 6,8 pontos acima do mínimo de 10,5%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto mais acima do mínimo, mais calote os bancos aguentam sem quebrar e sem parar de
+        emprestar. Perto de 10,5%, o banco fica limitado para pagar dividendos e precisa juntar
+        capital, o que costuma frear o crédito. O sistema brasileiro ficou entre 15,7% (começo de
+        2015) e 20,1% (meio de 2019) desde que o IF.data começa, sempre com folga larga sobre a
+        regra.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A média esconde o banco fraco.",
+        text: (
+          <>
+            O índice do sistema é dominado pelos grandes bancos. Uma instituição pequena pode estar
+            perto do mínimo com o sistema confortável; o IF.data traz o índice de cada uma.
+          </>
+        ),
+      },
+      {
+        title: "Difere um pouco do relatório do BC.",
+        text: (
+          <>
+            O app soma o que cada instituição publica no IF.data. O Relatório de Estabilidade
+            Financeira faz a conta dele e chega a até 0,1 ponto de diferença: 17,24% contra 17,33%
+            em dezembro de 2025.
+          </>
+        ),
+      },
+    ],
+    related: ["credit-cost", "credit-concessions"],
+    sources: [
+      {
+        name: "Banco Central, IF.data – dados selecionados de instituições financeiras (relatório de informações de capital)",
+        url: "https://dadosabertos.bcb.gov.br/dataset/ifdata---dados-selecionados-de-instituies-financeiras",
+        backs:
+          "O patrimônio de referência de R$ 1.748,7 bilhões e os ativos ponderados pelo risco de R$ 10.090,5 bilhões de dezembro de 2025, somados sobre as instituições.",
+      },
+      {
+        name: "Conselho Monetário Nacional, Resolução CMN nº 4.958, de 21 de outubro de 2021",
+        url: "https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=Resolu%C3%A7%C3%A3o%20CMN&numero=4958",
+        backs:
+          "O mínimo de 8% de patrimônio de referência (art. 4º), o adicional de conservação de 2,5% (art. 8º) e o limite a dividendos e bônus de quem fica abaixo do adicional (art. 9º).",
+      },
+      {
+        name: "Banco Central, Relatório de Estabilidade Financeira",
+        url: "https://www.bcb.gov.br/publicacoes/ref",
+        backs: "O índice de Basileia de 17,24% do sistema em dezembro de 2025.",
+      },
+    ],
+    frequency: "Trimestral: o IF.data publica o trimestre uns três meses depois do fim dele",
+    screens: [creditScreen],
+  },
 };

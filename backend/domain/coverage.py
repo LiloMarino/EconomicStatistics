@@ -53,6 +53,11 @@ def quarter_start(day: date) -> date:
     return date(day.year, (day.month - 1) // 3 * 3 + 1, 1)
 
 
+def quarter_end(day: date) -> date:
+    """O 1º dia do último mês do trimestre que contém `day`."""
+    return month_start(quarter_start(day), -2)
+
+
 def fetch_request(
     spec: SeriesSpec,
     cached: DateRange | None,

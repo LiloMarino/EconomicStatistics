@@ -7,10 +7,11 @@ from sqlalchemy.orm import Session
 
 from backend.core.enum import SeriesId
 from backend.core.errors import MissingDataError
-from backend.domain.coverage import month_start
+from backend.domain.basel import CONSERVATION_BUFFER, MIN_CAPITAL, basel_ratios
+from backend.domain.coverage import month_start, quarter_end
 from backend.domain.interest import month_end_rates
 from backend.domain.rates import PERCENT, index_change_12m
-from backend.domain.series import Observation
+from backend.domain.series import SERIES, Observation
 from backend.features.monthly_forecast import MonthValue
 from backend.repository.series import last_cached, read_observations
 
@@ -19,6 +20,8 @@ CREDIT_SERIES = (
     SeriesId.CONCESSIONS_BUSINESS,
     SeriesId.CONCESSIONS_HOUSEHOLDS,
     SeriesId.SELIC_TARGET,
+    SeriesId.BASEL_CAPITAL,
+    SeriesId.BASEL_RWA,
 )
 
 # Cada gráfico mostra os últimos 24 meses, terminando no último dado de cada série
@@ -55,9 +58,21 @@ class Concessions:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class Basel:
+    """O índice de Basileia do sistema em cada trimestre, datado no último mês dele, e
+    os mínimos da regra, tudo em fração: `minimum` só o patrimônio de referência e
+    `minimum_with_buffer` com o adicional de conservação."""
+
+    quarters: list[MonthValue]
+    minimum: float
+    minimum_with_buffer: float
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class Credit:
     cost: Cost
     concessions: Concessions
+    basel: Basel
 
 
 def credit(session: Session) -> Credit:
@@ -95,6 +110,9 @@ def credit(session: Session) -> Credit:
             business=_change_12m(observations[SeriesId.CONCESSIONS_BUSINESS]),
             households=_change_12m(observations[SeriesId.CONCESSIONS_HOUSEHOLDS]),
         ),
+        basel=_basel(
+            session, max(cached[SeriesId.BASEL_CAPITAL], cached[SeriesId.BASEL_RWA])
+        ),
     )
 
 
@@ -112,6 +130,27 @@ def _cost(cost: list[Observation], selic_days: list[Observation], start: date) -
     if not months:
         raise MissingDataError("Ainda não há Selic para os meses do custo do crédito.")
     return Cost(months=months, spread=months[-1].cost - months[-1].selic)
+
+
+def _basel(session: Session, end: date) -> Basel:
+    """O histórico inteiro que o IF.data publica."""
+    observations = read_observations(
+        session,
+        (SeriesId.BASEL_CAPITAL, SeriesId.BASEL_RWA),
+        SERIES[SeriesId.BASEL_CAPITAL].first_date,
+        end,
+    )
+    ratios = basel_ratios(
+        observations[SeriesId.BASEL_CAPITAL], observations[SeriesId.BASEL_RWA]
+    )
+    return Basel(
+        quarters=[
+            MonthValue(ref_date=quarter_end(item.ref_date), value=item.ratio)
+            for item in ratios
+        ],
+        minimum=MIN_CAPITAL,
+        minimum_with_buffer=MIN_CAPITAL + CONSERVATION_BUFFER,
+    )
 
 
 def _change_12m(observations: list[Observation]) -> list[MonthValue]:

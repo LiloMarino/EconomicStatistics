@@ -187,7 +187,7 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
         to: "/credit",
         label: "Crédito",
         icon: CreditCard,
-        description: "Custo do crédito, spread e concessões",
+        description: "Custo do crédito, spread, concessões e Basileia",
         keywords: [
           "crédito",
           "icc",

@@ -57,6 +57,7 @@ export const conceptIds = [
   "credit-spread",
   "credit-concessions",
   "free-and-directed-credit",
+  "basel-ratio",
 ] as const;
 
 /** O id do conceito é também o endereço da página dele em `/learn/<id>`. */

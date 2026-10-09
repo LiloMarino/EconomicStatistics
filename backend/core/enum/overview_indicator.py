@@ -20,3 +20,4 @@ class OverviewIndicator(StrEnum):
     INTERNATIONAL_POSITION = "international_position"
     CREDIT_COST = "credit_cost"
     HOUSEHOLD_CONCESSIONS = "household_concessions"
+    BASEL_RATIO = "basel_ratio"

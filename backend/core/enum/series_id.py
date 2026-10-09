@@ -49,3 +49,5 @@ class SeriesId(StrEnum):
     CREDIT_COST = "credit_cost"
     CONCESSIONS_BUSINESS = "concessions_business"
     CONCESSIONS_HOUSEHOLDS = "concessions_households"
+    BASEL_CAPITAL = "basel_capital"
+    BASEL_RWA = "basel_rwa"

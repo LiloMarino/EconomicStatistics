@@ -14,7 +14,7 @@ NOW = datetime(2026, 10, 20, 10)
 
 
 def _providers(provider: FakeProvider) -> dict[Source, FakeProvider]:
-    return {Source.IBGE: provider, Source.BCB_SGS: provider}
+    return {source: provider for source in Source}
 
 
 def test_second_refresh_does_not_hit_the_source(session: Session) -> None:

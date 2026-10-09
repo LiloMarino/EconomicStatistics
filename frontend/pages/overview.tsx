@@ -87,7 +87,7 @@ export function OverviewPage() {
 
       <footer className="text-caption text-muted-foreground border-t pt-5">
         Fontes: IBGE (IPCA, PIB e PNAD Contínua) e Banco Central (SGS, pesquisa Focus, estatísticas
-        fiscais, setor externo e crédito). Cada cartão abre a tela do assunto.
+        fiscais, setor externo, crédito e IF.data). Cada cartão abre a tela do assunto.
       </footer>
     </>
   );

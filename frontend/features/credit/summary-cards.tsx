@@ -1,12 +1,21 @@
 import type { Credit } from "@/features/credit/use-credit";
 import { ConceptHint } from "@/shared/components/concept-hint";
 import { StatCard } from "@/shared/components/stat-card";
-import { formatMonth, formatPercent, formatPoints, formatSignedPercent } from "@/shared/lib/format";
+import {
+  formatMonth,
+  formatPercent,
+  formatPoints,
+  formatQuarter,
+  formatShortPercent,
+  formatSignedPercent,
+} from "@/shared/lib/format";
 
-/** O último número de cada gráfico: custo do crédito, spread e concessões às famílias. */
+/** O último número de cada gráfico: custo do crédito, spread, concessões às famílias e
+índice de Basileia. */
 export function SummaryCards({ data }: { data: Credit }) {
   const cost = data.cost.months.at(-1);
   const households = data.concessions.households.at(-1);
+  const basel = data.basel.quarters.at(-1);
 
   return (
     <section
@@ -39,6 +48,18 @@ export function SummaryCards({ data }: { data: Credit }) {
         {households && (
           <span className="text-caption text-muted-foreground">
             em 12 meses até {formatMonth(households.ref_date)}, recursos livres, sem rotativo
+          </span>
+        )}
+      </StatCard>
+      <StatCard
+        label="Índice de Basileia"
+        hint={<ConceptHint id="basel-ratio" />}
+        value={basel && formatPercent(basel.value)}
+      >
+        {basel && (
+          <span className="text-caption text-muted-foreground">
+            mínimo de {formatShortPercent(data.basel.minimum_with_buffer)} com o colchão, em{" "}
+            {formatQuarter(basel.ref_date)}
           </span>
         )}
       </StatCard>

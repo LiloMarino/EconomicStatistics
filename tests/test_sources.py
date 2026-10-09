@@ -13,6 +13,7 @@ from types import TracebackType
 import pytest
 
 from backend.adapters import bcb_sgs_provider, ibge_provider, tesouro_debt_provider
+from backend.adapters.bcb_ifdata_provider import BcbIfDataProvider, to_total
 from backend.adapters.bcb_sgs_provider import BcbSgsProvider
 from backend.adapters.ibge_provider import IbgeAggregatesProvider
 from backend.core.enum import DebtHolder, Periodicity, SeriesId
@@ -254,3 +255,53 @@ def test_tesouro_rows_become_holdings() -> None:
             pytest.approx(12024419745.52),
         ),
     ]
+
+
+def _ifdata_row(institution: str, balance: float | None) -> dict[str, object]:
+    return {
+        "TipoInstituicao": 1,
+        "CodInst": institution,
+        "AnoMes": "202509",
+        "NumeroRelatorio": "5",
+        "Conta": "79649",
+        "Saldo": balance,
+    }
+
+
+# O começo da resposta do patrimônio de referência de set/2025, como o Olinda a
+# devolveu em 2026-10-09: cada instituição vem em três linhas iguais
+IFDATA_BODY = json.dumps(
+    {
+        "value": [
+            *[_ifdata_row("00068987", 81255823.28)] * 3,
+            *[_ifdata_row("00075847", 314500304.68)] * 3,
+            *[_ifdata_row("03795072", None)] * 3,
+        ]
+    }
+).encode()
+
+
+def test_ifdata_sums_each_institution_once() -> None:
+    """A conta soma uma linha por instituição, sem a repetição do Olinda nem o saldo
+    vazio: 81,3 mi + 314,5 mi."""
+    assert to_total(IFDATA_BODY) == pytest.approx(81255823.28 + 314500304.68)
+
+
+def test_ifdata_quarter_not_yet_published_is_skipped() -> None:
+    """Trimestre que ainda não saiu volta com a lista vazia e não vira observação; o
+    publicado é datado no 1º mês do trimestre e pedido pelo último."""
+    urls: list[str] = []
+
+    def download(url: str) -> bytes:
+        urls.append(url)
+        return IFDATA_BODY if "202509" in url else b'{"value": []}'
+
+    observations = BcbIfDataProvider(download).get_series(
+        SERIES[SeriesId.BASEL_CAPITAL], date(2025, 7, 1), date(2025, 12, 31)
+    )
+
+    assert [item.ref_date for item in observations] == [date(2025, 7, 1)]
+    assert len(urls) == 2
+    assert "%40AnoMes=202509" in urls[0]
+    assert "%40AnoMes=202512" in urls[1]
+    assert "%24filter=Conta%20eq%20%2779649%27" in urls[0]

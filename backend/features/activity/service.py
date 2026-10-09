@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from backend.core.enum import FocusIndicator, SeriesId
 from backend.core.errors import MissingDataError
-from backend.domain.coverage import month_start
+from backend.domain.coverage import month_start, quarter_end
 from backend.domain.focus import (
     Expectation,
     annual_expectations,
@@ -90,15 +90,11 @@ def activity(session: Session) -> Activity:
     )
 
 
-def _quarter_end(quarter_start: date) -> date:
-    return month_start(quarter_start, -(QUARTER_MONTHS - 1))
-
-
 def _gdp(
     observations: list[Observation], survey: tuple[date, list[Expectation]] | None
 ) -> Gdp:
     quarters = [
-        MonthValue(ref_date=_quarter_end(item.ref_date), value=item.value / PERCENT)
+        MonthValue(ref_date=quarter_end(item.ref_date), value=item.value / PERCENT)
         for item in observations
     ][-WINDOW_MONTHS // QUARTER_MONTHS :]
     return Gdp(quarters=quarters, forecast=_gdp_forecast(quarters, survey))

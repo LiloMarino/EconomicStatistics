@@ -180,6 +180,21 @@ def _fiscal_note(code: str, unit: Unit, first_date: date) -> SeriesSpec:
 # seguinte ao de referência
 CREDIT_NOTE_RELEASE_DAY = 28
 
+
+def _ifdata(account: str) -> SeriesSpec:
+    """O IF.data publica o trimestre uns três meses depois do fim dele, desde o de jan
+    a mar/2015: o de abr a jun é cobrado a partir de 1º de outubro."""
+    return SeriesSpec(
+        source=Source.BCB_IFDATA,
+        code=account,
+        unit=Unit.BRL,
+        first_date=date(2015, 1, 1),
+        lag_months=6,
+        release_day=1,
+        periodicity=Periodicity.QUARTERLY,
+    )
+
+
 # A NFSP é a necessidade de financiamento: valor positivo é déficit. As séries são
 # sem desvalorização cambial, em % do PIB e acumuladas em 12 meses. As três do setor
 # público consolidado fecham a conta nominal = primário + juros, e as de cada esfera
@@ -390,6 +405,10 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         lag_months=1,
         release_day=CREDIT_NOTE_RELEASE_DAY,
     ),
+    # O patrimônio de referência e os ativos ponderados pelo risco do relatório de
+    # informações de capital do IF.data, em R$, somados sobre todas as instituições
+    SeriesId.BASEL_CAPITAL: _ifdata("79649"),
+    SeriesId.BASEL_RWA: _ifdata("79665"),
 }
 
 IPCA_GROUPS: tuple[SeriesId, ...] = (

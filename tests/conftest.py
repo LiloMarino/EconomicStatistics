@@ -111,7 +111,11 @@ def api(
             yield session
 
     def providers_override() -> dict[Source, SeriesProvider]:
-        return {Source.IBGE: fake_provider, Source.BCB_SGS: fake_provider}
+        return {
+            Source.IBGE: fake_provider,
+            Source.BCB_SGS: fake_provider,
+            Source.BCB_IFDATA: fake_provider,
+        }
 
     def debt_provider_override() -> FederalDebtProvider:
         return fake_debt_provider

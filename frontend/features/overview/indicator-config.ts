@@ -27,7 +27,11 @@ export const blocks = [
     title: "Setor externo",
     subtitle: "O dólar e o dinheiro que entra e sai do país",
   },
-  { id: "credit", title: "Crédito", subtitle: "Quanto custa e quanto se empresta" },
+  {
+    id: "credit",
+    title: "Crédito",
+    subtitle: "Quanto custa, quanto se empresta e se os bancos aguentam",
+  },
 ] as const;
 
 export type BlockId = (typeof blocks)[number]["id"];
@@ -220,6 +224,16 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     period: "month",
     unit: "em 12 meses, recursos livres",
     source: "Banco Central",
+    to: "/credit",
+  },
+  basel_ratio: {
+    block: "credit",
+    title: "Índice de Basileia",
+    concept: "basel-ratio",
+    format: "percent",
+    period: "quarter",
+    unit: "de capital sobre o risco (mínimo de 10,5%)",
+    source: "Banco Central, IF.data",
     to: "/credit",
   },
 };

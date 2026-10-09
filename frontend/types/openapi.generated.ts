@@ -407,6 +407,21 @@ export interface components {
             /** Years */
             years: number;
         };
+        /**
+         * BaselDTO
+         * @description O índice de Basileia do sistema, o patrimônio de referência sobre os ativos
+         *     ponderados pelo risco, em fração (0.1733 é 17,33%), em cada trimestre desde 2015,
+         *     datado no último mês dele. `minimum` é o mínimo da regra (8%) e
+         *     `minimum_with_buffer` soma o adicional de conservação (10,5%).
+         */
+        BaselDTO: {
+            /** Quarters */
+            quarters: components["schemas"]["MonthValueDTO"][];
+            /** Minimum */
+            minimum: number;
+            /** Minimum With Buffer */
+            minimum_with_buffer: number;
+        };
         /** CaseContextDTO */
         CaseContextDTO: {
             /** Currency */
@@ -492,6 +507,7 @@ export interface components {
         CreditDTO: {
             cost: components["schemas"]["CostDTO"];
             concessions: components["schemas"]["ConcessionsDTO"];
+            basel: components["schemas"]["BaselDTO"];
         };
         /**
          * Dataset
@@ -1278,7 +1294,7 @@ export interface components {
          * @description Os indicadores que a Visão geral mostra, um cartão para cada.
          * @enum {string}
          */
-        OverviewIndicator: "ipca_12m" | "expected_ipca" | "selic" | "real_rate" | "net_debt" | "gross_debt" | "ibc_br" | "gdp" | "unemployment" | "dollar" | "reserves" | "current_account" | "fdi" | "international_position" | "credit_cost" | "household_concessions";
+        OverviewIndicator: "ipca_12m" | "expected_ipca" | "selic" | "real_rate" | "net_debt" | "gross_debt" | "ibc_br" | "gdp" | "unemployment" | "dollar" | "reserves" | "current_account" | "fdi" | "international_position" | "credit_cost" | "household_concessions" | "basel_ratio";
         /**
          * PaceForecastDTO
          * @description O 12 meses esperado em cada mês depois do último IPCA publicado, composto com a
@@ -1546,7 +1562,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.

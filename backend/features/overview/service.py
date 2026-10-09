@@ -183,6 +183,12 @@ def overview(session: Session, today: date) -> Overview:
             ChangeKind.POINTS,
             3,
         ),
+        _indicator(
+            OverviewIndicator.BASEL_RATIO,
+            credit_view.basel.quarters,
+            ChangeKind.POINTS,
+            MONTHS_PER_YEAR,
+        ),
     ]
     return Overview(
         indicators=[item for item in indicators if item is not None],

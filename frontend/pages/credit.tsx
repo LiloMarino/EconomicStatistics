@@ -1,5 +1,6 @@
 import { CircleAlert } from "lucide-react";
 
+import { BaselChart } from "@/features/credit/basel-chart";
 import { ConcessionsChart } from "@/features/credit/concessions-chart";
 import { CostChart } from "@/features/credit/cost-chart";
 import { SummaryCards } from "@/features/credit/summary-cards";
@@ -22,7 +23,7 @@ export function CreditPage() {
     <>
       <PageHeader
         title="Crédito"
-        description="Quanto custa pegar dinheiro emprestado e quanto está sendo emprestado"
+        description="Quanto custa pegar dinheiro emprestado, quanto está sendo emprestado e se os bancos aguentam"
       />
 
       {error ? (
@@ -42,10 +43,13 @@ export function CreditPage() {
           <SummaryCards data={data} />
           <CostChart cost={data.cost} />
           <ConcessionsChart concessions={data.concessions} />
+          <BaselChart basel={data.basel} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: Banco Central, séries do SGS 25351 (indicador de custo do crédito), 20635
             (concessões de recursos livres a pessoas jurídicas), 20663 (concessões de recursos
-            livres a pessoas físicas, não rotativo) e 432 (meta Selic).
+            livres a pessoas físicas, não rotativo) e 432 (meta Selic); IF.data, relatório de
+            informações de capital (patrimônio de referência e ativos ponderados pelo risco, somados
+            sobre as instituições).
           </footer>
         </>
       )}
