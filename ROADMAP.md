@@ -28,7 +28,6 @@
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | — | 🔍 |
 | [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | — | ⏳ |
-| [**F33**](#f33) | Tela Crédito: custo do crédito, concessões e solidez dos bancos | — | ⏳ |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | — | ⏳ |
 | [**F36**](#f36) | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ⏳ |
@@ -37,9 +36,10 @@
 | [**F39**](#f39) | Pranchas dos explicadores no canvas | — | ⏳ |
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
+| [**F47**](#f47) | Basileia dos bancos na tela Crédito | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (40 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (41 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -78,6 +78,7 @@
 | [**F30**](#f30) | Tela Juros: Selic, Copom e juro real | — | ✅ |
 | [**F31**](#f31) | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ |
 | [**F32**](#f32) | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ |
+| [**F33**](#f33) | Tela Crédito: custo do crédito, spread e concessões | — | ✅ |
 | [**F40**](#f40) | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
 | [**F41**](#f41) | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
 | [**F42**](#f42) | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
@@ -97,11 +98,11 @@
 | [**F39**](#f39) | Pranchas dos explicadores no canvas | M2 | 4 | ⏳ |
 | [**F11**](#f11) | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
 | [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | M4 | 1 | ⏳ |
-| [**F33**](#f33) | Tela Crédito: custo do crédito, concessões e solidez dos bancos | M8 | 1 | ⏳ |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | — | 0 | ⏳ |
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | 0 | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | M8 | 0 | 🔍 |
+| [**F47**](#f47) | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
 
 ---
 
@@ -260,21 +261,22 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 3/6 concluídas
+> **Progresso:** 4/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| [**F33**](#f33) | Tela Crédito: custo do crédito, concessões e solidez dos bancos | [F4](#f4) | ⏳ |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | [F33](#f33) | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | [F30](#f30) | 🔍 |
+| [**F47**](#f47) | Basileia dos bancos na tela Crédito | [F33](#f33) | 🔍 |
 
-<details><summary>Concluído (3 itens)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F30**](#f30) | Tela Juros: Selic, Copom e juro real | [F4](#f4), [F10](#f10) | ✅ |
 | [**F31**](#f31) | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | [F4](#f4) | ✅ |
 | [**F32**](#f32) | Tela Atividade: PIB, IBC-Br e desemprego | [F3](#f3), [F4](#f4) | ✅ |
+| [**F33**](#f33) | Tela Crédito: custo do crédito, spread e concessões | [F4](#f4) | ✅ |
 
 </details>
 
@@ -331,7 +333,7 @@
 | **F30** | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 | [F4](#f4), [F10](#f10) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F31** | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 | [F4](#f4) | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 | [F3](#f3), [F4](#f4) | Médio | Médio | Alto | Bom | ✅ Concluído |
-| **F33** | Tela Crédito: custo do crédito, concessões e solidez dos bancos | N1, N7 | — | M8 | [F4](#f4) | Médio | Baixo | Médio | Bom | ⏳ Pendente |
+| **F33** | Tela Crédito: custo do crédito, spread e concessões | N1, N7 | — | M8 | [F4](#f4) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F34** | Mercado imobiliário, na tela Crédito | N1 | — | M8 | [F33](#f33) | Médio | Médio | Baixo | Médio | 💤 Registrado, sem prioridade |
 | **F35** | IPCA livres, administrados e serviços | N1, N2 | — | — | [F4](#f4), [F8](#f8) | Baixo | Baixo | Médio | Bom | ⏳ Pendente |
 | **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | N2, N4, N7 | D7 | M2 | [F9](#f9), [F14](#f14), [F16](#f16) | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
@@ -900,13 +902,29 @@ O IBC-Br não é publicado em variação: o 12 meses é a média do índice nos 
 **Fica para depois:** o link "Ver na saúde da economia" da bandeja do desemprego entra com a F17; por enquanto ela leva só ao conceito.
 
 <a id="f33"></a>
-**F33 — Tela Crédito.** Rota própria com os gráficos de crédito da página do BCB, todos do SGS. Liga a Selic à vida real: quanto custa pegar dinheiro emprestado e quanto está sendo emprestado.
+**F33 — Tela Crédito.** Feito, a partir da prancha `Credit` do canvas. É a rota `/credit`, no grupo "Economia real e mundo" da navegação, e responde quanto custa pegar dinheiro emprestado e quanto está sendo emprestado.
 
-- **"Quanto custa o crédito":** o indicador de custo do crédito (ICC), em % ao ano, com a Selic no mesmo gráfico. A bandeja "Como ler" explica o spread, a distância entre o que o banco cobra e a Selic.
-- **"Quanto está sendo emprestado":** concessões de recursos livres, variação em 12 meses, para pessoa jurídica e para pessoa física (não rotativo), como o BCB.
-- **"Os bancos aguentam?":** o índice de adequação do patrimônio de referência (Basileia), com o mínimo regulatório escrito ao lado.
+**Séries do SGS** (conferidas ao vivo em 2026-10-08):
 
-Os códigos são levantados no catálogo do SGS na implementação. Os conceitos do Aprender entram junto: ICC, spread, concessões, recursos livres e direcionados, índice de Basileia. A bandeja de custo liga ao explicador dos dois loops (F9), na ponte dos juros.
+| Série | Código | Unidade |
+|---|---|---|
+| Indicador de custo do crédito (ICC), total | 25351 | % ao ano, mensal, desde jan/2013 |
+| Concessões de crédito com recursos livres, pessoas jurídicas, total | 20635 | R$ milhões, mensal, desde mar/2011 |
+| Concessões de crédito com recursos livres não rotativo, pessoas físicas | 20663 | R$ milhões, mensal, desde mar/2011 |
+
+O SGS não publica a variação em 12 meses das concessões: a tela soma os 12 meses que terminam em cada mês e divide pela soma dos 12 anteriores, e a conta é a `index_change_12m` de `backend/domain/rates.py`, a mesma do IBC-Br (a razão das médias é a razão das somas). O 20631 não serve: é o total de concessões com recursos livres e direcionados. O ICC é o custo médio de todo o crédito em aberto, e não só do novo, por isso anda devagar.
+
+**Implementação:**
+- as três séries entram no registro, mensais, cobradas a partir do dia 28 do mês seguinte, como a nota de crédito do BCB; não pedem tabela nem migration;
+- `GET /api/credit` devolve os últimos 24 meses do ICC com a Selic meta de fim de mês, o spread do último mês (ICC menos Selic, em fração) e a variação em 12 meses das concessões de empresas e de famílias, e 409 enquanto o cache está vazio;
+- a tela tem o resumo (custo do crédito, spread e concessões a famílias, cada um com o "?"), "Quanto custa o crédito" (ICC e Selic, com a faixa do spread entre as duas) e "Quanto está sendo emprestado" (concessões de recursos livres em 12 meses), cada um com a bandeja "Como ler";
+- no Aprender, o tema "Crédito" com custo do crédito (ICC), spread, concessões e recursos livres e direcionados.
+
+**Mudança em relação ao card:** o bloco "Os bancos aguentam?" (índice de Basileia) ficou de fora e virou a F47: a série do SGS (21424) parou em jun/2023. O spread da tela é a diferença simples entre o ICC e a Selic, e não o spread bancário do BCB, que compara o que o banco cobra com o que ele paga para captar.
+
+**Aceite cumprido:** com os dados de 8/out/2026, o ICC de ago/2026 dá 24,19% ao ano contra a Selic de 14,00%, spread de 10,19 pontos percentuais; as concessões em 12 meses até ago/2026 dão +12,86% para as famílias e +11,55% para as empresas.
+
+**Fica para depois:** o link da bandeja de custo para o explicador dos dois loops entra com ele (F9).
 
 <a id="f34"></a>
 **F34 — Mercado imobiliário.** Uma seção na tela Crédito (F33) com os dois gráficos de mercado imobiliário da página do BCB:
@@ -1071,6 +1089,7 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 | --- | --- | --- | --- | --- | --- |
 | **F15** | Como medir o financiamento monetário do déficit | Serviria N6; falta separar gestão de liquidez do BC de financiamento do Tesouro | M4 | [F13](#f13), [F16](#f16) | 🔍 Em avaliação |
 | **F46** | Juro neutro na tela Juros | Serviria N1 e N2; falta uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária | M8 | [F30](#f30) | 🔍 Em avaliação |
+| **F47** | Basileia dos bancos na tela Crédito | Serviria N1; falta uma fonte que dê para baixar: a série do SGS parou em jun/2023, e o BC publica o número no Relatório de Estabilidade Financeira, semestral, e no IF.data, por instituição | M8 | [F33](#f33) | 🔍 Em avaliação |
 
 <a id="f15"></a>
 **F15 — Como medir o financiamento monetário.** As candidatas já têm fonte:
@@ -1089,3 +1108,8 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 
 <a id="f46"></a>
 **F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar.
+
+<a id="f47"></a>
+**F47 — Basileia dos bancos.** O bloco "Os bancos aguentam?" da prancha `Credit` do canvas: o índice de Basileia do sistema bancário (quanto capital próprio os bancos têm para cada real emprestado, ponderado pelo risco), com o mínimo regulatório escrito ao lado. Ficou de fora da F33: a série do SGS (21424) parou em jun/2023, e o Banco Central hoje só publica o número no Relatório de Estabilidade Financeira, semestral (17,24% em dez/2025), e no IF.data, por instituição.
+
+Dois caminhos a avaliar: ler o número do relatório, que é um PDF e envelheceria sem ninguém editar (D8), ou somar o patrimônio de referência e os ativos ponderados pelo risco de todas as instituições, por trimestre, no serviço Olinda do IF.data, e dividir, o que pede um adapter novo e pode divergir um pouco do número do relatório. O mínimo é regra e entra digitado com a fonte: 8% de patrimônio de referência mais 2,5% de adicional de conservação de capital, na Resolução CMN 4.958, a confirmar no texto da norma. Volta quando uma das fontes se mostrar baixável.
