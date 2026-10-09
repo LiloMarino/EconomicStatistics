@@ -83,6 +83,9 @@
   --color-bridge-fx: var(--bridge-fx);
   --color-bridge-money: var(--bridge-money);
   --color-bridge-rate: var(--bridge-rate);
+  --color-financing-portfolio: var(--financing-portfolio);
+  --color-financing-repo: var(--financing-repo);
+  --color-financing-base: var(--financing-base);
   --color-indexer-selic: var(--indexer-selic);
   --color-indexer-fixed: var(--indexer-fixed);
   --color-indexer-ipca: var(--indexer-ipca);
@@ -278,6 +281,10 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --bridge-fx: #2f6fc4;
   --bridge-money: #c8423d;
   --bridge-rate: #2e8a4d;
+  /* Como o déficit é pago: a carteira do BC, as compromissadas e a base monetária */
+  --financing-portfolio: #8a4fc0;
+  --financing-repo: #2e8a4d;
+  --financing-base: #b85e1c;
   --card-shadow: none;
   --popover-shadow: 0 12px 28px rgb(0 0 0 / 0.16);
   --sidebar: #f4f4f0;
@@ -380,6 +387,9 @@ paleta é a do "caderno anotado": papel, folha, tinta e marca-texto */
   --bridge-fx: #5b9bea;
   --bridge-money: #e8645f;
   --bridge-rate: #4fb061;
+  --financing-portfolio: #b07ad9;
+  --financing-repo: #4fb061;
+  --financing-base: #e8853d;
   --popover-shadow: 0 12px 32px rgb(0 0 0 / 0.28);
   --sidebar: #111316;
   --sidebar-foreground: #aeb3ba;

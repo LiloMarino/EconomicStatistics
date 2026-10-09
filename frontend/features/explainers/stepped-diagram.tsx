@@ -1,7 +1,7 @@
-import { type DiagramSpec, isGroupActive } from "@/features/explainers/diagram-spec";
-import { EdgeList } from "@/features/explainers/edge-list";
-import { ExplainerDiagram } from "@/features/explainers/explainer-diagram";
 import { useDiagramStep } from "@/features/explainers/use-diagram-step";
+import { type DiagramSpec, isGroupActive } from "@/shared/components/diagram/diagram-spec";
+import { EdgeList } from "@/shared/components/diagram/edge-list";
+import { FlowDiagram } from "@/shared/components/diagram/flow-diagram";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
 
 /** O diagrama com o seletor de passo em cima e, embaixo, o texto de cada seta acesa, com
@@ -31,7 +31,7 @@ export function SteppedDiagram({ spec }: { spec: DiagramSpec }) {
         ))}
       </ToggleGroup>
 
-      <ExplainerDiagram spec={spec} step={step} />
+      <FlowDiagram spec={spec} step={step} />
 
       {/* O texto do passo e de cada seta acesa */}
       <section aria-live="polite" className="bg-card flex flex-col gap-3 rounded-2xl px-6 py-5">

@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 /** O passo do diagrama (`?parte=`) mora na URL; o primeiro passo é o padrão e não aparece. */
 export function useDiagramStep(steps: DiagramSpec["steps"]) {

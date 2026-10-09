@@ -32,6 +32,7 @@ const focusData = {
 const ipcaFrequency = "Mensal, por volta do dia 10 do mês seguinte";
 const externalNoteFrequency = "Mensal, perto do fim do mês seguinte";
 const fiscalNoteFrequency = "Mensal, perto do fim do mês seguinte";
+const monetaryNoteFrequency = "Mensal, perto do fim do mês seguinte";
 const tesouroFrequency = "Mensal, cerca de um mês e meio depois do mês do estoque";
 
 // As fontes que mais de um conceito cita; cada conceito diz o que ela comprova nele
@@ -97,6 +98,18 @@ const dpmfDataset = {
   name: "Banco Central, série 10618 no portal de dados abertos",
   url: "https://dadosabertos.bcb.gov.br/dataset/10618-divida-mobiliaria-federal---titulos-do-tesouro-nacional---emitidos---prazo-medio---total",
 };
+const sgs4152 = {
+  name: "Banco Central, série 4152 no portal de dados abertos (títulos do Tesouro na carteira do Banco Central)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/4152-divida-mobiliaria-saldos---titulos-do-tesouro-nacional-posicao-em-carteira---carteira-do-banco",
+};
+const sgs1832 = {
+  name: "Banco Central, série 1832 no portal de dados abertos (títulos do Tesouro em compromissadas)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/1832-sgs",
+};
+const sgs1788 = {
+  name: "Banco Central, série 1788 no portal de dados abertos (base monetária)",
+  url: "https://dadosabertos.bcb.gov.br/dataset/1788-sgs",
+};
 const tesouroStock = {
   name: "Tesouro Nacional, estoque da dívida pública federal no Tesouro Transparente",
   url: "https://www.tesourotransparente.gov.br/ckan/dataset/estoque-da-divida-publica-federal",
@@ -136,6 +149,14 @@ const sidra6381 = {
 const lrf = {
   name: "Lei Complementar 101/2000 (Lei de Responsabilidade Fiscal)",
   url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp101.htm",
+};
+const constitution = {
+  name: "Constituição Federal",
+  url: "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+};
+const law10179 = {
+  name: "Lei 10.179/2001",
+  url: "https://www.planalto.gov.br/ccivil_03/leis/leis_2001/l10179.htm",
 };
 const minimumWageLaw = {
   name: "Lei 14.663/2023",
@@ -2506,7 +2527,7 @@ export const concepts: Record<ConceptId, Concept> = {
         ),
       },
     ],
-    related: ["indexer", "average-maturity", "rollover", "gross-debt"],
+    related: ["indexer", "average-maturity", "rollover", "gross-debt", "central-bank-portfolio"],
     sources: [
       {
         ...rmdJul2026,
@@ -2731,6 +2752,296 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: fiscalNoteFrequency,
     screens: [debtScreen],
+  },
+
+  "central-bank-portfolio": {
+    title: "Carteira do Banco Central",
+    topic: "public-accounts",
+    summary: "Os títulos do Tesouro que ficam com o Banco Central, para ele regular o dinheiro.",
+    lead: (
+      <>
+        O Banco Central guarda títulos do Tesouro para controlar quanto dinheiro circula entre os
+        bancos. Em julho de 2026, eram 24,3% de todos os títulos federais emitidos. Esses títulos
+        não são empréstimo do Banco Central ao governo: a Constituição proíbe esse empréstimo.
+      </>
+    ),
+    keywords: [
+      "carteira do bc",
+      "títulos no banco central",
+      "financiamento monetário",
+      "lei 11.803",
+    ],
+    measures: (
+      <>
+        <p>
+          O valor, no fim do mês, dos títulos do Tesouro que estão com o Banco Central. O Tesouro
+          entrega esses títulos direto ao Banco Central, sem receber dinheiro em troca, para que ele
+          tenha uma carteira do tamanho certo para a política monetária. Quando um título da
+          carteira vence, o Banco Central pode comprar outro do Tesouro no lugar dele.
+        </p>
+        <p>
+          Com esses títulos, o Banco Central faz as compromissadas: empresta os títulos aos bancos e
+          recolhe o dinheiro que sobra entre eles, para a Selic ficar na meta.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{carteira em \\% do PIB} = \\frac{\\text{títulos na carteira do BC}}{\\text{PIB de 12 meses}}",
+      legend: [
+        { symbol: "\\text{títulos na carteira do BC}", text: <>em R$, no fim do mês</> },
+        {
+          symbol: "\\text{PIB de 12 meses}",
+          text: <>em R$, a soma dos 12 meses até o mesmo mês</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Em agosto de 2026, a carteira tinha R$ 2.929,82 bilhões em títulos, contra um PIB de 12
+            meses de R$ 13.342,45 bilhões:
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\frac{2.929{,}82}{13.342{,}45} = \mathbf{21{,}96\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+          <p>
+            Pelo arquivo do Tesouro, a carteira era 24,3% de todos os títulos federais emitidos em
+            julho de 2026.
+          </p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Uma carteira grande não quer dizer que o Banco Central financia o governo: quase metade dela
+        está emprestada aos bancos nas compromissadas. O sinal de financiamento seria a base
+        monetária crescer mais rápido que a economia.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "O Banco Central não compra título novo para financiar o Tesouro.",
+        text: (
+          <>
+            A Lei de Responsabilidade Fiscal proíbe a compra de título no lançamento. A exceção é
+            trocar os títulos que vencem na carteira do Banco Central por novos.
+          </>
+        ),
+      },
+    ],
+    related: ["repo-operations", "monetary-base", "federal-debt"],
+    sources: [
+      {
+        ...sgs4152,
+        backs: "Os R$ 2.929,82 bilhões de títulos na carteira do Banco Central em agosto de 2026.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 4382 do SGS",
+        backs: "O PIB de 12 meses de R$ 13.342,45 bilhões em agosto de 2026.",
+      },
+      {
+        ...tesouroStock,
+        backs:
+          "A parte de 24,3% de todos os títulos federais emitidos na carteira do Banco Central em julho de 2026.",
+      },
+      {
+        ...law10179,
+        backs:
+          "O Tesouro entrega títulos direto ao Banco Central, sem contrapartida financeira, para a carteira da política monetária (art. 1º, IX, e art. 3º, VIII, incluídos pela Lei 11.803/2008).",
+      },
+      {
+        ...constitution,
+        backs: "O Banco Central não pode emprestar ao Tesouro (art. 164, § 1º).",
+      },
+      {
+        ...lrf,
+        backs:
+          "O Banco Central não compra título no lançamento, a não ser para trocar os que vencem na carteira dele (art. 39, I e § 2º).",
+      },
+    ],
+    frequency: fiscalNoteFrequency,
+    screens: [deficitScreen],
+  },
+
+  "repo-operations": {
+    title: "Operações compromissadas",
+    topic: "public-accounts",
+    summary: "O Banco Central empresta títulos aos bancos para recolher o dinheiro que sobra.",
+    lead: (
+      <>
+        Na compromissada, o Banco Central vende aos bancos um título da carteira dele com a promessa
+        de recomprá-lo depois. Com isso, ele recolhe o dinheiro que sobra nos bancos e mantém a
+        Selic na meta. Em agosto de 2026, eram R$ 1,37 trilhão.
+      </>
+    ),
+    keywords: ["compromissadas", "mercado aberto", "liquidez", "recompra"],
+    measures: (
+      <p>
+        O valor, no fim do mês, dos títulos da carteira do Banco Central que estão com o mercado por
+        compromissadas. Sem elas, o dinheiro que sobra nos bancos faria o juro de um dia cair abaixo
+        da meta. A Constituição autoriza o Banco Central a comprar e vender títulos do Tesouro para
+        regular a moeda e os juros.
+      </p>
+    ),
+    formula: {
+      tex: "\\text{parte da carteira} = \\frac{\\text{compromissadas}}{\\text{títulos na carteira do BC}}",
+      legend: [
+        { symbol: "\\text{compromissadas}", text: <>em R$, no fim do mês</> },
+        { symbol: "\\text{títulos na carteira do BC}", text: <>em R$, no fim do mesmo mês</> },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Em agosto de 2026, as compromissadas eram de R$ 1.372,24 bilhões, contra R$ 2.929,82
+            bilhões de títulos na carteira do Banco Central:
+          </p>
+          <FormulaBox>
+            <Formula flushLeft tex="\frac{1.372{,}24}{2.929{,}82} = \mathbf{46{,}84\%}" />
+          </FormulaBox>
+          <p>Contra o PIB de 12 meses, as compromissadas eram 10,28% do PIB.</p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        É gestão do dinheiro entre os bancos, e não financiamento do governo. A parte da carteira
+        nas compromissadas mostra quanto dos títulos do Banco Central voltou ao mercado para segurar
+        a Selic.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Entra na dívida bruta.",
+        text: (
+          <>
+            As compromissadas fazem parte da dívida bruta do governo geral: são títulos do Tesouro
+            nas mãos do mercado, mesmo que tenham saído da carteira do Banco Central.
+          </>
+        ),
+      },
+    ],
+    related: ["central-bank-portfolio", "selic", "gross-debt"],
+    sources: [
+      {
+        ...sgs1832,
+        backs:
+          "Os R$ 1.372,24 bilhões de títulos do Tesouro em compromissadas em agosto de 2026, o financiamento líquido da base ampliada.",
+      },
+      {
+        ...sgs4152,
+        backs: "Os R$ 2.929,82 bilhões de títulos na carteira do Banco Central em agosto de 2026.",
+      },
+      {
+        ...constitution,
+        backs:
+          "O Banco Central pode comprar e vender títulos do Tesouro para regular a oferta de moeda ou a taxa de juros (art. 164, § 2º).",
+      },
+      {
+        ...dbggDataset,
+        backs: "A dívida bruta inclui as compromissadas do Banco Central.",
+      },
+    ],
+    frequency: monetaryNoteFrequency,
+    screens: [deficitScreen],
+  },
+
+  "monetary-base": {
+    title: "Base monetária",
+    topic: "public-accounts",
+    summary: "Todo o dinheiro que o Banco Central criou: papel-moeda e reservas dos bancos.",
+    lead: (
+      <>
+        A base monetária é o dinheiro que o Banco Central criou: as cédulas e moedas em circulação e
+        as reservas que os bancos deixam nele. Em % do PIB, mostra se o dinheiro cresce mais rápido
+        que a economia. Em agosto de 2026, era 3,24% do PIB.
+      </>
+    ),
+    keywords: [
+      "base monetária",
+      "emissão de moeda",
+      "papel-moeda",
+      "reservas bancárias",
+      "imprimir dinheiro",
+    ],
+    measures: (
+      <p>
+        O papel-moeda emitido mais as reservas bancárias, no fim do mês. O Banco Central chama a
+        base de emissão primária de moeda: é o que cresce quando ele cria dinheiro. Em reais, ela
+        sobe com a economia, e por isso a régua é o PIB.
+      </p>
+    ),
+    formula: {
+      tex: "\\text{base em \\% do PIB} = \\frac{\\text{base monetária}}{\\text{PIB de 12 meses}}",
+      legend: [
+        { symbol: "\\text{base monetária}", text: <>em R$, no fim do mês</> },
+        {
+          symbol: "\\text{PIB de 12 meses}",
+          text: <>em R$, a soma dos 12 meses até o mesmo mês</>,
+        },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <>
+          <p>
+            Em agosto de 2026, a base era de R$ 432,66 bilhões, contra um PIB de 12 meses de R$
+            13.342,45 bilhões:
+          </p>
+          <FormulaBox>
+            <Formula
+              flushLeft
+              tex="\frac{432{,}66}{13.342{,}45} = \mathbf{3{,}24\%}\ \text{do PIB}"
+            />
+          </FormulaBox>
+          <p>Em dezembro de 2002, era 4,92% do PIB.</p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Se o Banco Central pagasse as contas do governo com dinheiro novo, a base subiria em % do
+        PIB junto com o déficit. Desde 2002, ela ficou entre 3% e 6% do PIB, e em agosto de 2026
+        estava no ponto mais baixo da série.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "Pula em crise e com regra nova.",
+        text: (
+          <>
+            A base muda também quando as pessoas guardam mais dinheiro vivo ou quando o Banco
+            Central muda o depósito que os bancos são obrigados a deixar nele. Um pulo isolado, como
+            o de 2020, não é emissão para o governo.
+          </>
+        ),
+      },
+    ],
+    related: ["central-bank-portfolio", "repo-operations", "share-of-gdp"],
+    sources: [
+      {
+        ...sgs1788,
+        backs:
+          "A base como passivo monetário do Banco Central, a emissão primária de moeda, com a moeda em circulação e as reservas bancárias; os R$ 432,66 bilhões de agosto de 2026 e os R$ 73,30 bilhões de dezembro de 2002.",
+      },
+      {
+        ...sgs,
+        name: "Banco Central, série 4382 do SGS",
+        backs:
+          "O PIB de 12 meses de R$ 13.342,45 bilhões em agosto de 2026 e de R$ 1.488,79 bilhões em dezembro de 2002.",
+      },
+    ],
+    frequency: monetaryNoteFrequency,
+    screens: [deficitScreen],
   },
 
   "focus-survey": {

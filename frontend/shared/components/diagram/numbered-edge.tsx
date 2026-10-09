@@ -1,6 +1,6 @@
 import { type Edge, type EdgeProps, useInternalNode } from "@xyflow/react";
 
-import { NODE_MIN_HEIGHT, NODE_WIDTH } from "@/features/explainers/diagram-spec";
+import { NODE_MIN_HEIGHT, NODE_WIDTH } from "@/shared/components/diagram/diagram-spec";
 
 export type NumberedFlowEdge = Edge<
   { color: string; number: number; active: boolean; bend: number },

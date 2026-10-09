@@ -1,8 +1,8 @@
 import { Handle, type Node, type NodeProps, Position } from "@xyflow/react";
 import { Link } from "react-router-dom";
 
-import type { DiagramNode } from "@/features/explainers/diagram-spec";
-import { NODE_MIN_HEIGHT } from "@/features/explainers/diagram-spec";
+import type { DiagramNode } from "@/shared/components/diagram/diagram-spec";
+import { NODE_MIN_HEIGHT } from "@/shared/components/diagram/diagram-spec";
 
 export type ConceptFlowNode = Node<
   Omit<DiagramNode, "id" | "x" | "y"> & { dimmed: boolean },

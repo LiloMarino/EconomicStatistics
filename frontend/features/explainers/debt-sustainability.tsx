@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
 import { type DebtCase, type DebtCaseId, useDebtCases } from "@/features/simulator/use-simulator";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 import { Button } from "@/shared/components/ui/button";
 import { formatPoints } from "@/shared/lib/format";
 

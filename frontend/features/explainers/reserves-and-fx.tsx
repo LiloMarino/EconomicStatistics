@@ -1,7 +1,7 @@
 import { ExplainerCards } from "@/features/explainers/explainer-cards";
 import { type TodayValues, useTodayValues } from "@/features/explainers/explainer-values";
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 function buildSpec(values: TodayValues): DiagramSpec {
   return {

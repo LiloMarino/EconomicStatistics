@@ -3,13 +3,13 @@ import "@xyflow/react/dist/base.css";
 import { ReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
 
-import { ConceptNode, type ConceptFlowNode } from "@/features/explainers/concept-node";
+import { ConceptNode, type ConceptFlowNode } from "@/shared/components/diagram/concept-node";
 import {
   type DiagramSpec,
   type DiagramStep,
   isGroupActive,
-} from "@/features/explainers/diagram-spec";
-import { NumberedEdge, type NumberedFlowEdge } from "@/features/explainers/numbered-edge";
+} from "@/shared/components/diagram/diagram-spec";
+import { NumberedEdge, type NumberedFlowEdge } from "@/shared/components/diagram/numbered-edge";
 
 const nodeTypes = { concept: ConceptNode };
 const edgeTypes = { numbered: NumberedEdge };
@@ -19,7 +19,7 @@ const DEFAULT_WIDTH = 1000;
 
 /** O desenho do mecanismo: nós nas posições do `spec`, setas numeradas, tudo parado. O
 passo escolhido acende as setas dos grupos dele e apaga o resto. */
-export function ExplainerDiagram({ spec, step }: { spec: DiagramSpec; step: DiagramStep }) {
+export function FlowDiagram({ spec, step }: { spec: DiagramSpec; step: DiagramStep }) {
   const { nodes, edges } = useMemo(() => {
     const flowEdges: NumberedFlowEdge[] = spec.edges.map((edge, index) => ({
       id: `${edge.from}-${edge.to}`,

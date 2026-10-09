@@ -1,13 +1,14 @@
-import { type ReactNode, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
-import { ConceptDiagram } from "@/features/learn/concept-diagram";
 import { minimumWageSpec, targetSpec } from "@/features/learn/concept-diagrams";
 import { MovingWindow } from "@/features/learn/moving-window";
 import { Rolling12mTargetChart } from "@/features/learn/rolling-12m-target-chart";
 import { SourceList } from "@/features/learn/source-list";
+import { StaticDiagram } from "@/shared/components/diagram/static-diagram";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Button } from "@/shared/components/ui/button";
+import { useHashScroll } from "@/shared/hooks/use-hash-scroll";
 import { type ConceptId, topicLabels } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
 
@@ -15,8 +16,8 @@ import { concepts } from "@/shared/concepts/concepts";
 const conceptDiagrams: Partial<Record<ConceptId, ReactNode>> = {
   "rolling-12m": <MovingWindow />,
   "base-effect": <MovingWindow />,
-  "inflation-target": <ConceptDiagram spec={targetSpec} />,
-  "minimum-wage": <ConceptDiagram spec={minimumWageSpec} />,
+  "inflation-target": <StaticDiagram spec={targetSpec} />,
+  "minimum-wage": <StaticDiagram spec={minimumWageSpec} />,
 };
 
 /** O gráfico com o dado de hoje que acompanha o "É bom ou ruim?" de um conceito com
@@ -65,12 +66,8 @@ function ConceptAside({ id }: { id: ConceptId }) {
 os cuidados e os relacionados. */
 export function ConceptArticle({ id }: { id: ConceptId }) {
   const concept = concepts[id];
-  const { hash } = useLocation();
-
   // A busca pode levar a um bloco da página, como o de um grupo do IPCA
-  useEffect(() => {
-    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: "start" });
-  }, [hash, id]);
+  useHashScroll(id);
 
   return (
     <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_280px]">

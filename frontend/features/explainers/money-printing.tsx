@@ -1,7 +1,7 @@
 import { ExplainerCards } from "@/features/explainers/explainer-cards";
 import { type TodayValues, useTodayValues } from "@/features/explainers/explainer-values";
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 function buildSpec(values: TodayValues): DiagramSpec {
   return {
@@ -192,7 +192,9 @@ export function MoneyPrinting() {
           },
           {
             title: "Como medir se o BC está financiando o governo",
-            text: "Ainda em estudo no app: separar o que é gestão de liquidez do Banco Central do que seria financiamento do Tesouro.",
+            text: "Separando a carteira do Banco Central em compromissadas, que são gestão de liquidez, e o resto, e vendo se a base monetária cresce mais rápido que a economia.",
+            to: "/deficit#financing",
+            link: "Ver como o déficit é pago →",
           },
           {
             title: "O tamanho do déficit hoje",

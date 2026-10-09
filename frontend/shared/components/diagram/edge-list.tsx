@@ -1,4 +1,4 @@
-import type { DiagramEdge, DiagramSpec } from "@/features/explainers/diagram-spec";
+import type { DiagramEdge, DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 /** O texto de cada seta, com o número que ela leva no desenho e a cor do grupo dela. */
 export function EdgeList({

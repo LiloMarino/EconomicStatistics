@@ -1,4 +1,4 @@
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 export const targetSpec: DiagramSpec = {
   height: 380,

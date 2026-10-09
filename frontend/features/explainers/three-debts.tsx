@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
 import { useDebt, useFederalDebt } from "@/features/debt/use-debt";
-import type { DiagramSpec } from "@/features/explainers/diagram-spec";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
+import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 import { formatBrlTrillions, formatMonth, formatShortPercent } from "@/shared/lib/format";
 
 interface DebtValues {

@@ -193,6 +193,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/deficit/financing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Deficit Financing Overview */
+        get: operations["deficit_financing_overview_api_deficit_financing_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/debt": {
         parameters: {
             query?: never;
@@ -539,6 +556,22 @@ export interface components {
             cases: components["schemas"]["DebtCaseDTO"][];
         };
         /**
+         * DebtHoldersDTO
+         * @description Quem tem os títulos federais emitidos em `stock_month`, pelo estoque do Tesouro:
+         *     a fração na carteira do Banco Central e a no mercado, que somam 1.
+         */
+        DebtHoldersDTO: {
+            /**
+             * Stock Month
+             * Format: date
+             */
+            stock_month: string;
+            /** Central Bank Share */
+            central_bank_share: number;
+            /** Market Share */
+            market_share: number;
+        };
+        /**
          * DebtLevelDTO
          * @description Dívida líquida do setor público e bruta do governo geral, em fração do PIB
          *     (0.6926 é 69,26%).
@@ -603,6 +636,22 @@ export interface components {
             /** Spheres */
             spheres: components["schemas"]["SphereDeficitDTO"][];
             forecast: components["schemas"]["DeficitForecastDTO"] | null;
+        };
+        /**
+         * DeficitFinancingDTO
+         * @description `years` traz dezembro de cada ano e, por último, o último mês publicado.
+         *     `repo_share` é a fração da carteira do Banco Central que está nas compromissadas no
+         *     último mês (0.468 é 46,8%). `holders` é `null` até o estoque do Tesouro chegar ao
+         *     cache, e fecha num mês anterior ao de `last`.
+         */
+        DeficitFinancingDTO: {
+            last: components["schemas"]["FinancingPointDTO"];
+            amounts: components["schemas"]["FinancingAmountsDTO"];
+            /** Repo Share */
+            repo_share: number;
+            /** Years */
+            years: components["schemas"]["FinancingPointDTO"][];
+            holders: components["schemas"]["DebtHoldersDTO"] | null;
         };
         /**
          * DeficitForecastDTO
@@ -720,6 +769,37 @@ export interface components {
             composition: components["schemas"]["YearCompositionDTO"][];
             /** Maturities */
             maturities: components["schemas"]["MaturityBucketDTO"][];
+        };
+        /**
+         * FinancingAmountsDTO
+         * @description Os três estoques do último mês, em R$ milhões.
+         */
+        FinancingAmountsDTO: {
+            /** Central Bank Portfolio */
+            central_bank_portfolio: number;
+            /** Repo Operations */
+            repo_operations: number;
+            /** Monetary Base */
+            monetary_base: number;
+        };
+        /**
+         * FinancingPointDTO
+         * @description O fim de `ref_date`, em fração do PIB de 12 meses (0.22 é 22%): os títulos do
+         *     Tesouro na carteira do Banco Central, a parte deles que está com o mercado nas
+         *     compromissadas e a base monetária.
+         */
+        FinancingPointDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Central Bank Portfolio */
+            central_bank_portfolio: number;
+            /** Repo Operations */
+            repo_operations: number;
+            /** Monetary Base */
+            monetary_base: number;
         };
         /**
          * FirstYearDTO
@@ -1466,7 +1546,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1601,7 +1681,7 @@ export interface components {
          * Unit
          * @enum {string}
          */
-        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "months" | "percent_4_quarters" | "index" | "percent";
+        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "brl_thousand" | "months" | "percent_4_quarters" | "index" | "percent";
         /**
          * YearCompositionDTO
          * @description A fração da dívida federal em mercado de cada indexador no fim do mês.
@@ -2112,6 +2192,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeficitDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deficit_financing_overview_api_deficit_financing_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeficitFinancingDTO"];
                 };
             };
             /** @description Unprocessable Content */

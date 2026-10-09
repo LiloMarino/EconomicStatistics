@@ -1,4 +1,5 @@
 import { BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { indexerIdentity } from "@/features/debt/indexers";
 import type { FederalDebt } from "@/features/debt/use-debt";
@@ -117,12 +118,15 @@ export function CompositionCard({ data }: { data: FederalDebt }) {
           <StatCard
             size="compact"
             label="Na carteira do BC"
-            hint={<ConceptHint id="federal-debt" />}
+            hint={<ConceptHint id="central-bank-portfolio" />}
             value={formatPercent(data.central_bank_share)}
           >
             <span className="text-caption text-muted-foreground">
-              dos títulos federais emitidos, em {formatMonth(data.stock_month)}
+              de todos os títulos federais emitidos, em {formatMonth(data.stock_month)}
             </span>
+            <Link to="/deficit#financing" className="text-caption self-start font-semibold">
+              Como o déficit é pago →
+            </Link>
           </StatCard>
         </div>
       </div>
