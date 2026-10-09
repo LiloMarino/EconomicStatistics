@@ -21,15 +21,14 @@
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F6](#f6), [F20](#f20), [F23](#f23) | — |
 | **N4** | Saber se a dívida pública está sob controle | [F4](#f4), [F13](#f13), [F14](#f14), [F16](#f16), [F24](#f24), [F36](#f36), [F37](#f37), [F40](#f40), [F41](#f41), [F43](#f43) | — |
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | [F9](#f9), [F10](#f10), [F17](#f17), [F21](#f21), [F24](#f24), [F27](#f27), [F28](#f28), [F37](#f37), [F48](#f48) | — |
-| **N6** | Saber como o déficit é financiado | [F4](#f4), [F13](#f13), [F16](#f16), [F41](#f41), [F43](#f43) | — |
+| **N6** | Saber como o déficit é financiado | [F4](#f4), [F13](#f13), [F15](#f15), [F16](#f16), [F41](#f41), [F43](#f43) | — |
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48) | — |
-| [**F15**](#f15) | Como medir o financiamento monetário do déficit | — | 🔍 |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (52 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (53 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -38,9 +37,9 @@
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | [F2](#f2), [F5](#f5), [F6](#f6), [F14](#f14), [F21](#f21), [F24](#f24), [F25](#f25), [F27](#f27), [F30](#f30) | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | [F7](#f7), [F8](#f8), [F11](#f11), [F26](#f26) | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | [F21](#f21), [F23](#f23), [F25](#f25) | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F48](#f48) | ✅ |
-| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | [F9](#f9), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48) | ✅ |
-| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F45](#f45) | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F48](#f48) | ✅ |
+| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | [F9](#f9), [F15](#f15), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48) | ✅ |
+| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F15](#f15), [F45](#f45) | ✅ |
 | [**F1**](#f1) | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | [**F2**](#f2) | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | [**F3**](#f3) | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
@@ -55,6 +54,7 @@
 | [**F12**](#f12) | Tela de série: histórico, período e comparação na URL | — | 🚫 |
 | [**F13**](#f13) | Tela Déficit: primário, juros e nominal | — | ✅ |
 | [**F14**](#f14) | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ |
+| [**F15**](#f15) | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | — | ✅ |
 | [**F16**](#f16) | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ✅ |
 | [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | — | ✅ |
 | [**F18**](#f18) | Linha do tempo histórica com os episódios marcados | — | 🚫 |
@@ -96,7 +96,6 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| [**F15**](#f15) | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | [**F46**](#f46) | Juro neutro na tela Juros | M8 | 0 | 🔍 |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
 
@@ -184,18 +183,19 @@
 >
 > **Serve:** N4, N6
 >
-> **Progresso:** 6/7 concluídas
+> **Progresso:** 7/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| [**F15**](#f15) | Como medir o financiamento monetário do déficit | [F13](#f13), [F16](#f16) | 🔍 |
+| — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (6 itens)</summary>
+<details><summary>Concluído (7 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F13**](#f13) | Tela Déficit: primário, juros e nominal | [F4](#f4) | ✅ |
 | [**F14**](#f14) | Tela Dívida: r, g, r − g e o primário que estabiliza | [F13](#f13) | ✅ |
+| [**F15**](#f15) | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | [F13](#f13), [F16](#f16) | ✅ |
 | [**F16**](#f16) | Composição da dívida pública federal (Tesouro), na tela Dívida | [F2](#f2) | ✅ |
 | [**F24**](#f24) | Simulador da dívida, com casos que aconteceram e exemplos | [F14](#f14) | ✅ |
 | [**F41**](#f41) | Déficit mês a mês, com o nominal numa coluna própria | [F13](#f13) | ✅ |
@@ -362,6 +362,7 @@
 | **F44** | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — | [F13](#f13), [F14](#f14), [F31](#f31), [F28](#f28) | Baixo | Baixo | Baixo | Bom | ✅ Concluído |
 | **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | [F29](#f29) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 | [F9](#f9) | Alto | Médio | Médio | Bom | ✅ Concluído |
+| **F15** | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | N6 | D6, D7, D8 | M4 | [F13](#f13), [F16](#f16) | Médio | Médio | Alto | Bom | ✅ Concluído |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -563,9 +564,7 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 **No Aprender:** NFSP, resultado primário, resultado nominal e juros nominais, no tema novo "Contas públicas", com as séries em `conceptBySeries`.
 
-**Fica para depois:**
-- o link da bandeja para o loop da dívida, que o explicador dos dois loops (F9) faz ao entrar;
-- a seção "Como o déficit é pago", que segue como esboço no canvas até a F15.
+**Fica para depois:** o link da bandeja para o loop da dívida, que o explicador dos dois loops (F9) faz ao entrar. A seção "Como o déficit é pago" entrou com a F15.
 
 **Aceite:** conferido. O último mês tem o primário mais os juros igual ao nominal (0,62 + 8,86 = 9,48% do PIB em ago/2026), com os números das séries do SGS.
 
@@ -679,7 +678,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 - **indexador** pelo prefixo do título, sem olhar a caixa: LFT (com LFT-TD) é Selic; LTN e NTN-F são prefixado; NTN-B é IPCA; NTN-C é IGP-M; dívida externa é câmbio; o resto é "outros";
 - **vence em 12 meses:** o principal que vence até o fim do 12º mês depois do estoque;
 - **perfil de vencimentos:** o resto do ano do estoque, os 4 anos seguintes um a um, os 5 anos depois deles e o que vence mais tarde;
-- **carteira do BC:** a parte de todos os títulos emitidos que está no Banco Central (24,3% em jul/2026), que alimenta a F15.
+- **carteira do BC:** a parte de todos os títulos emitidos que está no Banco Central (24,3% em jul/2026). O número "Na carteira do BC" leva à seção "Como o déficit é pago" da tela Déficit (F15), que usa a mesma parcela.
 
 **Prazo médio** pela série oficial do SGS **10618** (títulos do Tesouro emitidos, em meses), e não pelo CSV: a medida oficial pesa cada pagamento, cupons inclusive, e dá 47,40 meses (3,95 anos) em jul/2026, igual aos 3,94 anos da DPMFi no Relatório Mensal. Pela data final de cada título, o CSV daria 5,35 anos.
 
@@ -1110,9 +1109,46 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - as bandejas "Para que servem", das reservas, e "O que mexe no dólar", do dólar, da tela Setor externo ligam a reservas, câmbio e dívida;
 - o nó "Serviços" da inércia liga ao conceito de inflação de serviços (F35);
 - as bandejas da tela Crédito não citam nenhum dos quatro temas e seguem sem link;
-- o cartão "Como medir se o BC está financiando o governo", do explicador de emissão de moeda, cita o estudo do financiamento monetário (F15) sem link: a F15 o acrescenta ao entrar.
+- o cartão "Como medir se o BC está financiando o governo", do explicador de emissão de moeda, leva à seção "Como o déficit é pago" da tela Déficit, que a F15 trouxe.
 
 **Fonte:** os ciclos de partida estão anotados da conversa com o ChatGPT; cada afirmação factual foi conferida contra a fonte oficial, como manda a D4.
+
+<a id="f15"></a>
+**F15 — Como o déficit é pago.** Feito: o estudo do financiamento monetário fechou e virou a seção "Como o déficit é pago" da tela Déficit (F13), embaixo de "Quem faz o déficit".
+
+**O que o estudo fechou** (séries conferidas ao vivo no SGS em 2026-10-09):
+- **gestão de liquidez contra financiamento:** a carteira do BC se divide em compromissadas e o resto. A compromissada é o BC emprestar aos bancos um título da carteira, com promessa de recompra, para recolher o dinheiro que sobra e segurar a Selic. Em ago/2026, 46,8% da carteira estava nas compromissadas;
+- **a base monetária entra, em % do PIB:** em reais ela cresce com a economia; contra o PIB de 12 meses, ela só sobe se o BC cria dinheiro mais rápido que a economia cresce. Foi de 4,9% em dez/2002 a 3,2% em ago/2026, o ponto mais baixo da série;
+- **a frase final:** "O déficit é pago com títulos vendidos ao mercado. 24,3% de todos os títulos federais emitidos estão na carteira do Banco Central (jul/2026). 46,8% dessa carteira voltam aos bancos nas compromissadas (ago/2026)." Cada número leva o seu mês, porque o estoque do Tesouro fecha um mês antes das séries do SGS.
+
+**Séries do SGS:**
+- carteira do BC: **4152**, títulos do Tesouro na carteira do Banco Central, em R$ milhões. Bate com a carteira "Banco Central" do CSV do Tesouro: 2.979.604,90 em jul/2026 nos dois;
+- compromissadas: **1832**, o "financiamento líquido" da base ampliada, em R$ mil. A carteira do mercado (1831) mais ela dão o total de títulos federais (7535);
+- base monetária: **1788**, base restrita no fim do mês, em **R$ mil**, o que fechou a dúvida da unidade.
+
+As três dividem pelo PIB de 12 meses (4382). A parcela de todos os títulos na carteira do BC segue a do CSV do Tesouro, para as telas Déficit e Dívida mostrarem o mesmo número.
+
+**Backend:** `GET /api/deficit/financing`, com as três séries em % do PIB em dezembro de cada ano e no último mês, os estoques do último mês em R$ milhões, a parte da carteira nas compromissadas e quem tem os títulos pelo estoque do Tesouro (nulo até o CSV chegar). O `share_of_gdp` saiu do setor externo para `domain/gdp.py`, que as duas telas usam.
+
+**Tela:**
+- o diagrama do caminho, com o número de hoje em cada nó: déficit → Tesouro vende títulos → mercado ou carteira do BC → compromissadas, a base monetária, e a seta do BC para o Tesouro marcada como fechada por lei;
+- o cartão "O Banco Central está imprimindo dinheiro para o governo?", com as três séries em % do PIB desde dez/2002, a bandeja "Como ler" (um bloco por série, o que seria financiar o governo e a conta da parte nas compromissadas) e a frase final.
+
+O diagrama, que a tela Déficit passou a usar junto com os explicadores e os conceitos, subiu para `shared/components/diagram/`, e a rolagem até o bloco do endereço virou o `useHashScroll`, que a página de conceito também usa.
+
+**No Aprender:** carteira do Banco Central, operações compromissadas e base monetária, no tema "Contas públicas".
+
+**Conferido na fonte (D4):**
+- Constituição, art. 164, § 1º (o BC não empresta ao Tesouro) e § 2º (o BC compra e vende títulos do Tesouro para regular a moeda e os juros);
+- Lei de Responsabilidade Fiscal, art. 39, I e § 2º: o BC só compra título direto do Tesouro para trocar o que vence na carteira dele;
+- Lei 10.179/2001, art. 1º, IX, e art. 3º, VIII, incluídos pela Lei 11.803/2008: o Tesouro entrega títulos ao BC sem contrapartida financeira, para a carteira da política monetária;
+- a definição da base como emissão primária de moeda e as unidades das três séries, nos metadados do portal de dados abertos do BCB.
+
+**Links de volta:** o número "Na carteira do BC" da tela Dívida (F16) e o cartão "Como medir se o BC está financiando o governo", do explicador de emissão de moeda (F48), levam à seção.
+
+**Aceite cumprido:** com os dados de 9/out/2026, compromissadas sobre carteira dão 46,8% (`test_repo_share_is_repo_over_the_central_bank_portfolio`), a base dá 3,2% do PIB (`test_monetary_base_is_converted_from_thousands_before_the_gdp_share`), a carteira dá 22,0% do PIB e a parcela, 24,3% em jul/2026.
+
+**Fica de fora:** a transferência do resultado do Banco Central ao Tesouro (Lei 13.820/2019), outro canal entre os dois, que pede uma fonte própria.
 
 ---
 ## 2. Nice-to-have
@@ -1142,24 +1178,8 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 
 | ID | Resumo | Conexão | Marco | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| **F15** | Como medir o financiamento monetário do déficit | Serviria N6; falta separar gestão de liquidez do BC de financiamento do Tesouro | M4 | [F13](#f13), [F16](#f16) | 🔍 Em avaliação |
 | **F46** | Juro neutro na tela Juros | Serviria N1 e N2; falta uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária | M8 | [F30](#f30) | 🔍 Em avaliação |
 | **F47** | Basileia dos bancos na tela Crédito | Serviria N1; falta uma fonte que dê para baixar: a série do SGS parou em jun/2023, e o BC publica o número no Relatório de Estabilidade Financeira, semestral, e no IF.data, por instituição | M8 | [F33](#f33) | 🔍 Em avaliação |
-
-<a id="f15"></a>
-**F15 — Como medir o financiamento monetário.** As candidatas já têm fonte:
-- **base monetária:** SGS 1788 responde (ago/2026: 432.655.492, provavelmente em R$ mil); falta conferir nome e unidade;
-- **fatores condicionantes da base, operações com títulos públicos:** SGS 1809;
-- **títulos da dívida na carteira do Banco Central:** o CSV de estoque do Tesouro já está no cache (F16) e separa a carteira "Banco Central" da carteira "Mercado"; a tela Dívida mostra a parcela: 24,3% de todos os títulos federais emitidos em jul/2026. A composição por indexador usa só a carteira "Mercado", e essa parcela usa as duas.
-
-**Na tela:** a seção "Como o déficit é pago" da tela Déficit (F13) fica como esboço no canvas: o fluxo déficit → Tesouro vende títulos → mercado ou carteira do BC, os números da base monetária e da carteira do BC, e a vedação do financiamento direto pela Lei de Responsabilidade Fiscal.
-
-**Link de volta:** o cartão "Na carteira do BC" da tela Dívida (F16) nasceu sem o link para esta seção; ela o acrescenta ao entrar. Na frase final, o X é essa parcela de todos os títulos emitidos, e a frase diz isso. O cartão "Como medir se o BC está financiando o governo", do explicador de emissão de moeda (F48), também nasceu sem o link, e ela o liga ao entrar.
-
-**O que o spike fecha,** lendo as notas de política monetária do BCB:
-- como separar a gestão de liquidez do dia a dia do BC (operações compromissadas) do que seria financiamento do Tesouro;
-- se a base monetária entra na tela ou só confunde, já que ela cresce também com a economia;
-- a frase final, com os números de verdade, no formato "o déficit é financiado com títulos vendidos ao mercado; a parcela da dívida na carteira do BC é X%".
 
 <a id="f46"></a>
 **F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar.
