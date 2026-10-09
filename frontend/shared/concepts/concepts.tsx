@@ -12,6 +12,7 @@ const focusScreen = { to: "/focus", label: "Focus" };
 const activityScreen = { to: "/activity", label: "Atividade" };
 const interestScreen = { to: "/interest", label: "Juros" };
 const creditScreen = { to: "/credit", label: "Crédito" };
+const healthScreen = { to: "/economy-health", label: "Saúde da economia" };
 
 const focusFrequency = "Semanal: as previsões da semana saem na segunda seguinte";
 
@@ -1099,7 +1100,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: "Definida pelo CMN; comparada todo mês",
-    screens: [inflationScreen],
+    screens: [inflationScreen, healthScreen],
   },
 
   "minimum-wage": {
@@ -1225,7 +1226,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
       { ...sgs3696, backs: "O dólar do fim de setembro de 2025 e de 2026." },
     ],
-    screens: [externalScreen],
+    screens: [externalScreen, healthScreen],
   },
 
   ptax: {
@@ -1514,7 +1515,61 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: "Mensal, a posição do último dia do mês",
-    screens: [externalScreen],
+    screens: [externalScreen, healthScreen],
+  },
+
+  "reserve-adequacy": {
+    title: "Adequação das reservas",
+    abbr: "ARA",
+    topic: "external",
+    summary: "O quanto as reservas cobrem do dinheiro que pode sair do país numa crise.",
+    lead: (
+      <>
+        A <strong>métrica ARA</strong>, do FMI, compara as reservas internacionais com o dinheiro
+        que poderia sair do país numa crise: dívida externa de curto prazo, outros investimentos de
+        carteira, a quantidade de moeda na economia (M2) e as exportações. Reservas entre 100% e
+        150% da métrica são vistas como adequadas.
+      </>
+    ),
+    keywords: ["ara", "métrica ara", "assessing reserve adequacy", "reservas adequadas", "fmi"],
+    measures: (
+      <p>
+        Cada item do risco entra com um peso, e a soma ponderada é o que as reservas deveriam
+        cobrir. O peso é maior para a dívida externa de curto prazo e menor para a moeda e as
+        exportações, e muda com o regime de câmbio. O resultado é uma razão: as reservas divididas
+        pela métrica.
+      </p>
+    ),
+    reading: (
+      <p>
+        100% quer dizer que as reservas cobrem exatamente a saída esperada num cenário de estresse;
+        abaixo disso o colchão é curto, e muito acima de 150% pode ser custo demais, porque reserva
+        parada rende pouco. O número serve de baliza e não de veredito.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "A faixa é um teste básico, não uma lei.",
+        text: (
+          <>
+            Quando o FMI discutiu a métrica, parte dos diretores achou a faixa de 100% a 150% um
+            teste básico razoável e parte a considerou mal justificada. O app não calcula o
+            percentual do Brasil: mostra as reservas em dólares e em % do PIB ao lado da faixa, sem
+            cor.
+          </>
+        ),
+      },
+    ],
+    related: ["international-reserves", "exchange-rate", "share-of-gdp"],
+    sources: [
+      {
+        name: "FMI, Public Information Notice 11/47: Executive Board Discusses Assessing Reserve Adequacy (7 de abril de 2011)",
+        url: "https://www.imf.org/en/news/articles/2015/09/28/04/53/pn1147",
+        backs:
+          "A métrica de adequação ponderada pelo risco e a faixa de 100% a 150% como teste básico, com as ressalvas de parte dos diretores.",
+      },
+    ],
+    screens: [healthScreen],
   },
 
   "international-investment-position": {
@@ -2094,7 +2149,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: fiscalNoteFrequency,
-    screens: [debtScreen],
+    screens: [debtScreen, healthScreen],
   },
 
   "implicit-rate": {
@@ -2393,7 +2448,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: fiscalNoteFrequency,
-    screens: [debtScreen],
+    screens: [debtScreen, healthScreen],
   },
 
   "federal-debt": {
@@ -2756,7 +2811,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: focusFrequency,
-    screens: [focusScreen],
+    screens: [focusScreen, healthScreen],
   },
 
   median: {
@@ -3202,7 +3257,60 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: "Mensal, no fim do mês seguinte ao fim do trimestre móvel",
-    screens: [activityScreen],
+    screens: [activityScreen, healthScreen],
+  },
+
+  nairu: {
+    title: "Desemprego que não acelera a inflação",
+    abbr: "NAIRU",
+    topic: "activity",
+    summary: "A taxa de desemprego abaixo da qual a inflação tende a subir.",
+    lead: (
+      <>
+        A <strong>NAIRU</strong> é a taxa de desemprego em que o mercado de trabalho está em
+        equilíbrio: abaixo dela, faltam trabalhadores, os salários sobem mais rápido e a inflação de
+        serviços acelera. Ninguém a observa; economistas a estimam, e as estimativas divergem.
+      </>
+    ),
+    keywords: ["nairu", "nawru", "desemprego natural", "desemprego neutro", "pleno emprego"],
+    measures: (
+      <p>
+        É uma régua para a taxa de desocupação: ela diz se o emprego está folgado ou apertado em
+        relação ao que a economia aguenta sem pressionar preços. A sigla vem do inglês, taxa de
+        desemprego que não acelera a inflação.
+      </p>
+    ),
+    reading: (
+      <p>
+        Desocupação bem abaixo da NAIRU sugere mercado de trabalho apertado: as empresas disputam
+        gente, pagam mais e repassam o custo aos preços, e o Banco Central tende a manter o juro
+        alto. Desocupação acima dela indica folga, que segura salários e preços. O que vale é a
+        distância entre as duas, e não o nível sozinho.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "É uma estimativa, e não há consenso.",
+        text: (
+          <>
+            O FGV-Ibre estimou a taxa de equilíbrio em cerca de 8,5% da força de trabalho em 2022, e
+            as projeções de mercado para a desocupação em 2025 e 2026 giravam em torno de 9,5%. O
+            valor muda com o método e com o período. Por isso o app mostra a desocupação ao lado da
+            referência escrita, sem cor.
+          </>
+        ),
+      },
+    ],
+    related: ["unemployment-rate", "inflation-target", "neutral-rate"],
+    sources: [
+      {
+        name: "FGV-Ibre, Blog do Ibre: a taxa de desemprego de equilíbrio brasileira está mais próxima dos 8,5% da PEA (18 de julho de 2022)",
+        url: "https://blogdoibre.fgv.br/posts/taxa-de-desemprego-de-equilibrio-brasileira-esta-mais-proxima-dos-85-da-pea",
+        backs:
+          "A estimativa de cerca de 8,5% da força de trabalho e as projeções de mercado de cerca de 9,5% para 2025 e 2026.",
+      },
+    ],
+    screens: [healthScreen],
   },
 
   "moving-quarter": {
@@ -3508,7 +3616,7 @@ export const concepts: Record<ConceptId, Concept> = {
       },
     ],
     frequency: "Muda toda semana, com a pesquisa Focus, e a cada reunião do Copom",
-    screens: [interestScreen],
+    screens: [interestScreen, healthScreen],
   },
 
   "neutral-rate": {
@@ -3557,7 +3665,7 @@ export const concepts: Record<ConceptId, Concept> = {
           "Que a taxa neutra é estimada por vários métodos e que as estimativas subiram depois do mínimo da pandemia.",
       },
     ],
-    screens: [interestScreen],
+    screens: [interestScreen, healthScreen],
   },
 
   "credit-cost": {

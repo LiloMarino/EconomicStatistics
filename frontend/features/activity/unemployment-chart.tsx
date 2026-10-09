@@ -1,5 +1,6 @@
 import { BookOpen } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, XAxis, YAxis } from "recharts";
+import { Link } from "react-router-dom";
 
 import type { Activity } from "@/features/activity/use-activity";
 import { ChartLegend } from "@/shared/components/chart-legend";
@@ -57,6 +58,9 @@ function HowToRead({ unemployment }: { unemployment: Unemployment }) {
           Para quem trabalha, sim. Mas muito baixo pressiona salários e o preço dos serviços, e o
           Banco Central olha isso ao decidir a Selic.
         </p>
+        <Link to="/economy-health" className="text-caption self-start font-semibold">
+          Ver na saúde da economia →
+        </Link>
       </TrayItem>
       {unemployment.forecast && (
         <TrayItem title="A previsão" concept="focus-survey">

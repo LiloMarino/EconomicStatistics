@@ -1,4 +1,5 @@
 import {
+  Activity,
   ChartColumn,
   ChartColumnStacked,
   CreditCard,
@@ -239,6 +240,25 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
   {
     label: "Explorar",
     items: [
+      {
+        to: "/economy-health",
+        label: "Saúde da economia",
+        icon: Activity,
+        description:
+          "Os sinais de crise: inflação contra a meta, primário e a referência dos demais",
+        keywords: [
+          "check engine",
+          "semáforo",
+          "crise",
+          "sinais",
+          "meta de inflação",
+          "primário que estabiliza",
+          "juro neutro",
+          "nairu",
+          "reservas",
+        ],
+        footer: { sources: "IBGE e Banco Central" },
+      },
       {
         to: "/learn",
         label: "Aprender",

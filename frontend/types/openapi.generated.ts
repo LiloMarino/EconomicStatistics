@@ -350,6 +350,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/economy-health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Economy Health View */
+        get: operations["economy_health_view_api_economy_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -465,6 +482,16 @@ export interface components {
          * @enum {string}
          */
         Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings" | "imf_countries" | "inflation_tolerance";
+        /** DatedValueDTO */
+        DatedValueDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Value */
+            value: number;
+        };
         /**
          * DebtCaseDTO
          * @description Um ponto de partida: dívida, juro, crescimento e primário em fração, a
@@ -624,18 +651,11 @@ export interface components {
             /** Difference */
             difference: number;
         };
-        /**
-         * DollarDTO
-         * @description A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
-         *     mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
-         *     espera.
-         */
-        DollarDTO: {
-            /** Months */
-            months: components["schemas"]["MonthValueDTO"][];
-            /** Change 12M */
-            change_12m: number | null;
-            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+        /** EconomyHealthDTO */
+        EconomyHealthDTO: {
+            inflation: components["schemas"]["InflationSignalDTO"];
+            primary: components["schemas"]["PrimarySignalDTO"];
+            references: components["schemas"]["ReferencesDTO"];
         };
         /**
          * ErrorResponse
@@ -646,16 +666,33 @@ export interface components {
             detail: string;
         };
         /**
+         * ExpectedInflationDTO
+         * @description A mediana do Focus para o IPCA do ano da pesquisa, em fração, e a meta do ano.
+         */
+        ExpectedInflationDTO: {
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+            /** Year */
+            year: number;
+            /** Median */
+            median: number;
+            /** Target */
+            target: number | null;
+        };
+        /**
          * ExternalSectorDTO
          * @description Cada gráfico na sua janela, terminando no último dado: 24 meses de dólar, 10
          *     anos de fluxos e de reservas, e um ponto por ano nos últimos 6 anos da posição.
          */
         ExternalSectorDTO: {
-            dollar: components["schemas"]["DollarDTO"];
+            dollar: components["schemas"]["backend__features__external_sector__router__DollarDTO"];
             /** Flows */
             flows: components["schemas"]["FlowPointDTO"][];
             flows_forecast: components["schemas"]["FlowsForecastDTO"] | null;
-            reserves: components["schemas"]["ReservesDTO"];
+            reserves: components["schemas"]["backend__features__external_sector__router__ReservesDTO"];
             /** Position */
             position: components["schemas"]["PositionPointDTO"][];
         };
@@ -987,13 +1024,40 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["GroupPaceDTO"][];
         };
+        /**
+         * InflationSignalDTO
+         * @description O IPCA em 12 meses do último mês contra a faixa da meta do ano, com a cor dele e
+         *     a de cada um dos últimos 24 meses. Verde dentro da faixa, amarelo fora há menos de 6
+         *     meses seguidos, vermelho a partir do sexto.
+         */
+        InflationSignalDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Rate */
+            rate: number;
+            band: components["schemas"]["TargetBandDTO"] | null;
+            lamp: components["schemas"]["Lamp"] | null;
+            /** Months Out */
+            months_out: number;
+            /** Strip */
+            strip: components["schemas"]["StripCellDTO"][];
+        };
         /** InterestDTO */
         InterestDTO: {
             selic: components["schemas"]["SelicDTO"];
             inflation: components["schemas"]["InflationDTO"];
             next_meeting: components["schemas"]["NextMeetingDTO"] | null;
-            real_rate: components["schemas"]["RealRateDTO"] | null;
+            real_rate: components["schemas"]["backend__features__interest__router__RealRateDTO"] | null;
         };
+        /**
+         * Lamp
+         * @description A cor do semáforo de um sinal com faixa oficial.
+         * @enum {string}
+         */
+        Lamp: "green" | "yellow" | "red";
         /**
          * LevelsForecastDTO
          * @description A dívida líquida e a bruta que o Focus espera para dezembro de cada ano, em
@@ -1234,6 +1298,26 @@ export interface components {
             services: components["schemas"]["PriceCutDTO"];
         };
         /**
+         * PrimarySignalDTO
+         * @description O primário feito contra o que estabiliza a dívida/PIB, em fração do PIB.
+         *     `surplus` é negativo no déficit; `gap` é o que falta, e negativo é sobra. Verde se o
+         *     feito cobre o necessário, vermelho se não.
+         */
+        PrimarySignalDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Surplus */
+            surplus: number;
+            /** Stabilizing */
+            stabilizing: number;
+            /** Gap */
+            gap: number;
+            lamp: components["schemas"]["Lamp"];
+        };
+        /**
          * PurchasingPowerDTO
          * @description Taxas em fração; os grupos vêm da maior perda ao maior ganho.
          */
@@ -1267,23 +1351,6 @@ export interface components {
             months: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
         };
         /**
-         * RealRateDTO
-         * @description A meta de hoje dividida pela inflação esperada para os 12 meses seguintes.
-         */
-        RealRateDTO: {
-            /** Rate */
-            rate: number;
-            /** Selic */
-            selic: number;
-            /** Expected Inflation */
-            expected_inflation: number;
-            /**
-             * Survey Date
-             * Format: date
-             */
-            survey_date: string;
-        };
-        /**
          * ReferenceRaiseDTO
          * @description O reajuste da referência no período; `null` quando o cache não o cobre.
          */
@@ -1291,6 +1358,19 @@ export interface components {
             reference: components["schemas"]["RaiseReference"];
             /** Rate */
             rate: number | null;
+        };
+        /**
+         * ReferencesDTO
+         * @description Os sinais sem faixa oficial, só com o número: taxas e frações em fração (0.053
+         *     é 5,3%). `expected_inflation` e `real_rate` dependem da pesquisa Focus.
+         */
+        ReferencesDTO: {
+            expected_inflation: components["schemas"]["ExpectedInflationDTO"] | null;
+            real_rate: components["schemas"]["backend__features__economy_health__router__RealRateDTO"] | null;
+            unemployment: components["schemas"]["DatedValueDTO"];
+            reserves: components["schemas"]["backend__features__economy_health__router__ReservesDTO"];
+            gross_debt: components["schemas"]["DatedValueDTO"];
+            dollar: components["schemas"]["backend__features__economy_health__router__DollarDTO"];
         };
         /**
          * RefreshReportDTO
@@ -1330,16 +1410,6 @@ export interface components {
             streak_weeks: number | null;
             /** Respondents */
             respondents: number;
-        };
-        /**
-         * ReservesDTO
-         * @description O estoque do fim de cada mês em US$ milhões, e a fração do PIB do último mês
-         *     que tem o PIB de 12 meses.
-         */
-        ReservesDTO: {
-            /** Months */
-            months: components["schemas"]["MonthValueDTO"][];
-            gdp_share: components["schemas"]["GdpShareDTO"] | null;
         };
         /**
          * RollingPointDTO
@@ -1485,6 +1555,24 @@ export interface components {
             primary_gap: number;
         };
         /**
+         * StripCellDTO
+         * @description O IPCA em 12 meses de um mês, em fração, e a cor dele. `lamp` é `null` quando o
+         *     ano não tem faixa da meta; `months_out` é há quantos meses seguidos o IPCA está fora
+         *     da faixa, 0 dentro dela.
+         */
+        StripCellDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Rate */
+            rate: number;
+            lamp: components["schemas"]["Lamp"] | null;
+            /** Months Out */
+            months_out: number;
+        };
+        /**
          * TargetBandDTO
          * @description A meta de inflação do ano e os limites do intervalo de tolerância, em fração.
          */
@@ -1534,6 +1622,75 @@ export interface components {
             /** Value */
             value: number;
         };
+        /**
+         * DollarDTO
+         * @description A PTAX do fim do mês, em reais, e a variação contra o mesmo mês do ano anterior.
+         */
+        backend__features__economy_health__router__DollarDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Value */
+            value: number;
+            /** Change 12M */
+            change_12m: number | null;
+        };
+        /**
+         * RealRateDTO
+         * @description O juro real ex-ante: a Selic de hoje descontada da inflação esperada, em fração.
+         */
+        backend__features__economy_health__router__RealRateDTO: {
+            /** Rate */
+            rate: number;
+            /** Selic */
+            selic: number;
+            /** Expected Inflation */
+            expected_inflation: number;
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
+        };
+        /**
+         * ReservesDTO
+         * @description O estoque em US$ milhões e, quando o PIB em dólar já saiu, a fração do PIB.
+         */
+        backend__features__economy_health__router__ReservesDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Value */
+            value: number;
+            gdp_share: components["schemas"]["GdpShareDTO"] | null;
+        };
+        /**
+         * DollarDTO
+         * @description A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
+         *     mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
+         *     espera.
+         */
+        backend__features__external_sector__router__DollarDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            /** Change 12M */
+            change_12m: number | null;
+            forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+        };
+        /**
+         * ReservesDTO
+         * @description O estoque do fim de cada mês em US$ milhões, e a fração do PIB do último mês
+         *     que tem o PIB de 12 meses.
+         */
+        backend__features__external_sector__router__ReservesDTO: {
+            /** Months */
+            months: components["schemas"]["MonthValueDTO"][];
+            gdp_share: components["schemas"]["GdpShareDTO"] | null;
+        };
         /** MonthRateDTO */
         backend__features__inflation__router__MonthRateDTO: {
             /**
@@ -1556,6 +1713,23 @@ export interface components {
             ref_date: string;
             /** Rate */
             rate: number;
+        };
+        /**
+         * RealRateDTO
+         * @description A meta de hoje dividida pela inflação esperada para os 12 meses seguintes.
+         */
+        backend__features__interest__router__RealRateDTO: {
+            /** Rate */
+            rate: number;
+            /** Selic */
+            selic: number;
+            /** Expected Inflation */
+            expected_inflation: number;
+            /**
+             * Survey Date
+             * Format: date
+             */
+            survey_date: string;
         };
     };
     responses: never;
@@ -2289,6 +2463,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OverviewDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    economy_health_view_api_economy_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EconomyHealthDTO"];
                 };
             };
             /** @description Unprocessable Content */
