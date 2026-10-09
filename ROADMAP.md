@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-09):** Concluído o simulador da dívida, com os casos que aconteceram, a comparação lado a lado e a dívida bruta de Japão, Grécia, Argentina e Brasil buscada do FMI.
+> **Última mudança (2026-10-09):** Concluída a tolerância da meta de inflação buscada do site do Banco Central, no lugar da constante digitada.
 
 ## Glossário
 
@@ -33,12 +33,11 @@
 | [**F37**](#f37) | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ⏳ |
 | [**F38**](#f38) | Diagramas nos conceitos que já existem | — | ⏳ |
 | [**F39**](#f39) | Pranchas dos explicadores no canvas | — | ⏳ |
-| [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (42 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (43 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -84,6 +83,7 @@
 | [**F42**](#f42) | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ |
 | [**F43**](#f43) | Quem faz o déficit: a NFSP por esfera | — | ✅ |
 | [**F44**](#f44) | A busca e o rodapé da barra lateral seguem a tela | — | ✅ |
+| [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | ✅ |
 
 </details>
 
@@ -99,7 +99,6 @@
 | [**F11**](#f11) | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | — | 0 | ⏳ |
-| [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | 0 | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | M8 | 0 | 🔍 |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
 
@@ -281,20 +280,20 @@
 
 ### Sem marco
 
-> **Progresso:** 3/5 concluídas
+> **Progresso:** 4/5 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F35**](#f35) | IPCA livres, administrados e serviços | [F4](#f4), [F8](#f8) | ⏳ |
-| [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | [F29](#f29) | ⏳ |
 
-<details><summary>Concluído (3 itens)</summary>
+<details><summary>Concluído (4 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F20**](#f20) | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | [F3](#f3) | ✅ |
 | [**F40**](#f40) | Leitura mais clara nas telas Dívida, Setor externo e Déficit | [F13](#f13), [F14](#f14), [F31](#f31) | ✅ |
 | [**F44**](#f44) | A busca e o rodapé da barra lateral seguem a tela | [F13](#f13), [F14](#f14), [F31](#f31), [F28](#f28) | ✅ |
+| [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | [F29](#f29) | ✅ |
 
 </details>
 
@@ -344,7 +343,7 @@
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 | [F8](#f8), [F29](#f29) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | [F13](#f13) | Médio | Médio | Médio | Bom | ✅ Concluído |
 | **F44** | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — | [F13](#f13), [F14](#f14), [F31](#f31), [F28](#f28) | Baixo | Baixo | Baixo | Bom | ✅ Concluído |
-| **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | [F29](#f29) | Médio | Baixo | Médio | Bom | ⏳ Pendente |
+| **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | [F29](#f29) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -1047,11 +1046,11 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - **Rodapé da barra lateral:** mostra até quando há dado na tela aberta e quem o publica: "Resultado fiscal até ago/2026 · Banco Central" no Déficit, "Dólar até set/2026 · Banco Central" no Setor externo. Cada item de `navigation.ts` diz a série e as fontes da sua tela. O Focus mostra só a fonte, porque a pesquisa não é série do cache, e o Aprender fica com o IPCA.
 
 <a id="f45"></a>
-**F45 — Tolerância da meta de inflação buscada da fonte.** A faixa da meta (piso e teto) soma uma tolerância à meta que o SGS publica, e essa tolerância está digitada em `backend/domain/inflation_target.py`, a partir das resoluções do CMN (2 p.p. de 1999 a 2002, 2,5 de 2003 a 2005, 2 de 2006 a 2016 e 1,5 desde 2017). Se o CMN a mudar, o app erra sem avisar, o que a D8 não admite.
+**F45 — Tolerância da meta de inflação buscada da fonte.** Feito. A faixa da meta (piso e teto) soma uma tolerância à meta que o SGS publica, e essa tolerância agora vem do site do Banco Central, sem número digitado no código.
 
-- **Primeiro passo:** achar onde o BCB publica a tolerância de forma buscável (a página da meta de inflação, uma série do SGS ou o JSON que o site lê), do mesmo jeito que o calendário do Copom foi achado.
-- **Depois:** um fetcher em `backend/adapters/` e a tabela ou série que o alimente, no lugar da constante, com o mesmo mecanismo incremental das outras fontes.
-- **Se não houver fonte buscável:** a constante fica, com a data da última conferência escrita ao lado, e a tela diz de quando é a tolerância.
+- **Fonte:** o site do BCB serve o conteúdo de cada página em JSON (`www.bcb.gov.br/api/paginasite/sitebcb/controleinflacao/<página>`). A tabela do histórico das metas (`historicometas`, de 1999 a 2024) dá a tolerância de cada ano, lida pelo intervalo de cada linha. A página das metas (`metainflacao`) dá a regra em vigor, numa frase: o ano em que o período começou e a distância da meta até o piso e até o teto. O SGS e a API Olinda não publicam a banda.
+- **Refresh:** a primeira carga traz o histórico e a regra em vigor; as seguintes conferem só a regra em vigor, no máximo uma vez por intervalo. O cache fica na tabela `inflation_tolerances` (ano a partir do qual vale, distância em fração) e o `POST /api/series/refresh` o atualiza com as outras fontes.
+- **Se a página mudar:** o parse recusa o que não reconhece (tabela sem ano, frase ausente, intervalo assimétrico), o cache fica como estava e a falta é avisada uma vez, como no calendário do Copom. Sem tolerância em cache, o ano fica sem faixa.
 
 ---
 ## 2. Nice-to-have
