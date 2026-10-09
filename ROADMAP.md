@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-09):** Concluída a tolerância da meta de inflação buscada do site do Banco Central, no lugar da constante digitada.
+> **Última mudança (2026-10-09):** Concluídos os explicadores dos dois loops, de r − g, das três dívidas e de por que a dívida não explode; registrada a F48 para os temas sem prancha
 
 ## Glossário
 
@@ -17,25 +17,23 @@
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **N1** | Acompanhar a economia brasileira num lugar só | F1, F2, F3, F4, F5, F10, F11, F20, F21, F25, F26, F27, F28, F29, F30, F31, F32, F33, F34, F35, F44, F45 | — |
-| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39, F40, F42 | — |
+| **N2** | Entender o que cada número significa enquanto olho | F1, F7, F8, F9, F22, F23, F25, F26, F29, F31, F32, F35, F36, F38, F39, F40, F42, F48 | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | F1, F2, F3, F4, F6, F20, F23 | — |
 | **N4** | Saber se a dívida pública está sob controle | F4, F13, F14, F16, F24, F36, F37, F40, F41, F43 | — |
-| **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F21, F24, F27, F28, F37 | — |
+| **N5** | Saber se a economia está saudável ou caminhando para uma crise | F9, F10, F17, F21, F24, F27, F28, F37, F48 | — |
 | **N6** | Saber como o déficit é financiado | F4, F13, F16, F41, F43 | — |
-| **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | F9, F13, F30, F31, F33, F36, F37, F39 | — |
-| **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | — | ⏳ |
+| **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | F9, F13, F30, F31, F33, F36, F37, F39, F48 | — |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | — | 🔍 |
 | **F17** | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | **F34** | Mercado imobiliário, na tela Crédito | — | 💤 |
-| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ⏳ |
-| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ⏳ |
 | **F38** | Diagramas nos conceitos que já existem | — | ⏳ |
 | **F46** | Juro neutro na tela Juros | — | 🔍 |
 | **F47** | Basileia dos bancos na tela Crédito | — | 🔍 |
+| **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (45 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (48 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -44,8 +42,8 @@
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | F2, F5, F6, F14, F21, F24, F25, F27, F30 | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | F7, F8, F11, F26 | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | F21, F23, F25 | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41, F44 | ✅ |
-| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | F9, F36, F37, F38, F39 | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | F7, F8, F9, F11, F13, F14, F16, F17, F22, F23, F24, F26, F39, F40, F41, F44, F48 | ✅ |
+| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | F9, F36, F37, F38, F39, F48 | ✅ |
 | **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | F45 | ✅ |
 | **F1** | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | **F2** | Cache de séries no SQLite com refresh idempotente | — | ✅ |
@@ -55,6 +53,7 @@
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ |
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ |
 | **F8** | Aba Aprender: glossário e página por conceito | — | ✅ |
+| **F9** | Explicadores com diagrama: os dois loops e as três pontes, r − g | — | ✅ |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ✅ |
 | **F12** | Tela de série: histórico, período e comparação na URL | — | 🚫 |
 | **F13** | Tela Déficit: primário, juros e nominal | — | ✅ |
@@ -77,6 +76,8 @@
 | **F32** | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ |
 | **F33** | Tela Crédito: custo do crédito, spread e concessões | — | ✅ |
 | **F35** | IPCA livres, administrados e serviços | — | ✅ |
+| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ✅ |
+| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ✅ |
 | **F39** | Pranchas dos explicadores no canvas | — | ✅ |
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | ✅ |
 | **F41** | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ |
@@ -95,11 +96,12 @@
 
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
-| **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | M2 | 3 | ⏳ |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | 1 | ⏳ |
 | **F15** | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
+| **F38** | Diagramas nos conceitos que já existem | M2 | 0 | ⏳ |
 | **F46** | Juro neutro na tela Juros | M8 | 0 | 🔍 |
 | **F47** | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
+| **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | M2 | 0 | ⏳ |
 
 ---
 
@@ -136,22 +138,23 @@
 >
 > **Serve:** N2, N7
 >
-> **Progresso:** 5/9 concluídas
+> **Progresso:** 8/10 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | F8, F39, F13, F14, F30, F31 | ⏳ |
-| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | F9, F14, F16 | ⏳ |
-| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | F9, F16, F24 | ⏳ |
 | **F38** | Diagramas nos conceitos que já existem | F9 | ⏳ |
+| **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | F9 | ⏳ |
 
-<details><summary>Concluído (5 itens)</summary>
+<details><summary>Concluído (8 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | F22 | ✅ |
 | **F8** | Aba Aprender: glossário e página por conceito | F7 | ✅ |
+| **F9** | Explicadores com diagrama: os dois loops e as três pontes, r − g | F8, F39, F13, F14, F30, F31 | ✅ |
 | **F26** | Busca com Ctrl+K: telas e conceitos | F8 | ✅ |
+| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | F9, F14, F16 | ✅ |
+| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | F9, F16, F24 | ✅ |
 | **F39** | Pranchas dos explicadores no canvas | — | ✅ |
 | **F42** | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | F8, F29 | ✅ |
 
@@ -311,7 +314,7 @@
 | **F6** | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 | F3, F4 | Médio | Médio | Alto | Excelente | ✅ Concluído |
 | **F7** | Catálogo de conceitos: os textos dos "?" num registro único | N2 | D4, D6 | M2 | F22 | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F8** | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 | F7 | Médio | Baixo | Alto | Bom | ✅ Concluído |
-| **F9** | Explicadores com diagrama: os dois loops e as três pontes, inércia e Plano Real, emissão de moeda, reservas, dominância fiscal, r − g | N2, N5, N7 | D6, D7 | M2 | F8, F39, F13, F14, F30, F31 | Alto | Médio | Médio | Bom | ⏳ Pendente |
+| **F9** | Explicadores com diagrama: os dois loops e as três pontes, r − g | N2, N5, N7 | D6, D7 | M2 | F8, F39, F13, F14, F30, F31 | Alto | Médio | Médio | Bom | ✅ Concluído |
 | **F10** | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 | F2 | Baixo | Médio | Médio | Bom | ✅ Concluído |
 | **F11** | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | N1 | D4, D6 | M3 | F4, F7, F10, F13 | Médio | Médio | Alto | Excelente | ⏳ Pendente |
 | **F13** | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 | F4 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
@@ -334,8 +337,8 @@
 | **F33** | Tela Crédito: custo do crédito, spread e concessões | N1, N7 | — | M8 | F4 | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F34** | Mercado imobiliário, na tela Crédito | N1 | — | M8 | F33 | Médio | Médio | Baixo | Médio | 💤 Registrado, sem prioridade |
 | **F35** | IPCA livres, administrados e serviços | N1, N2 | — | — | F4, F8 | Baixo | Baixo | Médio | Bom | ✅ Concluído |
-| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | N2, N4, N7 | D7 | M2 | F9, F14, F16 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
-| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | N4, N5, N7 | D7 | M2 | F9, F16, F24 | Baixo | Médio | Alto | Excelente | ⏳ Pendente |
+| **F36** | Explicador: as três dívidas (DBGG, DLSP e DPF) | N2, N4, N7 | D7 | M2 | F9, F14, F16 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
+| **F37** | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | N4, N5, N7 | D7 | M2 | F9, F16, F24 | Baixo | Médio | Alto | Excelente | ✅ Concluído |
 | **F38** | Diagramas nos conceitos que já existem | N2 | D7 | M2 | F9 | Baixo | Baixo | Médio | Bom | ⏳ Pendente |
 | **F39** | Pranchas dos explicadores no canvas | N2, N7 | D6, D7 | M2 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F40** | Leitura mais clara nas telas Dívida, Setor externo e Déficit | N2, N4 | D6 | — | F13, F14, F31 | Baixo | Baixo | Médio | Excelente | ✅ Concluído |
@@ -344,6 +347,7 @@
 | **F43** | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 | F13 | Médio | Médio | Médio | Bom | ✅ Concluído |
 | **F44** | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — | F13, F14, F31, F28 | Baixo | Baixo | Baixo | Bom | ✅ Concluído |
 | **F45** | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — | F29 | Médio | Baixo | Médio | Bom | ✅ Concluído |
+| **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 | F9 | Alto | Médio | Médio | Bom | ⏳ Pendente |
 
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
 
@@ -483,30 +487,17 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 <a id="f9"></a>
 
-**F9 — Explicadores de mecanismo, com diagrama.** Páginas em `/learn`, listadas no glossário (F8) na seção "Como as coisas se ligam" e no Ctrl+K (F26). Cada página é um diagrama em React Flow (D7) com texto curto em volta: o diagrama carrega a estrutura e o texto explica cada seta. É a primeira feature com diagrama, e por isso cria o componente base (nó de conceito com link para `/learn/<id>` e, quando há série, o valor de hoje).
+**F9 — Explicadores de mecanismo, com diagrama.** Feito para os dois explicadores que têm prancha no canvas (F39); os outros temas viraram a F48. Páginas em `/learn/explainers/<id>`, listadas em Aprender na seção "Como as coisas se ligam" e no Ctrl+K (F26). Cada página é um diagrama em React Flow (D7) com o texto de cada seta embaixo, numerado como a seta no desenho.
 
-**Vem depois das telas.** Os nós são conceitos de juros, contas públicas e setor externo: Selic e juro real, primário e nominal, dívida e r − g, câmbio e reservas. Esses conceitos entram no catálogo e as séries no cache com as telas Juros (F30), Déficit (F13), Dívida (F14) e Setor externo (F31), e o explicador usa o que elas trouxeram: o nó mostra o valor de hoje da série em cache e leva à página do conceito. O desenho da página e do nó sai das pranchas dos explicadores (F39). O explicador de inércia cita os serviços no texto, e o nó ganha o link quando o conceito entrar com o IPCA livres, administrados e serviços (F35).
+**O componente base** (`frontend/features/explainers/`), que a F36 e a F37 reusam: o nó de conceito (título, valor de hoje, link para `/learn/<id>` quando o conceito existe), a seta curva com a bolinha numerada, o seletor de passo (que acende as setas de um grupo e apaga as outras, com o passo na URL em `?parte=`) e a página com trilha, conceitos usados e fontes. O registro dos explicadores fica em `shared/concepts/explainers.ts`, separado do catálogo de conceitos porque o explicador não tem fórmula nem exemplo. As cores dos loops e das pontes são tokens do tema, em claro e escuro.
 
-**O explicador central: os dois loops e as três pontes.** Nasce da pergunta da conversa de origem ("dívida e inflação são 2 loops fechados que interferem um no outro, enviando uma 'carga'?"):
-- o loop da dívida: dívida → juros → déficit nominal → dívida;
-- o loop da inflação: inflação → reajustes → expectativas → inflação;
-- as três pontes que levam carga de um ao outro: câmbio (dívida → desconfiança → dólar sobe → importados e inflação), emissão de moeda (déficit → BC cria dinheiro → inflação) e juros (inflação → BC sobe a Selic → custo da dívida → dívida);
-- o que freia cada loop: superávit primário, crescimento nominal acima do juro, credibilidade do BC e a vedação de financiamento do Tesouro pelo BC na Lei de Responsabilidade Fiscal.
+**Os dois loops e as três pontes:** o loop da dívida (dívida → juros → déficit nominal → dívida), o da inflação (inflação → reajustes → expectativas → inflação) e as pontes do câmbio, da emissão de moeda e dos juros, em 6 passos. Os nós mostram o valor de hoje, lido das mesmas consultas das telas (dívida bruta, juros e déficit nominal, IPCA em 12 meses, Focus, dólar e Selic). Fecham a página os quatro freios: superávit primário, crescimento acima do juro, credibilidade do Banco Central e a vedação ao Banco Central de financiar o Tesouro.
 
-**Os outros temas,** cada um com o seu diagrama:
-- inflação inercial e indexação, URV e Plano Real, e por que a inércia não morreu com o Real (serviços e expectativas acima da meta);
-- emitir moeda gera inflação? Monetização e senhoriagem, e por que déficit não é emissão automática; liga ao estudo do financiamento monetário (F15);
-- reservas, câmbio e dívida: as reservas como seguro contra a fuga de dólares, o efeito do câmbio na dívida líquida e o custo de carregá-las;
-- dominância fiscal: quando o juro que combate a inflação piora a dívida;
-- por que r − g decide a trajetória da dívida, com o País A (dívida de 120%, r 2%, g 6%) e o País B (dívida de 60%, r 15%, g 3%).
+**Por que r − g decide a dívida:** a conta de um ano, o País A e o País B com as trajetórias vindas do simulador (sem recalcular no front) e o Brasil de hoje, com r e g do mês mais recente. Liga ao simulador com os dois países e à tela Dívida.
 
-**Links no meio do texto:** o explicador leva ao dado real e ao simulador no ponto em que o assunto aparece. O de r − g liga à tela Dívida e ao simulador com os números do País A e do País B. O cabeçalho cita os conceitos usados, cada um com link para a página dele (F8).
+**Links de volta:** o `TrayItem` ganhou a prop `explainer`. Ligam ao explicador a bandeja "Juros" da tela Déficit (loop da dívida) e a "Por que r − g decide" do gráfico de r e g da tela Dívida.
 
-**Links de volta:** as telas que citam um explicador (as bandejas de Déficit, Dívida, Juros, Setor externo e Crédito) nascem antes dele, e é o explicador que, ao entrar, liga cada bandeja a ele. Com o simulador (F24) vale o mesmo: entre os dois, o que for feito por último faz o link para o outro. Já existem, sem o link, a bandeja "Como ler e a conta" da tela Déficit (F13), que leva ao loop da dívida, e a bandeja "Como ler" do gráfico de r e g da tela Dívida (F14), que leva ao explicador de r − g.
-
-**Fonte:** os ciclos de partida estão anotados da conversa com o ChatGPT (seis ciclos, com o que freia cada um). Cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro, Planalto) antes de entrar, como manda a D4. Esse é o motivo do risco médio.
-
-<a id="f10"></a>
+**Conferido na fonte (D4):** a vedação está na Constituição, art. 164, § 1º (o Banco Central não concede empréstimos ao Tesouro), e na Lei de Responsabilidade Fiscal, art. 39, incisos I e II e § 2º (o Banco Central não compra título no dia do lançamento e só compra direto do Tesouro para refinanciar o que vence na carteira dele); o art. 34 trata de outra coisa, a proibição de o Banco Central emitir título próprio. Os dois textos foram lidos no Planalto. O texto "boa parte da dívida atrelada à Selic" confere com a composição por indexador da tela Dívida.
 
 **F10 — Fonte Focus completa.** Feito. Provider da API Olinda do BCB (`backend/adapters/bcb_focus_provider.py`), com os indicadores que o Focus pergunta hoje, na menor escala de cada um:
 
@@ -984,39 +975,24 @@ O IPCA geral dá 4,22% no mesmo mês, e a média dos livres e administrados pelo
 
 <a id="f36"></a>
 
-**F36 — Explicador: as três dívidas.** Página em `/learn` com um diagrama (D7) das três medidas de dívida pública e do que cada uma conta:
-- **DBGG**, dívida bruta do governo geral: o que União, estados e municípios devem, sem descontar nada. É a que o FMI e a IFI usam;
-- **DLSP**, dívida líquida do setor público: inclui o Banco Central e as estatais, e desconta o que o setor público tem a receber, com as reservas internacionais como maior item;
-- **DPF**, dívida pública federal: só os títulos do Tesouro, a que o Relatório Mensal da Dívida detalha (F16).
+**F36 — Explicador: as três dívidas.** Feito, a partir da prancha do canvas (F39), em `/learn/explainers/three-debts`, com o componente base da F9. O diagrama passa da DPF à DBGG e da DBGG à DLSP em 3 passos. Os nós mostram o valor de hoje: DBGG e DLSP em % do PIB, e a DPF em reais.
 
-**O diagrama** mostra a passagem de uma para a outra: da DBGG se somam o BC e as estatais e se descontam os ativos, e sai a DLSP. Os nós mostram o valor de hoje em % do PIB (em ago/2026, DBGG 82,9% e DLSP 69,3%).
+**A DPF em reais:** o app não tinha o estoque da DPF em % do PIB, e o nó mostra o estoque em mercado em R$ trilhões. Para isso, `/api/debt/federal` ganhou `stock_total`, a soma dos títulos em mercado, sem a carteira do Banco Central: a mesma base da composição e dos vencimentos e da dívida federal que o Tesouro reporta.
 
-**Perguntas que a página responde:** qual dívida aparece na notícia; o Focus pergunta as duas (DLSP e DBGG), separadas; por que o dólar subir faz a líquida cair e não mexe na bruta.
+**As três perguntas da página:** qual dívida aparece na notícia, o Focus perguntar as duas (DLSP e DBGG, separadas) e por que o dólar subir faz a líquida cair.
 
-**Vem depois da tela Dívida:** a DLSP e a DBGG, conceito e série, entram com a dinâmica da dívida (F14), e a DPF com a composição (F16).
+**Conferido na fonte (D4), com duas correções ao que o card previa:**
+- a bruta soma o governo federal, o INSS, os estados e os municípios e, por exceção, as operações compromissadas do Banco Central; a líquida soma o Banco Central e as estatais (menos os grupos Petrobras e Eletrobras) e desconta os ativos financeiros, as reservas entre eles (Manual de Estatísticas Fiscais, de 2019, e nota de dezembro de 2024); a DPF é a dívida interna e externa de responsabilidade do Tesouro em mercado (Relatório Mensal da Dívida);
+- o dólar mais caro **não** deixa a bruta parada: ela não desconta as reservas e sobe um pouco, e a líquida cai. Em 2024, com o dólar 27,9% mais caro, o efeito foi de −2,9 pontos do PIB na líquida e de +1,0 na bruta (nota de dezembro de 2024). O texto diz que o câmbio mexe pouco na bruta, e até para o outro lado;
+- "a que o FMI e a IFI usam" virou "a que se compara entre países": a bruta segue o conceito internacional de governo geral, e a comparação do simulador usa a série do FMI.
 
-**Link de volta:** a bandeja "Como ler" do gráfico "Dívida líquida e dívida bruta" da tela Dívida (F14) nasceu sem o link; é o explicador que, ao entrar, liga a bandeja a ele.
+**Link de volta:** a bandeja "Por que a distância entre elas muda" do gráfico de dívida líquida e bruta da tela Dívida liga ao explicador.
 
-Os fatos são conferidos no manual de estatísticas fiscais do BCB e no Tesouro (D4).
+**F37 — Explicador: por que a dívida não explode.** Feito, a partir da prancha do canvas (F39), em `/learn/explainers/debt-sustainability`, com o componente base da F9. O diagrama tem os quatro fatores (prazo e rolagem, moeda, credores e r − g), a hora de rolar e os dois desfechos, em 3 passos: tudo, o caminho tranquilo e o caminho da crise.
 
-<a id="f37"></a>
+**Os casos** são os do simulador (F24), lidos de `/api/debt/simulation/cases`: Japão nos anos 2010, Grécia em 2010 e Brasil de Collor. Cada cartão traz a história, a moeda, o prazo e os credores do caso e o r − g da conta, e o botão "Abrir no simulador" leva ao caso já carregado (`?base=<caso>`). O ✓ ou ✗ de prazo, moeda e credores é o juízo de quem lê a história, tipado por caso; o do r − g sai do sinal da conta. Nenhum número do caso é digitado na página, e por isso os 200% do Japão e os 40% do Collor do texto são os mesmos da API. A página liga aos vencimentos da tela Dívida.
 
-**F37 — Explicador: por que a dívida não explode.** Página em `/learn` com um diagrama (D7) do que decide se uma dívida é sustentável, além do tamanho:
-- **prazo e rolagem:** dívida longa vence aos poucos; dívida curta obriga a rolar muito de uma vez, e a desconfiança vira crise na hora de rolar;
-- **moeda:** dever na própria moeda contra dever em moeda que o país não emite;
-- **credores:** gente de dentro, mercado de fora ou credores oficiais;
-- **r − g:** o juro contra o crescimento (F9).
-
-**Os casos** são os mesmos do simulador (F24), cada um mostrando qual desses fatores pesou:
-- Japão, anos 2010: dívida acima de 200% do PIB, longa, em iene e com credores de dentro;
-- Grécia, 2010: o mercado se recusa a rolar; hoje, com credores oficiais e prazos longos, uma dívida em torno de 137% do PIB não está em crise;
-- Brasil, Collor (1990): dívida perto de 40% do PIB, mas curta e numa moeda instável.
-
-Cada caso leva ao simulador já carregado com ele, e a página liga aos vencimentos da tela Dívida (F16). Por isso vem depois dos dois: os casos, os vencimentos e os conceitos de prazo e rolagem já existem quando ela entra. Os números vêm da conversa com o ChatGPT e são conferidos no FMI DataMapper e no BCB antes de entrar (D4).
-
-**Link de volta:** a bandeja "Como ler" do cartão "Quanto vence e quando" da tela Dívida (F16) nasceu sem o link; é o explicador que, ao entrar, liga a bandeja a ele.
-
-<a id="f38"></a>
+**Link de volta:** a bandeja "Rolar a dívida" do cartão "Quanto vence e quando" da tela Dívida liga ao explicador.
 
 **F38 — Diagramas nos conceitos que já existem.** Passar pelos conceitos do catálogo (F7) e decidir, um a um, onde um diagrama explica melhor do que o texto (D7). Candidatos:
 - acumulado em 12 meses: a janela que anda um mês e o mês que sai;
@@ -1104,6 +1080,18 @@ O BCB não publica o nominal por esfera no bloco "Total": ele é o primário mai
 - **Fonte:** o site do BCB serve o conteúdo de cada página em JSON (`www.bcb.gov.br/api/paginasite/sitebcb/controleinflacao/<página>`). A tabela do histórico das metas (`historicometas`, de 1999 a 2024) dá a tolerância de cada ano, lida pelo intervalo de cada linha. A página das metas (`metainflacao`) dá a regra em vigor, numa frase: o ano em que o período começou e a distância da meta até o piso e até o teto. O SGS e a API Olinda não publicam a banda.
 - **Refresh:** a primeira carga traz o histórico e a regra em vigor; as seguintes conferem só a regra em vigor, no máximo uma vez por intervalo. O cache fica na tabela `inflation_tolerances` (ano a partir do qual vale, distância em fração) e o `POST /api/series/refresh` o atualiza com as outras fontes.
 - **Se a página mudar:** o parse recusa o que não reconhece (tabela sem ano, frase ausente, intervalo assimétrico), o cache fica como estava e a falta é avisada uma vez, como no calendário do Copom. Sem tolerância em cache, o ano fica sem faixa.
+
+**F48 — Explicadores sem prancha.** Os temas da F9 que o canvas ainda não desenhou, cada um com o seu diagrama (D7):
+- inflação inercial e indexação, URV e Plano Real, e por que a inércia não morreu com o Real (serviços e expectativas acima da meta);
+- emitir moeda gera inflação? Monetização e senhoriagem, e por que déficit não é emissão automática; liga ao estudo do financiamento monetário (F15);
+- reservas, câmbio e dívida: as reservas como seguro contra a fuga de dólares, o efeito do câmbio na dívida líquida e o custo de carregá-las;
+- dominância fiscal: quando o juro que combate a inflação piora a dívida.
+
+**Antes de codar, uma rodada no canvas (D6):** as pranchas desses temas, no molde das dos explicadores que já existem. O componente base e o registro vêm da F9: cada tema novo é uma página e uma entrada no registro.
+
+**Links de volta:** as bandejas de Juros ("Por que o BC sobe o juro"), Setor externo (reservas e dólar) e Crédito citam esses temas e nascem sem o link; é o explicador que, ao entrar, liga cada bandeja a ele. O explicador de inércia ganha o link do nó quando o conceito entrar com o IPCA livres, administrados e serviços (F35).
+
+**Fonte:** os ciclos de partida estão anotados da conversa com o ChatGPT. Cada afirmação factual é conferida contra a fonte oficial (BCB, IBGE, Tesouro, Planalto) antes de entrar, como manda a D4.
 
 ---
 ## 2. Nice-to-have
