@@ -15,6 +15,7 @@ import { InflationPage } from "@/pages/inflation";
 import { InterestPage } from "@/pages/interest";
 import { LearnPage } from "@/pages/learn";
 import { PurchasingPowerPage } from "@/pages/purchasing-power";
+import { SimulatorPage } from "@/pages/simulator";
 import { queryClient } from "@/shared/lib/query-client";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="purchasing-power" element={<PurchasingPowerPage />} />
             <Route path="deficit" element={<DeficitPage />} />
             <Route path="debt" element={<DebtPage />} />
+            <Route path="simulator" element={<SimulatorPage />} />
             <Route path="activity" element={<ActivityPage />} />
             <Route path="credit" element={<CreditPage />} />
             <Route path="interest" element={<InterestPage />} />

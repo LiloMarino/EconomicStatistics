@@ -4,9 +4,11 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 
 from backend.core.enum import (
+    Country,
     DebtHolder,
     FocusIndicator,
     FocusTargetKind,
+    ImfIndicator,
     Periodicity,
     Unit,
 )
@@ -14,6 +16,7 @@ from backend.domain.copom import Meeting
 from backend.domain.coverage import month_start, quarter_start
 from backend.domain.federal_debt import DebtHolding
 from backend.domain.focus import Expectation, week_start
+from backend.domain.imf import CountryObservation
 from backend.domain.series import Observation, SeriesSpec
 
 FAKE_VALUES = {
@@ -148,3 +151,41 @@ class FakeCopomProvider:
             for year in range(first_year, last_year + 1)
             for number, (month, day) in enumerate(((3, 16), (11, 3)), start=1)
         ]
+
+
+@dataclass
+class FakeImfProvider:
+    """O FMI com a dívida bruta de 2024 a 2027 dos quatro países, em % do PIB, e a
+    inflação de 2024 e 2025, em % ao ano: o 2027 é projeção, e a Argentina não tem a
+    inflação de 2025."""
+
+    name: str = "fake-imf"
+    offline: bool = False
+    calls: int = 0
+
+    def get_observations(self) -> list[CountryObservation]:
+        self.calls += 1
+        if self.offline:
+            raise ConnectionError("sem rede")
+        debt = [
+            CountryObservation(
+                country=country,
+                indicator=ImfIndicator.GROSS_DEBT,
+                year=year,
+                value=100.0 + index * 10 + (year - 2024),
+            )
+            for index, country in enumerate(Country)
+            for year in range(2024, 2028)
+        ]
+        inflation = [
+            CountryObservation(
+                country=country,
+                indicator=ImfIndicator.INFLATION,
+                year=year,
+                value=3.0 + (year - 2024),
+            )
+            for country in Country
+            for year in (2024, 2025)
+            if not (country is Country.ARG and year == 2025)
+        ]
+        return [*debt, *inflation]

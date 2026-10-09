@@ -16,3 +16,9 @@ class MissingDataError(EconomicError):
     """O cache não cobre o que o pedido precisa."""
 
     status = 409
+
+
+class InvalidRequestError(EconomicError):
+    """O pedido é bem formado, mas não faz sentido para a conta."""
+
+    status = 422

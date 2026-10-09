@@ -52,4 +52,5 @@ export const datasetLabels: Record<Dataset, string> = {
   federal_debt_stock: "Estoque da dívida federal",
   focus_expectations: "Pesquisa Focus",
   copom_meetings: "Calendário do Copom",
+  imf_countries: "Dívida e inflação dos países (FMI)",
 };

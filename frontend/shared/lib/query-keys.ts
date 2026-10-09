@@ -15,6 +15,9 @@ export const queryKeys = {
   deficit: ["series", "deficit"] as const,
   debt: ["series", "debt"] as const,
   federalDebt: ["series", "federal-debt"] as const,
+  debtSimulation: ["series", "debt-simulation"] as const,
+  debtCases: ["series", "debt-cases"] as const,
+  debtCountries: ["series", "debt-countries"] as const,
   focusReport: ["series", "focus-report"] as const,
   focusHistory: ["series", "focus-history"] as const,
 };

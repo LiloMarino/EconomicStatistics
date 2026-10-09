@@ -9,6 +9,7 @@ import {
   type LucideIcon,
   Percent,
   ShoppingCart,
+  SlidersHorizontal,
   Telescope,
 } from "lucide-react";
 
@@ -102,6 +103,25 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
           until: { series: "net_debt", label: "Dívida líquida" },
           sources: "Banco Central e Tesouro Nacional",
         },
+      },
+      {
+        to: "/simulator",
+        label: "Simulador da dívida",
+        icon: SlidersHorizontal,
+        description: "Juros, crescimento e primário: para onde vai a dívida em 10 anos",
+        keywords: [
+          "simulador",
+          "trajetória da dívida",
+          "r − g",
+          "primário que estabiliza",
+          "cenário",
+          "japão",
+          "grécia",
+          "argentina",
+          "crise",
+          "sustentabilidade",
+        ],
+        footer: { sources: "Banco Central e FMI" },
       },
     ],
   },

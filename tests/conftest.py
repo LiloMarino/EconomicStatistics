@@ -16,17 +16,20 @@ from backend.core.enum import Source
 from backend.domain.copom import CopomProvider
 from backend.domain.federal_debt import FederalDebtProvider
 from backend.domain.focus import FocusProvider
+from backend.domain.imf import ImfProvider
 from backend.domain.series import SeriesProvider
 from backend.features.providers import (
     get_copom_provider,
     get_debt_provider,
     get_focus_provider,
+    get_imf_provider,
     get_providers,
 )
 from tests.fakes import (
     FakeCopomProvider,
     FakeDebtProvider,
     FakeFocusProvider,
+    FakeImfProvider,
     FakeProvider,
 )
 
@@ -78,12 +81,18 @@ def fake_copom_provider() -> FakeCopomProvider:
 
 
 @pytest.fixture
+def fake_imf_provider() -> FakeImfProvider:
+    return FakeImfProvider()
+
+
+@pytest.fixture
 def api(
     engine: Engine,
     fake_provider: FakeProvider,
     fake_debt_provider: FakeDebtProvider,
     fake_focus_provider: FakeFocusProvider,
     fake_copom_provider: FakeCopomProvider,
+    fake_imf_provider: FakeImfProvider,
 ) -> TestClient:
     """App com a sessão apontando para o banco do teste e as fontes trocadas pelo
     fake: teste nenhum sai para a rede."""
@@ -104,10 +113,14 @@ def api(
     def copom_provider_override() -> CopomProvider:
         return fake_copom_provider
 
+    def imf_provider_override() -> ImfProvider:
+        return fake_imf_provider
+
     app = create_app()
     app.dependency_overrides[get_session] = session_override
     app.dependency_overrides[get_providers] = providers_override
     app.dependency_overrides[get_debt_provider] = debt_provider_override
     app.dependency_overrides[get_focus_provider] = focus_provider_override
     app.dependency_overrides[get_copom_provider] = copom_provider_override
+    app.dependency_overrides[get_imf_provider] = imf_provider_override
     return TestClient(app)

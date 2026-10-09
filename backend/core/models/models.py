@@ -7,10 +7,12 @@ from sqlalchemy import Enum, Index, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
 from backend.core.enum import (
+    Country,
     Dataset,
     DebtHolder,
     FocusIndicator,
     FocusTargetKind,
+    ImfIndicator,
     SeriesId,
 )
 
@@ -147,3 +149,19 @@ class CopomMeeting(Base):
     number: Mapped[int] = mapped_column(primary_key=True)
     first_day: Mapped[date]
     second_day: Mapped[date]
+
+
+class ImfObservation(Base):
+    """O valor de um indicador do FMI para um país em um ano (% do PIB ou % ao ano). Os
+    anos a partir do corrente são projeção do FMI."""
+
+    __tablename__ = "imf_observations"
+
+    country: Mapped[Country] = mapped_column(
+        _string_enum(Country, "country"), primary_key=True
+    )
+    indicator: Mapped[ImfIndicator] = mapped_column(
+        _string_enum(ImfIndicator, "imf_indicator"), primary_key=True
+    )
+    year: Mapped[int] = mapped_column(primary_key=True)
+    value: Mapped[float]

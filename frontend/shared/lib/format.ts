@@ -9,6 +9,11 @@ const wholePercent = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
+const shortPercent = new Intl.NumberFormat("pt-BR", {
+  style: "percent",
+  maximumFractionDigits: 1,
+});
+
 const signedPercent = new Intl.NumberFormat("pt-BR", {
   style: "percent",
   minimumFractionDigits: 2,
@@ -59,6 +64,11 @@ export function formatPercent(rate: number): string {
 /** Percentual sem casas: 0.213 vira "21%". */
 export function formatWholePercent(rate: number): string {
   return wholePercent.format(rate);
+}
+
+/** Percentual com até 1 casa, para espaço curto: 0.693 vira "69,3%" e 0.2 vira "20%". */
+export function formatShortPercent(rate: number): string {
+  return shortPercent.format(rate).replace("-", "−");
 }
 
 export function formatSignedPercent(rate: number): string {

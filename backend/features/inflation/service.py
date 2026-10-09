@@ -7,7 +7,7 @@ from datetime import date
 from sqlalchemy.orm import Session
 
 from backend.core.enum import PaceVerdict, RaiseReference, SeriesId
-from backend.core.errors import EconomicError, MissingDataError
+from backend.core.errors import InvalidRequestError, MissingDataError
 from backend.domain.coverage import month_start
 from backend.domain.inflation_target import TargetBand
 from backend.domain.pace import STEADY_BAND, verdict
@@ -31,10 +31,6 @@ from backend.features.target_bands import target_bands_between
 from backend.repository.series import first_cached, last_cached, read_observations
 
 IPCA_SERIES = (SeriesId.IPCA_GENERAL, *IPCA_GROUPS)
-
-
-class InvalidRequestError(EconomicError):
-    status = 422
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

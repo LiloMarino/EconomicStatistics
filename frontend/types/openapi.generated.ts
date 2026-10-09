@@ -210,6 +210,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/debt/simulation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Simulation
+         * @description Tudo em fração: `debt=0.8` é 80% do PIB, `r=0.1` é 10% ao ano e `primary=0.0224`
+         *     é um superávit de 2,24% do PIB.
+         */
+        get: operations["simulation_api_debt_simulation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/debt/simulation/cases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cases */
+        get: operations["cases_api_debt_simulation_cases_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/debt/simulation/countries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Countries */
+        get: operations["countries_api_debt_simulation_countries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/focus/report": {
         parameters: {
             query?: never;
@@ -284,6 +339,17 @@ export interface components {
             /** Years */
             years: number;
         };
+        /** CaseContextDTO */
+        CaseContextDTO: {
+            /** Currency */
+            currency: string;
+            /** Term */
+            term: string;
+            /** Lender */
+            lender: string;
+            /** Story */
+            story: string;
+        };
         /**
          * ConcessionsDTO
          * @description A variação em 12 meses das concessões de recursos livres, em fração (0.062 é
@@ -323,6 +389,29 @@ export interface components {
             /** Selic */
             selic: number;
         };
+        /**
+         * Country
+         * @description País da comparação internacional, pelo código ISO de 3 letras que o FMI usa, na
+         *     ordem em que a tela os lista.
+         * @enum {string}
+         */
+        Country: "JPN" | "GRC" | "ARG" | "BRA";
+        /** CountryHistoriesDTO */
+        CountryHistoriesDTO: {
+            /** Countries */
+            countries: components["schemas"]["CountryHistoryDTO"][];
+        };
+        /**
+         * CountryHistoryDTO
+         * @description A dívida bruta do governo geral em fração do PIB, ano a ano, e a inflação do
+         *     último ano com dado do FMI (`null` sem dado).
+         */
+        CountryHistoryDTO: {
+            country: components["schemas"]["Country"];
+            /** Debt */
+            debt: components["schemas"]["YearValueDTO"][];
+            inflation: components["schemas"]["YearValueDTO"] | null;
+        };
         /** CreditDTO */
         CreditDTO: {
             cost: components["schemas"]["CostDTO"];
@@ -333,7 +422,53 @@ export interface components {
          * @description Fonte que não cabe em `observations`, com tabela e refresh próprios.
          * @enum {string}
          */
-        Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings";
+        Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings" | "imf_countries";
+        /**
+         * DebtCaseDTO
+         * @description Um ponto de partida: dívida, juro, crescimento e primário em fração, a
+         *     trajetória de `years` anos e `rate_minus_growth` (r menos g). O exemplo não tem
+         *     `context`.
+         */
+        DebtCaseDTO: {
+            id: components["schemas"]["DebtCaseId"];
+            /** Label */
+            label: string;
+            group: components["schemas"]["DebtCaseGroup"];
+            /** Debt */
+            debt: number;
+            /** Rate */
+            rate: number;
+            /** Growth */
+            growth: number;
+            /** Primary */
+            primary: number;
+            context: components["schemas"]["CaseContextDTO"] | null;
+            /** Path */
+            path: number[];
+            /** End */
+            end: number;
+            /** Rate Minus Growth */
+            rate_minus_growth: number;
+        };
+        /**
+         * DebtCaseGroup
+         * @description Se o ponto de partida do simulador aconteceu de verdade ou é um exemplo para entender a conta.
+         * @enum {string}
+         */
+        DebtCaseGroup: "happened" | "example";
+        /**
+         * DebtCaseId
+         * @description Ponto de partida do simulador da dívida.
+         * @enum {string}
+         */
+        DebtCaseId: "brazil_today" | "brazil_collor" | "brazil_2002" | "brazil_2015" | "japan" | "greece" | "argentina_2001" | "argentina_2023" | "country_a" | "country_b";
+        /** DebtCasesDTO */
+        DebtCasesDTO: {
+            /** Years */
+            years: number;
+            /** Cases */
+            cases: components["schemas"]["DebtCaseDTO"][];
+        };
         /**
          * DebtLevelDTO
          * @description Dívida líquida do setor público e bruta do governo geral, em fração do PIB
@@ -375,6 +510,12 @@ export interface components {
             /** Nominal Growth */
             nominal_growth: number;
         };
+        /**
+         * DebtTrend
+         * @description Para onde a dívida/PIB vai ao longo do horizonte do simulador.
+         * @enum {string}
+         */
+        DebtTrend: "falling" | "stable" | "rising";
         /**
          * DeficitDTO
          * @description `interest_share` é a fração do déficit nominal que é juro (0.93 é 93%), `null`
@@ -497,6 +638,17 @@ export interface components {
             composition: components["schemas"]["YearCompositionDTO"][];
             /** Maturities */
             maturities: components["schemas"]["MaturityBucketDTO"][];
+        };
+        /**
+         * FirstYearDTO
+         * @description A conta do primeiro ano, em fração do PIB: `grown_debt` é a dívida depois do juro
+         *     e do crescimento, `debt` é ela depois de abatido o primário.
+         */
+        FirstYearDTO: {
+            /** Grown Debt */
+            grown_debt: number;
+            /** Debt */
+            debt: number;
         };
         /**
          * FlowPointDTO
@@ -1127,6 +1279,34 @@ export interface components {
             succeeded_at: string | null;
         };
         /**
+         * SimulationDTO
+         * @description A trajetória da dívida/PIB em fração (0.8 é 80%), com a de hoje em `path[0]` e
+         *     uma posição por ano. `change` é o fim menos o início; `still_rising` diz se o último
+         *     ano ainda subiu; `stabilizing_primary` é o primário que deixa a dívida parada;
+         *     `primary_gap` é o que falta dele até o primário escolhido (negativo é folga);
+         *     `rate_minus_growth` é o r menos o g.
+         */
+        SimulationDTO: {
+            /** Years */
+            years: number;
+            /** Path */
+            path: number[];
+            /** End */
+            end: number;
+            /** Change */
+            change: number;
+            trend: components["schemas"]["DebtTrend"];
+            /** Still Rising */
+            still_rising: boolean;
+            /** Stabilizing Primary */
+            stabilizing_primary: number;
+            /** Primary Gap */
+            primary_gap: number;
+            /** Rate Minus Growth */
+            rate_minus_growth: number;
+            first_year: components["schemas"]["FirstYearDTO"];
+        };
+        /**
          * Sphere
          * @description A esfera do setor público em que o BCB divide a NFSP. O governo central é o
          *     governo federal com o Banco Central; as estatais ficam sem a Petrobras e os bancos
@@ -1216,6 +1396,13 @@ export interface components {
             ref_date: string;
             /** Shares */
             shares: components["schemas"]["IndexerShareDTO"][];
+        };
+        /** YearValueDTO */
+        YearValueDTO: {
+            /** Year */
+            year: number;
+            /** Value */
+            value: number;
         };
         /** MonthRateDTO */
         backend__features__inflation__router__MonthRateDTO: {
@@ -1659,6 +1846,126 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FederalDebtDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    simulation_api_debt_simulation_get: {
+        parameters: {
+            query: {
+                debt: number;
+                r: number;
+                g: number;
+                primary: number;
+                years?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimulationDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    cases_api_debt_simulation_cases_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DebtCasesDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    countries_api_debt_simulation_countries_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CountryHistoriesDTO"];
                 };
             };
             /** @description Unprocessable Content */

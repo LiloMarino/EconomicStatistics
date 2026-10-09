@@ -7,3 +7,4 @@ class Dataset(StrEnum):
     FEDERAL_DEBT_STOCK = "federal_debt_stock"
     FOCUS_EXPECTATIONS = "focus_expectations"
     COPOM_MEETINGS = "copom_meetings"
+    IMF_COUNTRIES = "imf_countries"

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/shared/components/ui/button";
@@ -20,20 +20,23 @@ import {
 import type { ConceptId } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
 
+interface Explanation {
+  /** O texto do botão: "Como ler", "Ver a conta". */
+  label: string;
+  icon: LucideIcon;
+  /** O rótulo no topo da bandeja: "COMO LER". */
+  heading: ReactNode;
+  content: ReactNode;
+}
+
 interface ExplainedCardProps {
   id?: string;
   title: ReactNode;
   subtitle?: ReactNode;
   /** Controles do cartão, à esquerda do botão da explicação. */
   actions?: ReactNode;
-  explain: {
-    /** O texto do botão: "Como ler", "Ver a conta". */
-    label: string;
-    icon: LucideIcon;
-    /** O rótulo no topo da bandeja: "COMO LER". */
-    heading: ReactNode;
-    content: ReactNode;
-  };
+  /** Uma explicação, ou várias: cada uma ganha o seu botão e a bandeja mostra a escolhida. */
+  explain: Explanation | Explanation[];
   /** Aberta por fora quando outro controle do cartão pede a conta. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -52,10 +55,17 @@ export function ExplainedCard({
   onOpenChange,
   children,
 }: ExplainedCardProps) {
-  const Icon = explain.icon;
+  const explanations = Array.isArray(explain) ? explain : [explain];
+  // Com várias explicações, a escolhida é a que a bandeja mostra
+  const [chosen, setChosen] = useState<number | null>(null);
+  const several = explanations.length > 1;
+  const current = explanations[chosen ?? 0] ?? explanations[0];
+  if (!current) return null;
+  const Icon = current.icon;
+
   return (
     <Collapsible
-      open={open}
+      open={several ? chosen !== null : open}
       onOpenChange={(next) => onOpenChange?.(next)}
       render={<Card variant="sheet" id={id} />}
     >
@@ -66,19 +76,34 @@ export function ExplainedCard({
         {subtitle && <CardDescription>{subtitle}</CardDescription>}
         <CardAction className="flex flex-wrap items-center gap-3">
           {actions}
-          <CollapsibleTrigger render={<Button variant="pill" size="sm" />}>
-            <Icon />
-            {explain.label}
-          </CollapsibleTrigger>
+          {several ? (
+            explanations.map((item, index) => (
+              <Button
+                key={item.label}
+                variant="pill"
+                size="sm"
+                aria-expanded={chosen === index}
+                onClick={() => setChosen(chosen === index ? null : index)}
+              >
+                <item.icon />
+                {item.label}
+              </Button>
+            ))
+          ) : (
+            <CollapsibleTrigger render={<Button variant="pill" size="sm" />}>
+              <Icon />
+              {current.label}
+            </CollapsibleTrigger>
+          )}
         </CardAction>
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CollapsibleContent render={<CardTray />}>
         <span className="text-eyebrow text-muted-foreground col-span-full flex items-center gap-2">
           <Icon className="size-3.5" />
-          {explain.heading}
+          {current.heading}
         </span>
-        {explain.content}
+        {current.content}
       </CollapsibleContent>
     </Collapsible>
   );

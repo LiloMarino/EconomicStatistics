@@ -13,6 +13,7 @@ from backend.features.focus.router import router as focus_router
 from backend.features.inflation.router import router as inflation_router
 from backend.features.interest.router import router as interest_router
 from backend.features.series.router import router as series_router
+from backend.features.simulator.router import router as simulator_router
 
 
 def register_routes(app: FastAPI) -> None:
@@ -23,5 +24,6 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(credit_router)
     app.include_router(deficit_router)
     app.include_router(debt_router)
+    app.include_router(simulator_router)
     app.include_router(focus_router)
     app.include_router(interest_router)

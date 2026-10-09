@@ -8,8 +8,13 @@ from dataclasses import dataclass
 from datetime import date
 from statistics import fmean
 
+from backend.core.enum import DebtTrend
 from backend.domain.coverage import month_start
 from backend.domain.rates import relative_change
+
+# Variação da dívida/PIB no horizonte abaixo da qual ela conta como parada (0,5 ponto
+# percentual do PIB)
+STABLE_BAND = 0.005
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -36,6 +41,35 @@ def stabilizing_primary(debt: float, rate: float, growth: float) -> float:
     p* = d * ((1 + r) / (1 + g) - 1) = d * (r - g) / (1 + g). Com dívida de 80% do
     PIB, r de 10% e g de 7%: 0,8 * 0,03 / 1,07 = 2,24% do PIB."""
     return debt * (rate - growth) / (1 + growth)
+
+
+def debt_path(
+    debt: float, rate: float, growth: float, primary: float, years: int
+) -> list[float]:
+    """A dívida/PIB de hoje e de cada um dos `years` anos seguintes, em fração. Cada ano
+    a dívida cresce por (1 + r), o PIB por (1 + g) e o superávit primário `primary`
+    abate: d(t+1) = d(t) * (1 + r) / (1 + g) - p. Com 80%, r de 10%, g de 7% e
+    p = 2,24% (o p* dessa dívida), ela fica em 80% todos os anos."""
+    path = [debt]
+    for _ in range(years):
+        path.append(path[-1] * (1 + rate) / (1 + growth) - primary)
+    return path
+
+
+def debt_trend(path: Sequence[float]) -> DebtTrend:
+    """Para onde a dívida/PIB foi do início ao fim do caminho. Variação menor que
+    `STABLE_BAND` é dívida parada."""
+    change = path[-1] - path[0]
+    if abs(change) < STABLE_BAND:
+        return DebtTrend.STABLE
+    return DebtTrend.RISING if change > 0 else DebtTrend.FALLING
+
+
+def still_rising(path: Sequence[float]) -> bool:
+    """Se o último ano do caminho ainda subiu. A razão converge para um ponto fixo ou
+    foge dele sempre no mesmo sentido, então isso diz se ela segue subindo depois do
+    horizonte."""
+    return len(path) > 1 and path[-1] > path[-2]
 
 
 def debt_rates(
