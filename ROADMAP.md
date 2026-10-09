@@ -24,7 +24,6 @@
 | **N6** | Saber como o déficit é financiado | [F4](#f4), [F13](#f13), [F16](#f16), [F41](#f41), [F43](#f43) | — |
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48) | — |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | — | 🔍 |
-| [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | — | ⏳ |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F38**](#f38) | Diagramas nos conceitos que já existem | — | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
@@ -32,7 +31,7 @@
 | [**F48**](#f48) | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ⏳ |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (49 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (50 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
@@ -59,6 +58,7 @@
 | [**F13**](#f13) | Tela Déficit: primário, juros e nominal | — | ✅ |
 | [**F14**](#f14) | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ |
 | [**F16**](#f16) | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ✅ |
+| [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | — | ✅ |
 | [**F18**](#f18) | Linha do tempo histórica com os episódios marcados | — | 🚫 |
 | [**F19**](#f19) | Comparação internacional da dívida (FMI) | — | 🚫 |
 | [**F20**](#f20) | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | ✅ |
@@ -97,7 +97,6 @@
 | ID | Resumo | Marco | Destrava | Status |
 | --- | --- | --- | --- | --- |
 | [**F15**](#f15) | Como medir o financiamento monetário do déficit | M4 | 0 | 🔍 |
-| [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | M5 | 0 | ⏳ |
 | [**F38**](#f38) | Diagramas nos conceitos que já existem | M2 | 0 | ⏳ |
 | [**F46**](#f46) | Juro neutro na tela Juros | M8 | 0 | 🔍 |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito | M8 | 0 | 🔍 |
@@ -211,11 +210,19 @@
 >
 > **Serve:** N5
 >
-> **Progresso:** 0/1 concluídas
+> **Progresso:** 1/1 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
-| [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | [F11](#f11), [F14](#f14) | ⏳ |
+| — | *(nada em aberto)* | — | — |
+
+<details><summary>Concluído (1 item)</summary>
+
+| ID | Resumo | Depende de | Status |
+| --- | --- | --- | --- |
+| [**F17**](#f17) | "Check engine": semáforo dos sinais de crise | [F11](#f11), [F14](#f14) | ✅ |
+
+</details>
 
 ### M6 — Linguagem visual própria e ritmo da inflação
 
@@ -331,7 +338,7 @@
 | **F21** | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 | [F5](#f5) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F24** | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 | [F14](#f14) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F16** | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 | [F2](#f2) | Médio | Médio | Alto | Bom | ✅ Concluído |
-| **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | [F11](#f11), [F14](#f14) | Médio | Baixo | Alto | Bom | ⏳ Pendente |
+| **F17** | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 | [F11](#f11), [F14](#f14) | Médio | Baixo | Alto | Bom | ✅ Concluído |
 | **F20** | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — | [F3](#f3) | Baixo | Baixo | Alto | Excelente | ✅ Concluído |
 | **F22** | Rodadas de design no canvas | N2 | D6 | M6 | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 | **F25** | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 | [F5](#f5) | Médio | Baixo | Alto | Bom | ✅ Concluído |
@@ -692,21 +699,32 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 **Aceite:** conferido. A composição de jul/2026 bate com o Relatório Mensal da Dívida do mesmo mês: taxa flutuante 51,11% (Selic no app: 51,1%), prefixado 19,22% (19,2%), índice de preços 26,02% (IPCA 25,1% + IGP-M 0,8%) e câmbio 3,65% (3,7%).
 
 <a id="f17"></a>
-**F17 — "Check engine" da economia.** O semáforo só tem cor onde existe faixa oficial. Os outros sinais aparecem com o número e a referência escrita, sem cor, para o semáforo nunca virar opinião.
+**F17 — "Check engine" da economia.** Feito, a partir da prancha `CheckEngine` do canvas. É a rota `/economy-health`, no grupo "Explorar" da navegação. O semáforo só tem cor onde existe faixa oficial. Os outros sinais aparecem com o número e a referência escrita, sem cor, para o semáforo nunca virar opinião.
 
 **Com cor:**
-- **Inflação × meta:** IPCA 12 meses (13522) contra a meta de 3% com tolerância de 1,5 ponto (CMN, meta contínua desde 2025). Verde dentro do intervalo; amarelo fora há menos de 6 meses; vermelho fora por 6 meses seguidos, que é quando o BC tem de escrever a carta aberta.
-- **Primário observado × primário que estabiliza (F14):** verde se o observado cobre o p*, vermelho se não cobre. A distância em pontos do PIB aparece escrita.
+- **Inflação × meta:** IPCA 12 meses contra a meta de 3% com tolerância de 1,5 ponto (CMN, meta contínua desde 2025). Verde dentro do intervalo, com os limites dentro; amarelo fora há menos de 6 meses seguidos; vermelho fora por 6 meses seguidos, que é quando o BC tem de escrever a carta aberta. A tela mostra a cor de cada um dos últimos 24 meses. A regra mora em `backend/domain/health.py`, e a sequência lê meses antes da janela, para a cor do primeiro mês mostrado já saber a sequência.
+- **Primário observado × primário que estabiliza (F14):** verde se o observado cobre o p*, vermelho se não cobre. A distância em pontos do PIB aparece escrita. Os dois números são os da tela Dívida.
 
 **Sem cor, com a referência escrita:**
-- expectativas Focus × meta, sem faixa formal (F10);
-- juro real ex-ante × juro neutro estimado pelo BC (cerca de 5%, Relatório de Política Monetária);
-- desemprego × NAIRU estimada pela FGV-Ibre (9% a 9,5%, 2023), sem consenso;
-- reservas pela métrica ARA do FMI (adequado entre 100% e 150%). O BC não publica o % do Brasil, e a tela cita o número do FMI com data;
-- dívida/PIB, sem limiar de consenso, o que a tela diz;
-- câmbio, sem faixa citável.
+- expectativa do Focus para o IPCA do ano, com a meta de 3% ao lado;
+- juro real ex-ante, com o juro neutro estimado pelo BC em 5,0% (Relatório de Política Monetária de junho de 2025);
+- desemprego, com o que o FGV-Ibre estimou para a taxa que não acelera a inflação;
+- reservas internacionais em US$ e em % do PIB, com a faixa de 100% a 150% da métrica ARA do FMI;
+- dívida bruta, sem limiar de consenso, o que a tela diz;
+- dólar do fim do mês e a variação em 12 meses, sem faixa citável.
 
-Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`.
+Cada sinal tem a fonte da faixa ligada e um `<ConceptHint>`. As referências escritas moram num arquivo só do front (`reference-ranges.ts`), com a fonte e a data de cada uma.
+
+**Backend:** `GET /api/economy-health` compõe os serviços de Dívida, Juros, Atividade e Setor externo e traz só números e as cores; a referência escrita fica no front.
+
+**No Aprender:** os conceitos "Desemprego que não acelera a inflação" (NAIRU) e "Adequação das reservas" (ARA), e a tela nova nos conceitos ligados a ela.
+
+**Mudança em relação ao card:**
+- o desemprego deixou de citar "9% a 9,5% (2023)": só achei essa faixa em reportagens, sem o documento original. A tela cita o que o Blog do Ibre publicou (cerca de 8,5% em jul/2022, com as projeções de mercado para 2025 e 2026 em torno de 9,5%) e diz que não há consenso;
+- as reservas não mostram o percentual do FMI para o Brasil: não achei um número do FMI com data para citar. A linha traz as reservas em dólares e em % do PIB, ao lado da faixa de referência;
+- o primário que estabiliza sai da conta real da tela Dívida (em ago/2026, 4,20% do PIB contra um déficit de 0,62%), e não do exemplo da prancha.
+
+**Aceite cumprido:** com os dados de 9/out/2026, o IPCA de ago/2026 (4,22%) está dentro da faixa de 1,5% a 4,5%. Na faixa dos 24 meses, a inflação fica fora de out/2024 a out/2025: amarela até fev/2025, vermelha do 6º mês seguido (mar/2025), e volta para dentro em nov/2025, com nova saída em mai e jun/2026 (amarela). O primário não cobre o que estabiliza a dívida, e faltam 4,82 pontos do PIB.
 
 <a id="f20"></a>
 **F20 — IPCA por grupo desde 1999.** Feito. Quatro tabelas do IBGE se emendam sem sobreposição, todas com a variável 63 e a classificação 315 e com os mesmos códigos de categoria (conferido ao vivo):
@@ -899,7 +917,7 @@ O IBC-Br não é publicado em variação: o 12 meses é a média do índice nos 
 
 **Aceite cumprido:** com os dados de 2/out/2026, o PIB dá 1,9% em 4 trimestres até o 2º tri/2026, igual ao IBGE; o IBC-Br, 1,48% em 12 meses até jul/2026; e a desocupação, 5,3% no trimestre até ago/2026, contra 5,6% um ano antes (−0,3 p.p.), igual à divulgação do IBGE de 29/9. A previsão do Focus de 2/out/2026 traz 1,85% para o PIB de 2026 e 1,40% para o de 2027.
 
-**Fica para depois:** o link "Ver na saúde da economia" da bandeja do desemprego entra com a F17; por enquanto ela leva só ao conceito.
+**Link para a saúde da economia:** a bandeja do desemprego leva a "Ver na saúde da economia".
 
 <a id="f33"></a>
 **F33 — Tela Crédito.** Feito, a partir da prancha `Credit` do canvas. É a rota `/credit`, no grupo "Economia real e mundo" da navegação, e responde quanto custa pegar dinheiro emprestado e quanto está sendo emprestado.
