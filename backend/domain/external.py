@@ -6,6 +6,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date
 
+from backend.domain.gdp import share_of_gdp
 from backend.domain.series import Observation
 
 
@@ -18,12 +19,6 @@ class PositionPoint:
     assets: float
     liabilities: float
     net: float
-
-
-def share_of_gdp(value: float, gdp: float) -> float:
-    """Valor e PIB na mesma moeda: US$ 362,8 bi de reservas contra um PIB de 12 meses
-    de US$ 2,55 tri dão 0,142 (14,2% do PIB)."""
-    return value / gdp
 
 
 def quarter_last_month(quarter: date) -> date:

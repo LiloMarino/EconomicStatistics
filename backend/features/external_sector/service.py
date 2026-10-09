@@ -8,13 +8,14 @@ from sqlalchemy.orm import Session
 from backend.core.enum import FocusIndicator, SeriesId
 from backend.core.errors import MissingDataError
 from backend.domain.coverage import month_start
-from backend.domain.external import PositionPoint, international_position, share_of_gdp
+from backend.domain.external import PositionPoint, international_position
 from backend.domain.focus import (
     Expectation,
     annual_expectations,
     forecast_years,
     monthly_expectations,
 )
+from backend.domain.gdp import share_of_gdp
 from backend.domain.rates import PERCENT, relative_change
 from backend.domain.series import Observation
 from backend.features.monthly_forecast import MonthlyForecast, MonthValue

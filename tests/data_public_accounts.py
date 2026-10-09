@@ -1,6 +1,7 @@
 """Contas públicas como o BCB publicou no SGS, conferidas em 2026-10-08: resultado
 fiscal e dívida em % do PIB, dívida líquida e PIB de 12 meses em R$ milhões, prazo
-médio em meses."""
+médio em meses. A carteira do BC (R$ milhões), as compromissadas e a base monetária
+(R$ mil) foram conferidas em 2026-10-09."""
 
 from __future__ import annotations
 
@@ -47,6 +48,9 @@ NET_DEBT_BRL = [
 ]
 # Ago/2025 e ago/2026
 GDP_12M = [12442688.7, 13342452.6]
+CENTRAL_BANK_PORTFOLIO = [2774385.52, 2929821.82]
+REPO_OPERATIONS = [1093775856.0, 1372237463.0]
+MONETARY_BASE = [438857418.0, 432655492.0]
 
 AUGUST = date(2026, 8, 1)
 
@@ -98,14 +102,21 @@ def seed_public_accounts(session: Session) -> None:
     upsert_observations(
         session, SeriesId.NET_DEBT_BRL, _months(date(2025, 9, 1), NET_DEBT_BRL)
     )
-    upsert_observations(
-        session,
-        SeriesId.GDP_12M,
-        [
-            Observation(ref_date=date(2025, 8, 1), value=GDP_12M[0]),
-            Observation(ref_date=AUGUST, value=GDP_12M[1]),
-        ],
-    )
+    two_augusts = {
+        SeriesId.GDP_12M: GDP_12M,
+        SeriesId.CENTRAL_BANK_PORTFOLIO: CENTRAL_BANK_PORTFOLIO,
+        SeriesId.REPO_OPERATIONS: REPO_OPERATIONS,
+        SeriesId.MONETARY_BASE: MONETARY_BASE,
+    }
+    for series_id, (year_before, last) in two_augusts.items():
+        upsert_observations(
+            session,
+            series_id,
+            [
+                Observation(ref_date=date(2025, 8, 1), value=year_before),
+                Observation(ref_date=AUGUST, value=last),
+            ],
+        )
     upsert_observations(
         session,
         SeriesId.FEDERAL_DEBT_MATURITY,

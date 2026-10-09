@@ -308,6 +308,29 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     SeriesId.FEDERAL_DEBT_MATURITY: _fiscal_note(
         "10618", Unit.MONTHS, date(2000, 10, 1)
     ),
+    # Títulos do Tesouro na carteira do Banco Central, no fim do mês, em R$ milhões: é
+    # a mesma carteira "Banco Central" do estoque do Tesouro
+    SeriesId.CENTRAL_BANK_PORTFOLIO: _fiscal_note("4152", Unit.BRL_MILLION, NFSP_START),
+    # As duas da nota monetária vêm em R$ mil, no fim do mês. As compromissadas são o
+    # "financiamento líquido" da base ampliada: os títulos da carteira do BC que estão
+    # com o mercado, com a promessa de recompra
+    SeriesId.REPO_OPERATIONS: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="1832",
+        unit=Unit.BRL_THOUSAND,
+        first_date=NFSP_START,
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
+    ),
+    # Base monetária restrita: papel-moeda emitido mais as reservas dos bancos no BC
+    SeriesId.MONETARY_BASE: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="1788",
+        unit=Unit.BRL_THOUSAND,
+        first_date=NFSP_START,
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
+    ),
     # O IBGE divulga o PIB do trimestre no começo do terceiro mês depois do fim dele: o
     # do 2º tri (abr a jun) sai em setembro, e o lag conta do 1º mês do trimestre. A
     # variável é a taxa acumulada em quatro trimestres contra os quatro anteriores.

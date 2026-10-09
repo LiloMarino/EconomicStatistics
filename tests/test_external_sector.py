@@ -6,7 +6,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from backend.domain.external import international_position, share_of_gdp
+from backend.domain.external import international_position
+from backend.domain.gdp import share_of_gdp
 from backend.domain.series import Observation
 from tests.data_external import (
     DOLLAR,

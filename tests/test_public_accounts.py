@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from backend.core.enum import DebtHolder
 from backend.domain.coverage import month_start
 from backend.domain.debt import debt_rates, implicit_rate, stabilizing_primary
+from backend.domain.federal_debt import DebtHolding
+from backend.repository.federal_debt import replace_stock
 from tests.data_public_accounts import (
     AUGUST,
     GDP_12M,
@@ -110,14 +115,89 @@ def test_debt_overview_computes_the_stabilizing_primary(api: TestClient) -> None
     ]
 
 
+@pytest.mark.usefixtures("seeded")
+def test_repo_share_is_repo_over_the_central_bank_portfolio(api: TestClient) -> None:
+    """Em ago/2026, R$ 1,37 tri de compromissadas sobre R$ 2,93 tri de títulos na
+    carteira do BC: 46,8% da carteira está com o mercado. A carteira é 22,0% do PIB."""
+    body = api.get("/api/deficit/financing").json()
+
+    assert body["last"]["ref_date"] == "2026-08-01"
+    assert round(body["repo_share"] * 100, 1) == 46.8
+    assert round(body["last"]["central_bank_portfolio"] * 100, 1) == 22.0
+    assert body["amounts"]["repo_operations"] == pytest.approx(1372237.463)
+    assert [point["ref_date"] for point in body["years"]] == ["2026-08-01"]
+
+
+@pytest.mark.usefixtures("seeded")
+def test_monetary_base_is_converted_from_thousands_before_the_gdp_share(
+    api: TestClient,
+) -> None:
+    """A base vem em R$ mil e o PIB em R$ milhões: R$ 432,7 bi contra R$ 13,34 tri de
+    PIB dão 3,2% do PIB em ago/2026, e não 3.243%."""
+    body = api.get("/api/deficit/financing").json()
+
+    assert round(body["last"]["monetary_base"] * 100, 1) == 3.2
+    assert body["amounts"]["monetary_base"] == pytest.approx(432655.492)
+
+
+@pytest.mark.usefixtures("seeded")
+def test_financing_without_debt_stock_has_no_central_bank_share(
+    api: TestClient,
+) -> None:
+    """Antes de o estoque do Tesouro chegar, a seção sai sem a parcela da dívida no
+    BC, e o resto vem normalmente."""
+    body = api.get("/api/deficit/financing").json()
+
+    assert body["holders"] is None
+    assert body["repo_share"] > 0
+
+
+@pytest.mark.usefixtures("seeded")
+def test_financing_reads_the_central_bank_share_from_the_debt_stock(
+    api: TestClient, session: Session
+) -> None:
+    """A parcela da dívida no BC é a mesma da tela Dívida: a carteira do BC sobre todos
+    os títulos emitidos, no último mês do estoque."""
+    july = date(2026, 7, 1)
+    replace_stock(
+        session,
+        [
+            DebtHolding(
+                stock_month=july,
+                title="LFT 010327",
+                maturity=date(2027, 3, 1),
+                holder=holder,
+                external=False,
+                value=value,
+            )
+            for holder, value in [
+                (DebtHolder.MARKET, 75.0),
+                (DebtHolder.CENTRAL_BANK, 25.0),
+            ]
+        ],
+    )
+    session.commit()
+
+    holders = api.get("/api/deficit/financing").json()["holders"]
+
+    assert holders == {
+        "stock_month": "2026-07-01",
+        "central_bank_share": pytest.approx(0.25),
+        "market_share": pytest.approx(0.75),
+    }
+
+
 def test_public_accounts_without_cache_is_409(api: TestClient) -> None:
     """Antes da primeira atualização, as duas telas recebem 409 com a explicação."""
     deficit = api.get("/api/deficit")
+    financing = api.get("/api/deficit/financing")
     debt = api.get("/api/debt")
     federal = api.get("/api/debt/federal")
 
     assert deficit.status_code == 409
     assert "resultado fiscal" in deficit.json()["detail"]
+    assert financing.status_code == 409
+    assert "base monetária" in financing.json()["detail"]
     assert debt.status_code == 409
     assert "dívida pública" in debt.json()["detail"]
     assert federal.status_code == 409
