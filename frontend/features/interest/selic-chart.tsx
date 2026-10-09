@@ -81,7 +81,7 @@ function HowToRead({ data }: { data: Interest }) {
           </>
         )}
       </TrayItem>
-      <TrayItem title="Por que o BC sobe o juro">
+      <TrayItem title="Por que o BC sobe o juro" explainer="fiscal-dominance">
         <p>
           Quando a inflação passa da meta, o Banco Central sobe a Selic. O crédito encarece, as
           pessoas e as empresas gastam menos, e os preços sobem mais devagar.

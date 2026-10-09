@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import { DebtSustainability } from "@/features/explainers/debt-sustainability";
 import { type ExplainerId, explainers } from "@/shared/concepts/explainers";
 import { LoopsAndBridges } from "@/features/explainers/loops-and-bridges";
+import { FiscalDominance } from "@/features/explainers/fiscal-dominance";
+import { InertiaAndReal } from "@/features/explainers/inertia-and-real";
+import { MoneyPrinting } from "@/features/explainers/money-printing";
+import { ReservesAndFx } from "@/features/explainers/reserves-and-fx";
 import { ThreeDebts } from "@/features/explainers/three-debts";
 import { WhyRMinusG } from "@/features/explainers/why-r-minus-g";
 import { SourceList } from "@/features/learn/source-list";
@@ -14,6 +18,10 @@ const contents: Record<ExplainerId, ComponentType> = {
   "why-r-minus-g": WhyRMinusG,
   "three-debts": ThreeDebts,
   "debt-sustainability": DebtSustainability,
+  "inertia-and-real": InertiaAndReal,
+  "money-printing": MoneyPrinting,
+  "reserves-and-fx": ReservesAndFx,
+  "fiscal-dominance": FiscalDominance,
 };
 
 /** A página de um explicador: o cabeçalho com os conceitos que ele usa, o conteúdo

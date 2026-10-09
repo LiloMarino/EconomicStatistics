@@ -1,12 +1,23 @@
 import { type ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { ConceptDiagram } from "@/features/learn/concept-diagram";
+import { minimumWageSpec, targetSpec } from "@/features/learn/concept-diagrams";
+import { MovingWindow } from "@/features/learn/moving-window";
 import { Rolling12mTargetChart } from "@/features/learn/rolling-12m-target-chart";
 import { SourceList } from "@/features/learn/source-list";
 import { Formula, FormulaBox } from "@/shared/components/formula";
 import { Button } from "@/shared/components/ui/button";
 import { type ConceptId, topicLabels } from "@/shared/concepts/concept";
 import { concepts } from "@/shared/concepts/concepts";
+
+/** O desenho que acompanha "O que mede" quando o mecanismo se explica melhor com ele. */
+const conceptDiagrams: Partial<Record<ConceptId, ReactNode>> = {
+  "rolling-12m": <MovingWindow />,
+  "base-effect": <MovingWindow />,
+  "inflation-target": <ConceptDiagram spec={targetSpec} />,
+  "minimum-wage": <ConceptDiagram spec={minimumWageSpec} />,
+};
 
 /** O gráfico com o dado de hoje que acompanha o "É bom ou ruim?" de um conceito com
 série: o texto diz a regra, o gráfico mostra onde o número está agora. */
@@ -77,6 +88,8 @@ export function ConceptArticle({ id }: { id: ConceptId }) {
         <Section title="O que mede">
           <div className="flex max-w-prose flex-col gap-3">{concept.measures}</div>
         </Section>
+
+        {conceptDiagrams[id] && <Section title="No desenho">{conceptDiagrams[id]}</Section>}
 
         {concept.details && (
           <Section title={concept.details.title}>{concept.details.content}</Section>

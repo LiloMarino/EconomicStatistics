@@ -1,58 +1,9 @@
-import { Link } from "react-router-dom";
-
-import { useDeficit } from "@/features/deficit/use-deficit";
-import { useDebt } from "@/features/debt/use-debt";
 import type { DiagramSpec } from "@/features/explainers/diagram-spec";
+import { type ExplainerCard, ExplainerCards } from "@/features/explainers/explainer-cards";
+import { type TodayValues, useTodayValues } from "@/features/explainers/explainer-values";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
-import { useExternalSector } from "@/features/external-sector/use-external-sector";
-import { formatFocusValue } from "@/features/focus/focus-labels";
-import { useFocusReport } from "@/features/focus/use-focus";
-import { useInterest } from "@/features/interest/use-interest";
-import { formatMoney, formatMonth, formatPercent, formatShortPercent } from "@/shared/lib/format";
 
-interface LoopValues {
-  debt?: string;
-  debtMonth?: string;
-  interest?: string;
-  deficit?: string;
-  inflation?: string;
-  expectations?: string;
-  expectationsYear?: number;
-  dollar?: string;
-  dollarMonth?: string;
-  selic?: string;
-}
-
-/** O número de hoje de cada nó, lido das mesmas consultas das telas. Enquanto uma
-consulta não chega, o nó aparece sem número. */
-function useLoopValues(): LoopValues {
-  const debt = useDebt().data?.levels.at(-1);
-  const deficit = useDeficit().data?.last;
-  const interest = useInterest().data;
-  const dollar = useExternalSector().data?.dollar.months.at(-1);
-  const focus = useFocusReport().data;
-  // O Focus pergunta o IPCA de vários anos: vale o mais próximo
-  const expectation = focus?.rows
-    .filter((row) => row.indicator === "ipca")
-    .sort((a, b) => a.year - b.year)
-    .at(0);
-  const inflation = interest?.inflation.months.at(-1);
-
-  return {
-    debt: debt && formatShortPercent(debt.gross),
-    debtMonth: debt && formatMonth(debt.ref_date),
-    interest: deficit && formatPercent(deficit.interest),
-    deficit: deficit && formatPercent(deficit.nominal),
-    inflation: inflation && formatPercent(inflation.rate),
-    expectations: expectation && formatFocusValue(expectation.today, expectation.unit),
-    expectationsYear: expectation?.year,
-    dollar: dollar && formatMoney(dollar.value),
-    dollarMonth: dollar && formatMonth(dollar.ref_date),
-    selic: interest && formatPercent(interest.selic.current),
-  };
-}
-
-function buildSpec(values: LoopValues): DiagramSpec {
+function buildSpec(values: TodayValues): DiagramSpec {
   return {
     height: 600,
     label: "Diagrama dos loops da dívida e da inflação e das três pontes entre eles",
@@ -67,7 +18,7 @@ function buildSpec(values: LoopValues): DiagramSpec {
       {
         id: "debt",
         title: "Dívida",
-        value: values.debt && `${values.debt} do PIB`,
+        value: values.gross && `${values.gross} do PIB`,
         subtitle: values.debtMonth ? `bruta, ${values.debtMonth}` : "bruta",
         concept: "gross-debt",
         accent: "var(--loop-debt)",
@@ -295,7 +246,7 @@ function buildSpec(values: LoopValues): DiagramSpec {
   };
 }
 
-const brakes = [
+const brakes: ExplainerCard[] = [
   {
     title: "Superávit primário",
     text: "Freia o loop da dívida: sobra dinheiro para pagar juro sem pedir emprestado.",
@@ -324,7 +275,7 @@ const brakes = [
 
 /** Os dois loops, as três pontes e o que freia cada loop. */
 export function LoopsAndBridges() {
-  const spec = buildSpec(useLoopValues());
+  const spec = buildSpec(useTodayValues());
 
   return (
     <>
@@ -336,21 +287,7 @@ export function LoopsAndBridges() {
 
       <SteppedDiagram spec={spec} />
 
-      {/* O que freia cada loop */}
-      <section className="flex flex-col gap-3.5">
-        <h2 className="font-heading text-section-title">O que freia cada loop</h2>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
-          {brakes.map((brake) => (
-            <div key={brake.title} className="bg-card flex flex-col gap-1.5 rounded-xl p-4">
-              <strong>{brake.title}</strong>
-              <span className="text-caption text-muted-foreground">{brake.text}</span>
-              <Link to={brake.to} className="text-caption font-semibold">
-                {brake.link}
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ExplainerCards title="O que freia cada loop" cards={brakes} />
     </>
   );
 }

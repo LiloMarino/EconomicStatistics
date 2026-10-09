@@ -47,6 +47,8 @@ export interface DiagramSpec {
   steps: [DiagramStep, ...DiagramStep[]];
   /** Altura da área do diagrama em pixels. */
   height: number;
+  /** Largura da área em pixels; sem ela, 1000, a largura da página de explicador. */
+  width?: number;
   /** O texto que o leitor de tela lê no lugar do desenho. */
   label: string;
 }

@@ -14,6 +14,9 @@ import { NumberedEdge, type NumberedFlowEdge } from "@/features/explainers/numbe
 const nodeTypes = { concept: ConceptNode };
 const edgeTypes = { numbered: NumberedEdge };
 
+// A largura da página de explicador
+const DEFAULT_WIDTH = 1000;
+
 /** O desenho do mecanismo: nós nas posições do `spec`, setas numeradas, tudo parado. O
 passo escolhido acende as setas dos grupos dele e apaga o resto. */
 export function ExplainerDiagram({ spec, step }: { spec: DiagramSpec; step: DiagramStep }) {
@@ -47,8 +50,11 @@ export function ExplainerDiagram({ spec, step }: { spec: DiagramSpec; step: Diag
       <div
         role="group"
         aria-label={spec.label}
-        className="mx-auto h-(--diagram-height) w-250"
-        style={{ "--diagram-height": `${spec.height}px` }}
+        className="mx-auto h-(--diagram-height) w-(--diagram-width)"
+        style={{
+          "--diagram-height": `${spec.height}px`,
+          "--diagram-width": `${spec.width ?? DEFAULT_WIDTH}px`,
+        }}
       >
         <ReactFlow
           nodes={nodes}
@@ -69,6 +75,7 @@ export function ExplainerDiagram({ spec, step }: { spec: DiagramSpec; step: Diag
           nodesFocusable={false}
           edgesFocusable={false}
           elementsSelectable={false}
+          proOptions={{ hideAttribution: true }}
         />
       </div>
     </div>

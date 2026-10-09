@@ -65,7 +65,7 @@ function HowToRead({ dollar }: { dollar: Dollar }) {
           </p>
         </TrayItem>
       )}
-      <TrayItem title="O que mexe no dólar" concept="exchange-rate">
+      <TrayItem title="O que mexe no dólar" concept="exchange-rate" explainer="reserves-and-fx">
         <p>
           Os juros daqui contra os de fora, o risco do país, o preço das commodities que o Brasil
           exporta e o humor do mundo. Quando a dívida pública preocupa, o dólar costuma ser o

@@ -32,7 +32,11 @@ function HowToRead({ reserves }: { reserves: Reserves }) {
   const share = reserves.gdp_share;
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Para que servem" concept="international-reserves">
+      <TrayItem
+        title="Para que servem"
+        concept="international-reserves"
+        explainer="reserves-and-fx"
+      >
         <p>
           Numa fuga de dólares, o Banco Central vende reservas para segurar o câmbio. Como são
           dólares, quando o dólar sobe elas passam a valer mais reais, e isso alivia a dívida
