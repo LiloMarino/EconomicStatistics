@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from typing import Protocol
 
 from backend.core.enum import DebtHolder, Indexer
@@ -61,12 +61,13 @@ class IndexerShare:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class MaturityBucket:
     """A fração da dívida em mercado que vence de `start` até `end`, inclusive; sem
-    `end`, de `start` em diante. `within_12m` diz se a faixa começa nos 12 meses
-    seguintes ao estoque, o que o governo precisa rolar primeiro."""
+    `end`, de `start` em diante, e o valor em R$ dela. `within_12m` marca a faixa dos 12
+    meses seguintes ao estoque, o que o governo precisa rolar primeiro."""
 
     start: date
     end: date | None
     share: float
+    value: float
     within_12m: bool
 
 
@@ -122,55 +123,66 @@ def maturing_within_12m(holdings: Iterable[DebtHolding], stock_month: date) -> f
     return sum(item.value for item in market if item.maturity < limit) / total
 
 
-def _year_bucket(years_ahead: int) -> int:
-    """A faixa de um vencimento pela distância em anos até o ano do estoque: 0 é o
-    próprio ano, de 1 a 4 cada ano seguinte, 5 os 5 anos depois deles e 6 o resto."""
-    if years_ahead <= SINGLE_YEARS:
-        return max(years_ahead, 0)
-    if years_ahead <= SINGLE_YEARS + GROUPED_YEARS:
-        return SINGLE_YEARS + 1
-    return SINGLE_YEARS + 2
-
-
-def _bucket_range(stock_month: date, bucket: int) -> tuple[date, date | None]:
+def _ranges(stock_month: date) -> list[tuple[date, date | None]]:
+    """As faixas de vencimento a partir do estoque: os 12 meses seguintes, o resto do ano
+    em que eles terminam, cada ano seguinte até o 4º depois do estoque, os 5 anos depois
+    deles e o resto."""
     year = stock_month.year
-    if bucket == 0:
-        return _first_month_after(stock_month, 1), date(year, 12, 31)
-    if bucket <= SINGLE_YEARS:
-        return date(year + bucket, 1, 1), date(year + bucket, 12, 31)
-    if bucket == SINGLE_YEARS + 1:
-        return (
+    first = _first_month_after(stock_month, 1)
+    after_12m = _first_month_after(stock_month, 13)
+    ranges: list[tuple[date, date | None]] = [(first, after_12m - timedelta(days=1))]
+    if after_12m.month != 1:
+        ranges.append((after_12m, date(after_12m.year, 12, 31)))
+    ranges.extend(
+        (date(item, 1, 1), date(item, 12, 31))
+        for item in range(
+            after_12m.year + (after_12m.month != 1), year + SINGLE_YEARS + 1
+        )
+    )
+    ranges.append(
+        (
             date(year + SINGLE_YEARS + 1, 1, 1),
             date(year + SINGLE_YEARS + GROUPED_YEARS, 12, 31),
         )
-    return date(year + SINGLE_YEARS + GROUPED_YEARS + 1, 1, 1), None
+    )
+    ranges.append((date(year + SINGLE_YEARS + GROUPED_YEARS + 1, 1, 1), None))
+    return ranges
 
 
 def maturity_profile(
     holdings: Iterable[DebtHolding], stock_month: date
 ) -> list[MaturityBucket]:
-    """A dívida em mercado por faixa de vencimento: o resto do ano do estoque, os 4 anos
-    seguintes um a um, os 5 anos depois deles e o que vence mais tarde. Faixa sem
-    nenhum título, como o resto do ano num estoque de dezembro, sai."""
+    """A dívida em mercado por faixa de vencimento: os 12 meses seguintes ao estoque, que
+    batem com `maturing_within_12m`, o resto do ano em que eles terminam, os anos seguintes
+    um a um até o 4º depois do estoque, os 5 anos depois deles e o que vence mais tarde.
+    Faixa sem nenhum título sai."""
     market = _market(holdings)
     total = sum(item.value for item in market)
-    by_bucket: dict[int, float] = {}
+    ranges = _ranges(stock_month)
+    by_range = [0.0] * len(ranges)
+    # As faixas são contíguas e em ordem: cada título cai na primeira cujo fim ele não
+    # passa, e o que vence antes do início da primeira entra nela, como no
+    # `maturing_within_12m`. Assim as faixas somam a dívida inteira.
     for item in market:
-        bucket = _year_bucket(item.maturity.year - stock_month.year)
-        by_bucket[bucket] = by_bucket.get(bucket, 0.0) + item.value
-    limit = _first_month_after(stock_month, 13)
-    buckets: list[MaturityBucket] = []
-    for bucket in sorted(by_bucket):
-        start, end = _bucket_range(stock_month, bucket)
-        buckets.append(
-            MaturityBucket(
-                start=start,
-                end=end,
-                share=by_bucket[bucket] / total,
-                within_12m=start < limit,
-            )
+        index = next(
+            index
+            for index, (_, end) in enumerate(ranges)
+            if end is None or item.maturity <= end
         )
-    return buckets
+        by_range[index] += item.value
+    return [
+        MaturityBucket(
+            start=start,
+            end=end,
+            share=value / total,
+            value=value,
+            within_12m=index == 0,
+        )
+        for index, ((start, end), value) in enumerate(
+            zip(ranges, by_range, strict=True)
+        )
+        if value > 0
+    ]
 
 
 def central_bank_share(holdings: Sequence[DebtHolding]) -> float:

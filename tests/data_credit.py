@@ -5,7 +5,10 @@ ago/2026.
 
 O patrimônio de referência e os ativos ponderados pelo risco, em R$ milhões, somados
 sobre as instituições do relatório de capital do IF.data, de jul/2024 a jun/2026,
-conferidos em 2026-10-09."""
+conferidos em 2026-10-09.
+
+A inadimplência da carteira de crédito, total, acima de 90 dias (SGS 21082, % da
+carteira), de ago/2024 a ago/2026, conferida em 2026-10-11."""
 
 from __future__ import annotations
 
@@ -102,6 +105,34 @@ CONCESSIONS_HOUSEHOLDS = [
     71311.0,
 ]
 
+DELINQUENCY = [
+    3.33,
+    3.34,
+    3.30,
+    3.27,
+    3.08,
+    3.34,
+    3.41,
+    3.44,
+    3.67,
+    3.72,
+    3.75,
+    3.96,
+    4.14,
+    4.09,
+    4.18,
+    4.24,
+    4.20,
+    4.44,
+    4.64,
+    4.52,
+    4.64,
+    4.75,
+    4.58,
+    4.88,
+    5.04,
+]
+
 BASEL_QUARTERS = [month_start(date(2024, 7, 1), -3 * index) for index in range(8)]
 BASEL_CAPITAL = [
     1584266.1,
@@ -133,8 +164,8 @@ def _quarters(values: list[float]) -> list[Observation]:
 
 
 def seed_credit(session: Session) -> None:
-    """As três séries de crédito, a Selic diária que o spread desconta do custo e as
-    duas contas do índice de Basileia."""
+    """As três séries de crédito, a Selic diária que o spread desconta do custo, as
+    duas contas do índice de Basileia e a inadimplência."""
     start = date(2024, 8, 1)
     seeds = {
         SeriesId.CREDIT_COST: months_from(start, CREDIT_COST),
@@ -143,6 +174,7 @@ def seed_credit(session: Session) -> None:
         SeriesId.SELIC_TARGET: selic_days(),
         SeriesId.BASEL_CAPITAL: _quarters(BASEL_CAPITAL),
         SeriesId.BASEL_RWA: _quarters(BASEL_RWA),
+        SeriesId.DELINQUENCY: months_from(start, DELINQUENCY),
     }
     for series_id, observations in seeds.items():
         upsert_observations(session, series_id, observations)

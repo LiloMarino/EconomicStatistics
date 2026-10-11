@@ -130,8 +130,9 @@ def weekly_streak(medians: Sequence[float]) -> Streak | None:
     return Streak(direction=direction, weeks=weeks, start=medians[-weeks - 1])
 
 
-# A continuação dos gráficos anuais vai até dezembro do ano seguinte ao do último dado
-FORECAST_YEARS = 2
+# A continuação dos gráficos anuais cobre os anos do relatório Focus semanal: o ano do
+# último dado e os 3 seguintes
+FORECAST_YEARS = 4
 
 
 def monthly_expectations(
@@ -182,8 +183,8 @@ def next_12m_expectation(
 
 
 def forecast_years(last_real: date) -> list[int]:
-    """O ano que o último dado ainda não fechou e o seguinte; com dezembro já
-    publicado, os dois anos depois dele."""
+    """Os anos do relatório Focus a partir do que o último dado ainda não fechou; com
+    dezembro já publicado, a partir do ano seguinte a ele."""
     first = last_real.year + (1 if last_real.month == 12 else 0)
     return list(range(first, first + FORECAST_YEARS))
 

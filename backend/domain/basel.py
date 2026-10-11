@@ -16,10 +16,46 @@ MIN_CAPITAL = 0.08
 CONSERVATION_BUFFER = 0.025
 
 
+# O calote do exemplo da bandeja: R$ 5 de cada R$ 100 emprestados
+EXAMPLE_LOSS = 0.05
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class QuarterRatio:
     ref_date: date
     ratio: float
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class LossExample:
+    """O exemplo da bandeja em frações do valor emprestado, para um sistema em que todo
+    empréstimo tem o mesmo risco. `clients` é a parte que veio dos clientes e o banco
+    deve devolver; um calote de `loss` deixa `repaid` voltando e sai inteiro do
+    capital, que fica em `capital_after_loss`, e o índice cai para `ratio_after_loss`. `loss_to_minimum` é o
+    calote que leva o índice ao mínimo com o colchão de conservação."""
+
+    clients: float
+    loss: float
+    repaid: float
+    capital_after_loss: float
+    ratio_after_loss: float
+    loss_to_minimum: float
+
+
+def loss_example(
+    ratio: float, minimum: float, loss: float = EXAMPLE_LOSS
+) -> LossExample:
+    """Com índice de 17,33%, R$ 5 de calote em R$ 100 deixam R$ 12,33 de capital sobre
+    R$ 95 que ainda voltam, 12,98%. O calote L que leva ao mínimo m resolve
+    (índice - L) / (1 - L) = m: com m de 10,5%, cabem R$ 7,63."""
+    return LossExample(
+        clients=1 - ratio,
+        loss=loss,
+        repaid=1 - loss,
+        capital_after_loss=ratio - loss,
+        ratio_after_loss=(ratio - loss) / (1 - loss),
+        loss_to_minimum=(ratio - minimum) / (1 - minimum),
+    )
 
 
 def basel_ratios(

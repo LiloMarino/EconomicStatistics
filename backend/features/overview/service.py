@@ -15,14 +15,15 @@ from backend.core.enum import (
 from backend.domain.coverage import month_start
 from backend.domain.focus import REPORT_UNITS, WEEKS_BEFORE, to_fraction
 from backend.domain.inflation_target import TargetBand
-from backend.domain.rates import relative_change
+from backend.domain.interest import ex_ante_real_rates
+from backend.domain.rates import MonthlyRate, relative_change
 from backend.features.activity.service import activity
 from backend.features.credit.service import credit
 from backend.features.debt.service import debt_overview
 from backend.features.deficit.service import deficit
 from backend.features.external_sector.service import external_sector
 from backend.features.inflation.service import inflation_pace
-from backend.features.interest.service import interest
+from backend.features.interest.service import RealRate, interest
 from backend.features.monthly_forecast import MonthValue
 from backend.repository.focus import last_survey_date, read_history
 from backend.repository.series import last_cached
@@ -97,19 +98,7 @@ def overview(session: Session, today: date) -> Overview:
             3,
             ref_date=selic_until,
         ),
-        None
-        if rates.real_rate is None
-        else Indicator(
-            indicator=OverviewIndicator.REAL_RATE,
-            ref_date=rates.real_rate.survey_date,
-            value=rates.real_rate.rate,
-            change=None,
-            change_kind=ChangeKind.POINTS,
-            change_months=None,
-            sparkline=[],
-            band=None,
-            within_band=None,
-        ),
+        _real_rate(session, rates.selic.months, rates.real_rate),
         _indicator(
             OverviewIndicator.NET_DEBT,
             [MonthValue(ref_date=d.ref_date, value=d.net) for d in debt.levels],
@@ -240,6 +229,30 @@ def _indicator(
         sparkline=[p.value for p in points[-SPARKLINE_POINTS:]],
         band=band,
         within_band=None if band is None else band.floor <= last.value <= band.ceiling,
+    )
+
+
+def _real_rate(
+    session: Session, selic: list[MonthlyRate], today: RealRate | None
+) -> Indicator | None:
+    """O juro real ex-ante de cada mês, com o de hoje no fim, datado na pesquisa Focus
+    que ele usa. A variação compara com 12 meses antes."""
+    if today is None:
+        return None
+    history = read_history(session, FocusIndicator.IPCA, FocusTargetKind.NEXT_12M, 0, 0)
+    current_month = month_start(today.survey_date)
+    points = [
+        MonthValue(ref_date=item.ref_date, value=item.rate)
+        for item in ex_ante_real_rates(selic, history)
+        if item.ref_date < current_month
+    ]
+    points.append(MonthValue(ref_date=current_month, value=today.rate))
+    return _indicator(
+        OverviewIndicator.REAL_RATE,
+        points,
+        ChangeKind.POINTS,
+        MONTHS_PER_YEAR,
+        ref_date=today.survey_date,
     )
 
 

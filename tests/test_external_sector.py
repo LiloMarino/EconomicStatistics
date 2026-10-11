@@ -6,7 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from backend.domain.external import international_position
+from backend.domain.external import international_position, national_income
 from backend.domain.gdp import share_of_gdp
 from backend.domain.series import Observation
 from tests.data_external import (
@@ -15,6 +15,7 @@ from tests.data_external import (
     IIP_ASSETS,
     IIP_LIABILITIES,
     RESERVES,
+    months_from,
     seed_external,
 )
 
@@ -67,6 +68,8 @@ def test_external_sector_reads_each_chart_until_its_last_data(api: TestClient) -
     dollar = body["dollar"]
     assert dollar["months"][-1] == {"ref_date": "2026-09-01", "value": DOLLAR[-1]}
     assert round(dollar["change_12m"] * 100, 2) == -2.59
+    assert len(dollar["days"]) == 14
+    assert dollar["days"][-1] == {"ref_date": "2026-10-09", "value": 4.9892}
     assert body["flows"][-1] == {
         "ref_date": "2026-08-01",
         "current_account": pytest.approx(-0.0247),
@@ -75,6 +78,27 @@ def test_external_sector_reads_each_chart_until_its_last_data(api: TestClient) -
     assert body["reserves"]["months"][-1]["value"] == RESERVES[-1]
     assert body["reserves"]["gdp_share"]["ref_date"] == "2026-08-01"
     assert [point["ref_date"] for point in body["position"]] == ["2026-04-01"]
+
+
+@pytest.mark.usefixtures("seeded")
+def test_national_income_sums_12_months_of_primary_income(api: TestClient) -> None:
+    """Os 12 meses até ago/2026: US$ 42,9 bi recebidos e US$ 126,8 bi enviados contra o
+    PIB de US$ 2,55 tri. Saem 3,29% do PIB a mais do que entram, e o país fica com
+    96,71% do que produz."""
+    income = api.get("/api/external-sector").json()["national_income"]
+
+    assert income["ref_date"] == "2026-08-01"
+    assert income["received"] == pytest.approx(0.01678, abs=5e-5)
+    assert income["sent"] == pytest.approx(0.04964, abs=5e-5)
+    assert income["net_sent"] == pytest.approx(0.03286, abs=5e-5)
+    assert income["kept"] == pytest.approx(0.96714, abs=5e-5)
+
+
+def test_national_income_needs_12_months_in_a_row() -> None:
+    """Sem 12 meses seguidos das duas séries, não há renda de 12 meses para mostrar."""
+    months = months_from(date(2026, 1, 1), [1.0] * 11)
+
+    assert national_income(months, months, {date(2026, 11, 1): 100.0}) is None
 
 
 def test_external_sector_without_cache_is_409(api: TestClient) -> None:

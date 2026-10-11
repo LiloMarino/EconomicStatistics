@@ -43,7 +43,11 @@ class SeriesSpec:
     que a fonte publica.
 
     Quando a fonte trocou de tabela, `earlier_codes` traz as tabelas antigas em ordem
-    de data, e `code` vale do mês seguinte ao da última delas em diante."""
+    de data, e `code` vale do mês seguinte ao da última delas em diante.
+
+    Quando a fonte publica numa janela de dias, e não num dia fixo, `release_day` é o
+    primeiro dia da janela, a partir do qual o app já busca, e a falta só vira aviso
+    `warn_after_days` dias depois."""
 
     source: Source
     code: str
@@ -53,6 +57,7 @@ class SeriesSpec:
     release_day: int
     periodicity: Periodicity = Periodicity.MONTHLY
     earlier_codes: tuple[EarlierCode, ...] = ()
+    warn_after_days: int = 0
 
 
 def _next_month(day: date) -> date:
@@ -95,7 +100,10 @@ IPCA_EARLIER_TABLES = (
     (2938, date(2011, 12, 1)),
     (1419, date(2019, 12, 1)),
 )
-IPCA_RELEASE_DAY = 15
+# O IBGE divulga o IPCA do mês entre os dias 8 e 12 do mês seguinte: o app busca a
+# partir do dia 8 e só avisa a falta a partir do dia 15
+IPCA_RELEASE_DAY = 8
+IPCA_RELEASE_WINDOW = 7
 
 
 def _ipca(category: int) -> SeriesSpec:
@@ -106,6 +114,7 @@ def _ipca(category: int) -> SeriesSpec:
         first_date=IPCA_GROUPS_START,
         lag_months=1,
         release_day=IPCA_RELEASE_DAY,
+        warn_after_days=IPCA_RELEASE_WINDOW,
         earlier_codes=tuple(
             EarlierCode(code=f"{table}/63/315/{category}", last_ref_date=last)
             for table, last in IPCA_EARLIER_TABLES
@@ -126,6 +135,7 @@ def _ipca_cut(code: str) -> SeriesSpec:
         first_date=PRICE_CUTS_START,
         lag_months=1,
         release_day=IPCA_RELEASE_DAY,
+        warn_after_days=IPCA_RELEASE_WINDOW,
     )
 
 
@@ -226,6 +236,7 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         first_date=date(1979, 4, 1),
         lag_months=1,
         release_day=IPCA_RELEASE_DAY,
+        warn_after_days=IPCA_RELEASE_WINDOW,
     ),
     # O SGS publica o mínimo do ano inteiro já em janeiro. A série começa no Real:
     # antes dele o valor está em outras moedas, e a razão entre dois meses deixa de
@@ -260,6 +271,16 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         release_day=1,
         periodicity=Periodicity.DAILY,
     ),
+    # A PTAX de venda de cada dia útil, que o BCB publica no próprio dia, à tarde
+    SeriesId.DOLLAR_DAILY: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="1",
+        unit=Unit.BRL_PER_USD,
+        first_date=date(1994, 7, 1),
+        lag_months=0,
+        release_day=1,
+        periodicity=Periodicity.BUSINESS_DAILY,
+    ),
     # A PTAX do último dia útil do mês, a mesma medida que o Focus pergunta. Começa no
     # Real: antes dele o valor está em outras moedas.
     SeriesId.DOLLAR_MONTH_END: SeriesSpec(
@@ -278,6 +299,24 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         code="4192",
         unit=Unit.USD_MILLION,
         first_date=date(1990, 2, 1),
+        lag_months=1,
+        release_day=EXTERNAL_NOTE_RELEASE_DAY,
+    ),
+    # A renda primária das transações correntes, em US$ milhões no mês: o lucro, os
+    # juros e os salários que entram (receita) e os que saem do país (despesa)
+    SeriesId.PRIMARY_INCOME_RECEIVED: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="22801",
+        unit=Unit.USD_MILLION,
+        first_date=date(1995, 1, 1),
+        lag_months=1,
+        release_day=EXTERNAL_NOTE_RELEASE_DAY,
+    ),
+    SeriesId.PRIMARY_INCOME_PAID: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="22802",
+        unit=Unit.USD_MILLION,
+        first_date=date(1995, 1, 1),
         lag_months=1,
         release_day=EXTERNAL_NOTE_RELEASE_DAY,
     ),
@@ -378,6 +417,16 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         lag_months=1,
         release_day=30,
     ),
+    # A taxa composta de subutilização da força de trabalho, da mesma PNAD Contínua e no
+    # mesmo trimestre móvel, datado no último mês dele: a tabela 6441 do IBGE
+    SeriesId.UNDERUTILIZATION_RATE: SeriesSpec(
+        source=Source.IBGE,
+        code="6441/4118",
+        unit=Unit.PERCENT,
+        first_date=date(2012, 3, 1),
+        lag_months=1,
+        release_day=30,
+    ),
     # O indicador de custo do crédito (ICC) do BCB, total, em % ao ano
     SeriesId.CREDIT_COST: SeriesSpec(
         source=Source.BCB_SGS,
@@ -409,6 +458,16 @@ SERIES: dict[SeriesId, SeriesSpec] = {
     # informações de capital do IF.data, em R$, somados sobre todas as instituições
     SeriesId.BASEL_CAPITAL: _ifdata("79649"),
     SeriesId.BASEL_RWA: _ifdata("79665"),
+    # A inadimplência da carteira de crédito, total: a parte com parcela atrasada há mais
+    # de 90 dias, em % da carteira. Sai na nota de crédito, com as concessões
+    SeriesId.DELINQUENCY: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="21082",
+        unit=Unit.PERCENT,
+        first_date=date(2011, 3, 1),
+        lag_months=1,
+        release_day=CREDIT_NOTE_RELEASE_DAY,
+    ),
 }
 
 IPCA_GROUPS: tuple[SeriesId, ...] = (

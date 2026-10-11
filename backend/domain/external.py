@@ -50,3 +50,52 @@ def international_position(
             )
         )
     return points
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class NationalIncome:
+    """A renda primária de 12 meses que termina em `ref_date`, em fração do PIB de 12
+    meses: `received` entra no país, `sent` sai, e `net_sent` é o que sai a mais. `kept`
+    é a renda nacional bruta sobre o PIB, a parte do que se produz aqui que fica com
+    quem é daqui."""
+
+    ref_date: date
+    received: float
+    sent: float
+    net_sent: float
+    kept: float
+
+
+YEAR_MONTHS = 12
+
+
+def national_income(
+    received: Sequence[Observation],
+    paid: Sequence[Observation],
+    gdp_12m: Mapping[date, float],
+) -> NationalIncome | None:
+    """O último mês com os 12 meses das duas séries e o PIB de 12 meses publicados: em
+    ago/2026, US$ 42,9 bi recebidos e US$ 126,8 bi enviados contra um PIB de US$ 2,55
+    tri dão 1,68% e 4,96% do PIB, e o país fica com 96,7% do que produz."""
+    received_by_month = {item.ref_date: item.value for item in received}
+    paid_by_month = {item.ref_date: item.value for item in paid}
+    months = sorted(received_by_month.keys() & paid_by_month.keys())
+    for end in reversed(range(YEAR_MONTHS - 1, len(months))):
+        window = months[end - YEAR_MONTHS + 1 : end + 1]
+        gdp = gdp_12m.get(window[-1])
+        if gdp is None or _months_apart(window[0], window[-1]) != YEAR_MONTHS - 1:
+            continue
+        sent = share_of_gdp(sum(paid_by_month[month] for month in window), gdp)
+        income = share_of_gdp(sum(received_by_month[month] for month in window), gdp)
+        return NationalIncome(
+            ref_date=window[-1],
+            received=income,
+            sent=sent,
+            net_sent=sent - income,
+            kept=1 - (sent - income),
+        )
+    return None
+
+
+def _months_apart(start: date, end: date) -> int:
+    return (end.year - start.year) * YEAR_MONTHS + end.month - start.month

@@ -7,7 +7,13 @@ from sqlalchemy.orm import Session
 
 from backend.core.enum import SeriesId
 from backend.core.errors import MissingDataError
-from backend.domain.basel import CONSERVATION_BUFFER, MIN_CAPITAL, basel_ratios
+from backend.domain.basel import (
+    CONSERVATION_BUFFER,
+    MIN_CAPITAL,
+    LossExample,
+    basel_ratios,
+    loss_example,
+)
 from backend.domain.coverage import month_start, quarter_end
 from backend.domain.interest import month_end_rates
 from backend.domain.rates import PERCENT, index_change_12m
@@ -22,6 +28,7 @@ CREDIT_SERIES = (
     SeriesId.SELIC_TARGET,
     SeriesId.BASEL_CAPITAL,
     SeriesId.BASEL_RWA,
+    SeriesId.DELINQUENCY,
 )
 
 # Cada gráfico mostra os últimos 24 meses, terminando no último dado de cada série
@@ -61,18 +68,24 @@ class Concessions:
 class Basel:
     """O índice de Basileia do sistema em cada trimestre, datado no último mês dele, e
     os mínimos da regra, tudo em fração: `minimum` só o patrimônio de referência e
-    `minimum_with_buffer` com o adicional de conservação."""
+    `minimum_with_buffer` com o adicional de conservação. `example` é o exemplo da
+    bandeja com o último trimestre."""
 
     quarters: list[MonthValue]
     minimum: float
     minimum_with_buffer: float
+    example: LossExample
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Credit:
+    """`delinquency` é a inadimplência de cada mês desde o primeiro trimestre do índice
+    de Basileia, para os dois cartões se lerem juntos, em fração da carteira."""
+
     cost: Cost
     concessions: Concessions
     basel: Basel
+    delinquency: list[MonthValue]
 
 
 def credit(session: Session) -> Credit:
@@ -113,6 +126,7 @@ def credit(session: Session) -> Credit:
         basel=_basel(
             session, max(cached[SeriesId.BASEL_CAPITAL], cached[SeriesId.BASEL_RWA])
         ),
+        delinquency=_delinquency(session, cached[SeriesId.DELINQUENCY]),
     )
 
 
@@ -143,14 +157,31 @@ def _basel(session: Session, end: date) -> Basel:
     ratios = basel_ratios(
         observations[SeriesId.BASEL_CAPITAL], observations[SeriesId.BASEL_RWA]
     )
+    if not ratios:
+        raise MissingDataError("Ainda não há trimestre com as duas contas de Basileia.")
+    minimum_with_buffer = MIN_CAPITAL + CONSERVATION_BUFFER
     return Basel(
         quarters=[
             MonthValue(ref_date=quarter_end(item.ref_date), value=item.ratio)
             for item in ratios
         ],
         minimum=MIN_CAPITAL,
-        minimum_with_buffer=MIN_CAPITAL + CONSERVATION_BUFFER,
+        minimum_with_buffer=minimum_with_buffer,
+        example=loss_example(ratios[-1].ratio, minimum_with_buffer),
     )
+
+
+def _delinquency(session: Session, end: date) -> list[MonthValue]:
+    observations = read_observations(
+        session,
+        (SeriesId.DELINQUENCY,),
+        SERIES[SeriesId.BASEL_CAPITAL].first_date,
+        end,
+    )[SeriesId.DELINQUENCY]
+    return [
+        MonthValue(ref_date=item.ref_date, value=item.value / PERCENT)
+        for item in observations
+    ]
 
 
 def _change_12m(observations: list[Observation]) -> list[MonthValue]:

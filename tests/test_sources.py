@@ -176,6 +176,26 @@ def test_ibge_request_reads_gzip_and_asks_the_spec_category(
     assert "classificacao=315%5B7170%5D" in urls[0]
 
 
+def test_ibge_table_without_classification_asks_only_the_variable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A tabela da subutilização (6441) não tem classificação: o URL pede a variável no
+    nível Brasil, sem o parâmetro de classificação, e o trimestre móvel vai como mês."""
+    urls: list[str] = []
+
+    def fake_urlopen(url: str, timeout: float) -> FakeResponse:
+        urls.append(url)
+        return FakeResponse(IBGE_BODY, {})
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    IbgeAggregatesProvider().get_series(
+        SERIES[SeriesId.UNDERUTILIZATION_RATE], date(2026, 6, 1), date(2026, 8, 31)
+    )
+
+    assert "/6441/periodos/202606-202608/variaveis/4118?" in urls[0]
+    assert "classificacao" not in urls[0]
+
+
 def test_sgs_values_become_floats_dated_on_the_first() -> None:
     """O `valor` do SGS chega como string e vira float, datado no dia 1 do mês."""
     observations = bcb_sgs_provider.to_observations(SGS_BODY)

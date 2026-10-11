@@ -1,5 +1,6 @@
 """Atividade como as fontes publicaram, conferida em 2026-10-08: PIB em 4 trimestres (%,
-IBGE), índice do IBC-Br (SGS 24363) e taxa de desocupação (SGS 24369, %)."""
+IBGE), índice do IBC-Br (SGS 24363) e taxa de desocupação (SGS 24369, %). A taxa
+composta de subutilização (IBGE, tabela 6441, %) foi conferida em 2026-10-11."""
 
 from __future__ import annotations
 
@@ -44,6 +45,21 @@ IBC_BR = [
 ]
 # Ago/2025 a ago/2026
 UNEMPLOYMENT = [5.6, 5.6, 5.4, 5.2, 5.1, 5.4, 5.8, 6.1, 5.8, 5.6, 5.4, 5.3, 5.3]
+UNDERUTILIZATION = [
+    14.1,
+    13.9,
+    13.9,
+    13.5,
+    13.4,
+    13.8,
+    14.1,
+    14.3,
+    13.8,
+    13.3,
+    12.9,
+    13.0,
+    13.1,
+]
 
 SURVEY = date(2026, 10, 2)
 
@@ -53,6 +69,7 @@ def seed_activity(session: Session) -> None:
         SeriesId.GDP_GROWTH_4Q: months_from(date(2025, 1, 1), GDP_GROWTH_4Q, step=3),
         SeriesId.IBC_BR: months_from(date(2024, 8, 1), IBC_BR),
         SeriesId.UNEMPLOYMENT_RATE: months_from(date(2025, 8, 1), UNEMPLOYMENT),
+        SeriesId.UNDERUTILIZATION_RATE: months_from(date(2025, 8, 1), UNDERUTILIZATION),
     }
     for series_id, observations in seeds.items():
         upsert_observations(session, series_id, observations)

@@ -38,7 +38,8 @@ _variables = TypeAdapter(list[AggregateVariable])
 
 
 class IbgeAggregatesProvider:
-    """Cada código é `tabela/variável/classificação/categoria`, no nível Brasil."""
+    """Cada código é `tabela/variável`, mais `/classificação/categoria` quando a tabela
+    tem classificação, no nível Brasil."""
 
     name = "ibge"
 
@@ -55,13 +56,12 @@ class IbgeAggregatesProvider:
     def _get_table(
         self, code: str, start: date, end: date, periodicity: Periodicity
     ) -> list[Observation]:
-        table, variable, classification, category = code.split("/")
-        query = urlencode(
-            {
-                "localidades": "N1[all]",
-                "classificacao": f"{classification}[{category}]",
-            }
-        )
+        table, variable, *classification = code.split("/")
+        params = {"localidades": "N1[all]"}
+        if classification:
+            name, category = classification
+            params["classificacao"] = f"{name}[{category}]"
+        query = urlencode(params)
         url = (
             f"{BASE_URL}/{table}/periodos/{_period(start, periodicity)}"
             f"-{_period(end, periodicity)}/variaveis/{variable}?{query}"

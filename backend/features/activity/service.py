@@ -24,6 +24,7 @@ ACTIVITY_SERIES = (
     SeriesId.GDP_GROWTH_4Q,
     SeriesId.IBC_BR,
     SeriesId.UNEMPLOYMENT_RATE,
+    SeriesId.UNDERUTILIZATION_RATE,
 )
 
 # Cada gráfico mostra os últimos 4 anos de dado, terminando no último de cada série
@@ -55,11 +56,30 @@ class Ibc:
 class Unemployment:
     """A taxa de desocupação do trimestre móvel que termina em cada mês, em fração.
     `change_12m` é a diferença contra o mesmo mês do ano anterior, em fração (-0.008 é
-    -0,8 ponto percentual)."""
+    -0,8 ponto percentual). `employed` é a parte da força de trabalho que tem trabalho
+    no último mês."""
 
     months: list[MonthValue]
     change_12m: float | None
+    employed: float
     forecast: MonthlyForecast | None
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class RatePair:
+    ref_date: date
+    unemployment: float
+    underutilization: float
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Underutilization:
+    """A desocupação e a subutilização do mesmo trimestre móvel, em fração, nos meses
+    que trazem as duas. `gap` é a subutilização menos a desocupação no último deles: a
+    gente que quer trabalhar mais e a taxa de desemprego não conta."""
+
+    months: list[RatePair]
+    gap: float
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -67,6 +87,7 @@ class Activity:
     gdp: Gdp
     ibc: Ibc
     unemployment: Unemployment
+    underutilization: Underutilization
 
 
 def activity(session: Session) -> Activity:
@@ -87,6 +108,10 @@ def activity(session: Session) -> Activity:
         gdp=_gdp(observations[SeriesId.GDP_GROWTH_4Q], survey),
         ibc=_ibc(observations[SeriesId.IBC_BR]),
         unemployment=_unemployment(observations[SeriesId.UNEMPLOYMENT_RATE], survey),
+        underutilization=_underutilization(
+            observations[SeriesId.UNEMPLOYMENT_RATE],
+            observations[SeriesId.UNDERUTILIZATION_RATE],
+        ),
     )
 
 
@@ -103,7 +128,7 @@ def _gdp(
 def _gdp_forecast(
     quarters: list[MonthValue], survey: tuple[date, list[Expectation]] | None
 ) -> MonthlyForecast | None:
-    """O PIB esperado para o ano corrente e o seguinte, cada um em dezembro."""
+    """O PIB esperado para cada ano do relatório Focus, em dezembro."""
     if survey is None or not quarters:
         return None
     survey_date, expectations = survey
@@ -139,15 +164,38 @@ def _unemployment(
         change_12m=(
             None if year_before is None else (last.value - year_before) / PERCENT
         ),
+        employed=1 - last.value / PERCENT,
         forecast=_unemployment_forecast(last.ref_date, survey),
+    )
+
+
+def _underutilization(
+    unemployment: list[Observation], underutilization: list[Observation]
+) -> Underutilization:
+    rates = {item.ref_date: item.value for item in unemployment}
+    months = [
+        RatePair(
+            ref_date=item.ref_date,
+            unemployment=rates[item.ref_date] / PERCENT,
+            underutilization=item.value / PERCENT,
+        )
+        for item in underutilization
+        if item.ref_date in rates
+    ][-WINDOW_MONTHS:]
+    if not months:
+        raise MissingDataError(
+            "Ainda não há mês com a desocupação e a subutilização no cache."
+        )
+    return Underutilization(
+        months=months, gap=months[-1].underutilization - months[-1].unemployment
     )
 
 
 def _unemployment_forecast(
     last: date, survey: tuple[date, list[Expectation]] | None
 ) -> MonthlyForecast | None:
-    """A taxa esperada em cada mês depois do último dado, até dezembro do ano seguinte
-    ao do último dado."""
+    """A taxa esperada em cada mês depois do último dado, até dezembro do último ano do
+    relatório Focus."""
     if survey is None:
         return None
     survey_date, expectations = survey

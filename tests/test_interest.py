@@ -11,14 +11,16 @@ from sqlalchemy.orm import Session
 
 from backend.core.enum import FocusIndicator, FocusTargetKind
 from backend.core.models.models import FocusExpectation
+from backend.domain.focus import Expectation
 from backend.domain.interest import (
     SelicChange,
     SelicStep,
+    ex_ante_real_rates,
     forecast_by_month,
     last_change,
     month_end_rates,
 )
-from backend.domain.rates import real_change
+from backend.domain.rates import MonthlyRate, real_change
 from backend.domain.series import Observation
 from backend.repository.focus import upsert_expectations
 from tests.data_interest import SURVEY, expectation, seed_interest, selic_days
@@ -158,3 +160,34 @@ def test_interest_without_cache_is_409(api: TestClient) -> None:
 
     assert response.status_code == 409
     assert "Selic" in response.json()["detail"]
+
+
+def test_ex_ante_real_rate_uses_the_last_survey_until_the_end_of_each_month() -> None:
+    """Cada mês usa a última pesquisa feita até o fim dele: a de 26/set vale para
+    setembro e a de 3/out, para outubro. Selic de 13,75% contra 4,59% esperados dão
+    8,76%. Agosto, sem pesquisa até ali, fica de fora."""
+
+    def survey(day: date, median: float) -> Expectation:
+        return Expectation(
+            indicator=FocusIndicator.IPCA,
+            target_kind=FocusTargetKind.NEXT_12M,
+            target_year=0,
+            target_period=0,
+            survey_date=day,
+            median=median,
+            respondents=100,
+        )
+
+    selic = [
+        MonthlyRate(ref_date=date(2026, 8, 1), rate=0.1375),
+        MonthlyRate(ref_date=date(2026, 9, 1), rate=0.1375),
+        MonthlyRate(ref_date=date(2026, 10, 1), rate=0.1375),
+    ]
+    surveys = [survey(date(2026, 10, 3), 5.0), survey(date(2026, 9, 26), 4.59)]
+
+    rates = ex_ante_real_rates(selic, surveys)
+
+    assert [(item.ref_date, round(item.rate, 4)) for item in rates] == [
+        (date(2026, 9, 1), 0.0876),
+        (date(2026, 10, 1), round(1.1375 / 1.05 - 1, 4)),
+    ]

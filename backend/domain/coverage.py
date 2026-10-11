@@ -3,6 +3,7 @@ estar publicada, e no máximo uma vez por intervalo."""
 
 from __future__ import annotations
 
+from calendar import monthrange
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
@@ -12,6 +13,10 @@ from backend.domain.series import SeriesSpec
 FETCH_INTERVAL = timedelta(hours=6)
 # A fonte ainda corrige o que publicou: toda busca regrava os últimos 12 meses
 REVISION_MONTHS = 12
+# Numa série de dia útil, a falta só vira aviso depois de 3 dias úteis sem dado: o
+# feriado, que não está no calendário de dias úteis, passa sem alarme
+BUSINESS_DAYS_TOLERANCE = 3
+SATURDAY = 5
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -32,15 +37,21 @@ def month_start(day: date, months_back: int = 0) -> date:
     return date(index // 12, index % 12 + 1, 1)
 
 
-def expected_ref_date(spec: SeriesSpec, today: date) -> date:
+def expected_ref_date(spec: SeriesSpec, today: date, grace_days: int = 0) -> date:
     """A referência que já devia estar publicada hoje: o próprio dia numa série
     diária, o mês, o 1º dia do trimestre numa série trimestral, ou o 1º de janeiro do
     ano numa anual. A janela de revisão de 12 meses cobre um ano nas quatro."""
-    months_back = spec.lag_months + (0 if today.day >= spec.release_day else 1)
+    # O dia de publicação vale no máximo até o fim do mês: o "dia 30" de fevereiro é o 28
+    release_day = min(
+        spec.release_day + grace_days, monthrange(today.year, today.month)[1]
+    )
+    months_back = spec.lag_months + (0 if today.day >= release_day else 1)
     expected = month_start(today, months_back)
     match spec.periodicity:
         case Periodicity.DAILY:
             return today
+        case Periodicity.BUSINESS_DAILY:
+            return business_day_before(today)
         case Periodicity.ANNUAL:
             return date(expected.year, 1, 1)
         case Periodicity.QUARTERLY:
@@ -85,5 +96,21 @@ def fetch_request(
     return DateRange(start=start, end=end)
 
 
+def business_day_before(day: date, count: int = 1) -> date:
+    """O `count`-ésimo dia de segunda a sexta antes de `day`."""
+    while count > 0:
+        day -= timedelta(days=1)
+        if day.weekday() < SATURDAY:
+            count -= 1
+    return day
+
+
 def overdue(spec: SeriesSpec, last_cached: date | None, today: date) -> bool:
-    return last_cached is None or last_cached < expected_ref_date(spec, today)
+    """A busca vai atrás da referência esperada, mas a falta só conta depois da
+    tolerância: 3 dias úteis numa série de dia útil, e o fim da janela de publicação
+    nas outras."""
+    if last_cached is None:
+        return True
+    if spec.periodicity is Periodicity.BUSINESS_DAILY:
+        return last_cached < business_day_before(today, BUSINESS_DAYS_TOLERANCE)
+    return last_cached < expected_ref_date(spec, today, spec.warn_after_days)

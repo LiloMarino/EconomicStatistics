@@ -8,7 +8,12 @@ from sqlalchemy.orm import Session
 from backend.core.enum import FocusIndicator, SeriesId
 from backend.core.errors import MissingDataError
 from backend.domain.coverage import month_start
-from backend.domain.external import PositionPoint, international_position
+from backend.domain.external import (
+    NationalIncome,
+    PositionPoint,
+    international_position,
+    national_income,
+)
 from backend.domain.focus import (
     Expectation,
     annual_expectations,
@@ -30,10 +35,14 @@ EXTERNAL_SERIES = (
     SeriesId.GDP_USD_12M,
     SeriesId.IIP_ASSETS,
     SeriesId.IIP_LIABILITIES,
+    SeriesId.PRIMARY_INCOME_RECEIVED,
+    SeriesId.PRIMARY_INCOME_PAID,
+    SeriesId.DOLLAR_DAILY,
 )
 
 # Cada gráfico tem a sua janela, terminando no último dado da série
 DOLLAR_MONTHS = 24
+DOLLAR_DAYS_MONTHS = 12
 HISTORY_MONTHS = 10 * 12
 POSITION_YEARS = 6
 
@@ -41,11 +50,13 @@ POSITION_YEARS = 6
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Dollar:
     """A PTAX do fim de cada mês em reais; `change_12m` contra o mesmo mês do ano
-    anterior. `forecast` é o câmbio de fim de mês que o Focus espera."""
+    anterior. `forecast` é o câmbio de fim de mês que o Focus espera. `days` é a PTAX
+    de cada dia útil dos últimos 12 meses, datada no próprio dia."""
 
     months: list[MonthValue]
     change_12m: float | None
     forecast: MonthlyForecast | None
+    days: list[MonthValue]
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -75,12 +86,16 @@ class Reserves:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class FlowsForecast:
     """O que o Focus espera para o ano, em US$ bilhões. O gráfico está em % do PIB, e
-    o Focus não prevê o PIB em dólar: a previsão fica escrita ao lado."""
+    o Focus não prevê o PIB em dólar: a previsão fica escrita ao lado.
+    `services_and_income` é o resto das transações correntes, tirada a balança de
+    mercadorias."""
 
     survey_date: date
     year: int
     current_account: float
     fdi: float
+    trade_balance: float
+    services_and_income: float
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -90,6 +105,7 @@ class ExternalSector:
     flows_forecast: FlowsForecast | None
     reserves: Reserves
     position: list[PositionPoint]
+    national_income: NationalIncome | None
 
 
 def external_sector(session: Session) -> ExternalSector:
@@ -109,13 +125,18 @@ def external_sector(session: Session) -> ExternalSector:
             FocusIndicator.EXCHANGE_RATE,
             FocusIndicator.CURRENT_ACCOUNT,
             FocusIndicator.FDI,
+            FocusIndicator.TRADE_BALANCE,
         ),
     )
     flows = _flows(
         observations[SeriesId.CURRENT_ACCOUNT_GDP], observations[SeriesId.FDI_GDP]
     )
     return ExternalSector(
-        dollar=_dollar(observations[SeriesId.DOLLAR_MONTH_END], survey),
+        dollar=_dollar(
+            observations[SeriesId.DOLLAR_MONTH_END],
+            observations[SeriesId.DOLLAR_DAILY],
+            survey,
+        ),
         flows=flows,
         flows_forecast=_flows_forecast(flows, survey),
         reserves=_reserves(observations[SeriesId.RESERVES], gdp),
@@ -125,6 +146,11 @@ def external_sector(session: Session) -> ExternalSector:
                 observations[SeriesId.IIP_LIABILITIES],
                 gdp,
             )
+        ),
+        national_income=national_income(
+            observations[SeriesId.PRIMARY_INCOME_RECEIVED],
+            observations[SeriesId.PRIMARY_INCOME_PAID],
+            gdp,
         ),
     )
 
@@ -137,7 +163,9 @@ def _months(observations: list[Observation], count: int) -> list[MonthValue]:
 
 
 def _dollar(
-    observations: list[Observation], survey: tuple[date, list[Expectation]] | None
+    observations: list[Observation],
+    days: list[Observation],
+    survey: tuple[date, list[Expectation]] | None,
 ) -> Dollar:
     by_month = {item.ref_date: item.value for item in observations}
     last = observations[-1]
@@ -163,6 +191,11 @@ def _dollar(
             if survey is not None and expected
             else None
         ),
+        days=[
+            MonthValue(ref_date=item.ref_date, value=item.value)
+            for item in days
+            if item.ref_date >= month_start(days[-1].ref_date, DOLLAR_DAYS_MONTHS)
+        ],
     )
 
 
@@ -176,13 +209,16 @@ def _flows_forecast(
     year = forecast_years(flows[-1].ref_date)[0]
     current_account = annual_expectations(expectations, FocusIndicator.CURRENT_ACCOUNT)
     fdi = annual_expectations(expectations, FocusIndicator.FDI)
-    if year not in current_account or year not in fdi:
+    trade = annual_expectations(expectations, FocusIndicator.TRADE_BALANCE)
+    if year not in current_account or year not in fdi or year not in trade:
         return None
     return FlowsForecast(
         survey_date=survey_date,
         year=year,
         current_account=current_account[year],
         fdi=fdi[year],
+        trade_balance=trade[year],
+        services_and_income=current_account[year] - trade[year],
     )
 
 

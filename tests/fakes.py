@@ -52,7 +52,7 @@ class FakeProvider:
                 for year in range(max(start, spec.first_date).year, end.year + 1)
             ]
         value = FAKE_VALUES.get(spec.unit, 1000.0)
-        if spec.periodicity is Periodicity.DAILY:
+        if spec.periodicity in (Periodicity.DAILY, Periodicity.BUSINESS_DAILY):
             days = (end - max(start, spec.first_date)).days
             return [
                 Observation(

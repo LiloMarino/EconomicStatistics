@@ -38,6 +38,20 @@ class ConcessionsDTO(BaseDTO):
     households: list[MonthValueDTO]
 
 
+class LossExampleDTO(BaseDTO):
+    """O exemplo da bandeja com o último trimestre, em frações do valor emprestado: a
+    parte que veio dos clientes, o calote do exemplo, o que ainda volta, o capital que
+    sobra depois dele, o índice depois dele e o calote que leva o índice ao mínimo com o
+    colchão."""
+
+    clients: float
+    loss: float
+    repaid: float
+    capital_after_loss: float
+    ratio_after_loss: float
+    loss_to_minimum: float
+
+
 class BaselDTO(BaseDTO):
     """O índice de Basileia do sistema, o patrimônio de referência sobre os ativos
     ponderados pelo risco, em fração (0.1733 é 17,33%), em cada trimestre desde 2015,
@@ -47,12 +61,17 @@ class BaselDTO(BaseDTO):
     quarters: list[MonthValueDTO]
     minimum: float
     minimum_with_buffer: float
+    example: LossExampleDTO
 
 
 class CreditDTO(BaseDTO):
+    """`delinquency` é a inadimplência (atraso de mais de 90 dias) de cada mês desde
+    mar/2015, o começo do índice de Basileia, em fração da carteira (0.0504 é 5,04%)."""
+
     cost: CostDTO
     concessions: ConcessionsDTO
     basel: BaselDTO
+    delinquency: list[MonthValueDTO]
 
 
 @router.get("", responses=ERROR_RESPONSES)

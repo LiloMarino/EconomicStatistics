@@ -15,11 +15,13 @@ router = APIRouter(prefix="/api/external-sector", tags=["external-sector"])
 class DollarDTO(BaseDTO):
     """A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
     mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
-    espera."""
+    espera. `days` é a PTAX de cada dia útil dos últimos 12 meses, datada no próprio
+    dia."""
 
     months: list[MonthValueDTO]
     change_12m: float | None
     forecast: MonthlyForecastDTO | None
+    days: list[MonthValueDTO]
 
 
 class FlowPointDTO(BaseDTO):
@@ -56,12 +58,28 @@ class PositionPointDTO(BaseDTO):
 
 class FlowsForecastDTO(BaseDTO):
     """O que o Focus espera para o ano em transações correntes e investimento direto,
-    em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões)."""
+    em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões). `trade_balance` é a balança
+    de mercadorias, e `services_and_income` o resto das transações correntes, os
+    serviços e a renda."""
 
     survey_date: date
     year: int
     current_account: float
     fdi: float
+    trade_balance: float
+    services_and_income: float
+
+
+class NationalIncomeDTO(BaseDTO):
+    """A renda primária dos 12 meses que terminam em `ref_date`, em fração do PIB de 12
+    meses: `received` entra, `sent` sai, `net_sent` é o que sai a mais (0.033 é 3,3% do
+    PIB). `kept` é a renda nacional bruta sobre o PIB (0.967 é 96,7%)."""
+
+    ref_date: date
+    received: float
+    sent: float
+    net_sent: float
+    kept: float
 
 
 class ExternalSectorDTO(BaseDTO):
@@ -73,6 +91,7 @@ class ExternalSectorDTO(BaseDTO):
     flows_forecast: FlowsForecastDTO | None
     reserves: ReservesDTO
     position: list[PositionPointDTO]
+    national_income: NationalIncomeDTO | None
 
 
 @router.get("", responses=ERROR_RESPONSES)

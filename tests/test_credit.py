@@ -81,6 +81,30 @@ def test_basel_divides_the_capital_by_the_risk_weighted_assets(api: TestClient) 
     assert basel["minimum_with_buffer"] == pytest.approx(0.105)
 
 
+@pytest.mark.usefixtures("seeded")
+def test_basel_example_takes_the_loss_out_of_the_capital(api: TestClient) -> None:
+    """Com o índice de jun/2026 (16,98%), de cada R$ 100 emprestados R$ 83,02 vieram dos
+    clientes; R$ 5 de calote deixam R$ 11,98 de capital, e o índice cai para 12,61%.
+    Cabem R$ 7,24 de calote até o mínimo com o colchão, de 10,5%."""
+    example = api.get("/api/credit").json()["basel"]["example"]
+
+    assert example["clients"] == pytest.approx(0.8302, abs=5e-5)
+    assert example["loss"] == pytest.approx(0.05)
+    assert example["repaid"] == pytest.approx(0.95)
+    assert example["capital_after_loss"] == pytest.approx(0.1198, abs=5e-5)
+    assert example["ratio_after_loss"] == pytest.approx(0.1261, abs=5e-5)
+    assert example["loss_to_minimum"] == pytest.approx(0.0724, abs=5e-5)
+
+
+@pytest.mark.usefixtures("seeded")
+def test_delinquency_comes_month_by_month_as_a_fraction(api: TestClient) -> None:
+    """A inadimplência chega em fração da carteira, mês a mês: 5,04% em ago/2026."""
+    delinquency = api.get("/api/credit").json()["delinquency"]
+
+    assert len(delinquency) == 25
+    assert delinquency[-1] == {"ref_date": "2026-08-01", "value": pytest.approx(0.0504)}
+
+
 def test_basel_skips_a_quarter_without_both_accounts() -> None:
     """Trimestre com o patrimônio e sem os ativos ponderados fica de fora."""
     capital = [

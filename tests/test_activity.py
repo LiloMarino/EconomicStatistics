@@ -71,12 +71,30 @@ def test_activity_reads_each_chart_until_its_last_data(api: TestClient) -> None:
         "value": pytest.approx(0.053),
     }
     assert unemployment["change_12m"] == pytest.approx(-0.003)
+    assert unemployment["employed"] == pytest.approx(0.947)
+
+
+@pytest.mark.usefixtures("seeded")
+def test_underutilization_pairs_the_two_rates_of_the_same_quarter(
+    api: TestClient,
+) -> None:
+    """A subutilização e a desocupação do mesmo trimestre móvel vêm juntas, mês a mês:
+    em ago/2026, 13,1% contra 5,3%, 7,8 pontos de distância."""
+    underutilization = api.get("/api/activity").json()["underutilization"]
+
+    assert len(underutilization["months"]) == 13
+    assert underutilization["months"][-1] == {
+        "ref_date": "2026-08-01",
+        "unemployment": pytest.approx(0.053),
+        "underutilization": pytest.approx(0.131),
+    }
+    assert underutilization["gap"] == pytest.approx(0.078)
 
 
 @pytest.mark.usefixtures("seeded")
 def test_activity_forecast_comes_from_the_latest_focus_survey(api: TestClient) -> None:
-    """O PIB esperado vem em dezembro de 2026 e de 2027, e a desocupação, mês a mês,
-    depois de ago/2026 e até dez/2027: jan/2028 fica de fora."""
+    """O PIB esperado vem em dezembro de cada ano que a pesquisa traz, e a desocupação,
+    mês a mês, depois de ago/2026 e até dez/2029, os anos do relatório Focus."""
     body = api.get("/api/activity").json()
 
     assert body["gdp"]["forecast"] == {
@@ -93,6 +111,7 @@ def test_activity_forecast_comes_from_the_latest_focus_survey(api: TestClient) -
         "2026-10-01",
         "2026-12-01",
         "2027-01-01",
+        "2028-01-01",
     ]
 
 

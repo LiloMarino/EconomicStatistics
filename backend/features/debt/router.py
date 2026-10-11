@@ -78,12 +78,13 @@ class YearCompositionDTO(BaseDTO):
 
 class MaturityBucketDTO(BaseDTO):
     """A fração da dívida em mercado que vence de `start` até `end`; sem `end`, de
-    `start` em diante. `within_12m` marca as faixas que começam nos 12 meses
-    seguintes ao estoque."""
+    `start` em diante, e `value` o valor em R$ dela. `within_12m` marca a faixa dos 12
+    meses seguintes ao estoque, a mesma de `maturing_12m`."""
 
     start: date
     end: date | None
     share: float
+    value: float
     within_12m: bool
 
 

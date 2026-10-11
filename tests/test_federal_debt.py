@@ -96,20 +96,35 @@ def test_maturing_within_12m_goes_until_the_end_of_the_12th_month() -> None:
     assert maturing_within_12m(STOCK, JULY) == pytest.approx(0.60)
 
 
-def test_maturity_profile_groups_by_year() -> None:
-    """As faixas saem por ano, com 2031 a 2035 juntos e o resto depois; faixa vazia
-    sai, e as que começam em até 12 meses ficam marcadas."""
+def test_maturity_profile_starts_with_the_next_12_months() -> None:
+    """A primeira faixa são os 12 meses depois do estoque, a mesma conta do "vence em 12
+    meses"; depois vêm o resto de 2027, vazio aqui e por isso fora, os anos um a um,
+    2031 a 2035 juntos e o resto."""
     buckets = maturity_profile(STOCK, JULY)
 
     assert [
         (item.start, item.end, item.share, item.within_12m) for item in buckets
     ] == [
-        (date(2027, 1, 1), date(2027, 12, 31), pytest.approx(0.60), True),
+        (date(2026, 8, 1), date(2027, 7, 31), pytest.approx(0.60), True),
         (date(2028, 1, 1), date(2028, 12, 31), pytest.approx(0.04), False),
         (date(2029, 1, 1), date(2029, 12, 31), pytest.approx(0.05), False),
         (date(2031, 1, 1), date(2035, 12, 31), pytest.approx(0.25), False),
         (date(2036, 1, 1), None, pytest.approx(0.06), False),
     ]
+    assert buckets[0].share == pytest.approx(maturing_within_12m(STOCK, JULY))
+    assert buckets[0].value == pytest.approx(60.0)
+
+
+def test_maturity_profile_counts_what_matures_in_the_stock_month() -> None:
+    """Um título que vence dentro do mês do estoque entra na faixa dos 12 meses, como no
+    "vence em 12 meses", e as faixas somam a dívida inteira."""
+    stock = [*STOCK, _holding("LTN 010726", date(2026, 7, 1), 20.0)]
+
+    buckets = maturity_profile(stock, JULY)
+
+    assert sum(item.share for item in buckets) == pytest.approx(1.0)
+    assert buckets[0].share == pytest.approx(maturing_within_12m(stock, JULY))
+    assert buckets[0].value == pytest.approx(80.0)
 
 
 def test_central_bank_share_is_over_every_title() -> None:

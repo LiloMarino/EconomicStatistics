@@ -9,6 +9,7 @@ from backend.domain.coverage import (
     expected_ref_date,
     fetch_request,
     month_start,
+    overdue,
 )
 from backend.domain.series import SERIES, code_ranges
 
@@ -26,10 +27,13 @@ def cached_until(spec_first: date, last: date) -> DateRange:
     return DateRange(start=spec_first, end=last)
 
 
-def test_ipca_month_is_expected_from_day_15_of_the_next_month() -> None:
-    """O IPCA de setembro só é cobrado a partir de 15 de outubro."""
-    assert expected_ref_date(IPCA, date(2026, 10, 14)) == date(2026, 8, 1)
-    assert expected_ref_date(IPCA, date(2026, 10, 15)) == date(2026, 9, 1)
+def test_ipca_month_is_fetched_from_day_8_and_missed_from_day_15() -> None:
+    """O IPCA de setembro sai entre 8 e 12 de outubro: o app o busca a partir do dia 8,
+    e a falta só vira aviso a partir do dia 15."""
+    assert expected_ref_date(IPCA, date(2026, 10, 7)) == date(2026, 8, 1)
+    assert expected_ref_date(IPCA, date(2026, 10, 8)) == date(2026, 9, 1)
+    assert not overdue(IPCA, date(2026, 8, 1), date(2026, 10, 14))
+    assert overdue(IPCA, date(2026, 8, 1), date(2026, 10, 15))
 
 
 def test_minimum_wage_is_expected_in_its_own_month() -> None:
@@ -78,10 +82,10 @@ def test_credit_month_is_expected_at_the_end_of_the_next_month() -> None:
 
 
 def test_ipca_cut_month_is_expected_with_the_ipca_of_the_ibge() -> None:
-    """O IPCA livres de setembro, como o IPCA geral, só é cobrado a partir de 15 de
+    """O IPCA livres de setembro, como o IPCA geral, é buscado a partir de 8 de
     outubro."""
-    assert expected_ref_date(IPCA_FREE, date(2026, 10, 14)) == date(2026, 8, 1)
-    assert expected_ref_date(IPCA_FREE, date(2026, 10, 15)) == date(2026, 9, 1)
+    assert expected_ref_date(IPCA_FREE, date(2026, 10, 7)) == date(2026, 8, 1)
+    assert expected_ref_date(IPCA_FREE, date(2026, 10, 8)) == date(2026, 9, 1)
 
 
 def test_first_load_asks_for_the_whole_series() -> None:
@@ -187,3 +191,32 @@ def test_daily_cache_up_to_today_asks_nothing_and_yesterday_refetches() -> None:
     )
     assert request is not None
     assert (request.start, request.end) == (date(2025, 10, 1), date(2026, 10, 8))
+
+
+def test_business_day_series_is_expected_on_the_previous_business_day() -> None:
+    """A PTAX de segunda é cobrada pela da sexta anterior, e a de quinta pela de quarta:
+    a do próprio dia só sai à tarde."""
+    dollar = SERIES[SeriesId.DOLLAR_DAILY]
+
+    assert expected_ref_date(dollar, date(2026, 10, 12)) == date(2026, 10, 9)
+    assert expected_ref_date(dollar, date(2026, 10, 15)) == date(2026, 10, 14)
+
+
+def test_business_day_gap_waits_three_business_days() -> None:
+    """Um feriado deixa a PTAX um dia útil atrás sem aviso; a falta só conta depois de 3
+    dias úteis sem dado."""
+    dollar = SERIES[SeriesId.DOLLAR_DAILY]
+    thursday = date(2026, 10, 15)
+
+    assert not overdue(dollar, date(2026, 10, 13), thursday)
+    assert not overdue(dollar, date(2026, 10, 12), thursday)
+    assert overdue(dollar, date(2026, 10, 9), thursday)
+
+
+def test_release_day_past_the_end_of_the_month_falls_on_the_last_day() -> None:
+    """A desocupação de janeiro sai perto do fim de fevereiro: cobrada a partir do "dia
+    30", ela vale em 28/fev, e não só em 1º de março."""
+    unemployment = SERIES[SeriesId.UNEMPLOYMENT_RATE]
+
+    assert expected_ref_date(unemployment, date(2027, 2, 28)) == date(2027, 1, 1)
+    assert expected_ref_date(unemployment, date(2027, 2, 27)) == date(2026, 12, 1)

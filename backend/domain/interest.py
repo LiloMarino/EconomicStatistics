@@ -8,7 +8,8 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 
 from backend.domain.coverage import month_start
-from backend.domain.rates import PERCENT, MonthlyRate
+from backend.domain.focus import Expectation
+from backend.domain.rates import PERCENT, MonthlyRate, real_change
 from backend.domain.series import Observation
 
 
@@ -36,6 +37,32 @@ def month_end_rates(observations: Iterable[Observation]) -> list[MonthlyRate]:
     for item in observations:
         by_month[month_start(item.ref_date)] = item.value / PERCENT
     return [MonthlyRate(ref_date=month, rate=rate) for month, rate in by_month.items()]
+
+
+def ex_ante_real_rates(
+    selic: Sequence[MonthlyRate], expected_12m: Sequence[Expectation]
+) -> list[MonthlyRate]:
+    """O juro real ex-ante de cada mês: a Selic do fim do mês contra o IPCA que o
+    mercado esperava para os 12 meses seguintes na última pesquisa Focus feita até o
+    fim dele. Selic de 13,75% contra 4,59% esperados dão 8,76%. Mês sem pesquisa até
+    ali fica de fora."""
+    surveys = sorted(expected_12m, key=lambda item: item.survey_date)
+    rates: list[MonthlyRate] = []
+    index = 0
+    latest: Expectation | None = None
+    for month in selic:
+        next_month = month_start(month.ref_date, -1)
+        while index < len(surveys) and surveys[index].survey_date < next_month:
+            latest = surveys[index]
+            index += 1
+        if latest is not None:
+            rates.append(
+                MonthlyRate(
+                    ref_date=month.ref_date,
+                    rate=real_change(month.rate, latest.median / PERCENT),
+                )
+            )
+    return rates
 
 
 def last_change(observations: Sequence[Observation]) -> SelicChange | None:
