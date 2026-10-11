@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from threading import Lock
 
 from fastapi import APIRouter
 
@@ -25,6 +26,10 @@ from backend.features.simulator.refresh import refresh_imf
 from backend.repository.series import fetch_logs, last_cached
 
 router = APIRouter(prefix="/api/series", tags=["series"])
+
+# Um refresh por vez, de todas as fontes juntas: o concorrente espera e refaz o plano
+# sobre o cache que o primeiro deixou, sem gravar a mesma tentativa duas vezes
+_refresh_lock = Lock()
 
 
 class RefreshReportDTO(BaseDTO):
@@ -57,17 +62,20 @@ def refresh(
 ) -> RefreshReportDTO:
     """Com o cache em dia, responde sem sair da máquina. Sem rede não é erro: o cache
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
-    now = datetime.now()
-    report = refresh_series(session, providers, now)
-    datasets: dict[Dataset, DatasetRefresh] = {
-        Dataset.FEDERAL_DEBT_STOCK: refresh_federal_debt(session, debt_provider, now),
-        Dataset.FOCUS_EXPECTATIONS: refresh_focus(session, focus_provider, now),
-        Dataset.COPOM_MEETINGS: refresh_copom(session, copom_provider, now),
-        Dataset.IMF_COUNTRIES: refresh_imf(session, imf_provider, now),
-        Dataset.INFLATION_TOLERANCE: refresh_tolerance(
-            session, tolerance_provider, now
-        ),
-    }
+    with _refresh_lock:
+        now = datetime.now()
+        report = refresh_series(session, providers, now)
+        datasets: dict[Dataset, DatasetRefresh] = {
+            Dataset.FEDERAL_DEBT_STOCK: refresh_federal_debt(
+                session, debt_provider, now
+            ),
+            Dataset.FOCUS_EXPECTATIONS: refresh_focus(session, focus_provider, now),
+            Dataset.COPOM_MEETINGS: refresh_copom(session, copom_provider, now),
+            Dataset.IMF_COUNTRIES: refresh_imf(session, imf_provider, now),
+            Dataset.INFLATION_TOLERANCE: refresh_tolerance(
+                session, tolerance_provider, now
+            ),
+        }
     return RefreshReportDTO(
         updated=list(report.updated),
         failed=list(report.failed),

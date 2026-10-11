@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
 
 from fastapi.testclient import TestClient
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from backend.core.enum import SeriesId, Source
+from backend.core.enum import Dataset, SeriesId, Source
+from backend.core.models.models import DatasetFetchLog
 from backend.features.series.refresh import refresh_series
 from backend.repository.series import last_cached
 from tests.fakes import FakeProvider
@@ -63,3 +66,18 @@ def test_refresh_endpoint_feeds_the_status(api: TestClient) -> None:
     assert refreshed.status_code == 200
     by_id = {item["series_id"]: item for item in status}
     assert by_id["ipca_food"]["last_ref_date"] is not None
+
+
+def test_simultaneous_refreshes_record_each_source_once(
+    api: TestClient, session: Session
+) -> None:
+    """Dois "Atualizar dados" ao mesmo tempo, como o app aberto em modo estrito: o
+    segundo espera o primeiro, os dois respondem 200 e cada fonte que não é série fica
+    com uma linha só no registro de tentativas."""
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(api.post, "/api/series/refresh") for _ in range(2)]
+        responses = [future.result() for future in futures]
+
+    assert [response.status_code for response in responses] == [200, 200]
+    logs = session.scalar(select(func.count()).select_from(DatasetFetchLog))
+    assert logs == len(Dataset)

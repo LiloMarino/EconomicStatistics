@@ -4,7 +4,6 @@ import logging
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
-from threading import Lock
 
 from sqlalchemy.orm import Session
 
@@ -22,8 +21,6 @@ from backend.repository.series import (
 
 logger = logging.getLogger(__name__)
 
-_refresh_lock = Lock()
-
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class RefreshReport:
@@ -37,10 +34,8 @@ class RefreshReport:
 def refresh_series(
     session: Session, providers: Mapping[Source, SeriesProvider], now: datetime
 ) -> RefreshReport:
-    """Consulta a fonte só pelas séries a que falta a última referência esperada.
-    Um refresh por vez: o concorrente espera e refaz o plano sobre o cache novo."""
-    with _refresh_lock:
-        return _refresh(session, providers, now)
+    """Consulta a fonte só pelas séries a que falta a última referência esperada."""
+    return _refresh(session, providers, now)
 
 
 def _fetch(
