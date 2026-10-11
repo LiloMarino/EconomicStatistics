@@ -1,9 +1,26 @@
-import { type Edge, type EdgeProps, useInternalNode } from "@xyflow/react";
+import { type Edge, EdgeLabelRenderer, type EdgeProps, useInternalNode } from "@xyflow/react";
+import type { ReactNode } from "react";
+
+import type { DiagramEdge } from "@/shared/components/diagram/diagram-spec";
+import { EdgeTags } from "@/shared/components/diagram/effect-tag";
 
 import { NODE_MIN_HEIGHT, NODE_WIDTH } from "@/shared/components/diagram/diagram-spec";
 
 export type NumberedFlowEdge = Edge<
-  { color: string; number: number; active: boolean; bend: number },
+  {
+    color: string;
+    number: number;
+    active: boolean;
+    bend: number;
+    /** Em destaque pelo mouse: traço mais grosso e o texto da seta num balão. */
+    highlighted: boolean;
+    /** Outra coisa está em destaque: a seta recua. */
+    receded: boolean;
+    text: ReactNode;
+    effect?: DiagramEdge["effect"];
+    flow?: DiagramEdge["flow"];
+    onHover: (number: number | null) => void;
+  },
   "numbered"
 >;
 
@@ -72,7 +89,12 @@ export function NumberedEdge({ id, source, target, data }: EdgeProps<NumberedFlo
   const markerId = `arrow-${id}`;
 
   return (
-    <g className={data.active ? "opacity-100" : "opacity-12"} style={{ "--edge": data.color }}>
+    <g
+      className={`transition-opacity ${!data.active ? "opacity-12" : data.receded ? "opacity-25" : "opacity-100"}`}
+      style={{ "--edge": data.color }}
+      onMouseEnter={() => data.onHover(data.number)}
+      onMouseLeave={() => data.onHover(null)}
+    >
       <defs>
         <marker
           id={markerId}
@@ -89,11 +111,24 @@ export function NumberedEdge({ id, source, target, data }: EdgeProps<NumberedFlo
       <path
         d={`M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`}
         fill="none"
-        strokeWidth={data.active ? 2.5 : 2}
+        strokeWidth={data.highlighted ? 4 : data.active ? 2.5 : 2}
         markerEnd={`url(#${markerId})`}
         className="stroke-(--edge)"
       />
-      <circle cx={badge.x} cy={badge.y} r={BADGE_RADIUS} className="fill-(--edge)" />
+      {/* Uma faixa larga e invisível em volta do traço, para o mouse achar a seta */}
+      <path
+        d={`M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`}
+        fill="none"
+        strokeWidth={16}
+        pointerEvents="stroke"
+        className="stroke-transparent"
+      />
+      <circle
+        cx={badge.x}
+        cy={badge.y}
+        r={data.highlighted ? BADGE_RADIUS + 3 : BADGE_RADIUS}
+        className="fill-(--edge)"
+      />
       <text
         x={badge.x}
         y={badge.y}
@@ -105,6 +140,23 @@ export function NumberedEdge({ id, source, target, data }: EdgeProps<NumberedFlo
       >
         {data.number}
       </text>
+      {(data.effect?.label || data.flow || data.highlighted) && (
+        <EdgeLabelRenderer>
+          <div
+            className="pointer-events-none absolute top-0 left-0 z-10 translate-x-(--x) translate-y-(--y)"
+            style={{ "--x": `${badge.x}px`, "--y": `${badge.y}px` }}
+          >
+            <div className="flex w-64 -translate-y-1/2 flex-col items-start gap-1 pl-4">
+              <EdgeTags flow={data.flow} effect={data.effect} />
+              {data.highlighted && (
+                <span className="bg-popover text-popover-foreground text-small rounded-lg border px-2.5 py-1.5 shadow-md">
+                  {data.text}
+                </span>
+              )}
+            </div>
+          </div>
+        </EdgeLabelRenderer>
+      )}
     </g>
   );
 }

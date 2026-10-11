@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import type { Activity } from "@/features/activity/use-activity";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import { forecastLegendEntry } from "@/shared/components/forecast-legend";
 import { ForecastSpan } from "@/shared/components/forecast-span";
 import {
@@ -18,6 +19,7 @@ import {
   formatMonth,
   formatMonthName,
   formatMonthRange,
+  formatPeople,
   formatPercent,
   formatShortMonth,
 } from "@/shared/lib/format";
@@ -46,6 +48,28 @@ function HowToRead({ unemployment }: { unemployment: Unemployment }) {
           {last &&
             `: o de ${formatMonthName(last.ref_date)} junta ${formatMonthName(addMonths(last.ref_date, -2))}, ${formatMonthName(addMonths(last.ref_date, -1))} e ${formatMonthName(last.ref_date)}`}
           . Por isso a linha é suave e reage com atraso.
+        </p>
+      </TrayItem>
+      {last && (
+        <TrayItem title="Com gente de verdade: 100 pessoas na força de trabalho">
+          <MoneyExample
+            rows={[
+              { label: "Trabalham ou procuram trabalho", value: formatPeople(1) },
+              { label: "Procuraram e não acharam: a taxa", value: formatPeople(last.value) },
+              { label: "Têm trabalho", value: formatPeople(unemployment.employed), total: true },
+            ]}
+          >
+            A taxa só conta quem procurou trabalho. Quem já desistiu de procurar não entra na conta.
+          </MoneyExample>
+        </TrayItem>
+      )}
+      <TrayItem title="Quem fica de fora da taxa" concept="unemployment-rate">
+        <p>
+          A taxa não mede todo o desemprego. Ficam de fora quem desistiu de procurar porque acha que
+          não vai achar (o desalentado), quem trabalha menos horas do que queria (o subocupado) e
+          quem queria trabalhar mas não pode começar agora. O IBGE junta todos eles numa outra taxa,
+          a de subutilização da força de trabalho, que é bem maior. O cartão abaixo mostra as duas
+          lado a lado.
         </p>
       </TrayItem>
       <TrayItem title="É o mesmo número do IBGE?" concept="unemployment-rate">

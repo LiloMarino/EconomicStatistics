@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { type ExplainerCard, ExplainerCards } from "@/features/explainers/explainer-cards";
 import { type TodayValues, useTodayValues } from "@/features/explainers/explainer-values";
 import { SteppedDiagram } from "@/features/explainers/stepped-diagram";
@@ -5,7 +7,7 @@ import type { DiagramSpec } from "@/shared/components/diagram/diagram-spec";
 
 function buildSpec(values: TodayValues): DiagramSpec {
   return {
-    height: 600,
+    height: 700,
     label: "Diagrama dos loops da dívida e da inflação e das três pontes entre eles",
     groupColors: {
       debt: "var(--loop-debt)",
@@ -52,16 +54,16 @@ function buildSpec(values: TodayValues): DiagramSpec {
         subtitle: "IPCA em 12 meses",
         concept: "ipca",
         accent: "var(--loop-inflation)",
-        x: 720,
-        y: 40,
+        x: 790,
+        y: 140,
       },
       {
         id: "adjustments",
         title: "Reajustes",
         subtitle: "salários, aluguéis e contratos pela inflação passada",
         accent: "var(--loop-inflation)",
-        x: 820,
-        y: 300,
+        x: 830,
+        y: 420,
       },
       {
         id: "expectations",
@@ -77,8 +79,8 @@ function buildSpec(values: TodayValues): DiagramSpec {
         id: "distrust",
         title: "Desconfiança",
         subtitle: "o mercado duvida que a dívida será paga",
-        x: 300,
-        y: 10,
+        x: 330,
+        y: 20,
       },
       {
         id: "dollar",
@@ -95,8 +97,8 @@ function buildSpec(values: TodayValues): DiagramSpec {
         id: "money",
         title: "BC cria dinheiro",
         subtitle: "para cobrir o déficit (vedado pela Constituição e pela LRF)",
-        x: 420,
-        y: 200,
+        x: 440,
+        y: 230,
       },
       {
         id: "selic",
@@ -104,8 +106,8 @@ function buildSpec(values: TodayValues): DiagramSpec {
         value: values.selic,
         subtitle: "para conter a inflação",
         concept: "selic",
-        x: 420,
-        y: 470,
+        x: 440,
+        y: 580,
       },
     ],
     edges: [
@@ -170,14 +172,14 @@ function buildSpec(values: TodayValues): DiagramSpec {
         from: "deficit",
         to: "money",
         group: "money",
-        text: "Se o Banco Central imprimisse dinheiro para pagar o déficit...",
+        text: "O atalho seria o Banco Central imprimir dinheiro para pagar o déficit. No Brasil, a Constituição e a Lei de Responsabilidade Fiscal fecham esse caminho.",
         bend: -20,
       },
       {
         from: "money",
         to: "inflation",
         group: "money",
-        text: "...mais dinheiro atrás dos mesmos produtos viraria inflação. No Brasil, a Constituição e a Lei de Responsabilidade Fiscal fecham esse caminho direto.",
+        text: "Se o atalho fosse usado, mais dinheiro atrás dos mesmos produtos viraria inflação: é o caminho clássico da hiperinflação.",
         bend: 20,
       },
       {
@@ -185,14 +187,14 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "selic",
         group: "rate",
         text: "Inflação acima da meta faz o Banco Central subir a Selic.",
-        bend: -60,
+        bend: -150,
       },
       {
         from: "selic",
         to: "interest",
         group: "rate",
         text: "Selic mais alta encarece a dívida, que tem boa parte atrelada a ela: a carga volta para o loop da dívida.",
-        bend: -40,
+        bend: -60,
       },
     ],
     steps: [
@@ -201,46 +203,78 @@ function buildSpec(values: TodayValues): DiagramSpec {
         label: "Tudo",
         groups: [],
         title: "O desenho inteiro",
-        intro:
-          "Roxo é o loop da dívida, laranja o da inflação; azul, vermelho e verde são as pontes. Escolha um pedaço acima para ver só ele.",
+        intro: (
+          <>
+            Esta tela junta os outros explicadores num desenho só: roxo é o loop da dívida, laranja
+            o da inflação, e azul, vermelho e verde são as pontes. Cada pedaço tem uma página
+            própria; escolha um acima para ver só ele e o link para o explicador dele. Passe o mouse
+            num número ou num bloco para acender só o que ele toca.
+          </>
+        ),
       },
       {
         id: "debt",
         label: "Loop da dívida",
         groups: ["debt"],
         title: "O loop da dívida",
-        intro:
-          "Dívida gera juro, juro vira déficit, déficit vira dívida. Ele gira sozinho enquanto o primário não cobrir o juro.",
+        intro: (
+          <>
+            Dívida gera juro, juro vira déficit, déficit vira dívida. O loop acelera quando o juro
+            da dívida (r) passa do crescimento da economia (g) e o primário não cobre a diferença: é
+            a conta de r − g.{" "}
+            <Link to="/learn/explainers/why-r-minus-g">Por que r − g decide a dívida →</Link>
+          </>
+        ),
       },
       {
         id: "inflation",
         label: "Loop da inflação",
         groups: ["inflation"],
         title: "O loop da inflação",
-        intro: "É a inércia: a inflação de ontem vira reajuste hoje e expectativa amanhã.",
+        intro: (
+          <>
+            É a inércia: a inflação de ontem vira reajuste hoje e expectativa amanhã.{" "}
+            <Link to="/learn/explainers/inertia-and-real">A inércia e o Plano Real →</Link>
+          </>
+        ),
       },
       {
         id: "fx",
         label: "Ponte do câmbio",
         groups: ["fx"],
         title: "A ponte do câmbio",
-        intro: "Leva carga da dívida para a inflação pelo dólar.",
+        intro: (
+          <>
+            Leva carga da dívida para a inflação pelo dólar. As reservas são o amortecedor dessa
+            ponte. <Link to="/learn/explainers/reserves-and-fx">Reservas, câmbio e dívida →</Link>
+          </>
+        ),
       },
       {
         id: "money",
         label: "Ponte da emissão",
         groups: ["money"],
         title: "A ponte da emissão de moeda",
-        intro:
-          "O caminho clássico da hiperinflação. Hoje ele está fechado por lei, mas explica o passado do Brasil.",
+        intro: (
+          <>
+            O caminho clássico da hiperinflação. Hoje ele está fechado por lei, mas explica o
+            passado do Brasil.{" "}
+            <Link to="/learn/explainers/money-printing">Emitir moeda gera inflação? →</Link>
+          </>
+        ),
       },
       {
         id: "rate",
         label: "Ponte dos juros",
         groups: ["rate"],
         title: "A ponte dos juros",
-        intro:
-          "Leva carga da inflação para a dívida: o remédio de uma piora a outra. Quando isso domina, é a dominância fiscal.",
+        intro: (
+          <>
+            Leva carga da inflação para a dívida: o remédio de uma piora a outra. Quando isso
+            domina, é a dominância fiscal.{" "}
+            <Link to="/learn/explainers/fiscal-dominance">Dominância fiscal →</Link>
+          </>
+        ),
       },
     ],
   };

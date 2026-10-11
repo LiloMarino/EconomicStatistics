@@ -8,7 +8,7 @@ tamanho da dívida não basta. */
 export function HowItWorks() {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="A corrida entre r e g" concept="r-minus-g">
+      <TrayItem title="A corrida entre r e g" concept="r-minus-g" explainer="why-r-minus-g">
         <p>
           Todo ano a dívida cresce pelo juro (r) e o PIB cresce por g. Se r passa g, a dívida/PIB
           sobe sozinha; se g passa r, ela encolhe sozinha. O primário só acelera ou freia.
@@ -21,7 +21,7 @@ export function HowItWorks() {
           desvaloriza, como na Argentina em 2002.
         </p>
       </TrayItem>
-      <TrayItem title="Por que o tamanho não basta">
+      <TrayItem title="Por que o tamanho não basta" explainer="debt-sustainability">
         <p>
           Dever na própria moeda, para gente de dentro, com juro baixo, é bem diferente de dever em
           moeda que o país não emite. Compare Japão e Grécia no gráfico e na seção de baixo.

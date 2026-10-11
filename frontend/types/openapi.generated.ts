@@ -396,6 +396,7 @@ export interface components {
             gdp: components["schemas"]["GdpDTO"];
             ibc: components["schemas"]["IbcDTO"];
             unemployment: components["schemas"]["UnemploymentDTO"];
+            underutilization: components["schemas"]["UnderutilizationDTO"];
         };
         /** AverageMaturityDTO */
         AverageMaturityDTO: {
@@ -421,6 +422,7 @@ export interface components {
             minimum: number;
             /** Minimum With Buffer */
             minimum_with_buffer: number;
+            example: components["schemas"]["LossExampleDTO"];
         };
         /** CaseContextDTO */
         CaseContextDTO: {
@@ -503,11 +505,17 @@ export interface components {
             debt: components["schemas"]["YearValueDTO"][];
             inflation: components["schemas"]["YearValueDTO"] | null;
         };
-        /** CreditDTO */
+        /**
+         * CreditDTO
+         * @description `delinquency` é a inadimplência (atraso de mais de 90 dias) de cada mês desde
+         *     mar/2015, o começo do índice de Basileia, em fração da carteira (0.0504 é 5,04%).
+         */
         CreditDTO: {
             cost: components["schemas"]["CostDTO"];
             concessions: components["schemas"]["ConcessionsDTO"];
             basel: components["schemas"]["BaselDTO"];
+            /** Delinquency */
+            delinquency: components["schemas"]["MonthValueDTO"][];
         };
         /**
          * Dataset
@@ -760,6 +768,7 @@ export interface components {
             reserves: components["schemas"]["backend__features__external_sector__router__ReservesDTO"];
             /** Position */
             position: components["schemas"]["PositionPointDTO"][];
+            national_income: components["schemas"]["NationalIncomeDTO"] | null;
         };
         /**
          * FederalDebtDTO
@@ -847,7 +856,9 @@ export interface components {
         /**
          * FlowsForecastDTO
          * @description O que o Focus espera para o ano em transações correntes e investimento direto,
-         *     em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões).
+         *     em US$ bilhões (-60.0 é um déficit de US$ 60 bilhões). `trade_balance` é a balança
+         *     de mercadorias, e `services_and_income` o resto das transações correntes, os
+         *     serviços e a renda.
          */
         FlowsForecastDTO: {
             /**
@@ -861,6 +872,10 @@ export interface components {
             current_account: number;
             /** Fdi */
             fdi: number;
+            /** Trade Balance */
+            trade_balance: number;
+            /** Services And Income */
+            services_and_income: number;
         };
         /**
          * FocusDirection
@@ -909,8 +924,8 @@ export interface components {
         /**
          * GdpDTO
          * @description O PIB acumulado em 4 trimestres, em fração (0.019 é 1,9%), datado no mês em que
-         *     cada trimestre termina. `forecast` é o PIB do ano que o Focus espera, em dezembro
-         *     do ano corrente e do seguinte.
+         *     cada trimestre termina. `forecast` é o PIB que o Focus espera para cada ano do
+         *     relatório, em dezembro.
          */
         GdpDTO: {
             /** Quarters */
@@ -1169,10 +1184,31 @@ export interface components {
             years: components["schemas"]["DebtLevelDTO"][];
         };
         /**
+         * LossExampleDTO
+         * @description O exemplo da bandeja com o último trimestre, em frações do valor emprestado: a
+         *     parte que veio dos clientes, o calote do exemplo, o que ainda volta, o capital que
+         *     sobra depois dele, o índice depois dele e o calote que leva o índice ao mínimo com o
+         *     colchão.
+         */
+        LossExampleDTO: {
+            /** Clients */
+            clients: number;
+            /** Loss */
+            loss: number;
+            /** Repaid */
+            repaid: number;
+            /** Capital After Loss */
+            capital_after_loss: number;
+            /** Ratio After Loss */
+            ratio_after_loss: number;
+            /** Loss To Minimum */
+            loss_to_minimum: number;
+        };
+        /**
          * MaturityBucketDTO
          * @description A fração da dívida em mercado que vence de `start` até `end`; sem `end`, de
-         *     `start` em diante. `within_12m` marca as faixas que começam nos 12 meses
-         *     seguintes ao estoque.
+         *     `start` em diante, e `value` o valor em R$ dela. `within_12m` marca a faixa dos 12
+         *     meses seguintes ao estoque, a mesma de `maturing_12m`.
          */
         MaturityBucketDTO: {
             /**
@@ -1184,6 +1220,8 @@ export interface components {
             end: string | null;
             /** Share */
             share: number;
+            /** Value */
+            value: number;
             /** Within 12M */
             within_12m: boolean;
         };
@@ -1261,6 +1299,27 @@ export interface components {
             survey_date: string;
             /** Months */
             months: components["schemas"]["MonthValueDTO"][];
+        };
+        /**
+         * NationalIncomeDTO
+         * @description A renda primária dos 12 meses que terminam em `ref_date`, em fração do PIB de 12
+         *     meses: `received` entra, `sent` sai, `net_sent` é o que sai a mais (0.033 é 3,3% do
+         *     PIB). `kept` é a renda nacional bruta sobre o PIB (0.967 é 96,7%).
+         */
+        NationalIncomeDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Received */
+            received: number;
+            /** Sent */
+            sent: number;
+            /** Net Sent */
+            net_sent: number;
+            /** Kept */
+            kept: number;
         };
         /**
          * NextMeetingDTO
@@ -1447,6 +1506,22 @@ export interface components {
             months: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
         };
         /**
+         * RatePairDTO
+         * @description A desocupação e a subutilização do trimestre móvel que termina em `ref_date`, em
+         *     fração.
+         */
+        RatePairDTO: {
+            /**
+             * Ref Date
+             * Format: date
+             */
+            ref_date: string;
+            /** Unemployment */
+            unemployment: number;
+            /** Underutilization */
+            underutilization: number;
+        };
+        /**
          * ReferenceRaiseDTO
          * @description O reajuste da referência no período; `null` quando o cache não o cobre.
          */
@@ -1562,7 +1637,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "dollar_daily" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "primary_income_received" | "primary_income_paid" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "underutilization_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa" | "delinquency";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1681,16 +1756,31 @@ export interface components {
             ceiling: number;
         };
         /**
+         * UnderutilizationDTO
+         * @description As duas taxas da PNAD Contínua mês a mês, nos últimos 4 anos. `gap` é a
+         *     subutilização menos a desocupação no último mês, em fração (0.078 é 7,8 pontos).
+         */
+        UnderutilizationDTO: {
+            /** Months */
+            months: components["schemas"]["RatePairDTO"][];
+            /** Gap */
+            gap: number;
+        };
+        /**
          * UnemploymentDTO
          * @description A taxa de desocupação do trimestre móvel que termina em cada mês, em fração.
          *     `change_12m` é a diferença contra o mesmo mês do ano anterior, em fração (-0.008 é
-         *     -0,8 ponto percentual). `forecast` é a taxa que o Focus espera mês a mês.
+         *     -0,8 ponto percentual). `employed` é a parte da força de trabalho que tem trabalho
+         *     no último mês (0.947 com desocupação de 5,3%). `forecast` é a taxa que o Focus espera
+         *     mês a mês.
          */
         UnemploymentDTO: {
             /** Months */
             months: components["schemas"]["MonthValueDTO"][];
             /** Change 12M */
             change_12m: number | null;
+            /** Employed */
+            employed: number;
             forecast: components["schemas"]["MonthlyForecastDTO"] | null;
         };
         /**
@@ -1768,7 +1858,8 @@ export interface components {
          * DollarDTO
          * @description A PTAX do fim de cada mês em reais por dólar; `change_12m` em fração contra o
          *     mesmo mês do ano anterior. `forecast` é o câmbio de fim de mês que o Focus
-         *     espera.
+         *     espera. `days` é a PTAX de cada dia útil dos últimos 12 meses, datada no próprio
+         *     dia.
          */
         backend__features__external_sector__router__DollarDTO: {
             /** Months */
@@ -1776,6 +1867,8 @@ export interface components {
             /** Change 12M */
             change_12m: number | null;
             forecast: components["schemas"]["MonthlyForecastDTO"] | null;
+            /** Days */
+            days: components["schemas"]["MonthValueDTO"][];
         };
         /**
          * ReservesDTO

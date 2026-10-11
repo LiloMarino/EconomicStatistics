@@ -13,7 +13,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatDay, formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
+import {
+  formatDay,
+  formatList,
+  formatMonth,
+  formatMonthRange,
+  formatPercent,
+} from "@/shared/lib/format";
 import { addMonths, monthsBetween } from "@/shared/lib/months";
 import { niceTicks } from "@/shared/lib/nice-scale";
 
@@ -110,7 +116,7 @@ export function LevelsChart({ levels, forecast }: { levels: Level[]; forecast: L
   return (
     <ExplainedCard
       title="Dívida líquida e dívida bruta"
-      subtitle={`% do PIB · ${formatMonthRange(first.ref_date, last.ref_date)}${expected.length > 0 ? ` e a previsão para dezembro de ${expected.map((point) => point.ref_date.slice(0, 4)).join(" e ")}` : ""}`}
+      subtitle={`% do PIB · ${formatMonthRange(first.ref_date, last.ref_date)}${expected.length > 0 ? ` e a previsão para dezembro de ${formatList(expected.map((point) => point.ref_date.slice(0, 4)))}` : ""}`}
       explain={{
         label: "Como ler",
         icon: BookOpen,

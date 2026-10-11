@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { DebtSustainability } from "@/features/explainers/debt-sustainability";
 import { type ExplainerId, explainers } from "@/shared/concepts/explainers";
 import { LoopsAndBridges } from "@/features/explainers/loops-and-bridges";
+import { DollarFlows } from "@/features/explainers/dollar-flows";
 import { FiscalDominance } from "@/features/explainers/fiscal-dominance";
 import { InertiaAndReal } from "@/features/explainers/inertia-and-real";
 import { MoneyPrinting } from "@/features/explainers/money-printing";
@@ -22,6 +23,7 @@ const contents: Record<ExplainerId, ComponentType> = {
   "money-printing": MoneyPrinting,
   "reserves-and-fx": ReservesAndFx,
   "fiscal-dominance": FiscalDominance,
+  "dollar-flows": DollarFlows,
 };
 
 /** A página de um explicador: o cabeçalho com os conceitos que ele usa, o conteúdo

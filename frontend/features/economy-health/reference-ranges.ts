@@ -9,8 +9,8 @@ export const referenceRanges = {
     source: "Banco Central, pesquisa Focus",
   },
   neutralRate: {
-    text: "Juro neutro estimado em 5,0%: acima disso, o juro freia a economia.",
-    source: "Banco Central, Relatório de Política Monetária de junho de 2025",
+    text: "Acima do juro neutro, o juro freia a economia. O Banco Central publica a estimativa dele só no texto do Relatório de Política Monetária, sem série para baixar, e por isso o app não a mostra.",
+    source: "Banco Central, Relatório de Política Monetária",
   },
   unemployment: {
     text: "Sem estimativa oficial da taxa que não acelera a inflação: o FGV-Ibre estimou cerca de 8,5% em 2022, e as projeções de mercado para 2025 e 2026 giravam em torno de 9,5%. Sem consenso.",

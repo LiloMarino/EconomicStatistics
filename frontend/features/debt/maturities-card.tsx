@@ -3,7 +3,12 @@ import { BookOpen } from "lucide-react";
 import type { FederalDebt } from "@/features/debt/use-debt";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
-import { formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
+import {
+  formatBrlBillions,
+  formatMonth,
+  formatMonthRange,
+  formatPercent,
+} from "@/shared/lib/format";
 import { cn } from "@/shared/lib/utils";
 
 type Bucket = FederalDebt["maturities"][number];
@@ -11,6 +16,7 @@ type Bucket = FederalDebt["maturities"][number];
 /** "ago–dez/2026" no resto do ano, "2027" num ano, "2031–2035" na faixa de 5 anos e
 "depois de 2035" na última. */
 function bucketLabel(bucket: Bucket): string {
+  if (bucket.within_12m) return "próximos 12 meses";
   const startYear = bucket.start.slice(0, 4);
   if (bucket.end === null) return `depois de ${Number(startYear) - 1}`;
   const endYear = bucket.end.slice(0, 4);
@@ -58,7 +64,7 @@ export function MaturitiesCard({ data }: { data: FederalDebt }) {
           entries={[
             {
               key: "soon",
-              label: "começa nos próximos 12 meses",
+              label: "vence nos próximos 12 meses (o mesmo número do cartão ao lado)",
               color: "var(--trend-up)",
               shape: "square",
             },
@@ -69,10 +75,19 @@ export function MaturitiesCard({ data }: { data: FederalDebt }) {
           {data.maturities.map((bucket) => (
             <li
               key={bucket.start}
-              className="text-small grid grid-cols-[7.5rem_1fr_3.5rem] items-center gap-3"
+              className="text-small grid grid-cols-[9rem_1fr_3.5rem_6.5rem] items-center gap-3"
               style={{ "--width": `${(bucket.share / top) * 100}%` }}
             >
-              <span className="text-muted-foreground">{bucketLabel(bucket)}</span>
+              <span className="flex flex-col">
+                <span className={bucket.within_12m ? "font-semibold" : "text-muted-foreground"}>
+                  {bucketLabel(bucket)}
+                </span>
+                {bucket.within_12m && bucket.end && (
+                  <span className="text-caption text-muted-foreground">
+                    {formatMonthRange(bucket.start, bucket.end, "–")}
+                  </span>
+                )}
+              </span>
               <span className="bg-chart-grid h-5 rounded-sm">
                 <span
                   className={cn(
@@ -82,6 +97,9 @@ export function MaturitiesCard({ data }: { data: FederalDebt }) {
                 />
               </span>
               <strong className="text-right tabular-nums">{formatPercent(bucket.share)}</strong>
+              <span className="text-muted-foreground text-right tabular-nums">
+                {formatBrlBillions(bucket.value)}
+              </span>
             </li>
           ))}
         </ul>

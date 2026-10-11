@@ -28,7 +28,7 @@ export function EconomyHealthPage() {
             <h2 id="with-band" className="font-heading text-section-title">
               Com faixa oficial
             </h2>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-3">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-start gap-3">
               <InflationSignalCard data={health.data.inflation} />
               <PrimarySignalCard data={health.data.primary} />
             </div>

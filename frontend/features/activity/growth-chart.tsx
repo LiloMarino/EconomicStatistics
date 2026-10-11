@@ -14,6 +14,7 @@ import {
 } from "@/shared/components/ui/chart";
 import {
   formatDay,
+  formatList,
   formatMonth,
   formatMonthRange,
   formatPercent,
@@ -87,7 +88,7 @@ function HowToRead({ gdp, ibc }: { gdp: Gdp; ibc: Ibc }) {
         <TrayItem title="A previsão" concept="focus-survey" color={FOCUS_COLOR}>
           <p>
             Os pontos cinza são o PIB que o mercado espera para{" "}
-            {gdp.forecast.months.map((point) => point.ref_date.slice(0, 4)).join(" e ")}, na
+            {formatList(gdp.forecast.months.map((point) => point.ref_date.slice(0, 4)))}, na
             pesquisa Focus de {formatDay(gdp.forecast.survey_date)}. Em dezembro, o acumulado de 4
             trimestres é o próprio crescimento do ano, e é por isso que o Focus cabe no gráfico. O
             Focus não prevê o IBC-Br.
@@ -132,7 +133,7 @@ export function GrowthChart({ gdp, ibc }: { gdp: Gdp; ibc: Ibc }) {
   return (
     <ExplainedCard
       title="A economia cresce ou encolhe?"
-      subtitle={`PIB em 4 trimestres e IBC-Br em 12 meses, % · ${formatMonthRange(first, lastReal)}${forecastEnd ? ` e a previsão do Focus para dezembro de ${expected.map((point) => point.ref_date.slice(0, 4)).join(" e ")}` : ""}`}
+      subtitle={`PIB em 4 trimestres e IBC-Br em 12 meses, % · ${formatMonthRange(first, lastReal)}${forecastEnd ? ` e a previsão do Focus para dezembro de ${formatList(expected.map((point) => point.ref_date.slice(0, 4)))}` : ""}`}
       explain={{
         label: "Como ler",
         icon: BookOpen,

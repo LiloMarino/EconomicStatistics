@@ -1,10 +1,12 @@
 import { CircleAlert } from "lucide-react";
 
 import { DollarChart } from "@/features/external-sector/dollar-chart";
+import { NationalIncomeCard } from "@/features/external-sector/national-income-card";
 import { FlowsChart } from "@/features/external-sector/flows-chart";
 import { PositionChart } from "@/features/external-sector/position-chart";
 import { ReservesChart } from "@/features/external-sector/reserves-chart";
 import { SummaryCards } from "@/features/external-sector/summary-cards";
+import { useDollarScale } from "@/features/external-sector/use-dollar-scale";
 import { useExternalSector } from "@/features/external-sector/use-external-sector";
 import { PageHeader } from "@/shared/components/page-header";
 import {
@@ -19,6 +21,7 @@ import { getApiErrorMessage } from "@/shared/lib/api";
 
 export function ExternalSectorPage() {
   const { data, isPending, error } = useExternalSector();
+  const { scale, setScale } = useDollarScale();
 
   return (
     <>
@@ -42,17 +45,19 @@ export function ExternalSectorPage() {
       ) : (
         <>
           <SummaryCards data={data} />
-          <DollarChart dollar={data.dollar} />
+          <DollarChart dollar={data.dollar} scale={scale} onScaleChange={setScale} />
           <FlowsChart flows={data.flows} forecast={data.flows_forecast} />
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(420px,100%),1fr))] gap-4">
+          {data.national_income && <NationalIncomeCard income={data.national_income} />}
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(420px,100%),1fr))] items-start gap-4">
             <ReservesChart reserves={data.reserves} />
             <PositionChart position={data.position} />
           </div>
           <footer className="text-caption text-muted-foreground border-t pt-5">
-            Fonte: Banco Central, séries do SGS 3696 (dólar, PTAX do fim do mês), 23079 e 23080
-            (transações correntes e investimento direto no país em % do PIB), 3546 (reservas
-            internacionais), 4192 (PIB de 12 meses em dólar), 24011 e 24040 (ativos e passivos da
-            posição internacional de investimento); a previsão vem da pesquisa Focus.
+            Fonte: Banco Central, séries do SGS 3696 (dólar, PTAX do fim do mês), 1 (PTAX de cada
+            dia útil), 22801 e 22802 (renda primária recebida e enviada), 23079 e 23080 (transações
+            correntes e investimento direto no país em % do PIB), 3546 (reservas internacionais),
+            4192 (PIB de 12 meses em dólar), 24011 e 24040 (ativos e passivos da posição
+            internacional de investimento); a previsão vem da pesquisa Focus.
           </footer>
         </>
       )}

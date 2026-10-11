@@ -11,13 +11,14 @@ import {
 
 import type { Credit } from "@/features/credit/use-credit";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatPercent, formatQuarter, formatShortPercent } from "@/shared/lib/format";
+import { formatMoney, formatPercent, formatQuarter, formatShortPercent } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
 
 type Basel = Credit["basel"];
@@ -31,12 +32,19 @@ const axisPercent = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
+// O exemplo da bandeja escala as frações da API a R$ 100 emprestados
+const EXAMPLE_LOAN = 100;
+
 // O eixo x leva um rótulo a cada 2 anos, no 4º trimestre, contados do último ano
 const YEARS_PER_TICK = 2;
 
 function HowToRead({ basel }: { basel: Basel }) {
+  const last = basel.quarters.at(-1);
+  if (!last) return null;
   const minimum = formatShortPercent(basel.minimum);
   const withBuffer = formatShortPercent(basel.minimum_with_buffer);
+  const { example } = basel;
+  const money = (share: number) => formatMoney(EXAMPLE_LOAN * share);
 
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
@@ -52,6 +60,61 @@ function HowToRead({ basel }: { basel: Basel }) {
           O Conselho Monetário Nacional exige {minimum} de capital sobre o risco, mais 2,5 pontos de
           colchão de conservação: {withBuffer} no total. Abaixo do colchão, o banco tem limite para
           pagar dividendos e bônus até se recompor. Quanto mais longe das linhas, mais folga.
+        </p>
+      </TrayItem>
+      <TrayItem title="Com dinheiro na mão: de onde vêm R$ 100 emprestados">
+        <MoneyExample
+          rows={[
+            {
+              label: "Dos clientes: depósitos e aplicações, que o banco tem de devolver",
+              value: money(example.clients),
+            },
+            {
+              label: `Dos donos do banco: o capital próprio (${formatShortPercent(last.value)})`,
+              value: money(last.value),
+            },
+            { label: "Emprestado", value: money(1), total: true },
+          ]}
+        >
+          O índice não sai dos R$ 100 nem soma a eles: diz que, de cada R$ 100 emprestados,{" "}
+          {money(last.value)} vieram dos donos. Para simplificar, todo empréstimo aqui tem o mesmo
+          risco.
+        </MoneyExample>
+      </TrayItem>
+      <TrayItem title={`E se ${money(example.loss)} não forem pagos?`}>
+        <MoneyExample
+          rows={[
+            { label: "Emprestado que ainda volta", value: money(example.repaid) },
+            { label: "O que o banco ainda deve aos clientes", value: money(example.clients) },
+            {
+              label: `Sobra para os donos: o capital (${formatShortPercent(example.ratio_after_loss)})`,
+              value: money(example.capital_after_loss),
+              total: true,
+            },
+          ]}
+        >
+          O calote não diminui o que o banco deve aos clientes, então a perda sai inteira do
+          capital, e o índice cai de {formatShortPercent(last.value)} para{" "}
+          {formatShortPercent(example.ratio_after_loss)}. É por isso que o capital é o colchão: os
+          depósitos ficam protegidos enquanto ele aguenta.
+        </MoneyExample>
+      </TrayItem>
+      <TrayItem title="Quanto calote cabe">
+        <p>
+          O banco pode perder até <strong>{money(example.loss_to_minimum)}</strong> de cada R$ 100
+          emprestados antes de o índice chegar ao mínimo com o colchão, de {withBuffer}. Abaixo
+          dele, já não pode pagar dividendos e bônus à vontade; abaixo de {minimum}, descumpre a
+          regra e o Banco Central exige que recomponha o capital.
+        </p>
+      </TrayItem>
+      <TrayItem title="Para que serve olhar, se existe um mínimo?">
+        <p>
+          A linha mostra a folga do sistema, e não só se a regra é cumprida. Quando ela desce em
+          direção ao mínimo, os bancos param de emprestar para não furar a regra, e o crédito
+          encolhe. E mais não é sempre melhor: o capital é o dinheiro mais caro do banco, porque os
+          donos querem ganhar mais que o juro de um depósito. Capital demais deixa o crédito mais
+          caro. O número diz quanto calote cabe; quanto calote está acontecendo está no cartão de
+          inadimplência, logo abaixo.
         </p>
       </TrayItem>
       <TrayItem title="Por que difere um pouco do relatório do BC">

@@ -70,12 +70,12 @@ export function ExplainedCard({
       onOpenChange={(next) => onOpenChange?.(next)}
       render={<Card variant="sheet" id={id} />}
     >
-      <CardHeader>
+      <CardHeader className="max-sm:has-data-[slot=card-action]:grid-cols-1">
         <CardTitle>
           <h2>{title}</h2>
         </CardTitle>
         {subtitle && <CardDescription>{subtitle}</CardDescription>}
-        <CardAction className="flex flex-wrap items-center gap-3">
+        <CardAction className="flex flex-wrap items-center gap-3 max-sm:col-start-1 max-sm:row-span-1 max-sm:row-start-3 max-sm:justify-self-start">
           {actions}
           {several ? (
             explanations.map((item, index) => (

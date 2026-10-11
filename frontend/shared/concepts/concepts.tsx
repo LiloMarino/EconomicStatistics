@@ -1139,7 +1139,8 @@ export const concepts: Record<ConceptId, Concept> = {
       <p>
         A regra da Lei 14.663/2023 junta duas partes: o INPC dos 12 meses até novembro do ano
         anterior, que repõe a inflação, e o crescimento real do PIB de dois anos antes, que dá o
-        ganho real. Desde 2025, esse ganho real fica limitado a 2,5%.
+        ganho real. De 2025 a 2030, esse ganho fica dentro da faixa de crescimento do gasto do
+        arcabouço fiscal, que vai até 2,5%.
       </p>
     ),
     example: {
@@ -1147,8 +1148,8 @@ export const concepts: Record<ConceptId, Concept> = {
       content: (
         <>
           <p>
-            O INPC de dezembro de 2024 a novembro de 2025 foi 4,18%. O PIB de 2024 cresceu acima de
-            2,5%, então o ganho real ficou no limite.
+            O INPC de dezembro de 2024 a novembro de 2025 foi 4,18%. O PIB de 2024 cresceu mais que
+            o teto da faixa, então o ganho real ficou em 2,5%.
           </p>
           <FormulaBox>
             <Formula flushLeft tex="1{,}0418 \times 1{,}025 = 1{,}0678" />
@@ -1176,7 +1177,8 @@ export const concepts: Record<ConceptId, Concept> = {
       {
         name: "Lei 15.077/2024",
         url: "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l15077.htm",
-        backs: "O limite de 2,5% para o ganho real, desde 2025.",
+        backs:
+          "O ganho real dentro da faixa de crescimento do gasto do arcabouço fiscal, que vai até 2,5%, de 2025 a 2030 (art. 4º).",
       },
       {
         name: "Decreto 12.797/2025",
@@ -4366,5 +4368,244 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: "Trimestral: o IF.data publica o trimestre uns três meses depois do fim dele",
     screens: [creditScreen],
+  },
+  delinquency: {
+    title: "Inadimplência",
+    topic: "credit",
+    summary: "A parte do crédito com parcela atrasada há mais de 90 dias.",
+    lead: (
+      <>
+        A <strong>inadimplência</strong> é a fatia da carteira de crédito com pelo menos uma parcela
+        atrasada há mais de 90 dias. Quanto maior, mais gente e empresa deixando de pagar.
+      </>
+    ),
+    keywords: ["inadimplência", "calote", "atraso", "90 dias", "crédito", "carteira"],
+    measures: (
+      <>
+        <p>
+          O percentual compara o que está atrasado com o total emprestado. Entram famílias e
+          empresas, tanto nos recursos livres quanto nos direcionados.
+        </p>
+        <p>
+          Atraso não é perda inteira. Parte dele volta a ser paga depois de uma renegociação, e
+          parte é cobrada. Os bancos guardam uma <strong>provisão</strong>, dinheiro reservado para
+          a perda que esperam ter. O que vier além disso é coberto pelo capital, medido pelo índice
+          de Basileia.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{inadimplência} = \\frac{\\text{carteira com atraso acima de 90 dias}}{\\text{carteira total}}",
+      legend: [
+        {
+          symbol: "carteira com atraso acima de 90 dias",
+          text: "o crédito com pelo menos uma parcela atrasada há mais de 90 dias",
+        },
+        { symbol: "carteira total", text: "todo o crédito do sistema financeiro" },
+      ],
+    },
+    example: {
+      title: "Com os números de agosto de 2026",
+      content: (
+        <p>
+          Em agosto de 2026, <strong>5,04% da carteira total</strong> estava com atraso acima de 90
+          dias: de cada R$ 100 emprestados, R$ 5,04 estavam nessa situação. Um ano antes, em agosto
+          de 2025, eram 4,14%. Só as pessoas físicas, que é a parte das famílias, chegavam a 6,03%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Subir é sinal de aperto nas famílias e nas empresas: fica mais difícil pagar o que já se
+        deve. Leia junto com o índice de Basileia. Inadimplência subindo com a Basileia parada
+        significa economia apertada, com os bancos ainda firmes. Se as duas pioram juntas, o alerta
+        é maior.
+      </p>
+    ),
+    related: ["basel-ratio", "credit-cost", "credit-concessions"],
+    sources: [
+      {
+        name: "Banco Central, SGS 21082 – Inadimplência da carteira de crédito, total",
+        url: "https://dadosabertos.bcb.gov.br/dataset/21082-inadimplencia-da-carteira-de-credito---total",
+        backs: "Os 5,04% de agosto de 2026 e os 4,14% de agosto de 2025.",
+      },
+      {
+        name: "Banco Central, Estatísticas monetárias e de crédito",
+        url: "https://www.bcb.gov.br/estatisticas/estatisticasmonetariascredito",
+        backs:
+          "A definição de inadimplência como atraso acima de 90 dias e os 6,03% das pessoas físicas (série 21084) em agosto de 2026.",
+      },
+    ],
+    frequency: "Mensal: sai na nota de crédito do Banco Central, perto do fim do mês seguinte",
+    screens: [creditScreen],
+  },
+  underutilization: {
+    title: "Taxa de subutilização",
+    topic: "activity",
+    summary:
+      "O desemprego somado a quem trabalha menos do que queria e a quem desistiu de procurar.",
+    lead: (
+      <>
+        A <strong>taxa de subutilização</strong> soma ao desemprego quem trabalha menos do que
+        queria e quem desistiu de procurar. Ela mostra a folga do mercado de trabalho que a taxa de
+        desocupação deixa de fora.
+      </>
+    ),
+    keywords: [
+      "subutilização",
+      "desalentado",
+      "subocupado",
+      "força de trabalho potencial",
+      "PNAD",
+      "desemprego",
+    ],
+    measures: (
+      <>
+        <p>
+          A conta soma três grupos. Os <strong>desocupados</strong> procuraram emprego e não
+          acharam. Os <strong>subocupados por insuficiência de horas</strong> trabalham menos horas
+          do que queriam e poderiam trabalhar mais. A <strong>força de trabalho potencial</strong> é
+          quem queria trabalhar, mas não procurou: o desalentado, que desistiu porque acha que não
+          vai achar, e quem procurou, mas não pode começar agora.
+        </p>
+        <p>
+          A soma é dividida pela força de trabalho ampliada, que é a força de trabalho mais a força
+          potencial. Os dados vêm da mesma PNAD Contínua do IBGE que traz a taxa de desocupação, no
+          mesmo trimestre móvel.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\text{subutilização} = \\frac{\\text{desocupados} + \\text{subocupados} + \\text{força potencial}}{\\text{força de trabalho} + \\text{força potencial}}",
+      legend: [
+        { symbol: "desocupados", text: "quem procurou trabalho e não achou" },
+        {
+          symbol: "subocupados",
+          text: "quem trabalha menos horas do que queria e poderia trabalhar mais",
+        },
+        { symbol: "força potencial", text: "quem queria trabalhar, mas não procurou" },
+        { symbol: "força de trabalho", text: "quem trabalha ou procura trabalho" },
+      ],
+    },
+    example: {
+      title: "Com os números do trimestre até agosto de 2026",
+      content: (
+        <p>
+          A subutilização foi de <strong>13,1%</strong>, contra 5,3% de desocupação. A diferença de
+          7,8 pontos é a parte do mercado que a taxa de desemprego não mostra. Em agosto de 2022,
+          eram 20,5% contra 8,9%.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        Quanto menor, melhor. A distância para a desocupação mostra o que a taxa oficial esconde:
+        quanto maior a diferença, mais gente fica de fora da conta do desemprego. Quando a distância
+        diminui, o mercado de trabalho melhorou além do que a taxa mostra.
+      </p>
+    ),
+    related: ["unemployment-rate", "moving-quarter"],
+    sources: [
+      {
+        name: "IBGE, PNAD Contínua, tabela 6441 do SIDRA (taxa composta de subutilização da força de trabalho)",
+        url: "https://sidra.ibge.gov.br/tabela/6441",
+        backs:
+          "Os 13,1% do trimestre até agosto de 2026 e os 20,5% do trimestre até agosto de 2022.",
+      },
+      {
+        ...sgs,
+        backs:
+          "A taxa de desocupação de 5,3% (série 24369) no trimestre até agosto de 2026 e de 8,9% no até agosto de 2022.",
+      },
+    ],
+    frequency: "Mensal, em trimestre móvel: o IBGE divulga perto do fim do mês seguinte",
+    screens: [activityScreen],
+  },
+  "primary-income": {
+    title: "Renda primária e renda nacional",
+    topic: "external",
+    summary:
+      "O lucro, os juros e os salários que entram e saem do país, e quanto do PIB fica com quem é daqui.",
+    lead: (
+      <>
+        A <strong>renda primária</strong> conta o lucro, os juros e os salários que cruzam a
+        fronteira. A <strong>renda nacional bruta</strong> usa essa conta para dizer quanto do que o
+        país produz fica com quem é daqui.
+      </>
+    ),
+    keywords: [
+      "renda primária",
+      "renda nacional",
+      "RNB",
+      "PNB",
+      "lucros",
+      "dividendos",
+      "juros",
+      "remessa",
+    ],
+    measures: (
+      <>
+        <p>
+          A renda primária é a linha das transações correntes com o lucro de empresas, os juros de
+          dívidas e os salários que cruzam a fronteira. A <strong>receita</strong> é o que entra:
+          uma empresa brasileira lá fora mandando lucro para cá. A <strong>despesa</strong> é o que
+          sai: uma filial de empresa estrangeira mandando lucro para a matriz, ou juros pagos a um
+          credor de fora.
+        </p>
+        <p>
+          A <strong>renda nacional bruta</strong> é o PIB mais a receita, menos a despesa: o que
+          fica com quem é daqui. O PIB conta tudo o que se produz no território, de quem quer que
+          seja a empresa.
+        </p>
+      </>
+    ),
+    formula: {
+      tex: "\\frac{\\text{renda nacional}}{\\text{PIB}} = 1 + \\frac{\\text{receita} - \\text{despesa}}{\\text{PIB}}",
+      legend: [
+        {
+          symbol: "receita",
+          text: "a renda primária recebida pelo país em 12 meses, em dólar",
+        },
+        {
+          symbol: "despesa",
+          text: "a renda primária enviada pelo país em 12 meses, em dólar",
+        },
+        { symbol: "PIB", text: "o PIB de 12 meses, em dólar" },
+      ],
+    },
+    example: {
+      title: "Com os 12 meses até agosto de 2026",
+      content: (
+        <p>
+          A receita foi de US$ 42,9 bilhões (1,68% do PIB) e a despesa de US$ 126,8 bilhões (4,96%
+          do PIB), num PIB de 12 meses de US$ 2,55 trilhões. Saem{" "}
+          <strong>3,29% do PIB a mais do que entram</strong>, e o país fica com 96,7% do que produz:
+          de cada R$ 100 produzidos, cerca de R$ 3,29 saem como lucro e juros pagos lá fora.
+        </p>
+      ),
+    },
+    reading: (
+      <p>
+        No Brasil sai mais do que entra porque há mais empresa e credor estrangeiro aqui do que
+        brasileiro lá fora. Isso não é bom nem ruim por si: o investimento estrangeiro que gera esse
+        lucro também trouxe fábrica e emprego.
+      </p>
+    ),
+    related: ["current-account", "fdi", "gdp"],
+    sources: [
+      {
+        name: "Banco Central, SGS 22801 – Renda primária, mensal, receita",
+        url: "https://dadosabertos.bcb.gov.br/dataset/22801-renda-primaria---mensal---receita",
+        backs: "Os US$ 42,9 bilhões recebidos nos 12 meses até agosto de 2026.",
+      },
+      {
+        name: "Banco Central, SGS 22802 – Renda primária, mensal, despesa",
+        url: "https://dadosabertos.bcb.gov.br/dataset/22802-renda-primaria---mensal---despesa",
+        backs: "Os US$ 126,8 bilhões enviados nos 12 meses até agosto de 2026.",
+      },
+      { ...sgs, backs: "O PIB de 12 meses de US$ 2,55 trilhões em agosto de 2026 (série 4192)." },
+    ],
+    frequency: "Mensal: sai na nota do setor externo do Banco Central, no mês seguinte",
+    screens: [externalScreen],
   },
 };

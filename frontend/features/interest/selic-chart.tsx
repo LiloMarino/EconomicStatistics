@@ -4,6 +4,7 @@ import { Area, CartesianGrid, ComposedChart, Line, ReferenceDot, XAxis, YAxis } 
 import type { Interest } from "@/features/interest/use-interest";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import { forecastLegendEntry } from "@/shared/components/forecast-legend";
 import { ForecastSpan } from "@/shared/components/forecast-span";
 import { Formula, FormulaBox } from "@/shared/components/formula";
@@ -15,6 +16,7 @@ import {
 } from "@/shared/components/ui/chart";
 import {
   formatDay,
+  formatMoney,
   formatMonth,
   formatMonthRange,
   formatPercent,
@@ -62,7 +64,7 @@ function HowToRead({ data }: { data: Interest }) {
           compara com a meta. O gráfico termina no último IPCA publicado.
         </p>
       </TrayItem>
-      <TrayItem title="O juro real é a distância" concept="real-rate">
+      <TrayItem title="O juro real é a distância" concept="real-rate" explainer="loops-and-bridges">
         <p>
           A faixa sombreada entre as duas linhas é o juro real: quanto a Selic rende acima da
           inflação. Quanto mais larga a faixa, mais o juro aperta a economia.
@@ -81,6 +83,30 @@ function HowToRead({ data }: { data: Interest }) {
           </>
         )}
       </TrayItem>
+      {real && (
+        <TrayItem title="Com dinheiro na mão: R$ 100 aplicados por um ano">
+          <MoneyExample
+            rows={[
+              {
+                label: `R$ 100 rendendo a Selic de ${formatPercent(real.selic)}`,
+                value: formatMoney(100 * (1 + real.selic)),
+              },
+              {
+                label: `O que custava R$ 100, com a inflação esperada de ${formatPercent(real.expected_inflation)}`,
+                value: formatMoney(100 * (1 + real.expected_inflation)),
+              },
+              {
+                label: "Quanto o dinheiro compra a mais no fim do ano",
+                value: formatPercent(real.rate),
+                total: true,
+              },
+            ]}
+          >
+            Os {formatMoney(100 * real.selic)} a mais não são ganho inteiro: parte só repõe os
+            preços que subiram. O ganho de verdade, em poder de compra, é o juro real.
+          </MoneyExample>
+        </TrayItem>
+      )}
       <TrayItem title="Por que o BC sobe o juro" explainer="fiscal-dominance">
         <p>
           Quando a inflação passa da meta, o Banco Central sobe a Selic. O crédito encarece, as

@@ -5,6 +5,15 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EconomicStatistics</title>
+    <script>
+      // O tema salvo entra antes da primeira pintura; sem escolha, o escuro
+      var light = false;
+      try {
+        light = localStorage.getItem("theme") === "light";
+      } catch {}
+      document.documentElement.classList.toggle("dark", !light);
+      document.documentElement.style.colorScheme = light ? "light" : "dark";
+    </script>
   </head>
   <body>
     <div id="root"></div>

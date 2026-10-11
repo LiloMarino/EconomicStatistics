@@ -126,7 +126,7 @@ const spec: DiagramSpec = {
       groups: [],
       title: "Tudo se decide na hora de rolar",
       intro:
-        "Os quatro fatores da esquerda definem se o mercado aceita trocar a dívida que vence por dívida nova.",
+        'Os quatro fatores da esquerda definem se o mercado aceita trocar a dívida que vence por dívida nova. "Na hora de rolar" é onde o caminho se decide: ou o tranquilo, ou o da crise, nunca os dois. Escolha um caminho para ver cada fator do lado dele.',
     },
     {
       id: "calm",
@@ -134,6 +134,25 @@ const spec: DiagramSpec = {
       groups: ["factor", "ok"],
       title: "O caminho tranquilo",
       intro: "Prazo longo, moeda própria, credor de dentro e r perto de g: o caso do Japão.",
+      nodes: {
+        term: { subtitle: "longo: pouco vence de cada vez", accent: "var(--ok)" },
+        currency: { subtitle: "a própria: sempre dá para pagar em reais", accent: "var(--ok)" },
+        lenders: { subtitle: "gente de dentro, que foge menos", accent: "var(--ok)" },
+        "rate-growth": {
+          subtitle: "r perto ou abaixo de g: a dívida não cresce sozinha",
+          accent: "var(--ok)",
+        },
+        rollover: {
+          subtitle: "o mercado aceita trocar a dívida que vence, a juro razoável",
+          accent: "var(--ok)",
+        },
+      },
+      edges: {
+        1: "Com prazo longo, pouco vence de cada vez: uma desconfiança passageira não trava a rolagem.",
+        2: "Em moeda própria, o país sempre consegue pagar o que deve em reais.",
+        3: "Credor de dentro, como os bancos e fundos do próprio país, não vende tudo ao primeiro susto.",
+        4: "Com r perto de g, a dívida não cresce sozinha, e não há motivo para a desconfiança aumentar.",
+      },
     },
     {
       id: "crisis",
@@ -142,6 +161,31 @@ const spec: DiagramSpec = {
       title: "O caminho da crise",
       intro:
         "Prazo curto, moeda alheia ou credor que foge: o caso da Grécia em 2010 e do Brasil de Collor.",
+      nodes: {
+        term: { subtitle: "curto: muito vence de uma vez", accent: "var(--trend-up)" },
+        currency: {
+          subtitle: "uma que o país não emite: depende de ter dólar",
+          accent: "var(--trend-up)",
+        },
+        lenders: {
+          subtitle: "mercado de fora, que foge na primeira desconfiança",
+          accent: "var(--trend-up)",
+        },
+        "rate-growth": {
+          subtitle: "r bem acima de g: a dívida cresce sozinha",
+          accent: "var(--trend-up)",
+        },
+        rollover: {
+          subtitle: "o mercado recusa, ou só aceita a juro alto demais",
+          accent: "var(--trend-up)",
+        },
+      },
+      edges: {
+        1: "Com prazo curto, muito dinheiro vence de uma vez: qualquer desconfiança vira uma rolagem difícil.",
+        2: "Em dólar, não adianta imprimir reais: o país precisa ter dólar para pagar.",
+        3: "Investidor de fora vende e vai embora ao primeiro sinal de problema.",
+        4: "Com r bem acima de g, a dívida cresce sozinha todo ano, e a desconfiança cresce junto.",
+      },
     },
   ],
 };

@@ -91,6 +91,7 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "dollar",
         group: "insurance",
         text: "Numa crise, investidores vendem reais para comprar dólares e levar embora, e o dólar dispara.",
+        effect: { direction: "up", label: "sobe" },
         bend: 0,
       },
       {
@@ -105,6 +106,7 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "dollar",
         group: "insurance",
         text: "Com mais dólar à venda, o preço sobe menos. É um seguro: o objetivo que o Banco Central declara é dar confiança de que o país honra os compromissos externos.",
+        effect: { direction: "down", label: "segura" },
         bend: 0,
       },
       {
@@ -112,6 +114,7 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "reserves",
         group: "debt",
         text: "O contrário também vale: com o dólar mais caro, as reservas passam a valer mais reais.",
+        effect: { direction: "up", label: "valem mais" },
         bend: 30,
       },
       {
@@ -119,6 +122,7 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "net",
         group: "debt",
         text: "E descontam mais da dívida líquida. Em 2024, com o dólar 27,9% mais caro, esse efeito tirou 2,9 pontos do PIB da líquida.",
+        effect: { direction: "down", label: "cai" },
         bend: 0,
       },
       {
@@ -126,6 +130,7 @@ function buildSpec(values: TodayValues): DiagramSpec {
         to: "gross",
         group: "debt",
         text: "A bruta não desconta as reservas, e o câmbio mexe pouco nela: no mesmo 2024, +1,0 ponto. Por isso as duas podem andar em direções opostas.",
+        effect: { direction: "up", label: "sobe pouco" },
         bend: 0,
       },
       {
@@ -157,7 +162,8 @@ function buildSpec(values: TodayValues): DiagramSpec {
         label: "O seguro",
         groups: ["insurance"],
         title: "Para que servem as reservas",
-        intro: "Dólar guardado para a hora da fuga.",
+        intro:
+          "Duas setas chegam ao dólar com efeitos opostos: a fuga empurra o dólar para cima, a venda de reservas segura. O seguro funciona porque a segunda compensa a primeira.",
       },
       {
         id: "debt",

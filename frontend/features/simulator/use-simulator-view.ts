@@ -54,11 +54,20 @@ export function useSimulatorView(cases: readonly [DebtCase, ...DebtCase[]]) {
       { replace, preventScrollReset: true },
     );
 
+  const showScenario = searchParams.get("mine") !== "0";
+
   return {
     base,
     scenario,
     touched,
     compared,
+    /** O seu cenário no gráfico: `?mine=0` esconde a linha dele. */
+    showScenario,
+    toggleScenario: () =>
+      update((params) => {
+        if (showScenario) params.set("mine", "0");
+        else params.delete("mine");
+      }, true),
     /** Mexe num número e fixa os outros três na URL, para o link repetir o cenário. */
     setValue: (key: ScenarioKey, percent: number) =>
       update((params) => {

@@ -3,6 +3,7 @@ import { BookOpen } from "lucide-react";
 import type { ExternalSector } from "@/features/external-sector/use-external-sector";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import { formatPercent, formatQuarter } from "@/shared/lib/format";
 
 type PositionPoint = ExternalSector["position"][number];
@@ -14,7 +15,7 @@ function pointLabel(point: PositionPoint, last: PositionPoint): string {
     : point.ref_date.slice(0, 4);
 }
 
-function HowToRead() {
+function HowToRead({ last }: { last: PositionPoint }) {
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] items-start gap-x-8 gap-y-5">
       <TrayItem title="Ativos" color="var(--ok)">
@@ -29,10 +30,38 @@ function HowToRead() {
           ações e os títulos que compraram, e o que emprestaram para governo e empresas daqui.
         </p>
       </TrayItem>
+      <TrayItem title={`Com exemplos: o que conta de cada lado (${formatQuarter(last.ref_date)})`}>
+        <MoneyExample
+          rows={[
+            {
+              label: "Ativos: ações americanas de um brasileiro, as reservas do BC",
+              value: `${formatPercent(last.assets)} do PIB`,
+            },
+            {
+              label:
+                "Passivos: a fábrica de uma montadora estrangeira aqui, um título do Tesouro com um fundo de fora",
+              value: `${formatPercent(last.liabilities)} do PIB`,
+            },
+            {
+              label: "Saldo: ativos menos passivos",
+              value: `${formatPercent(last.net).replace("-", "−")} do PIB`,
+              total: true,
+            },
+          ]}
+        />
+      </TrayItem>
       <TrayItem title="Saldo" concept="international-investment-position">
         <p>
           Ativos menos passivos. Negativo é o normal de país emergente: estrangeiros investem aqui
           mais do que os brasileiros investem lá fora.
+        </p>
+      </TrayItem>
+      <TrayItem title="E o quanto do PIB é de fora?">
+        <p>
+          Não é este número. O PIB conta tudo o que se produz no Brasil, inclusive nas fábricas de
+          estrangeiros. A parte que vai para fora como lucro e juros sai do PIB e fica de fora da
+          renda nacional, que mede o que sobra para quem é daqui. A diferença entre os dois é a
+          renda primária das transações correntes.
         </p>
       </TrayItem>
       <TrayItem title="O que pesa é do que o passivo é feito">
@@ -58,7 +87,12 @@ export function PositionChart({ position }: { position: PositionPoint[] }) {
     <ExplainedCard
       title="O balanço com o mundo"
       subtitle="Posição internacional de investimento, % do PIB"
-      explain={{ label: "Como ler", icon: BookOpen, heading: "COMO LER", content: <HowToRead /> }}
+      explain={{
+        label: "Como ler",
+        icon: BookOpen,
+        heading: "COMO LER",
+        content: <HowToRead last={last} />,
+      }}
     >
       <div className="flex flex-col gap-3">
         <ChartLegend

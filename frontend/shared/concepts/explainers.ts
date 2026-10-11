@@ -9,6 +9,7 @@ export const explainerIds = [
   "money-printing",
   "reserves-and-fx",
   "fiscal-dominance",
+  "dollar-flows",
 ] as const;
 
 /** O id do explicador é também o endereço da página dele em `/learn/explainers/<id>`. */
@@ -253,6 +254,29 @@ export const explainers: Record<ExplainerId, Explainer> = {
           "Com dívida alta, parte em moeda estrangeira, e prêmio de risco alto, juro maior pode depreciar o câmbio e subir a inflação; o Brasil esteve nessa situação em 2002 e 2003.",
       },
       sgs,
+    ],
+  },
+  "dollar-flows": {
+    title: "O caminho dos dólares",
+    summary:
+      "Por onde o dólar entra e sai do Brasil: transações correntes, conta financeira e as reservas do Banco Central.",
+    readingMinutes: 5,
+    keywords: [
+      "entrada de dólar",
+      "saída de dólar",
+      "balança comercial",
+      "conta financeira",
+      "câmbio",
+      "fluxo cambial",
+    ],
+    uses: ["current-account", "fdi", "exchange-rate", "international-reserves"],
+    sources: [
+      {
+        name: "Banco Central, Estatísticas do setor externo",
+        url: "https://www.bcb.gov.br/estatisticas/estatisticassetorexterno",
+        backs:
+          "As transações correntes (mercadorias, serviços e renda), a conta financeira e as reservas, como o Banco Central as publica.",
+      },
     ],
   },
 };

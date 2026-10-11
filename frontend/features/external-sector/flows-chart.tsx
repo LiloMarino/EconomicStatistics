@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts";
 
 import type { ExternalSector } from "@/features/external-sector/use-external-sector";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import {
   type ChartConfig,
   ChartContainer,
@@ -35,7 +37,40 @@ const axisPercent = new Intl.NumberFormat("pt-BR", {
 // Rótulo do eixo x em janeiro, a cada 2 anos
 const YEARS_BETWEEN_TICKS = 2;
 
-function HowToRead({ last }: { last: Flow }) {
+/** Um ano do Brasil em dólares, com o que o mercado espera para o ano na pesquisa Focus:
+as transações correntes separadas em mercadorias e no resto, serviços e renda. */
+function CurrentAccountExample({ forecast }: { forecast: FlowsForecast }) {
+  const usd = (value: number) => formatUsdBillions(value * 1000);
+  const tradeSurplus = forecast.trade_balance > 0;
+  return (
+    <TrayItem title={`Com dinheiro na mão: ${forecast.year} em dólares`}>
+      <MoneyExample
+        rows={[
+          {
+            label: tradeSurplus
+              ? "Mercadorias: vende mais do que compra (balança comercial)"
+              : "Mercadorias: compra mais do que vende (balança comercial)",
+            value: usd(forecast.trade_balance),
+          },
+          {
+            label: "Serviços e renda: frete, viagens, lucros e juros mandados para fora",
+            value: usd(forecast.services_and_income),
+          },
+          { label: "Transações correntes", value: usd(forecast.current_account), total: true },
+        ]}
+      >
+        O que o mercado espera para {forecast.year} (Focus de {formatDay(forecast.survey_date)}).
+        {tradeSurplus && forecast.current_account < 0
+          ? " Mesmo vendendo mais mercadorias do que compra, o Brasil paga mais do que recebe em serviços e em renda, e o saldo fica negativo."
+          : ""}{" "}
+        Quando o saldo é negativo, o dólar não acaba: o buraco é coberto pelo que entra como
+        investimento direto e empréstimos, a linha verde do gráfico.
+      </MoneyExample>
+    </TrayItem>
+  );
+}
+
+function HowToRead({ last, forecast }: { last: Flow; forecast: FlowsForecast | null }) {
   const deficit = -last.current_account;
   const covered = last.fdi >= deficit;
   return (
@@ -48,6 +83,20 @@ function HowToRead({ last }: { last: Flow }) {
           dinheiro de fora cubra a diferença.
         </p>
       </TrayItem>
+      <TrayItem title="O que é entrar e sair dólar">
+        <p>
+          Entra dólar quando alguém de fora paga ao Brasil: compra soja, se hospeda num hotel daqui,
+          põe dinheiro numa fábrica. Sai quando o Brasil paga lá fora: importa celular, viaja, a
+          filial de uma empresa estrangeira manda lucro para a matriz.
+        </p>
+        <p>
+          Um brasileiro trocar real por dólar no banco não muda a conta sozinho: o dólar só troca de
+          mão aqui dentro. Ele sai quando é usado para pagar algo lá fora.
+        </p>
+        <Link to="/learn/explainers/dollar-flows" className="text-caption self-start font-semibold">
+          Ver o caminho dos dólares no desenho →
+        </Link>
+      </TrayItem>
       <TrayItem title="Investimento direto no país" concept="fdi" color="var(--ok)">
         <p>
           O dinheiro que estrangeiros põem em empresas daqui: abrir uma fábrica, comprar uma
@@ -55,6 +104,7 @@ function HowToRead({ last }: { last: Flow }) {
           não dá para vender uma fábrica numa tarde de pânico.
         </p>
       </TrayItem>
+      {forecast && <CurrentAccountExample forecast={forecast} />}
       <TrayItem title="As duas juntas">
         <p>
           A pergunta do gráfico é se a linha verde cobre o buraco da vermelha. Quando o investimento
@@ -130,7 +180,7 @@ export function FlowsChart({ flows, forecast }: FlowsChartProps) {
         label: "Como ler",
         icon: BookOpen,
         heading: "COMO LER",
-        content: <HowToRead last={last} />,
+        content: <HowToRead last={last} forecast={forecast} />,
       }}
     >
       <div className="flex flex-col gap-2">

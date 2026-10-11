@@ -26,10 +26,13 @@ export function TrajectoryChart({
   simulation,
   cases,
   compared,
+  showScenario = true,
 }: {
   simulation: Simulation;
   cases: DebtCase[];
   compared: DebtCaseId[];
+  /** O olho do seu cenário: escondido, sobra só a comparação entre os casos. */
+  showScenario?: boolean;
 }) {
   const shown = cases.filter((item) => compared.includes(item.id));
   const rows = simulation.path.map((value, year) => ({
@@ -37,7 +40,10 @@ export function TrajectoryChart({
     me: value,
     ...Object.fromEntries(shown.map((item) => [item.id, item.path[year] ?? null])),
   }));
-  const values = [simulation.path, ...shown.map((item) => item.path)].flat();
+  const values = [
+    ...(showScenario ? [simulation.path] : []),
+    ...shown.map((item) => item.path),
+  ].flat();
   const ticks = niceTicks(Math.min(0, ...values), Math.max(...values) * HEADROOM, 5);
   const chartConfig = {
     me: { label: "Seu cenário", color: scenarioColor },
@@ -50,7 +56,9 @@ export function TrajectoryChart({
     <div className="flex flex-col gap-2">
       <ChartLegend
         entries={[
-          { key: "me", label: "Seu cenário", color: scenarioColor, shape: "line" },
+          ...(showScenario
+            ? [{ key: "me", label: "Seu cenário", color: scenarioColor, shape: "line" as const }]
+            : []),
           ...shown.map((item) => ({
             key: item.id,
             label: item.label,
@@ -98,6 +106,7 @@ export function TrajectoryChart({
             />
           ))}
           <Line
+            hide={!showScenario}
             dataKey="me"
             stroke="var(--color-me)"
             strokeWidth={3.5}

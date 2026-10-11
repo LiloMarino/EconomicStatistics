@@ -1,10 +1,10 @@
 import { ChartNoAxesCombined, Moon, PanelLeft, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { useRefreshSeries } from "@/features/series/use-refresh-series";
 import { useSeriesStatus } from "@/shared/hooks/use-series-status";
+import { useTheme } from "@/shared/hooks/use-theme";
 import { CommandSearch } from "@/layouts/command-search";
 import { defaultFooter, isActive, navGroups } from "@/layouts/navigation";
 import { Button } from "@/shared/components/ui/button";
@@ -55,7 +55,7 @@ function ThemeSwitch() {
         variant="segmented"
         size="sm"
         aria-label="Tema"
-        value={[resolvedTheme ?? "dark"]}
+        value={[resolvedTheme]}
         onValueChange={([value]) => {
           if (value) setTheme(value);
         }}
@@ -134,7 +134,7 @@ export function MainLayout() {
           {/* Navegação */}
           <SidebarContent>
             {navGroups.map((group) => (
-              <SidebarGroup key={group.label} className="px-4 py-3">
+              <SidebarGroup key={group.label} className="px-4 py-2">
                 <SidebarGroupLabel className="text-eyebrow uppercase">
                   {group.label}
                 </SidebarGroupLabel>
@@ -145,6 +145,7 @@ export function MainLayout() {
                         <SidebarMenuButton
                           variant="nav"
                           size="nav"
+                          className="h-9"
                           isActive={isActive(to, pathname)}
                           tooltip={label}
                           render={<NavLink to={to} />}
@@ -161,7 +162,7 @@ export function MainLayout() {
           </SidebarContent>
 
           {/* Até quando há dado e tema */}
-          <SidebarFooter className="gap-3 px-4 pb-6">
+          <SidebarFooter className="gap-2 px-4 pb-4">
             <DataUntil pathname={pathname} />
             <ThemeSwitch />
           </SidebarFooter>

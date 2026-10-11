@@ -1,3 +1,4 @@
+import { focusIndicatorLabels, isFocusIndicator } from "@/features/focus/focus-labels";
 import { HistoryChart } from "@/features/focus/history-chart";
 import { ReportTable } from "@/features/focus/report-table";
 import { SummaryCards } from "@/features/focus/summary-cards";
@@ -5,6 +6,13 @@ import { useFocusHistory, useFocusReport } from "@/features/focus/use-focus";
 import { useFocusView } from "@/features/focus/use-focus-view";
 import { NoData } from "@/shared/components/no-data";
 import { PageHeader } from "@/shared/components/page-header";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
 
@@ -16,31 +24,60 @@ export function FocusPage() {
   const report = useFocusReport();
   const years = [...new Set(report.data?.rows.map((row) => row.year))].toSorted((a, b) => a - b);
   const year = view.year ?? history.data?.year ?? years.at(0);
+  const indicators = [
+    ...new Set(report.data?.rows.filter((row) => row.year === year).map((row) => row.indicator)),
+  ];
+
+  // Indicador e ano ficam no cabeçalho do gráfico que eles mudam, e não um no topo da
+  // tela e o outro na tabela lá embaixo
+  const controls = (
+    <div className="flex flex-wrap items-center gap-2">
+      {indicators.length > 0 && (
+        <Select
+          value={view.indicator}
+          onValueChange={(next) => {
+            if (typeof next === "string" && isFocusIndicator(next)) view.setIndicator(next);
+          }}
+        >
+          <SelectTrigger size="sm" aria-label="Indicador">
+            <SelectValue>
+              {(value: string) => (isFocusIndicator(value) ? focusIndicatorLabels[value] : value)}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {indicators.map((item) => (
+              <SelectItem key={item} value={item}>
+                {focusIndicatorLabels[item]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+      {year !== undefined && years.length > 0 && (
+        <ToggleGroup
+          variant="segmented"
+          size="sm"
+          aria-label="Ano previsto"
+          value={[String(year)]}
+          onValueChange={([next]) => {
+            if (next) view.setYear(Number(next));
+          }}
+        >
+          {years.map((item) => (
+            <ToggleGroupItem key={item} value={String(item)}>
+              {item}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      )}
+    </div>
+  );
 
   return (
     <>
       <PageHeader
         title="Focus"
         description="O que o mercado espera para a economia, e como a previsão mudou semana a semana"
-        controls={
-          year !== undefined &&
-          years.length > 0 && (
-            <ToggleGroup
-              variant="segmented"
-              aria-label="Ano previsto"
-              value={[String(year)]}
-              onValueChange={([next]) => {
-                if (next) view.setYear(Number(next));
-              }}
-            >
-              {years.map((item) => (
-                <ToggleGroupItem key={item} value={String(item)}>
-                  {item}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          )
-        }
       />
 
       {history.error ? (
@@ -50,7 +87,7 @@ export function FocusPage() {
       ) : (
         <>
           <SummaryCards history={history.data} />
-          <HistoryChart history={history.data} />
+          <HistoryChart history={history.data} controls={controls} />
         </>
       )}
 

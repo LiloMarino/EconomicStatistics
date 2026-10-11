@@ -8,6 +8,7 @@ import { ConceptHint } from "@/shared/components/concept-hint";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { StatCard } from "@/shared/components/stat-card";
 import { formatMonth, formatPercent, formatWholePercent } from "@/shared/lib/format";
+import { cn } from "@/shared/lib/utils";
 
 // Abaixo disso o pedaço da barra é estreito demais para o rótulo
 const LABEL_MIN_SHARE = 0.08;
@@ -32,6 +33,13 @@ function HowToRead() {
           do Banco Central bate direto no custo da dívida.
         </p>
       </TrayItem>
+      <TrayItem title="Hoje e o que vence" concept="federal-debt">
+        <p>
+          A primeira linha é a dívida inteira de hoje, por indexador. O cartão de cima corta essa
+          mesma dívida pela data em que cada título vence: são dois jeitos de olhar o mesmo estoque.
+          As outras linhas mostram como a mistura mudou desde 2017.
+        </p>
+      </TrayItem>
       <TrayItem title="Só a dívida em mercado" concept="federal-debt">
         <p>
           A composição conta os títulos com bancos, fundos, previdência e estrangeiros, como o
@@ -51,7 +59,7 @@ export function CompositionCard({ data }: { data: FederalDebt }) {
   return (
     <ExplainedCard
       title="De que é feita a dívida federal"
-      subtitle="% da dívida em mercado por indexador, em dezembro de cada ano · Tesouro Nacional"
+      subtitle={`% da dívida em mercado por indexador · a primeira linha é a dívida de hoje (${formatMonth(data.stock_month)}), as outras são dezembro de cada ano · Tesouro Nacional`}
       explain={{ label: "Como ler", icon: BookOpen, heading: "COMO LER", content: <HowToRead /> }}
     >
       <div className="flex flex-col gap-6 lg:flex-row">
@@ -65,12 +73,17 @@ export function CompositionCard({ data }: { data: FederalDebt }) {
             }))}
           />
           <ul className="flex flex-col gap-2">
-            {data.composition.map((row) => (
+            {data.composition.toReversed().map((row, index) => (
               <li
                 key={row.ref_date}
-                className="text-small grid grid-cols-[4.5rem_1fr] items-center gap-3"
+                className={cn(
+                  "text-small grid grid-cols-[4.5rem_1fr] items-center gap-3",
+                  index === 0 && "border-b pb-2.5 font-semibold",
+                )}
               >
-                <span className="text-muted-foreground">{rowLabel(row.ref_date)}</span>
+                <span className={index === 0 ? "text-foreground" : "text-muted-foreground"}>
+                  {index === 0 ? `hoje · ${rowLabel(row.ref_date)}` : rowLabel(row.ref_date)}
+                </span>
                 <span className="flex h-6 overflow-hidden rounded-sm">
                   {row.shares
                     .filter((part) => part.share > 0)

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { BookOpen } from "lucide-react";
 import {
   CartesianGrid,
@@ -44,7 +45,14 @@ function yearTicks(points: FocusHistory["points"]): string[] {
 
 /** A previsão de um indicador para um ano, pesquisa a pesquisa, com a meta e os
 limites quando o indicador é o IPCA. */
-export function HistoryChart({ history }: { history: FocusHistory }) {
+export function HistoryChart({
+  history,
+  controls,
+}: {
+  history: FocusHistory;
+  /** O indicador e o ano escolhidos, no cabeçalho do próprio gráfico. */
+  controls?: ReactNode;
+}) {
   const sentence = readingSentence(history);
   const first = history.points.at(0);
   const last = history.points.at(-1);
@@ -60,6 +68,7 @@ export function HistoryChart({ history }: { history: FocusHistory }) {
   return (
     <ExplainedCard
       title="Como a previsão mudou"
+      actions={controls}
       subtitle={`${label} esperado para ${history.year}, de ${formatDay(first.survey_date)} a ${formatDay(last.survey_date)}`}
       explain={{
         label: "Como ler",

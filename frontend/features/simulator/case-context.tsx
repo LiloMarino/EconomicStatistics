@@ -12,7 +12,16 @@ function Fact({ label, children }: { label: string; children: string }) {
 
 /** O que a conta não mostra sobre o ponto de partida: moeda, prazo, quem empresta e o que
 aconteceu de verdade. O exemplo não tem contexto. */
-export function CaseContext({ base, touched }: { base: DebtCase; touched: boolean }) {
+export function CaseContext({
+  base,
+  touched,
+  previewing = false,
+}: {
+  base: DebtCase;
+  touched: boolean;
+  /** O caso sob o mouse na lista, e não o ponto de partida do seu cenário. */
+  previewing?: boolean;
+}) {
   if (!base.context) return null;
   return (
     <section
@@ -21,11 +30,15 @@ export function CaseContext({ base, touched }: { base: DebtCase; touched: boolea
       style={{ "--swatch": caseColor[base.id] }}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <strong className="text-body">Ponto de partida: {base.label}</strong>
+        <strong className="text-body">
+          {previewing ? base.label : `Ponto de partida: ${base.label}`}
+        </strong>
         <span className="text-small text-muted-foreground">
-          {touched
-            ? "Você mudou os números a partir deste caso."
-            : "Seu cenário está com os números deste caso."}
+          {previewing
+            ? "Copie o caso para levar os números dele ao seu cenário."
+            : touched
+              ? "Você mudou os números a partir deste caso."
+              : "Seu cenário está com os números deste caso."}
         </span>
       </div>
       <dl className="text-caption grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5">

@@ -2,6 +2,7 @@ import { CircleAlert } from "lucide-react";
 
 import { GrowthChart } from "@/features/activity/growth-chart";
 import { SummaryCards } from "@/features/activity/summary-cards";
+import { UnderutilizationCard } from "@/features/activity/underutilization-card";
 import { UnemploymentChart } from "@/features/activity/unemployment-chart";
 import { useActivity } from "@/features/activity/use-activity";
 import { PageHeader } from "@/shared/components/page-header";
@@ -39,11 +40,13 @@ export function ActivityPage() {
           <SummaryCards data={data} />
           <GrowthChart gdp={data.gdp} ibc={data.ibc} />
           <UnemploymentChart unemployment={data.unemployment} />
+          <UnderutilizationCard underutilization={data.underutilization} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: IBGE, Contas Nacionais Trimestrais (tabela 5932 do SIDRA, taxa acumulada em
             quatro trimestres do PIB a preços de mercado); Banco Central, séries do SGS 24363
-            (índice do IBC-Br) e 24369 (taxa de desocupação da PNAD Contínua, do IBGE); a previsão
-            vem da pesquisa Focus.
+            (índice do IBC-Br) e 24369 (taxa de desocupação da PNAD Contínua, do IBGE); IBGE, PNAD
+            Contínua (tabela 6441 do SIDRA, taxa composta de subutilização); a previsão vem da
+            pesquisa Focus.
           </footer>
         </>
       )}

@@ -1,4 +1,5 @@
 import { BookOpen, Target } from "lucide-react";
+import { Fragment } from "react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, XAxis, YAxis } from "recharts";
 
 import { verdictLook } from "@/features/inflation/pace-verdict";
@@ -170,6 +171,7 @@ function HowToRead({ pace }: { pace: InflationPace }) {
           </p>
         </TrayItem>
       )}
+      <TargetChanges pace={pace} />
       <TrayItem title="Efeito base" concept="base-effect">
         <p>
           Um mês fora da curva há um ano mexe na linha hoje. Em jul a set/2023 ela subiu de 3,16%
@@ -178,6 +180,49 @@ function HowToRead({ pace }: { pace: InflationPace }) {
         </p>
       </TrayItem>
     </div>
+  );
+}
+
+/** Por que a linha da meta anda em degraus: a meta e os limites de cada ano que o
+gráfico mostra, como a API os devolve. */
+function TargetChanges({ pace }: { pace: InflationPace }) {
+  // Anos seguidos com a mesma faixa viram um trecho só: "2024 a 2028"
+  type Band = NonNullable<RollingPoint["band"]>;
+  const spans: { first: string; last: string; band: Band }[] = [];
+  for (const point of [...pace.general_12m, ...(pace.forecast?.points ?? [])]) {
+    if (!point.band) continue;
+    const year = point.ref_date.slice(0, 4);
+    const current = spans.at(-1);
+    const same =
+      current &&
+      current.band.target === point.band.target &&
+      current.band.floor === point.band.floor &&
+      current.band.ceiling === point.band.ceiling;
+    if (same) current.last = year;
+    else spans.push({ first: year, last: year, band: point.band });
+  }
+  if (spans.length === 0) return null;
+  return (
+    <TrayItem title="Por que a meta muda" concept="inflation-target">
+      <p>
+        O Conselho Monetário Nacional fixava a meta de cada ano com antecedência, com a sua
+        tolerância, e por isso a linha da meta muda de degrau na virada do ano. Desde 2025 a meta é
+        contínua: 3%, com tolerância de 1,5 ponto para cima ou para baixo, conferida mês a mês.
+      </p>
+      <div className="text-small grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+        {spans.map(({ first, last, band }) => (
+          <Fragment key={first}>
+            <span className="font-semibold tabular-nums">
+              {first === last ? first : `${first} a ${last}`}
+            </span>
+            <span className="tabular-nums">
+              meta de {formatPercent(band.target)}, entre {formatPercent(band.floor)} e{" "}
+              {formatPercent(band.ceiling)}
+            </span>
+          </Fragment>
+        ))}
+      </div>
+    </TrayItem>
   );
 }
 
@@ -233,8 +278,9 @@ export function Rolling12mChart({
   );
   const ticks = niceTicks(Math.min(...values), Math.max(...values), 3);
   const tickEvery = Math.max(TICK_EVERY, Math.ceil(rows.length / MAX_TICKS));
+  // Os rótulos contam do último mês para trás, para o último não colar no anterior
   const monthTicks = rows
-    .filter((_, index) => index % tickEvery === 0 || index === rows.length - 1)
+    .filter((_, index) => (rows.length - 1 - index) % tickEvery === 0)
     .map((row) => row.month);
 
   return (
@@ -317,8 +363,9 @@ export function Rolling12mChart({
               ticks={monthTicks}
               tickLine={false}
               axisLine={false}
-              interval={0}
-              tickFormatter={(month: string) => formatMonth(month)}
+              interval="preserveEnd"
+              minTickGap={12}
+              tickFormatter={(month: string) => `${formatShortMonth(month)}/${month.slice(2, 4)}`}
             />
             <YAxis
               domain={[ticks.at(0) ?? 0, ticks.at(-1) ?? 0.01]}

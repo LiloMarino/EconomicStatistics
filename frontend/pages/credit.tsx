@@ -3,6 +3,7 @@ import { CircleAlert } from "lucide-react";
 import { BaselChart } from "@/features/credit/basel-chart";
 import { ConcessionsChart } from "@/features/credit/concessions-chart";
 import { CostChart } from "@/features/credit/cost-chart";
+import { DelinquencyCard } from "@/features/credit/delinquency-card";
 import { SummaryCards } from "@/features/credit/summary-cards";
 import { useCredit } from "@/features/credit/use-credit";
 import { PageHeader } from "@/shared/components/page-header";
@@ -44,12 +45,13 @@ export function CreditPage() {
           <CostChart cost={data.cost} />
           <ConcessionsChart concessions={data.concessions} />
           <BaselChart basel={data.basel} />
+          <DelinquencyCard delinquency={data.delinquency} />
           <footer className="text-caption text-muted-foreground border-t pt-5">
             Fonte: Banco Central, séries do SGS 25351 (indicador de custo do crédito), 20635
             (concessões de recursos livres a pessoas jurídicas), 20663 (concessões de recursos
-            livres a pessoas físicas, não rotativo) e 432 (meta Selic); IF.data, relatório de
-            informações de capital (patrimônio de referência e ativos ponderados pelo risco, somados
-            sobre as instituições).
+            livres a pessoas físicas, não rotativo), 21082 (inadimplência da carteira de crédito) e
+            432 (meta Selic); IF.data, relatório de informações de capital (patrimônio de referência
+            e ativos ponderados pelo risco, somados sobre as instituições).
           </footer>
         </>
       )}

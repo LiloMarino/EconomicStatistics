@@ -96,10 +96,10 @@ diz, sem cor. */
 export function ReferenceTable({ data }: { data: References }) {
   return (
     <div className="bg-card overflow-x-auto rounded-2xl px-5 pt-1 pb-2">
-      <ul className="min-w-160">
+      <ul className="md:min-w-160">
         <li
           aria-hidden="true"
-          className="text-label text-muted-foreground grid grid-cols-[minmax(200px,1.3fr)_minmax(110px,0.6fr)_minmax(240px,1.6fr)] gap-4 border-b py-3.5"
+          className="text-label text-muted-foreground hidden grid-cols-[minmax(200px,1.3fr)_minmax(110px,0.6fr)_minmax(240px,1.6fr)] gap-4 border-b py-3.5 md:grid"
         >
           <span>Sinal</span>
           <span>Agora</span>
@@ -108,7 +108,7 @@ export function ReferenceTable({ data }: { data: References }) {
         {rows(data).map((row) => (
           <li
             key={row.name}
-            className="grid grid-cols-[minmax(200px,1.3fr)_minmax(110px,0.6fr)_minmax(240px,1.6fr)] items-center gap-4 border-b py-3.5 last:border-b-0"
+            className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 border-b py-3.5 last:border-b-0 md:grid-cols-[minmax(200px,1.3fr)_minmax(110px,0.6fr)_minmax(240px,1.6fr)] md:gap-y-4"
           >
             <div className="flex items-start gap-2.5">
               <ConceptHint id={row.concept} />
@@ -117,8 +117,8 @@ export function ReferenceTable({ data }: { data: References }) {
                 <span className="text-caption text-muted-foreground">{row.what}</span>
               </div>
             </div>
-            <strong className="font-heading text-kpi-sm">{row.value}</strong>
-            <div className="text-caption flex flex-col gap-0.5">
+            <strong className="font-heading text-kpi-sm whitespace-nowrap">{row.value}</strong>
+            <div className="text-caption col-span-full flex flex-col gap-0.5 md:col-span-1">
               <span>{row.reference}</span>
               <span className="text-muted-foreground">{row.source}</span>
             </div>

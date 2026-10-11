@@ -124,9 +124,9 @@ function buildSpec(values: TodayValues): DiagramSpec {
         id: "all",
         label: "Tudo",
         groups: [],
-        title: "Os dois caminhos da alta de juros",
+        title: "Um caminho ou o outro",
         intro:
-          "Verde: o caminho normal, em que o juro derruba a inflação. Vermelho: o da dominância fiscal, em que o juro a empurra para cima.",
+          "Os dois caminhos saem da mesma alta de juros, mas não acontecem juntos: com dívida sob controle vale o verde, e o juro derruba a inflação; com dívida alta e primário que não cobre, vale o vermelho, e o juro a empurra para cima. O que decide é a situação da dívida quando o juro sobe.",
       },
       {
         id: "normal",

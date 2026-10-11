@@ -1,8 +1,10 @@
 import { Sigma } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import type { DebtOverview } from "@/features/debt/use-debt";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
 import { Formula, FormulaBox } from "@/shared/components/formula";
+import { Button } from "@/shared/components/ui/button";
 import { formatMonth, formatPercent, formatPoints } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
 import { texDecimal } from "@/shared/lib/tex";
@@ -156,6 +158,14 @@ export function StabilizationCard({ data }: { data: Stabilization }) {
         <p className="text-caption text-muted-foreground">
           % do PIB em 12 meses · positivo é superávit, negativo é déficit
         </p>
+        <Button
+          variant="outline"
+          className="self-start"
+          render={<Link to="/simulator?base=brazil_today" />}
+          nativeButton={false}
+        >
+          Mexer nos números no simulador →
+        </Button>
       </div>
     </ExplainedCard>
   );

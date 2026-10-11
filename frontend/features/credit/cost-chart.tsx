@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceDot, XAxis, YAxis } from "recharts";
 
 import type { Credit } from "@/features/credit/use-credit";
 import { ChartLegend } from "@/shared/components/chart-legend";
 import { ExplainedCard, TrayItem } from "@/shared/components/explained-card";
+import { MoneyExample } from "@/shared/components/money-example";
 import {
   type ChartConfig,
   ChartContainer,
@@ -11,10 +13,10 @@ import {
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
 import {
+  formatMoney,
   formatMonth,
   formatMonthRange,
   formatPercent,
-  formatPoints,
   formatShortMonth,
 } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
@@ -40,26 +42,74 @@ const axisPercent = new Intl.NumberFormat("pt-BR", {
 const TICK_EVERY = 4;
 
 function HowToRead({ cost }: { cost: Cost }) {
+  const last = cost.months.at(-1);
+  if (!last) return null;
+  const loan = 10_000;
+  const interest = loan * last.cost;
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
-      <TrayItem title="Custo do crédito" concept="credit-cost" color="var(--credit-cost)">
+      <TrayItem
+        title="Custo do crédito"
+        concept="credit-cost"
+        explainer="loops-and-bridges"
+        color="var(--credit-cost)"
+      >
         <p>
-          O que os bancos cobram, em média, por ano, de todo o crédito em aberto. Como pesa o que já
-          foi emprestado, a linha anda devagar.
+          O que os bancos cobram, em média, por ano, de todo o crédito em aberto: do consignado,
+          mais barato, ao cartão rotativo, bem mais caro. Como pesa o que já foi emprestado, a linha
+          anda devagar.
         </p>
       </TrayItem>
       <TrayItem title="Selic meta" concept="selic" color="var(--indexer-selic)">
         <p>
-          A taxa básica de juros, no fim de cada mês. É o começo da conta do banco, e a linha anda
-          em degraus porque só muda nas reuniões do Copom.
+          A mesma Selic da tela Juros: a taxa básica que o Copom fixa, aqui no fim de cada mês. É o
+          começo da conta do banco, e a linha anda em degraus porque só muda nas reuniões.
+        </p>
+        <Link to="/interest" className="text-caption self-start font-semibold">
+          Ver na tela Juros →
+        </Link>
+      </TrayItem>
+      <TrayItem title="O spread não é só lucro" concept="credit-spread">
+        <p>
+          A faixa sombreada entre as duas linhas é o spread. O banco capta dinheiro pagando perto da
+          Selic a quem aplica nele, e empresta mais caro. A diferença paga o calote esperado, os
+          impostos, o custo de operar e, no fim, o lucro. Por isso cortar a Selic não derruba o juro
+          do crédito na mesma proporção.
         </p>
       </TrayItem>
-      <TrayItem title="O spread é a distância" concept="credit-spread">
-        <p>
-          A faixa sombreada entre as duas linhas é o spread: risco de calote, impostos, custos e
-          lucro dos bancos. Hoje a diferença é de {formatPoints(cost.spread)}. Por isso cortar a
-          Selic não derruba o juro do crédito na mesma proporção.
-        </p>
+      <TrayItem title={`Com dinheiro na mão: ${formatMoney(loan)} por um ano`}>
+        <MoneyExample
+          rows={[
+            { label: "Emprestado", value: formatMoney(loan) },
+            {
+              label: `Juros de um ano, à taxa média de ${formatPercent(last.cost)}`,
+              value: formatMoney(interest),
+            },
+            { label: "Devolvido no fim do ano", value: formatMoney(loan + interest), total: true },
+          ]}
+        >
+          É uma conta simples, de juro cobrado uma vez no fim do ano. Na vida real as parcelas pagam
+          aos poucos, e cada tipo de crédito tem a sua taxa; a média junta todos.
+        </MoneyExample>
+      </TrayItem>
+      <TrayItem title="Os juros de cada R$ 100, separados">
+        <MoneyExample
+          rows={[
+            {
+              label: "Juros de R$ 100 emprestados por um ano",
+              value: formatMoney(100 * last.cost),
+            },
+            { label: "Custo de captar, perto da Selic", value: formatMoney(100 * last.selic) },
+            {
+              label: "Spread: calote, impostos, custos e lucro",
+              value: formatMoney(100 * cost.spread),
+              total: true,
+            },
+          ]}
+        >
+          A conta aqui é simples, custo do crédito menos Selic. O Banco Central publica a divisão do
+          spread em cada parte no Relatório de Economia Bancária.
+        </MoneyExample>
       </TrayItem>
     </div>
   );

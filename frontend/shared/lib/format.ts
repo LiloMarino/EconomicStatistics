@@ -87,6 +87,20 @@ export function formatPoints(difference: number): string {
   return `${signedNumber.format(difference * 100).replace("-", "−")} p.p.`;
 }
 
+const list = new Intl.ListFormat("pt-BR", { style: "long", type: "conjunction" });
+
+/** Itens numa frase: ["2026", "2027", "2028"] vira "2026, 2027 e 2028". */
+export function formatList(items: string[]): string {
+  return list.format(items);
+}
+
+const people = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
+
+/** Quantas pessoas de um grupo de `total`, com até 1 casa: 0.053 de 100 vira "5,3". */
+export function formatPeople(share: number, total = 100): string {
+  return people.format(share * total);
+}
+
 /** Fator de uma taxa com 4 casas: 1.04441 vira "1,0444". */
 export function formatFactor(factor: number, digits = 4): string {
   return factor.toFixed(digits).replace(".", ",").replace("-", "−");
@@ -99,6 +113,13 @@ export function formatMoney(value: number): string {
 /** Valor em reais, em trilhões: 8912345678901 vira "R$ 8,9 tri". */
 export function formatBrlTrillions(value: number): string {
   return `R$ ${billions.format(value / 1e12)} tri`.replace("-", "−");
+}
+
+const wholeBillions = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
+
+/** Valor em reais, em bilhões inteiros: 525000000000 vira "R$ 525 bi". */
+export function formatBrlBillions(value: number): string {
+  return `R$ ${wholeBillions.format(value / 1e9)} bi`.replace("-", "−");
 }
 
 /** Estoque em US$ milhões, como o Banco Central publica: 362821 vira "US$ 362,8 bi". */

@@ -9,12 +9,12 @@ import { formatMonth, formatPercent, formatPoints, formatShortMonth } from "@/sh
 import { addMonths, fromUrlMonth, toUrlMonth } from "@/shared/lib/months";
 import { cn } from "@/shared/lib/utils";
 
-// A régua mostra 24 meses: a janela de 12 e os 12 anteriores, de onde sai o mês. São
-// também os meses que o 12 meses do fim e o do mês antes dele precisam.
-const SHOWN_MONTHS = 24;
+// A régua mostra 15 meses: o mês antigo, fora das duas janelas; o mês que sai; os 11 que
+// as duas janelas têm em comum; o mês que entra; e o próximo, que ainda não conta
 const WINDOW = 12;
+const BEFORE = WINDOW + 1;
 
-/** A janela de 12 meses andando sobre o IPCA mês a mês: o mês que entra, o que sai e o
+/** A janela de 12 meses andando sobre o IPCA mês a mês: o mês que sai, o que entra e o
 que acontece com o acumulado. O mês final mora na URL (`?janela=AAAA-MM`). */
 export function MovingWindow() {
   const last = useSeriesStatus().data?.find(
@@ -24,30 +24,55 @@ export function MovingWindow() {
   return <Window last={last} />;
 }
 
+type Role = "old" | "left" | "common" | "entered" | "next";
+
+const roleClass: Record<Role, string> = {
+  old: "text-muted-foreground",
+  left: "bg-tray outline-trend-up outline-2 outline-dashed",
+  common: "bg-tray",
+  entered: "bg-tray ring-ok ring-2",
+  next: "text-muted-foreground",
+};
+
 function Window({ last }: { last: string }) {
   const [params, setParams] = useSearchParams();
   const requested = fromUrlMonth(params.get("janela"));
   const end = requested && requested <= last ? requested : last;
-  const groups = useInflationGroups({ start: addMonths(end, 1 - SHOWN_MONTHS), end });
+  const next = addMonths(end, 1);
+  const groups = useInflationGroups({
+    start: addMonths(end, -BEFORE),
+    end: next <= last ? next : end,
+  });
 
   if (!groups.data) return <Skeleton className="h-56 w-full" />;
   const monthly = groups.data.monthly.filter((item) => item.series_id === "ipca_general");
   const rolling = groups.data.rolling_12m.filter((item) => item.series_id === "ipca_general");
   const rate = (month: string) => monthly.find((item) => item.ref_date === month)?.rate;
   const rolled = (month: string) => rolling.find((item) => item.ref_date === month)?.rate;
-  const shown = Array.from({ length: SHOWN_MONTHS }, (_, index) =>
-    addMonths(end, index - SHOWN_MONTHS + 1),
-  );
   const leaving = addMonths(end, -WINDOW);
+  const cells = Array.from({ length: BEFORE + 2 }, (_, index) => {
+    const month = addMonths(end, index - BEFORE);
+    const role: Role =
+      index === 0
+        ? "old"
+        : month === leaving
+          ? "left"
+          : month === end
+            ? "entered"
+            : month > end
+              ? "next"
+              : "common";
+    return { month, role };
+  });
   const entered = rate(end);
   const left = rate(leaving);
   const now = rolled(end);
   const before = rolled(addMonths(end, -1));
   const move = (count: number) =>
     setParams(
-      (next) => {
-        next.set("janela", toUrlMonth(addMonths(end, count)));
-        return next;
+      (nextParams) => {
+        nextParams.set("janela", toUrlMonth(addMonths(end, count)));
+        return nextParams;
       },
       { preventScrollReset: true },
     );
@@ -58,8 +83,8 @@ function Window({ last }: { last: string }) {
         <span className="flex flex-col gap-0.5">
           <strong>A janela que anda</strong>
           <span className="text-caption text-muted-foreground">
-            IPCA de cada mês. Embaixo, na faixa clara, os 12 meses que entram na conta; em cima, o
-            ano anterior, de onde sai o mesmo mês
+            IPCA de cada mês, em %. Na troca de mês, sai o tracejado e entra o contornado; os 11 do
+            meio contam nas duas janelas.
           </span>
         </span>
         <span className="flex items-center gap-2">
@@ -67,7 +92,7 @@ function Window({ last }: { last: string }) {
             variant="outline"
             size="icon"
             aria-label="Mês anterior"
-            disabled={end <= addMonths(last, -SHOWN_MONTHS)}
+            disabled={end <= addMonths(last, -60)}
             onClick={() => move(-1)}
           >
             <ChevronLeft />
@@ -85,41 +110,60 @@ function Window({ last }: { last: string }) {
         </span>
       </figcaption>
 
-      <ol className="grid grid-cols-12 gap-1">
-        {shown.map((month) => {
-          const inWindow = month > leaving;
-          const monthRate = rate(month);
-          return (
-            <li
-              key={month}
-              className={cn(
-                "text-caption flex flex-col items-center gap-1 rounded-md px-0.5 py-2 tabular-nums",
-                inWindow ? "bg-tray" : "text-muted-foreground",
-                month === end && "ring-ok ring-2",
-                month === leaving && "outline-trend-up outline-2 outline-dashed",
-              )}
-            >
-              <span>{formatShortMonth(month)}</span>
-              <span className="font-semibold">
-                {monthRate === undefined ? "—" : formatPercent(monthRate)}
+      <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-15 gap-1">
+          {/* A janela anterior: do mês que sai ao mês antes do que entra */}
+          <span className="text-caption text-muted-foreground col-start-2 col-end-14 flex items-center gap-2">
+            <span className="border-trend-up h-2 flex-1 rounded-t border-x-2 border-t-2 border-dashed" />
+            janela até {formatMonth(addMonths(end, -1))}
+            {before !== undefined && (
+              <strong className="text-foreground">{formatPercent(before)}</strong>
+            )}
+            <span className="border-trend-up h-2 flex-1 rounded-t border-x-2 border-t-2 border-dashed" />
+          </span>
+        </div>
+        <div className="grid grid-cols-15 gap-1">
+          {cells.map(({ month, role }) => {
+            const value = rate(month);
+            return (
+              <span
+                key={month}
+                className={cn(
+                  "text-caption flex flex-col items-center gap-1 rounded-md px-0.5 py-2 tabular-nums",
+                  roleClass[role],
+                )}
+              >
+                <span>{formatShortMonth(month)}</span>
+                <span className="font-semibold">
+                  {value === undefined ? "—" : formatPercent(value).replace("%", "")}
+                </span>
               </span>
-            </li>
-          );
-        })}
-      </ol>
+            );
+          })}
+        </div>
+        <div className="grid grid-cols-15 gap-1">
+          {/* A janela nova: do mês seguinte ao que saiu até o que entrou */}
+          <span className="text-caption text-muted-foreground col-start-3 col-end-15 flex items-center gap-2">
+            <span className="border-ok h-2 flex-1 rounded-b border-x-2 border-b-2" />
+            janela até {formatMonth(end)}
+            {now !== undefined && <strong className="text-foreground">{formatPercent(now)}</strong>}
+            <span className="border-ok h-2 flex-1 rounded-b border-x-2 border-b-2" />
+          </span>
+        </div>
+      </div>
 
       {entered !== undefined && left !== undefined && now !== undefined && before !== undefined && (
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
           <div className="flex flex-col">
-            <dt className="text-caption text-muted-foreground">Entrou</dt>
-            <dd className="font-semibold">
-              {formatMonth(end)}: {formatPercent(entered)}
-            </dd>
-          </div>
-          <div className="flex flex-col">
             <dt className="text-caption text-muted-foreground">Saiu</dt>
             <dd className="font-semibold">
               {formatMonth(leaving)}: {formatPercent(left)}
+            </dd>
+          </div>
+          <div className="flex flex-col">
+            <dt className="text-caption text-muted-foreground">Entrou</dt>
+            <dd className="font-semibold">
+              {formatMonth(end)}: {formatPercent(entered)}
             </dd>
           </div>
           <div className="flex flex-col">

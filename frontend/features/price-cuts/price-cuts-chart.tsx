@@ -32,9 +32,9 @@ const chartConfig = {
   free: { label: "Livres", color: "var(--price-free)" },
   administered: { label: "Administrados", color: "var(--price-administered)" },
   services: { label: "Serviços", color: "var(--price-services)" },
-  freeForecast: { label: "Livres (Focus)", color: "var(--forecast)" },
-  administeredForecast: { label: "Administrados (Focus)", color: "var(--forecast)" },
-  servicesForecast: { label: "Serviços (Focus)", color: "var(--forecast)" },
+  freeForecast: { label: "Livres (Focus)", color: "var(--price-free)" },
+  administeredForecast: { label: "Administrados (Focus)", color: "var(--price-administered)" },
+  servicesForecast: { label: "Serviços (Focus)", color: "var(--price-services)" },
 } satisfies ChartConfig;
 
 const axisPercent = new Intl.NumberFormat("pt-BR", {
@@ -182,13 +182,15 @@ export function PriceCutsChart({ data }: { data: PriceCuts }) {
                     return typeof month === "string" ? formatMonth(month) : null;
                   }}
                   formatter={(value, name) => {
-                    const line = lines.find((item) => item.key === name);
+                    // A previsão de cada corte leva a cor dele, tracejada
+                    const forecast = String(name).endsWith("Forecast");
+                    const line = lines.find((item) => String(name).startsWith(item.key));
                     return (
                       <span className="flex w-full items-center justify-between gap-4">
                         <span className="inline-flex items-center gap-1.5">
                           <ColorSwatch
                             color={line?.color ?? "var(--forecast)"}
-                            shape={line ? "line" : "dashed"}
+                            shape={forecast ? "dashed" : "line"}
                           />
                           {chartConfig[name as keyof typeof chartConfig].label}
                         </span>
@@ -206,7 +208,8 @@ export function PriceCutsChart({ data }: { data: PriceCuts }) {
               <Line
                 key={`${line.key}Forecast`}
                 dataKey={`${line.key}Forecast`}
-                stroke="var(--forecast)"
+                stroke={line.color}
+                strokeOpacity={0.6}
                 strokeWidth={2.5}
                 strokeDasharray="5 4"
                 dot={false}

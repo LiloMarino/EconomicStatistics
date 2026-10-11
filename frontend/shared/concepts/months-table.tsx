@@ -4,36 +4,15 @@ export function MonthsTable({
 }: {
   rows: { label: string; rate: string; factor?: string }[];
 }) {
-  const withFactor = rows.some((row) => row.factor);
   return (
-    <div className="bg-card overflow-x-auto rounded-xl px-4.5 py-4">
-      <table className="text-caption w-full min-w-max text-center">
-        <tbody>
-          <tr className="text-muted-foreground">
-            {rows.map((row) => (
-              <td key={row.label} className="px-1.5 py-0.5">
-                {row.label}
-              </td>
-            ))}
-          </tr>
-          <tr className="font-bold">
-            {rows.map((row) => (
-              <td key={row.label} className="px-1.5 py-0.5">
-                {row.rate}
-              </td>
-            ))}
-          </tr>
-          {withFactor && (
-            <tr className="text-muted-foreground">
-              {rows.map((row) => (
-                <td key={row.label} className="px-1.5 py-0.5">
-                  {row.factor}
-                </td>
-              ))}
-            </tr>
-          )}
-        </tbody>
-      </table>
+    <div className="bg-card grid grid-cols-6 gap-x-2 gap-y-3 rounded-xl px-4.5 py-4">
+      {rows.map((row) => (
+        <div key={row.label} className="text-caption flex flex-col items-center tabular-nums">
+          <span className="text-muted-foreground">{row.label}</span>
+          <strong>{row.rate}</strong>
+          {row.factor && <span className="text-muted-foreground">{row.factor}</span>}
+        </div>
+      ))}
     </div>
   );
 }
