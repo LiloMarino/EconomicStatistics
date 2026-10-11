@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-09):** a D8 ganhou a revisão do índice de Basileia, somado do IF.data no lugar do PDF do relatório.
+> **Última mudança (2026-10-11):** o fechamento da V1 estendeu a D3 (o front só escala uma fração pronta), a D4 (o exemplo do Aprender é datado), a D6 e a D7 (a rodada antes | depois do canvas) e a D8 (as séries novas, a janela de publicação e o juro neutro fora da Saúde).
 
 ---
 
@@ -147,6 +147,8 @@ Inflação, juros, dívida, câmbio, crédito e emissão de moeda formam uma tei
 
 A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7060 publica por grupo (no ano e em 12 meses) e encadeá-los. Ela bateria com o oficial no ano cheio, mas dobraria as séries e o código do provider. Ficou de fora pela simplicidade: a composição dos mensais é o que o app Streamlit já fazia.
 
+**Exemplos com dinheiro na mão (2026-10-11):** os exemplos das bandejas ("R$ 100 aplicados por um ano", "de cada R$ 100 emprestados") escalam frações que já chegam prontas da API: o front multiplica uma fração pelo tamanho do exemplo, e só. Toda conta entre duas grandezas (a diferença entre duas taxas, a composição, o complemento, o calote que leva a Basileia ao mínimo, quanto da renda fica no país) mora no backend e vem no DTO do cartão.
+
 ### D4 — Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito
 **Status:** ✅ Decidida
 
@@ -170,6 +172,8 @@ A alternativa avaliada foi guardar também os acumulados oficiais que a tabela 7
 - **Campos do `Concept`:** são as seções da página de conceito do canvas: resumo de uma linha, o `lead` (que é também o "?" das telas), o que mede, a fórmula com legenda, o exemplo com números reais e datado, como ler, os cuidados, os relacionados, a fonte oficial e as telas em que aparece.
 
 O "?" abre com clique, num balão curto (D6), e não num hover card.
+
+**Exemplo datado (2026-10-11):** o exemplo de cada conceito é uma fotografia com data ("com os números de agosto de 2026"), e o número de hoje mora nas telas. O plano de trocar o exemplo pelo número de hoje dependia da tela de série (F12), descartada; o gráfico com o dado de hoje fica onde ele ajuda a ler a regra, como no acumulado em 12 meses (F42). A regra ou convenção citada no texto, como a meta de 3% com tolerância de 1,5 ponto do CMN, entra com a fonte, como manda a D8.
 
 **Fontes no Aprender (2026-10-07):** toda página de conceito cita a fonte oficial de cada fato e de cada número dela (IBGE, Banco Central, lei ou decreto no Planalto), e cada fonte diz o que comprova. O tipo exige ao menos uma fonte, então uma página não nasce sem. Os grupos do IPCA continuam um conceito só, e a página dele mostra a composição de cada grupo (subgrupos, exemplos de itens e peso) tirada da estrutura da tabela 7060 do IBGE.
 
@@ -229,8 +233,13 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 - O visual herdado do Finance Manager era uma cópia, e o app pede identidade própria.
 
 **Consequências:**
-- O catálogo de conceitos (F7) guarda os textos dos "?" e das bandejas, que hoje moram nos componentes das telas.
+- O catálogo de conceitos (F7) guarda os textos dos "?". As bandejas explicam o gráfico com os números da tela e moram no componente do cartão.
 - Toda tela nova nasce no padrão, a partir da prancha dela no canvas.
+
+**Rodada antes | depois (2026-10-11):**
+- **Dinheiro na mão:** um número abstrato que fica mais claro em reais ganha um exemplo na bandeja, no componente `MoneyExample`: linhas de conta com o valor à direita e a frase que conclui embaixo, no molde do exemplo do poder de compra. Entraram no custo do crédito, no spread, na Basileia, no desemprego, no juro real, nas transações correntes, na posição internacional e na renda nacional.
+- **Período preso no topo:** os controles do `PageHeader` ficam presos ao rolar, em toda tela que os tem.
+- **Tela estreita:** no celular, os botões do cabeçalho do cartão descem para baixo do título, e uma tabela larga empilha as colunas em vez de rolar de lado.
 
 ### D7 — Mecanismo se explica com diagrama, desenhado em React Flow
 **Status:** ✅ Decidida
@@ -254,6 +263,13 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 
 **Consequências:** o layout de cada diagrama é posicionado à mão, o que dá mais trabalho por diagrama. Os ciclos de partida vêm da conversa com o ChatGPT e passam pela conferência na fonte oficial, como todo fato do Aprender (D4).
 
+**Rodada antes | depois (2026-10-11):**
+- **Hover:** a seta, o nó e a linha da lista acendem juntos, e o resto recua. Vale para todo diagrama numerado.
+- **Etiqueta da seta:** diz o que a seta leva ("entra", "sai", "BC compra") ou, quando não há fluxo, o efeito ("sobe", "segura"), no `Badge`.
+- **Triângulo:** com o mouse na seta, um ▲ ou ▼ aparece ao lado do valor do nó afetado, como numa cotação, em vermelho para subir e azul para cair, as cores de tendência do app. Nunca verde e vermelho: subir não é "bom".
+- **Caminhos que se excluem:** quando um diagrama tem caminhos alternativos, o passo de cada um troca o texto e a cor dos nós, em vez de ganhar um desenho próprio.
+- **O nó leva ao conceito** em `/learn/<id>`, e a tela do número fica nos links "Ver … →" dos cartões.
+
 ### D8 — Dado externo se atualiza sozinho e aos poucos
 **Status:** ✅ Decidida
 
@@ -270,4 +286,8 @@ O "?" abre com clique, num balão curto (D6), e não num hover card.
 - **Revisão de 2026-10-08:** as séries do SGS e do IBGE, a pesquisa Focus, a dívida federal do Tesouro e o calendário do Copom seguem a regra. A tolerância da meta de inflação, que estava digitada a partir das resoluções do CMN, passou a vir do site do Banco Central: a tabela do histórico das metas e a frase da regra em vigor.
 - **Revisão de 2026-10-08, parâmetros dos casos do simulador:** dívida, juro, crescimento e primário de cada caso que aconteceu (Japão nos anos 2010, Grécia em 2010, Argentina em 2001 e 2023, o Brasil de 2002 e de 2015-2016) ficam digitados em `domain/debt_cases.py`. São retratos de um período que passou e não têm série publicada por caso, então entram como convenção, com a fonte e o período escritos ao lado. O que muda com o tempo vem da fonte: o Brasil hoje lê a tela Dívida e a seção histórica lê o FMI, que o app busca sozinho.
 - **Revisão de 2026-10-09, índice de Basileia:** o número que o Banco Central divulga no Relatório de Estabilidade Financeira, um PDF, vem da soma do IF.data no serviço Olinda: o patrimônio de referência e os ativos ponderados pelo risco de todas as instituições, trimestre a trimestre, divididos no backend. A soma fica a menos de 0,1 ponto do relatório. Os mínimos (8% e o adicional de conservação de 2,5%) são regra da Resolução CMN 4.958 e entram digitados, com o artigo ao lado.
+- **Revisão de 2026-10-11, fechamento da V1:**
+  - os três cartões da rodada antes | depois que vieram com dado de exemplo passaram a ler a fonte: a inadimplência (SGS 21082), a subutilização (IBGE, tabela 6441) e a renda primária (SGS 22801 e 22802);
+  - o juro neutro saiu também da tela Saúde da economia, que o mostrava digitado;
+  - a fonte que publica numa janela de dias ganhou duas datas no registro: a partir do primeiro dia o app já busca, e a falta só vira aviso no fim da janela. O IPCA é buscado a partir do dia 8 e cobrado a partir do dia 15. A série de dia útil, como a PTAX diária, segue a mesma ideia: cobra o dia útil anterior e só avisa a falta depois de 3 dias úteis.
 - **Teste de uma fonte nova:** o que acontece daqui a um ano? Se a resposta for "alguém precisa lembrar de editar o código", a fonte não está pronta.

@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-09):** Concluída a Basileia dos bancos na tela Crédito e no painel, somada do IF.data
+> **Última mudança (2026-10-11):** Fechada a V1: a rodada antes | depois do canvas e as pendências da revisão, com a inadimplência, a subutilização, a renda nacional, o dólar diário e o juro real com histórico lendo a fonte
 
 ## Glossário
 
@@ -16,29 +16,29 @@
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
-| **N1** | Acompanhar a economia brasileira num lugar só | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F5](#f5), [F10](#f10), [F11](#f11), [F20](#f20), [F21](#f21), [F25](#f25), [F26](#f26), [F27](#f27), [F28](#f28), [F29](#f29), [F30](#f30), [F31](#f31), [F32](#f32), [F33](#f33), [F34](#f34), [F35](#f35), [F44](#f44), [F45](#f45), [F47](#f47) | — |
-| **N2** | Entender o que cada número significa enquanto olho | [F1](#f1), [F7](#f7), [F8](#f8), [F9](#f9), [F22](#f22), [F23](#f23), [F25](#f25), [F26](#f26), [F29](#f29), [F31](#f31), [F32](#f32), [F35](#f35), [F36](#f36), [F38](#f38), [F39](#f39), [F40](#f40), [F42](#f42), [F48](#f48) | — |
+| **N1** | Acompanhar a economia brasileira num lugar só | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F5](#f5), [F10](#f10), [F11](#f11), [F20](#f20), [F21](#f21), [F25](#f25), [F26](#f26), [F27](#f27), [F28](#f28), [F29](#f29), [F30](#f30), [F31](#f31), [F32](#f32), [F33](#f33), [F34](#f34), [F35](#f35), [F44](#f44), [F45](#f45), [F47](#f47), [F49](#f49), [F51](#f51), [F52](#f52), [F53](#f53), [F54](#f54), [F55](#f55), [F56](#f56) | — |
+| **N2** | Entender o que cada número significa enquanto olho | [F1](#f1), [F7](#f7), [F8](#f8), [F9](#f9), [F22](#f22), [F23](#f23), [F25](#f25), [F26](#f26), [F29](#f29), [F31](#f31), [F32](#f32), [F35](#f35), [F36](#f36), [F38](#f38), [F39](#f39), [F40](#f40), [F42](#f42), [F48](#f48), [F49](#f49), [F50](#f50), [F52](#f52), [F53](#f53), [F56](#f56) | — |
 | **N3** | Saber em que áreas de gasto o dinheiro passou a comprar mais ou menos | [F1](#f1), [F2](#f2), [F3](#f3), [F4](#f4), [F6](#f6), [F20](#f20), [F23](#f23) | — |
 | **N4** | Saber se a dívida pública está sob controle | [F4](#f4), [F13](#f13), [F14](#f14), [F16](#f16), [F24](#f24), [F36](#f36), [F37](#f37), [F40](#f40), [F41](#f41), [F43](#f43) | — |
-| **N5** | Saber se a economia está saudável ou caminhando para uma crise | [F9](#f9), [F10](#f10), [F17](#f17), [F21](#f21), [F24](#f24), [F27](#f27), [F28](#f28), [F37](#f37), [F48](#f48) | — |
+| **N5** | Saber se a economia está saudável ou caminhando para uma crise | [F9](#f9), [F10](#f10), [F17](#f17), [F21](#f21), [F24](#f24), [F27](#f27), [F28](#f28), [F37](#f37), [F48](#f48), [F51](#f51) | — |
 | **N6** | Saber como o déficit é financiado | [F4](#f4), [F13](#f13), [F15](#f15), [F16](#f16), [F41](#f41), [F43](#f43) | — |
-| **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48) | — |
+| **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48), [F50](#f50) | — |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (54 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (62 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | [F1](#f1) | ✅ |
 | **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | [F2](#f2), [F3](#f3), [F4](#f4), [F10](#f10), [F16](#f16), [F20](#f20), [F43](#f43) | ✅ |
-| **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | [F2](#f2), [F5](#f5), [F6](#f6), [F14](#f14), [F21](#f21), [F24](#f24), [F25](#f25), [F27](#f27), [F30](#f30) | ✅ |
+| **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | [F2](#f2), [F5](#f5), [F6](#f6), [F14](#f14), [F21](#f21), [F24](#f24), [F25](#f25), [F27](#f27), [F30](#f30), [F49](#f49), [F53](#f53), [F55](#f55) | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | [F7](#f7), [F8](#f8), [F11](#f11), [F26](#f26) | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | [F21](#f21), [F23](#f23), [F25](#f25) | ✅ |
-| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F47](#f47), [F48](#f48) | ✅ |
-| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | [F9](#f9), [F15](#f15), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48) | ✅ |
-| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F15](#f15), [F45](#f45), [F47](#f47) | ✅ |
+| **D6** | Linguagem visual própria, definida no canvas antes de virar código | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F47](#f47), [F48](#f48), [F49](#f49), [F50](#f50) | ✅ |
+| **D7** | Mecanismo se explica com diagrama, desenhado em React Flow | [F9](#f9), [F15](#f15), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48), [F49](#f49), [F50](#f50) | ✅ |
+| **D8** | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | [F15](#f15), [F45](#f45), [F47](#f47), [F51](#f51), [F52](#f52), [F53](#f53), [F54](#f54), [F56](#f56) | ✅ |
 | [**F1**](#f1) | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ |
 | [**F2**](#f2) | Cache de séries no SQLite com refresh idempotente | — | ✅ |
 | [**F3**](#f3) | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ |
@@ -85,6 +85,14 @@
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | — | ✅ |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito e no painel | — | ✅ |
 | [**F48**](#f48) | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ✅ |
+| [**F49**](#f49) | Rodada "antes \| depois" do canvas nas telas do app | — | ✅ |
+| [**F50**](#f50) | Explicador: o caminho dos dólares | — | ✅ |
+| [**F51**](#f51) | Inadimplência na tela Crédito | — | ✅ |
+| [**F52**](#f52) | Subutilização da força de trabalho na tela Atividade | — | ✅ |
+| [**F53**](#f53) | Renda nacional no Setor externo: quanto do PIB fica no país | — | ✅ |
+| [**F54**](#f54) | Dólar dia a dia no Setor externo | — | ✅ |
+| [**F55**](#f55) | Juro real com histórico na Visão geral | — | ✅ |
+| [**F56**](#f56) | Fechamento das pendências da V1 | — | ✅ |
 
 </details>
 
@@ -133,13 +141,13 @@
 >
 > **Serve:** N2, N7
 >
-> **Progresso:** 10/10 concluídas
+> **Progresso:** 11/11 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (10 itens)</summary>
+<details><summary>Concluído (11 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -153,6 +161,7 @@
 | [**F39**](#f39) | Pranchas dos explicadores no canvas | — | ✅ |
 | [**F42**](#f42) | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | [F8](#f8), [F29](#f29) | ✅ |
 | [**F48**](#f48) | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | [F9](#f9) | ✅ |
+| [**F50**](#f50) | Explicador: o caminho dos dólares | [F9](#f9), [F31](#f31) | ✅ |
 
 </details>
 
@@ -162,17 +171,18 @@
 >
 > **Serve:** N1
 >
-> **Progresso:** 1/1 concluídas
+> **Progresso:** 2/2 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (1 item)</summary>
+<details><summary>Concluído (2 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F11**](#f11) | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | [F4](#f4), [F7](#f7), [F10](#f10), [F13](#f13) | ✅ |
+| [**F55**](#f55) | Juro real com histórico na Visão geral | [F11](#f11), [F30](#f30) | ✅ |
 
 </details>
 
@@ -274,14 +284,14 @@
 >
 > **Serve:** N1, N2, N7
 >
-> **Progresso:** 5/7 concluídas
+> **Progresso:** 9/11 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | [F33](#f33) | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | [F30](#f30) | 🔍 |
 
-<details><summary>Concluído (5 itens)</summary>
+<details><summary>Concluído (9 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -290,18 +300,22 @@
 | [**F32**](#f32) | Tela Atividade: PIB, IBC-Br e desemprego | [F3](#f3), [F4](#f4) | ✅ |
 | [**F33**](#f33) | Tela Crédito: custo do crédito, spread e concessões | [F4](#f4) | ✅ |
 | [**F47**](#f47) | Basileia dos bancos na tela Crédito e no painel | [F33](#f33) | ✅ |
+| [**F51**](#f51) | Inadimplência na tela Crédito | [F33](#f33), [F47](#f47) | ✅ |
+| [**F52**](#f52) | Subutilização da força de trabalho na tela Atividade | [F32](#f32) | ✅ |
+| [**F53**](#f53) | Renda nacional no Setor externo: quanto do PIB fica no país | [F31](#f31) | ✅ |
+| [**F54**](#f54) | Dólar dia a dia no Setor externo | [F31](#f31) | ✅ |
 
 </details>
 
 ### Sem marco
 
-> **Progresso:** 5/5 concluídas
+> **Progresso:** 7/7 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (5 itens)</summary>
+<details><summary>Concluído (7 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -310,6 +324,8 @@
 | [**F40**](#f40) | Leitura mais clara nas telas Dívida, Setor externo e Déficit | [F13](#f13), [F14](#f14), [F31](#f31) | ✅ |
 | [**F44**](#f44) | A busca e o rodapé da barra lateral seguem a tela | [F13](#f13), [F14](#f14), [F31](#f31), [F28](#f28) | ✅ |
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | [F29](#f29) | ✅ |
+| [**F49**](#f49) | Rodada "antes \| depois" do canvas nas telas do app | [F22](#f22), [F23](#f23) | ✅ |
+| [**F56**](#f56) | Fechamento das pendências da V1 | [F49](#f49) | ✅ |
 
 </details>
 
@@ -363,6 +379,14 @@
 | **F48** | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 | [F9](#f9) | Alto | Médio | Médio | Bom | ✅ Concluído |
 | **F15** | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | N6 | D6, D7, D8 | M4 | [F13](#f13), [F16](#f16) | Médio | Médio | Alto | Bom | ✅ Concluído |
 | **F47** | Basileia dos bancos na tela Crédito e no painel | N1 | D6, D8 | M8 | [F33](#f33) | Médio | Baixo | Médio | Bom | ✅ Concluído |
+| **F49** | Rodada "antes \| depois" do canvas nas telas do app | N1, N2 | D3, D6, D7 | — | [F22](#f22), [F23](#f23) | Alto | Médio | Alto | Bom | ✅ Concluído |
+| **F50** | Explicador: o caminho dos dólares | N2, N7 | D6, D7 | M2 | [F9](#f9), [F31](#f31) | Médio | Baixo | Alto | Bom | ✅ Concluído |
+| **F51** | Inadimplência na tela Crédito | N1, N5 | D8 | M8 | [F33](#f33), [F47](#f47) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F52** | Subutilização da força de trabalho na tela Atividade | N1, N2 | D8 | M8 | [F32](#f32) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F53** | Renda nacional no Setor externo: quanto do PIB fica no país | N1, N2 | D3, D8 | M8 | [F31](#f31) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F54** | Dólar dia a dia no Setor externo | N1 | D8 | M8 | [F31](#f31) | Médio | Baixo | Médio | Bom | ✅ Concluído |
+| **F55** | Juro real com histórico na Visão geral | N1 | D3 | M3 | [F11](#f11), [F30](#f30) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
+| **F56** | Fechamento das pendências da V1 | N1, N2 | D8 | — | [F49](#f49) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -379,8 +403,6 @@
 - o `index.css`, sem os tokens de carteira (referências, liquidez, subcarteira, compra/venda).
 
 O layout tem sidebar e toggle de tema, e os caminhos são em inglês (`/inflation`, `/purchasing-power`), como no Finance Manager. `CLAUDE.md` e `README.md` adaptados. Saem o Streamlit, o `requirements.txt` e o launch do VS Code.
-
-**Limitação:** `venv/`, `__pycache__/` e `ipca_cache.csv` não puderam ser apagados pela sessão (permissão negada) e ficam para remoção manual; os dois primeiros já estão no `.gitignore`.
 
 <a id="f2"></a>
 **F2 — Cache de séries no SQLite.** Feito.
@@ -474,7 +496,7 @@ Os eixos usam ticks "redondos" (`shared/lib/nice-scale.ts`), e cada gráfico tra
 
 **Os exemplos** usam os números do banco até ago/2026, calculados com as contas de `backend/domain/rates.py`. Os fatos foram conferidos na fonte: faixa de renda e áreas do IPCA e do INPC (IBGE), meta contínua de 3% ± 1,5 p.p. desde 2025 (CMN) e a regra do mínimo (Lei 14.663/2023, ganho real limitado a 2,5% desde 2025).
 
-**Limitação:** só os conceitos de inflação. Os de juros, contas públicas, atividade e setor externo entram com as features que os mostram.
+**Depois:** os conceitos de juros, contas públicas, atividade, setor externo e crédito entraram com as telas que os mostram.
 
 <a id="f8"></a>
 **F8 — Aba Aprender.** Feito, a partir das pranchas `Learn` e `Concept` do canvas.
@@ -490,9 +512,7 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 **Relação com as telas:** a página é um superset do "?", que mostra o mesmo `lead`. Ela complementa as bandejas "Como ler"/"Ver a conta": as bandejas explicam aquele gráfico com os números da tela, e a página explica o conceito em geral.
 
-**Fica para depois:**
-- a seção "Como as coisas se ligam" entra com os explicadores (F9);
-- o número de hoje e o gráfico da série na página do conceito entram com a tela de série (F12); até lá, o exemplo é fixo e datado.
+**Depois:** a seção "Como as coisas se ligam" entrou com os explicadores (F9). O número de hoje na página do conceito ficou no gráfico do acumulado em 12 meses (F42): a tela de série (F12) foi descartada, e o exemplo de cada conceito fica datado (D4).
 
 <a id="f9"></a>
 **F9 — Explicadores de mecanismo, com diagrama.** Feito para os dois explicadores que têm prancha no canvas (F39); os outros temas viraram a F48. Páginas em `/learn/explainers/<id>`, listadas em Aprender na seção "Como as coisas se ligam" e no Ctrl+K (F26). Cada página é um diagrama em React Flow (D7) com o texto de cada seta embaixo, numerado como a seta no desenho.
@@ -546,7 +566,7 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 **Mudança em relação ao card:**
 - o IPCA em 12 meses continua calculado a partir do IPCA mensal, e não vira a série 13522: é a mesma conta das telas de inflação e juros;
 - o dólar é o do fim do mês, como na tela Setor externo, e não a média mensal;
-- o cartão de Basileia dos bancos ficou de fora e segue na F47: a série do SGS parou em jun/2023;
+- o cartão de Basileia dos bancos entrou depois, com a F47, e o juro real ganhou o histórico com a F55;
 - a variação do Focus compara com a pesquisa de 4 semanas antes.
 
 **Aceite cumprido:** com os dados de 9/out/2026, os cartões batem com as telas temáticas: IPCA de 4,22% em ago/2026 (−0,91 ponto em 12 meses), dívida líquida de 69,26% e bruta de 82,86% do PIB, déficit nominal de 9,48% do PIB em ago/2026 com 93% de juros, desocupação de 5,3% e PIB de 1,9% em 4 trimestres.
@@ -564,7 +584,7 @@ Um id desconhecido mostra "Conceito não encontrado", com o link para o glossár
 
 **No Aprender:** NFSP, resultado primário, resultado nominal e juros nominais, no tema novo "Contas públicas", com as séries em `conceptBySeries`.
 
-**Fica para depois:** o link da bandeja para o loop da dívida, que o explicador dos dois loops (F9) faz ao entrar. A seção "Como o déficit é pago" entrou com a F15.
+**Links:** a bandeja "Juros" liga ao explicador dos dois loops (F9), e a seção "Como o déficit é pago" entrou com a F15.
 
 **Aceite:** conferido. O último mês tem o primário mais os juros igual ao nominal (0,62 + 8,86 = 9,48% do PIB em ago/2026), com os números das séries do SGS.
 
@@ -590,7 +610,7 @@ Em ago/2026: r = 13,74%, g = 7,23%, p* = 4,20% do PIB e, com déficit primário 
 
 **No Aprender:** DLSP, DBGG, juro implícito, crescimento nominal, r − g e o primário que estabiliza.
 
-**Fica para depois:** os links das bandejas para o explicador das três dívidas (F36), para o de r − g (F9) e para o simulador (F24), que cada um faz ao entrar.
+**Links:** as bandejas ligam ao explicador das três dívidas (F36) e ao de r − g (F9), e o cartão "A dívida sobe ou desce?" abre o simulador no caso Brasil hoje (F56).
 
 <a id="f23"></a>
 **F23 — Linguagem visual nas telas que existem.** Feito.
@@ -630,7 +650,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 - as inclinações de 1 e de 3 meses e o veredito (`domain/pace.py`: estável dentro de ±0,10 p.p. em 3 meses);
 - por grupo, o 12 meses no fim e as janelas de 1, 3 e 6 meses, com a inclinação em p.p. e relativa.
 
-**Meta de inflação:** é o SGS 13521. O registro de séries ganhou periodicidade anual: a meta do ano é cobrada desde janeiro. A tolerância de 1,5 ponto fica no registro.
+**Meta de inflação:** é o SGS 13521. O registro de séries ganhou periodicidade anual: a meta do ano é cobrada desde janeiro. A tolerância passou a vir do site do Banco Central com a F45.
 
 **Tela:**
 - o cartão "Ritmo da inflação", com o "?" curto que leva à conta de 1 e de 3 meses, com os números do mês, na bandeja do gráfico de 12 meses;
@@ -664,7 +684,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Aceite cumprido:** com d = 80%, r = 10%, g = 7% e primário igual ao p* (2,24% do PIB), a dívida fica em 80% em todos os anos (`test_debt_stays_put_at_the_stabilizing_primary`).
 
-**Fica para depois:** os links da bandeja "Como funciona" para o explicador de r − g (F9) e para o de por que a dívida não explode (F37), que cada um faz ao entrar.
+**Links:** a bandeja "Como funciona" liga aos explicadores de r − g (F9) e de por que a dívida não explode (F37), desde a F56.
 
 <a id="f16"></a>
 **F16 — Composição da dívida pública federal.** Feito, embaixo da dinâmica na tela Dívida (F14).
@@ -677,7 +697,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 - **universo:** só a carteira "Mercado". É a dívida federal que o Tesouro reporta: em jul/2026, R$ 9.288,8 bilhões, igual ao Relatório Mensal da Dívida;
 - **indexador** pelo prefixo do título, sem olhar a caixa: LFT (com LFT-TD) é Selic; LTN e NTN-F são prefixado; NTN-B é IPCA; NTN-C é IGP-M; dívida externa é câmbio; o resto é "outros";
 - **vence em 12 meses:** o principal que vence até o fim do 12º mês depois do estoque;
-- **perfil de vencimentos:** o resto do ano do estoque, os 4 anos seguintes um a um, os 5 anos depois deles e o que vence mais tarde;
+- **perfil de vencimentos:** os 12 meses seguintes ao estoque, a mesma faixa do "vence em 12 meses", o resto do ano em que eles terminam, os anos seguintes um a um até o 4º depois do estoque, os 5 anos depois deles e o que vence mais tarde, cada faixa com o valor em R$ (F49);
 - **carteira do BC:** a parte de todos os títulos emitidos que está no Banco Central (24,3% em jul/2026). O número "Na carteira do BC" leva à seção "Como o déficit é pago" da tela Déficit (F15), que usa a mesma parcela.
 
 **Prazo médio** pela série oficial do SGS **10618** (títulos do Tesouro emitidos, em meses), e não pelo CSV: a medida oficial pesa cada pagamento, cupons inclusive, e dá 47,40 meses (3,95 anos) em jul/2026, igual aos 3,94 anos da DPMFi no Relatório Mensal. Pela data final de cada título, o CSV daria 5,35 anos.
@@ -692,7 +712,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Limitação:** o "vence em 12 meses" conta só o principal (16,9% em jul/2026). O Tesouro conta todo pagamento dos 12 meses, juros inclusive, e publica 18,91%; não há série oficial dele no SGS. O número na tela diz "do principal", e a página da rolagem cita os dois.
 
-**Fora:** detentores e custo médio, que só existem no Relatório Mensal (PDF e anexo). O link da bandeja de vencimentos para o explicador de por que a dívida não explode (F37) entra com ele.
+**Fora:** detentores e custo médio, que só existem no Relatório Mensal (PDF e anexo). O link da bandeja de vencimentos para o explicador de por que a dívida não explode entrou com a F37.
 
 **Aceite:** conferido. A composição de jul/2026 bate com o Relatório Mensal da Dívida do mesmo mês: taxa flutuante 51,11% (Selic no app: 51,1%), prefixado 19,22% (19,2%), índice de preços 26,02% (IPCA 25,1% + IGP-M 0,8%) e câmbio 3,65% (3,7%).
 
@@ -705,7 +725,7 @@ As contas de contraste (soma simples e subtração) vêm da API (D3).
 
 **Sem cor, com a referência escrita:**
 - expectativa do Focus para o IPCA do ano, com a meta de 3% ao lado;
-- juro real ex-ante, com o juro neutro estimado pelo BC em 5,0% (Relatório de Política Monetária de junho de 2025);
+- juro real ex-ante, com a explicação de que o juro neutro só sai no texto do Relatório de Política Monetária, sem número (F56);
 - desemprego, com o que o FGV-Ibre estimou para a taxa que não acelera a inflação;
 - reservas internacionais em US$ e em % do PIB, com a faixa de 100% a 150% da métrica ARA do FMI;
 - dívida bruta, sem limiar de consenso, o que a tela diz;
@@ -787,7 +807,7 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 - **Filtro:** ignora acento ("educacao" acha "Grupo do IPCA" pelo nome do grupo), e o resultado que bate no título vem antes.
 - **Teclado:** ↑↓ navegam, Enter abre, Esc fecha; o rodapé leva a "Ver tudo em Aprender".
 
-**Entra depois:** os explicadores (F9) como terceiro grupo, e as séries quando existir a tela de série (F12).
+**Depois:** os explicadores entraram na busca com a F9; as séries ficaram de fora com a tela de série (F12), descartada.
 
 <a id="f27"></a>
 **F27 — Continuação pelo Focus nos gráficos.** Feito. O gráfico de uma série segue depois do último dado real com o que o mercado espera na pesquisa Focus mais recente (F10).
@@ -803,9 +823,9 @@ A nota do mapa de calor usa a mesma faixa para dizer se a maior alta do período
 
 **Backend:** os DTOs de `pace`, `external-sector`, `deficit` e `debt` ganharam a previsão, nula quando não há pesquisa em cache. As contas moram em `backend/domain/focus.py` (`rolling_12m_forecast`, `nfsp_from_balance`, `forecast_years`).
 
-**Fica para depois:** a Selic por reunião e o desemprego entram com as telas Juros (F30) e Atividade (F32), e o IPCA livres, administrados e serviços com a F35.
+**Depois:** a Selic por reunião entrou com a tela Juros (F30), o desemprego com a Atividade (F32) e os livres, administrados e serviços com a F35. Desde a F49, a continuação cobre os anos do relatório Focus semanal: o ano do último dado e os 3 seguintes.
 
-**Aceite:** na pesquisa de 2/out/2026, o 12 meses esperado para dez/2026 dá 5,01%, igual à mediana anual do IPCA de 2026 no relatório Focus, e o de dez/2027 dá 4,29%, contra a mediana anual de 4,30%; a diferença vem de as medianas mensais não comporem exatamente na mediana do ano. A comparação com a linha "Focus mais recente" do gráfico do BCB fica para conferir na página, que monta o gráfico no navegador.
+**Aceite:** na pesquisa de 2/out/2026, o 12 meses esperado para dez/2026 dá 5,01%, igual à mediana anual do IPCA de 2026 no relatório Focus, e o de dez/2027 dá 4,29%, contra a mediana anual de 4,30%; a diferença vem de as medianas mensais não comporem exatamente na mediana do ano. Conferido em 2026-10-11 contra a linha "Focus mais recente" da página de estatísticas do BCB (o JSON `datavalor` que a página lê): os 25 meses de set/2026 a set/2028 batem, depois que o IPCA de setembro entrou no cache (F56).
 
 <a id="f28"></a>
 **F28 — Tela Focus: como a expectativa mudou.** Feito, sem prancha no canvas: segue o padrão da D6 com os componentes das telas que existem. É a rota `/focus`, no grupo novo "Expectativas" da navegação.
@@ -858,9 +878,7 @@ O Focus numera as reuniões (`R7/2026`) e não dá a data. O calendário do BCB 
 - a tela tem o resumo (Selic meta, próximo Copom e juro real, cada um com o "?") e o gráfico "A Selic e a inflação", com a faixa do juro real entre as duas linhas e a bandeja "Como ler";
 - no Aprender, o tema "Juros" com Selic meta, Copom, juro real e juro neutro, que é só conceito.
 
-**Fica para depois:**
-- o cartão "O juro aperta ou alivia?" da prancha, com o juro real contra o neutro (F46);
-- o link da bandeja para o explicador dos dois loops entra com ele (F9).
+**Depois:** o cartão "O juro aperta ou alivia?" segue em avaliação na F46, sem fonte que dê para baixar; a bandeja do juro real liga ao explicador dos dois loops desde a F56.
 
 <a id="f31"></a>
 **F31 — Tela Setor externo.** Feito, a partir da prancha `External` do canvas. É a rota `/external-sector`, no grupo "Economia real e mundo" da navegação, e responde de onde vem o preço do dólar e se o país depende de dinheiro que foge rápido.
@@ -884,9 +902,7 @@ As reservas usam o conceito liquidez (3546), que é o número que o BCB divulga.
 - a tela tem o resumo (dólar, transações correntes, investimento direto e reservas, cada um com o "?") e os quatro gráficos da prancha, "O dólar", "De onde vêm e para onde vão os dólares", "O colchão" e "O balanço com o mundo", cada um com a bandeja "Como ler";
 - no Aprender, o tema "Setor externo" com câmbio, PTAX, transações correntes, IDP, reservas internacionais, posição internacional de investimento e % do PIB, que é o conceito da série do PIB em dólar.
 
-**Fica para depois:**
-- o dólar diário (SGS 1): pede que o cache aceite série diária, com a regra de qual dia útil já devia estar publicado. A tela usa a média mensal, como a prancha;
-- os links das bandejas para os explicadores de câmbio e de reservas entram com os explicadores (F9).
+**Depois:** o dólar diário entrou com a F54, e as bandejas do dólar e das reservas ligam ao explicador de reservas, câmbio e dívida (F48).
 
 **Mudança com a continuação pelo Focus (F27):** o dólar passou da média mensal da PTAX (SGS 3698) para a PTAX do fim do mês (SGS 3696), que é a medida que o Focus pergunta (conferido: na pesquisa de 5/jan/2018, o "Câmbio" da API dá 3,34 para 2018, igual à linha "fim de período" do relatório, e não aos 3,32 da média). Uma migration apagou a série antiga do cache. Em set/2026, o dólar fechou a R$ 5,1809, −2,59% em 12 meses.
 
@@ -940,7 +956,7 @@ O SGS não publica a variação em 12 meses das concessões: a tela soma os 12 m
 
 **Aceite cumprido:** com os dados de 8/out/2026, o ICC de ago/2026 dá 24,19% ao ano contra a Selic de 14,00%, spread de 10,19 pontos percentuais; as concessões em 12 meses até ago/2026 dão +12,86% para as famílias e +11,55% para as empresas.
 
-**Fica para depois:** o link da bandeja de custo para o explicador dos dois loops entra com ele (F9).
+**Links:** a bandeja do custo do crédito liga ao explicador dos dois loops desde a F56, e a inadimplência entrou com a F51.
 
 <a id="f34"></a>
 **F34 — Mercado imobiliário.** Uma seção na tela Crédito (F33) com os dois gráficos de mercado imobiliário da página do BCB:
@@ -1168,6 +1184,138 @@ O diagrama, que a tela Déficit passou a usar junto com os explicadores e os con
 
 **Aceite cumprido:** com os dados de 9/out/2026, a soma dá 17,21% em dez/2024 (o relatório diz 17,22%), 17,39% em jun/2025 (17,32%, revisado) e 17,33% em dez/2025 (17,24%): a diferença fica abaixo de 0,1 ponto. O último trimestre, jun/2026, dá 16,98%.
 
+<a id="f49"></a>
+**F49 — Rodada "antes | depois" do canvas.** Feito. O canvas foi refeito numa página só, com o app de hoje à esquerda, a proposta à direita e um post-it por tela, em três voltas de comentário. O código veio num patch aplicado sobre a `main`, revisado contra as convenções do projeto.
+
+**Todas as telas:**
+- a barra lateral ficou mais compacta, com "Juros e expectativas" logo depois de Inflação;
+- os controles de período ficam presos no topo ao rolar (`PageHeader`);
+- os cartões de uma grade não esticam quando a bandeja do vizinho abre (`items-start`);
+- os exemplos com dinheiro na mão (`MoneyExample`) entraram em Juros, Crédito, Atividade e Setor externo.
+
+**Diagramas:**
+- o hover acende juntos a seta, o nó e a linha da lista;
+- a seta ganhou etiqueta de fluxo ("entra", "sai") ou de efeito ("sobe", "segura");
+- com o mouse na seta, um triângulo ▲/▼ aparece ao lado do valor do nó afetado, nas cores de tendência;
+- os passos de um diagrama trocam o texto e a cor dos nós quando os caminhos se excluem.
+
+**Por tela:**
+- Focus: o indicador e os anos passaram para o cabeçalho do gráfico, e a continuação cobre o ano do último dado e os 3 seguintes, como o relatório semanal;
+- Dívida: os vencimentos começam pelos próximos 12 meses, com as datas e uma coluna em R$, e a composição mostra "hoje" primeiro;
+- Simulador: os cartões grandes e coloridos voltaram, com "Seu cenário" fixo e a lista de casos rolando na lateral;
+- explicadores: os dois loops ganharam links para os outros explicadores; as três dívidas viraram uma cadeia só; "por que a dívida não explode" voltou ao desenho antigo, com o texto dos nós mudando por caminho; reservas e câmbio ganharam o efeito em cada seta;
+- conceito do acumulado em 12 meses: a janela que anda mostra 15 meses numa linha.
+
+**Ajustes na revisão:**
+- o perfil de vencimentos passou a pôr na primeira faixa o título que vence no próprio mês do estoque, para as faixas somarem a dívida inteira;
+- as etiquetas das setas usam o `Badge`;
+- as contas dos exemplos foram para o backend (D3).
+
+Os cartões que vieram com dado de exemplo viraram a F51, a F52 e a F53, e o explicador novo, a F50.
+
+<a id="f50"></a>
+**F50 — Explicador "O caminho dos dólares".** Feito, a partir da prancha da rodada antes | depois (F49), em `/learn/explainers/dollar-flows`.
+
+**O diagrama:**
+- as entradas à esquerda (exportações, serviços e renda recebidos, investimento de fora);
+- as saídas à direita;
+- o mercado de câmbio no meio, com o dólar de hoje;
+- as reservas do BC embaixo.
+
+Cada seta diz se o dólar entra ou sai, ou se o BC compra ou vende. Com o mouse na seta, o triângulo ao lado do preço mostra se ele sobe ou cai.
+
+**O resto da página:** os passos de transações correntes, conta financeira e Banco Central, e as perguntas que confundem: "entra dólar, o preço sobe?" e "brasileiro comprando dólar: entra ou sai?". A bandeja de transações correntes da tela Setor externo liga ao explicador.
+
+**Conferido em 2026-10-11:** a página de estatísticas do setor externo do BCB, a fonte citada, responde e é a que publica as transações correntes, a conta financeira e as reservas.
+
+<a id="f51"></a>
+**F51 — Inadimplência na tela Crédito.** Feito. O cartão "Quanto não está sendo pago" da rodada antes | depois (F49), logo depois da Basileia: a Basileia diz quanto calote cabe, e a inadimplência diz quanto está acontecendo.
+
+**Fonte:** SGS 21082, inadimplência da carteira de crédito, total, a parte com parcela atrasada há mais de 90 dias, em % da carteira, mensal, desde mar/2011. Sai na nota de crédito do BCB, perto do fim do mês seguinte, como as concessões.
+
+**Backend:** o `GET /api/credit` ganhou `delinquency`, cada mês desde o primeiro trimestre da Basileia, em fração.
+
+**Tela:**
+- a linha mês a mês, com o último valor marcado;
+- a bandeja com o exemplo "de cada R$ 100 emprestados" e "atraso não é perda inteira";
+- o conceito "Inadimplência" no Aprender, no tema Crédito.
+
+**Aceite cumprido:** com os dados de 11/out/2026, ago/2026 dá 5,04%, contra 4,14% em ago/2025.
+
+<a id="f52"></a>
+**F52 — Subutilização na tela Atividade.** Feito. O cartão "O desemprego além da taxa" da rodada antes | depois (F49), logo depois do Desemprego, com as duas taxas sempre juntas: o que o cartão mostra é a distância entre elas.
+
+**Fonte:** IBGE, PNAD Contínua, tabela 6441 do SIDRA, variável 4118: a taxa composta de subutilização, no mesmo trimestre móvel da desocupação (SGS 24369), datado no último mês dele, desde mar/2012. O provider do IBGE passou a aceitar tabela sem classificação.
+
+**Backend:**
+- o `GET /api/activity` ganhou `underutilization`, com as duas taxas por mês nos últimos 4 anos e a distância no último mês, em fração;
+- o Desemprego ganhou `employed`, a parte da força de trabalho que tem trabalho, para o exemplo das 100 pessoas.
+
+**No Aprender:** o conceito "Taxa de subutilização", no tema Atividade.
+
+**Aceite cumprido:** com os dados de 11/out/2026, o trimestre até ago/2026 dá 13,1% de subutilização contra 5,3% de desocupação: 7,8 pontos de distância.
+
+<a id="f53"></a>
+**F53 — Renda nacional na tela Setor externo.** Feito. O cartão "Quanto do que se produz aqui fica no país" da rodada antes | depois (F49): o PIB contra a renda nacional bruta, que tira a renda que vai para fora como lucro e juros e soma a que vem de fora.
+
+**Fonte:** SGS 22801 (receita) e 22802 (despesa) da renda primária, em US$ milhões no mês, desde 1995. O backend soma os 12 meses de cada série e divide pelo PIB de 12 meses em dólar (4192), no último mês com os três publicados (`domain/external.py`, `national_income`).
+
+**Backend:** o `GET /api/external-sector` ganhou `national_income`, com recebido, enviado, o que sai a mais e o que fica, em fração do PIB.
+
+**No Aprender:** o conceito "Renda primária e renda nacional", no tema Setor externo.
+
+**Mudança em relação ao desenho:** a prancha tinha números de exemplo (0,8% recebido e 3,1% enviado); os reais são maiores.
+
+**Aceite cumprido:** nos 12 meses até ago/2026, US$ 42,9 bi recebidos e US$ 126,8 bi enviados contra um PIB de US$ 2,55 tri dão 1,68% e 4,96% do PIB, e o país fica com 96,7% do que produz.
+
+<a id="f54"></a>
+**F54 — Dólar diário na tela Setor externo.** Feito. O gráfico do dólar ganhou o seletor "Mês a mês / Dia a dia" no cabeçalho, com a escolha na URL (`?scale=days`), no molde da escala do Déficit.
+
+**Fonte:** SGS 1, a PTAX de venda de cada dia útil, desde jul/1994.
+
+**Periodicidade nova, "dia útil":**
+- o cache cobra o dia útil anterior, porque a PTAX do dia só sai à tarde;
+- a falta só vira aviso depois de 3 dias úteis sem dado, para um feriado não gerar alarme (`domain/coverage.py`).
+
+**Tela:**
+- o dia a dia mostra os últimos 12 meses, sem a continuação do Focus;
+- o resumo, a Visão geral e a Saúde seguem com o dólar do fim do mês, a medida que o Focus pergunta.
+
+**Aceite cumprido:** a PTAX de 30/set/2026 (R$ 5,1809) é a mesma da série de fim de mês; em 9/out/2026, R$ 4,9892.
+
+<a id="f55"></a>
+**F55 — Juro real com histórico na Visão geral.** Feito. O cartão do juro real ganhou o minigráfico e a variação em 12 meses, que o post-it da rodada antes | depois (F49) pedia.
+
+**A conta** (`domain/interest.py`, `ex_ante_real_rates`): a Selic do fim de cada mês contra o IPCA esperado para os 12 meses seguintes na última pesquisa Focus feita até o fim dele, dividindo (D3). O histórico semanal do Focus já estava no banco (F10). O mês corrente usa a Selic de hoje e a pesquisa mais recente, o mesmo número do cartão.
+
+**Aceite cumprido:** com os dados de 11/out/2026, 8,76% ao ano, −1,76 ponto em 12 meses, com 24 meses no minigráfico.
+
+<a id="f56"></a>
+**F56 — Fechamento das pendências da V1.** Feito. A revisão das sessões de desenvolvimento listou o que ficou para trás, e a rodada antes | depois do canvas (F49) somou o que pedia código sem desenho.
+
+**Defeitos:**
+- o "Atualizar dados" dava erro 500 com duas chamadas ao mesmo tempo, como o app aberto em modo estrito. Agora uma trava cobre o refresh inteiro, e um teste dispara as duas chamadas juntas;
+- o aviso de tag `<script>` no console vinha do `next-themes`. Ele saiu, e o tema passou a um provider próprio (`shared/components/theme-provider.tsx`), com o script do `index.html` aplicando o tema salvo antes da pintura;
+- o IPCA era cobrado só a partir do dia 15, e o IBGE publica entre os dias 8 e 12. Agora a busca começa no dia 8, e a falta só vira aviso no dia 15 (`warn_after_days`). O dia de publicação também passou a valer até o fim do mês, para o "dia 30" de fevereiro cair no dia 28.
+
+**Links que faltavam:**
+- Dívida → simulador, no caso Brasil hoje;
+- simulador → explicadores de r − g e de por que a dívida não explode;
+- Juros e Crédito → explicador dos dois loops.
+
+**Regra de dado e texto:**
+- o juro neutro de 5,0%, digitado na Saúde da economia, saiu (D8);
+- o salário mínimo no Aprender diz "até 2,5%", como a Lei 15.077/2024;
+- o explicador dos dólares deixou de afirmar o estado de hoje em texto fixo.
+
+**Telas:**
+- a bandeja do IPCA em 12 meses ganhou "Por que a meta muda", lido da faixa de cada ano;
+- os rótulos do eixo do mesmo gráfico deixaram de encavalar em tela estreita;
+- as previsões dos livres, administrados e serviços ganharam a cor de cada corte;
+- a Visão geral fechou os blocos sem buraco (até 4 cartões numa linha, 5 em 3 + 2);
+- o cabeçalho dos cartões põe os botões embaixo do título no celular;
+- a tabela de referências da Saúde empilha a referência embaixo de cada sinal no celular.
+
 ---
 ## 2. Nice-to-have
 
@@ -1199,4 +1347,4 @@ O diagrama, que a tela Déficit passou a usar junto com os explicadores e os con
 | **F46** | Juro neutro na tela Juros | Serviria N1 e N2; falta uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária | M8 | [F30](#f30) | 🔍 Em avaliação |
 
 <a id="f46"></a>
-**F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar.
+**F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar. Conferido de novo em 2026-10-11: continua só em boxe de PDF. A tela Saúde da economia também deixou de mostrar o número (F56).
