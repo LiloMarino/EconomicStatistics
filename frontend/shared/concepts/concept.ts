@@ -46,6 +46,7 @@ export const conceptIds = [
   "gdp",
   "ibc-br",
   "real-growth",
+  "seasonal-adjustment",
   "unemployment-rate",
   "nairu",
   "moving-quarter",

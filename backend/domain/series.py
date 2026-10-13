@@ -47,7 +47,10 @@ class SeriesSpec:
 
     Quando a fonte publica numa janela de dias, e não num dia fixo, `release_day` é o
     primeiro dia da janela, a partir do qual o app já busca, e a falta só vira aviso
-    `warn_after_days` dias depois."""
+    `warn_after_days` dias depois.
+
+    Numa série `seasonally_adjusted`, a fonte refaz o ajuste sazonal da série inteira a
+    cada divulgação, e todo mês publicado pode mudar."""
 
     source: Source
     code: str
@@ -58,6 +61,7 @@ class SeriesSpec:
     periodicity: Periodicity = Periodicity.MONTHLY
     earlier_codes: tuple[EarlierCode, ...] = ()
     warn_after_days: int = 0
+    seasonally_adjusted: bool = False
 
 
 def _next_month(day: date) -> date:
@@ -397,6 +401,18 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         release_day=5,
         periodicity=Periodicity.QUARTERLY,
     ),
+    # A mesma tabela, na taxa contra o trimestre imediatamente anterior, que o IBGE
+    # calcula sobre o PIB com ajuste sazonal. O 1º tri/1996 não tem trimestre anterior.
+    SeriesId.GDP_GROWTH_QOQ: SeriesSpec(
+        source=Source.IBGE,
+        code="5932/6564/11255/90707",
+        unit=Unit.PERCENT_QUARTER,
+        first_date=date(1996, 4, 1),
+        lag_months=5,
+        release_day=5,
+        periodicity=Periodicity.QUARTERLY,
+        seasonally_adjusted=True,
+    ),
     # O índice do IBC-Br sem ajuste sazonal. O BCB publica o mês perto da metade do
     # segundo mês seguinte.
     SeriesId.IBC_BR: SeriesSpec(
@@ -406,6 +422,16 @@ SERIES: dict[SeriesId, SeriesSpec] = {
         first_date=date(2003, 1, 1),
         lag_months=2,
         release_day=20,
+    ),
+    # O mesmo índice com ajuste sazonal, que o BCB publica junto
+    SeriesId.IBC_BR_SEASONALLY_ADJUSTED: SeriesSpec(
+        source=Source.BCB_SGS,
+        code="24364",
+        unit=Unit.INDEX,
+        first_date=date(2003, 1, 1),
+        lag_months=2,
+        release_day=20,
+        seasonally_adjusted=True,
     ),
     # A PNAD Contínua é um trimestre móvel e o SGS data cada valor no último mês dele. O
     # IBGE divulga no fim do mês seguinte.

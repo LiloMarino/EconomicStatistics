@@ -57,6 +57,8 @@
   --color-fiscal-interest: var(--fiscal-interest);
   --color-debt-net: var(--debt-net);
   --color-activity-ibc: var(--activity-ibc);
+  --color-activity-grew: var(--ok);
+  --color-activity-shrank: var(--trend-up);
   --color-price-free: var(--price-free);
   --color-price-administered: var(--price-administered);
   --color-price-services: var(--price-services);

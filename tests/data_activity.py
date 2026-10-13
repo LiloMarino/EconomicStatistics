@@ -1,6 +1,9 @@
 """Atividade como as fontes publicaram, conferida em 2026-10-08: PIB em 4 trimestres (%,
 IBGE), índice do IBC-Br (SGS 24363) e taxa de desocupação (SGS 24369, %). A taxa
-composta de subutilização (IBGE, tabela 6441, %) foi conferida em 2026-10-11."""
+composta de subutilização (IBGE, tabela 6441, %) foi conferida em 2026-10-11. O PIB
+contra o trimestre anterior (%, IBGE, tabela 5932), o índice do IBC-Br com ajuste
+sazonal (SGS 24364) e os meses de mai a jul/2024 do índice sem ajuste foram conferidos
+em 2026-10-13."""
 
 from __future__ import annotations
 
@@ -16,8 +19,12 @@ from tests.data_external import months_from
 
 # 1º tri/2025 ao 2º tri/2026 (6 trimestres, datados no 1º dia de cada um)
 GDP_GROWTH_4Q = [3.6, 3.3, 2.7, 2.3, 2.0, 1.9]
-# Ago/2024 a jul/2026
+GDP_GROWTH_QOQ = [1.3, 0.4, 0.1, 0.2, 1.1, 0.5]
+# Mai/2024 a jul/2026
 IBC_BR = [
+    104.71213,
+    105.86915,
+    111.50900,
     110.06254,
     107.07852,
     109.18379,
@@ -43,6 +50,28 @@ IBC_BR = [
     109.94156,
     114.40189,
 ]
+# Jan/2025 a jul/2026
+IBC_BR_SEASONALLY_ADJUSTED = [
+    108.09524,
+    108.62006,
+    110.03287,
+    109.52766,
+    108.88620,
+    108.80376,
+    108.49869,
+    108.82893,
+    108.73548,
+    108.75326,
+    109.25005,
+    109.45280,
+    110.04992,
+    110.73660,
+    110.58808,
+    110.90009,
+    111.13846,
+    110.15775,
+    109.91611,
+]
 # Ago/2025 a ago/2026
 UNEMPLOYMENT = [5.6, 5.6, 5.4, 5.2, 5.1, 5.4, 5.8, 6.1, 5.8, 5.6, 5.4, 5.3, 5.3]
 UNDERUTILIZATION = [
@@ -67,7 +96,11 @@ SURVEY = date(2026, 10, 2)
 def seed_activity(session: Session) -> None:
     seeds = {
         SeriesId.GDP_GROWTH_4Q: months_from(date(2025, 1, 1), GDP_GROWTH_4Q, step=3),
-        SeriesId.IBC_BR: months_from(date(2024, 8, 1), IBC_BR),
+        SeriesId.GDP_GROWTH_QOQ: months_from(date(2025, 1, 1), GDP_GROWTH_QOQ, step=3),
+        SeriesId.IBC_BR: months_from(date(2024, 5, 1), IBC_BR),
+        SeriesId.IBC_BR_SEASONALLY_ADJUSTED: months_from(
+            date(2025, 1, 1), IBC_BR_SEASONALLY_ADJUSTED
+        ),
         SeriesId.UNEMPLOYMENT_RATE: months_from(date(2025, 8, 1), UNEMPLOYMENT),
         SeriesId.UNDERUTILIZATION_RATE: months_from(date(2025, 8, 1), UNDERUTILIZATION),
     }

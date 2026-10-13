@@ -21,6 +21,7 @@ GDP = SERIES[SeriesId.GDP_GROWTH_4Q]
 UNEMPLOYMENT = SERIES[SeriesId.UNEMPLOYMENT_RATE]
 CREDIT_COST = SERIES[SeriesId.CREDIT_COST]
 IPCA_FREE = SERIES[SeriesId.FREE_PRICES]
+IBC_ADJUSTED = SERIES[SeriesId.IBC_BR_SEASONALLY_ADJUSTED]
 
 
 def cached_until(spec_first: date, last: date) -> DateRange:
@@ -104,6 +105,16 @@ def test_late_cache_refetches_the_revision_window() -> None:
 
     assert request is not None
     assert request.start == date(2025, 7, 1)
+
+
+def test_seasonally_adjusted_series_refetches_the_whole_series() -> None:
+    """O ajuste sazonal muda os meses antigos a cada divulgação: o IBC-Br com ajuste
+    atrasado é buscado de novo desde jan/2003."""
+    cached = cached_until(IBC_ADJUSTED.first_date, date(2026, 6, 1))
+    request = fetch_request(IBC_ADJUSTED, cached, None, datetime(2026, 9, 20, 10))
+
+    assert request is not None
+    assert (request.start, request.end) == (date(2003, 1, 1), date(2026, 9, 20))
 
 
 def test_up_to_date_cache_asks_nothing() -> None:

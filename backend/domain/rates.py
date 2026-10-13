@@ -6,6 +6,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import date
+from itertools import pairwise
 
 from backend.domain.coverage import month_start
 from backend.domain.series import Observation
@@ -81,3 +82,17 @@ def index_change_12m(index: Sequence[Observation]) -> list[MonthlyRate]:
                 )
             )
     return result
+
+
+def index_change_1m(index: Sequence[Observation]) -> list[MonthlyRate]:
+    """A variação, em fração, de cada mês sobre o anterior, a partir de um índice
+    mensal em ordem de data: o IBC-Br com ajuste sazonal em 109,92 em jul/2026 contra
+    110,16 em jun/2026 dá 109,92 / 110,16 - 1 = -0,22%. Mês sem o anterior em
+    sequência fica de fora."""
+    return [
+        MonthlyRate(
+            ref_date=after.ref_date, rate=relative_change(after.value, before.value)
+        )
+        for before, after in pairwise(index)
+        if before.ref_date == month_start(after.ref_date, 1)
+    ]

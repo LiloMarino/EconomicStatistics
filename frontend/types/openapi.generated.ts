@@ -924,12 +924,15 @@ export interface components {
         /**
          * GdpDTO
          * @description O PIB acumulado em 4 trimestres, em fração (0.019 é 1,9%), datado no mês em que
-         *     cada trimestre termina. `forecast` é o PIB que o Focus espera para cada ano do
-         *     relatório, em dezembro.
+         *     cada trimestre termina. `quarter_on_quarter` é a variação de cada trimestre sobre o
+         *     anterior, com ajuste sazonal, em fração e com a mesma data. `forecast` é o PIB que o
+         *     Focus espera para cada ano do relatório, em dezembro.
          */
         GdpDTO: {
             /** Quarters */
             quarters: components["schemas"]["MonthValueDTO"][];
+            /** Quarter On Quarter */
+            quarter_on_quarter: components["schemas"]["MonthValueDTO"][];
             forecast: components["schemas"]["MonthlyForecastDTO"] | null;
         };
         /** GdpShareDTO */
@@ -1035,10 +1038,25 @@ export interface components {
          * IbcDTO
          * @description A variação em 12 meses do IBC-Br, em fração, calculada do índice mensal: média
          *     dos 12 meses que terminam em `ref_date` sobre a média dos 12 anteriores.
+         *     `month_on_month` é a variação de cada mês sobre o anterior no índice com ajuste
+         *     sazonal, em fração (-0.0022 é -0,22%).
+         *
+         *     O ritmo: `change_1m` e `change_3m` são a inclinação do 12 meses no último mês e nos
+         *     últimos 3, em fração (-0.0016 é -0,16 p.p.). O veredito usa a de 3 meses, e
+         *     inclinação dentro de `steady_band` para cima ou para baixo é estável.
          */
         IbcDTO: {
             /** Months */
             months: components["schemas"]["MonthValueDTO"][];
+            /** Month On Month */
+            month_on_month: components["schemas"]["MonthValueDTO"][];
+            /** Change 1M */
+            change_1m: number;
+            /** Change 3M */
+            change_3m: number;
+            verdict: components["schemas"]["PaceVerdict"];
+            /** Steady Band */
+            steady_band: number;
         };
         /**
          * Indexer
@@ -1637,7 +1655,7 @@ export interface components {
          * SeriesId
          * @enum {string}
          */
-        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "dollar_daily" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "primary_income_received" | "primary_income_paid" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "ibc_br" | "unemployment_rate" | "underutilization_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa" | "delinquency";
+        SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "dollar_daily" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "primary_income_received" | "primary_income_paid" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "gdp_growth_qoq" | "ibc_br" | "ibc_br_seasonally_adjusted" | "unemployment_rate" | "underutilization_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa" | "delinquency";
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -1787,7 +1805,7 @@ export interface components {
          * Unit
          * @enum {string}
          */
-        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "brl_thousand" | "months" | "percent_4_quarters" | "index" | "percent";
+        Unit: "percent_month" | "percent_year" | "brl" | "brl_per_usd" | "usd_million" | "usd_billion" | "percent_gdp" | "brl_million" | "brl_thousand" | "months" | "percent_4_quarters" | "percent_quarter" | "index" | "percent";
         /**
          * YearCompositionDTO
          * @description A fração da dívida federal em mercado de cada indexador no fim do mês.

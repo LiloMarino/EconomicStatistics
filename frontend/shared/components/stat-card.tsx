@@ -6,6 +6,8 @@ const tones = {
   default: "",
   up: "text-trend-up",
   down: "text-trend-down",
+  ok: "text-ok",
+  caution: "text-caution",
   "fiscal-primary": "text-fiscal-primary",
   "fiscal-interest": "text-fiscal-interest",
 };

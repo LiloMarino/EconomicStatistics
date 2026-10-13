@@ -1,4 +1,5 @@
-"""O ritmo da inflação: se o acumulado de 12 meses está subindo, parado ou caindo.
+"""O ritmo de um acumulado de 12 meses, como o da inflação ou o do crescimento: se
+ele está subindo, parado ou caindo.
 
 A inclinação é a diferença entre dois acumulados de 12 meses, em pontos percentuais.
 É uma comparação de nível entre duas taxas, e não composição: por isso subtrai."""

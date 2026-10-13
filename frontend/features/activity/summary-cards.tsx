@@ -1,5 +1,7 @@
+import { growthPaceLook } from "@/features/activity/growth-pace";
 import type { Activity } from "@/features/activity/use-activity";
 import { ConceptHint } from "@/shared/components/concept-hint";
+import { HintButton } from "@/shared/components/hint-button";
 import { StatCard } from "@/shared/components/stat-card";
 import {
   formatMonth,
@@ -9,7 +11,44 @@ import {
   formatSignedPercent,
 } from "@/shared/lib/format";
 
-/** O último número de cada gráfico: PIB, IBC-Br e desemprego. */
+function PaceCard({ ibc }: { ibc: Activity["ibc"] }) {
+  const look = growthPaceLook[ibc.verdict];
+  const Icon = look.icon;
+  const band = formatPoints(ibc.steady_band).replace("+", "").replace(" p.p.", "");
+  return (
+    <StatCard
+      label="Ritmo da economia"
+      hint={
+        <HintButton label="O que é o ritmo da economia">
+          <p>
+            Quanto a linha do IBC-Br em 12 meses subiu ou desceu nos últimos 3 meses:{" "}
+            <strong>{formatPoints(ibc.change_3m)}</strong>
+          </p>
+          <p className="text-muted-foreground">
+            Desceu mais de {band} p.p.: freando, o país cresce cada vez menos. Subiu mais de {band}:
+            acelerando. Entre os dois: estável. Encolher é outra coisa: é a linha abaixo de zero.
+          </p>
+        </HintButton>
+      }
+      tone={look.tone}
+      value={
+        <>
+          <Icon className="size-7.5" />
+          {look.label}
+        </>
+      }
+    >
+      <span className="text-caption text-muted-foreground grid grid-cols-[1fr_auto] gap-x-2">
+        <span>12 meses, no último mês</span>
+        <strong className="text-foreground">{formatPoints(ibc.change_1m)}</strong>
+        <span>12 meses, em 3 meses</span>
+        <strong className="text-foreground">{formatPoints(ibc.change_3m)}</strong>
+      </span>
+    </StatCard>
+  );
+}
+
+/** O último número de cada gráfico: PIB, IBC-Br, o ritmo do IBC-Br e o desemprego. */
 export function SummaryCards({ data }: { data: Activity }) {
   const gdp = data.gdp.quarters.at(-1);
   const ibc = data.ibc.months.at(-1);
@@ -43,6 +82,7 @@ export function SummaryCards({ data }: { data: Activity }) {
           </span>
         )}
       </StatCard>
+      <PaceCard ibc={data.ibc} />
       <StatCard
         label="Desemprego"
         hint={<ConceptHint id="unemployment-rate" />}

@@ -77,7 +77,8 @@ def fetch_request(
 ) -> DateRange | None:
     """A série inteira na primeira carga. Depois, as pontas que faltam no cache: o
     começo, quando o registro passa a cobrir meses mais antigos, e o fim, com a janela
-    de revisão a partir do último mês em cache."""
+    de revisão a partir do último mês em cache. Numa série com ajuste sazonal, a janela
+    de revisão é a série inteira."""
     if last is not None and now - last.attempted_at < FETCH_INTERVAL:
         return None
     today = now.date()
@@ -89,7 +90,7 @@ def fetch_request(
         return None
     start = (
         spec.first_date
-        if missing_start
+        if missing_start or spec.seasonally_adjusted
         else max(spec.first_date, month_start(cached.end, REVISION_MONTHS))
     )
     end = today if missing_end else month_start(cached.start, 1)

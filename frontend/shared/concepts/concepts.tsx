@@ -3285,8 +3285,9 @@ export const concepts: Record<ConceptId, Concept> = {
         title: "O número do noticiário é outro.",
         text: (
           <>
-            A manchete do IBGE traz a variação contra o trimestre anterior (0,5% no 2º trimestre de
-            2026). A tela mostra os 4 trimestres, que é o ritmo de um ano inteiro.
+            A manchete do IBGE traz a variação contra o trimestre anterior, com ajuste sazonal (0,5%
+            no 2º trimestre de 2026). A tela mostra as duas: os 4 trimestres, que é o ritmo de um
+            ano inteiro, e cada trimestre contra o anterior, no gráfico trimestre a trimestre.
           </>
         ),
       },
@@ -3300,7 +3301,7 @@ export const concepts: Record<ConceptId, Concept> = {
         ),
       },
     ],
-    related: ["ibc-br", "real-growth", "nominal-gdp-growth", "share-of-gdp"],
+    related: ["ibc-br", "real-growth", "seasonal-adjustment", "nominal-gdp-growth", "share-of-gdp"],
     sources: [
       {
         ...ibgeGdpRelease,
@@ -3393,14 +3394,14 @@ export const concepts: Record<ConceptId, Concept> = {
         title: "Com ou sem ajuste sazonal.",
         text: (
           <>
-            A tela usa o índice sem ajuste, que é o que se compara ao PIB acumulado. O Banco Central
-            também publica o dessazonalizado (série 24364), que em julho de 2026 dá 1,32% em 12
-            meses.
+            A linha de 12 meses usa o índice sem ajuste, que é o que se compara ao PIB acumulado. O
+            gráfico mês a mês usa o dessazonalizado (série 24364), que o Banco Central publica junto
+            e que em julho de 2026 dá 1,32% em 12 meses.
           </>
         ),
       },
     ],
-    related: ["gdp", "real-growth"],
+    related: ["gdp", "real-growth", "seasonal-adjustment"],
     sources: [
       {
         ...ibcDataset,
@@ -3492,6 +3493,113 @@ export const concepts: Record<ConceptId, Concept> = {
     ],
     frequency: "Trimestral, junto com o PIB",
     screens: [activityScreen, debtScreen],
+  },
+
+  "seasonal-adjustment": {
+    title: "Ajuste sazonal",
+    abbr: "dessazonalizado",
+    topic: "activity",
+    summary:
+      "A série sem o vaivém típico de cada época do ano, para comparar um mês com o anterior.",
+    lead: (
+      <>
+        Toda economia tem épocas que produzem mais, como a safra e o fim de ano. A série{" "}
+        <strong>com ajuste sazonal</strong> tira esse padrão que se repete todo ano, e aí dá para
+        comparar um mês com o anterior e ver se a economia andou de verdade.
+      </>
+    ),
+    keywords: [
+      "dessazonalizado",
+      "dessazonalizada",
+      "com ajuste",
+      "mês contra mês anterior",
+      "trimestre contra trimestre",
+      "margem",
+    ],
+    measures: (
+      <>
+        <p>
+          A fonte estima, com anos de histórico, quanto cada mês costuma ficar acima ou abaixo do
+          normal: dias úteis, feriados, colheita, Natal. Depois divide cada mês por esse padrão. O
+          que sobra é a tendência e o que mudou de fato.
+        </p>
+        <p>
+          Sem o ajuste, a comparação justa é com o mesmo mês do ano anterior, ou a média de 12
+          meses. Com ele, dá para comparar com o mês imediatamente anterior, que é a forma mais
+          rápida de ver uma virada.
+        </p>
+      </>
+    ),
+    example: {
+      title: "O IBC-Br de fevereiro para março, em 2025 e 2026",
+      content: (
+        <>
+          <div className="bg-card text-caption grid grid-cols-[auto_auto_auto] justify-start gap-x-6 gap-y-1 rounded-xl px-4.5 py-4 tabular-nums">
+            <span className="text-muted-foreground">Fevereiro → março</span>
+            <span className="text-muted-foreground text-right">Sem ajuste</span>
+            <span className="text-muted-foreground text-right">Com ajuste</span>
+            <span>2025</span>
+            <strong className="text-right">+6,73%</strong>
+            <strong className="text-right">+1,30%</strong>
+            <span>2026</span>
+            <strong className="text-right">+10,54%</strong>
+            <strong className="text-right">−0,13%</strong>
+          </div>
+          <p>
+            Sem ajuste, março sempre sobe muito sobre fevereiro: tem mais dias úteis e é o pico da
+            safra de soja. Com o ajuste, março de 2026 na verdade ficou um pouco abaixo de
+            fevereiro.
+          </p>
+        </>
+      ),
+    },
+    reading: (
+      <p>
+        Positivo, a economia produziu mais que no período anterior; negativo, menos. Um mês só
+        oscila muito: vale a sequência. Dois trimestres seguidos de queda do PIB com ajuste é o que
+        o noticiário chama de recessão técnica.
+      </p>
+    ),
+    cautions: [
+      {
+        title: "O passado muda.",
+        text: (
+          <>
+            A cada mês novo, a fonte recalcula o padrão sazonal com mais um dado, e os meses antigos
+            da série com ajuste podem mudar um pouco. A série sem ajuste só muda quando o dado de
+            origem é revisado.
+          </>
+        ),
+      },
+      {
+        title: "É uma estimativa.",
+        text: (
+          <>
+            O ajuste é um modelo estatístico, e não uma medida. Uma mudança no padrão de um ano,
+            como uma safra fora de época, pode aparecer como crescimento ou queda.
+          </>
+        ),
+      },
+    ],
+    related: ["ibc-br", "gdp", "seasonality", "rolling-12m"],
+    sources: [
+      {
+        ...sgs,
+        name: "Banco Central, série 24364 do SGS (IBC-Br com ajuste sazonal)",
+        backs: "O índice com ajuste de fevereiro e março de 2025 e de 2026.",
+      },
+      {
+        ...ibcDataset,
+        backs: "O índice sem ajuste de fevereiro e março de 2025 e de 2026.",
+      },
+      {
+        ...ibgeGdpRelease,
+        backs:
+          "A alta de 0,5% do PIB do 2º trimestre de 2026 contra o 1º, na série com ajuste sazonal.",
+      },
+    ],
+    frequency: "Mensal no IBC-Br e trimestral no PIB, junto com a série sem ajuste",
+    screens: [activityScreen],
   },
 
   "unemployment-rate": {

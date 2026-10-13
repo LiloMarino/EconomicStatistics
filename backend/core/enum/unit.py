@@ -13,5 +13,6 @@ class Unit(StrEnum):
     BRL_THOUSAND = "brl_thousand"
     MONTHS = "months"
     PERCENT_4_QUARTERS = "percent_4_quarters"
+    PERCENT_QUARTER = "percent_quarter"
     INDEX = "index"
     PERCENT = "percent"

@@ -18,6 +18,7 @@ import {
   formatMonth,
   formatMonthRange,
   formatPercent,
+  formatPoints,
   formatQuarter,
   formatShortMonth,
 } from "@/shared/lib/format";
@@ -47,6 +48,7 @@ const FOCUS_COLOR = "var(--forecast)";
 function HowToRead({ gdp, ibc }: { gdp: Gdp; ibc: Ibc }) {
   const lastGdp = gdp.quarters.at(-1);
   const lastIbc = ibc.months.at(-1);
+  const threeBefore = ibc.months.at(-4);
   return (
     <div className="col-span-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-x-8 gap-y-5">
       <TrayItem title="Qual é qual">
@@ -73,6 +75,22 @@ function HowToRead({ gdp, ibc }: { gdp: Gdp; ibc: Ibc }) {
         <p>
           A linha mostra a mesma conta mês a mês: a média dos últimos 12 meses do índice contra a
           dos 12 anteriores. Como sai todo mês, a linha vira antes que o PIB do trimestre apareça.
+        </p>
+      </TrayItem>
+      <TrayItem title="Acelerando ou freando">
+        <p>
+          Pense no tamanho da economia como posição: o crescimento é a velocidade, e o 12 meses é a
+          velocidade média do último ano. A inclinação da linha é a aceleração. Linha descendo: o
+          país cresce cada vez menos; subindo, cada vez mais. Encolher é a linha abaixo de zero.
+        </p>
+        {lastIbc && threeBefore && (
+          <p>
+            Nos últimos 3 meses, o IBC-Br em 12 meses foi de {formatPercent(threeBefore.value)} para{" "}
+            {formatPercent(lastIbc.value)}: <strong>{formatPoints(ibc.change_3m)}</strong>.
+          </p>
+        )}
+        <p className="text-muted-foreground">
+          A média de um ano vira devagar. O passo de cada mês está no gráfico abaixo.
         </p>
       </TrayItem>
       <TrayItem title="Real ou nominal" concept="real-growth">
