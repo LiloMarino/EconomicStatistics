@@ -50,6 +50,7 @@ def test_debt_rates_need_twelve_months_of_debt() -> None:
     [point] = debt_rates({AUGUST: 0.05}, gdp, net_debt)
     assert point.implicit_rate == pytest.approx(0.055)
     assert point.nominal_growth == pytest.approx(0.10)
+    assert point.rate_minus_growth == pytest.approx(-0.045)
 
 
 @pytest.mark.usefixtures("seeded")

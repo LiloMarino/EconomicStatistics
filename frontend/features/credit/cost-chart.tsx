@@ -17,9 +17,11 @@ import {
   formatMonth,
   formatMonthRange,
   formatPercent,
+  formatPoints,
   formatShortMonth,
 } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
+import { cn } from "@/shared/lib/utils";
 
 type Cost = Credit["cost"];
 type CostMonth = Cost["months"][number];
@@ -27,6 +29,7 @@ type CostMonth = Cost["months"][number];
 const chartConfig = {
   cost: { label: "Custo do crédito (ICC)", color: "var(--credit-cost)" },
   selic: { label: "Selic meta", color: "var(--indexer-selic)" },
+  spread: { label: "Spread", color: "var(--ink-2)" },
 } satisfies ChartConfig;
 
 const seriesNames = new Map<string, string>(
@@ -119,6 +122,7 @@ interface Row {
   ref_date: string;
   cost: number;
   selic: number;
+  spread: number;
   gapFloor: number;
   gapSize: number;
 }
@@ -128,6 +132,7 @@ function buildRows(months: CostMonth[]): Row[] {
     ref_date: month.ref_date,
     cost: month.cost,
     selic: month.selic,
+    spread: month.spread,
     gapFloor: Math.min(month.cost, month.selic),
     gapSize: Math.abs(month.cost - month.selic),
   }));
@@ -208,10 +213,19 @@ export function CostChart({ cost }: { cost: Cost }) {
                     return typeof month === "string" ? formatMonth(month) : null;
                   }}
                   formatter={(value, name) => (
-                    <span className="flex w-full items-center justify-between gap-4">
+                    <span
+                      className={cn(
+                        "flex w-full items-center justify-between gap-4",
+                        name === "spread" && "mt-0.5 border-t pt-1.5",
+                      )}
+                    >
                       {seriesNames.get(String(name))}
                       <span className="tabular-nums">
-                        {typeof value === "number" ? formatPercent(value) : ""}
+                        {typeof value !== "number"
+                          ? ""
+                          : name === "spread"
+                            ? formatPoints(value)
+                            : formatPercent(value)}
                       </span>
                     </span>
                   )}
@@ -251,6 +265,14 @@ export function CostChart({ cost }: { cost: Cost }) {
               stroke="var(--color-selic)"
               strokeWidth={3}
               dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="spread"
+              stroke="none"
+              dot={false}
+              activeDot={false}
+              legendType="none"
               isAnimationActive={false}
             />
             <ReferenceDot

@@ -57,11 +57,12 @@ class UnemploymentDTO(BaseDTO):
 
 class RatePairDTO(BaseDTO):
     """A desocupação e a subutilização do trimestre móvel que termina em `ref_date`, em
-    fração."""
+    fração. `gap` é a subutilização menos a desocupação (0.078 é 7,8 pontos)."""
 
     ref_date: date
     unemployment: float
     underutilization: float
+    gap: float
 
 
 class UnderutilizationDTO(BaseDTO):

@@ -14,11 +14,13 @@ router = APIRouter(prefix="/api/credit", tags=["credit"])
 
 class CostMonthDTO(BaseDTO):
     """O custo do crédito (ICC) e a Selic meta de fim do mês `ref_date`, ao ano e em
-    fração (0.2419 é 24,19% ao ano)."""
+    fração (0.2419 é 24,19% ao ano). `spread` é o ICC menos a Selic, em fração (0.09 é 9
+    pontos percentuais)."""
 
     ref_date: date
     cost: float
     selic: float
+    spread: float
 
 
 class CostDTO(BaseDTO):

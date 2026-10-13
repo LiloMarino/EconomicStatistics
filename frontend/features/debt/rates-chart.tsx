@@ -10,15 +10,21 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
-import { formatMonth, formatMonthRange, formatPercent } from "@/shared/lib/format";
+import { formatMonth, formatMonthRange, formatPercent, formatPoints } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
+import { cn } from "@/shared/lib/utils";
 
 type Rates = DebtOverview["rates"][number];
 
 const chartConfig = {
   implicit_rate: { label: "r, juro implícito", color: "var(--debt-rate)" },
   nominal_growth: { label: "g, crescimento nominal", color: "var(--debt-growth)" },
+  rate_minus_growth: { label: "r − g", color: "var(--ink-2)" },
 } satisfies ChartConfig;
+
+const seriesNames = new Map<string, string>(
+  Object.entries(chartConfig).map(([key, item]) => [key, item.label]),
+);
 
 const axisPercent = new Intl.NumberFormat("pt-BR", {
   style: "percent",
@@ -150,10 +156,19 @@ export function RatesChart({ rates }: { rates: Rates[] }) {
                     return typeof month === "string" ? formatMonth(month) : null;
                   }}
                   formatter={(value, name) => (
-                    <span className="flex w-full items-center justify-between gap-4">
-                      {name === "implicit_rate" ? "r, juro implícito" : "g, crescimento nominal"}
+                    <span
+                      className={cn(
+                        "flex w-full items-center justify-between gap-4",
+                        name === "rate_minus_growth" && "mt-0.5 border-t pt-1.5",
+                      )}
+                    >
+                      {seriesNames.get(String(name))}
                       <span className="tabular-nums">
-                        {typeof value === "number" ? formatPercent(value) : ""}
+                        {typeof value !== "number"
+                          ? ""
+                          : name === "rate_minus_growth"
+                            ? formatPoints(value)
+                            : formatPercent(value)}
                       </span>
                     </span>
                   )}
@@ -172,6 +187,14 @@ export function RatesChart({ rates }: { rates: Rates[] }) {
               stroke="var(--color-nominal_growth)"
               strokeWidth={2.5}
               dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="rate_minus_growth"
+              stroke="none"
+              dot={false}
+              activeDot={false}
+              legendType="none"
               isAnimationActive={false}
             />
           </LineChart>

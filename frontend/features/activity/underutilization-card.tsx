@@ -12,13 +12,19 @@ import {
 } from "@/shared/components/ui/chart";
 import { formatMonth, formatMonthRange, formatPercent, formatPoints } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
+import { cn } from "@/shared/lib/utils";
 
 type Underutilization = Activity["underutilization"];
 
 const chartConfig = {
   unemployment: { label: "Desocupação", color: "var(--foreground)" },
   underutilization: { label: "Subutilização", color: "var(--trend-up)" },
+  gap: { label: "Distância", color: "var(--ink-2)" },
 } satisfies ChartConfig;
+
+const seriesNames = new Map<string, string>(
+  Object.entries(chartConfig).map(([key, item]) => [key, item.label]),
+);
 
 const axisPercent = new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 0 });
 
@@ -103,10 +109,19 @@ export function UnderutilizationCard({ underutilization }: { underutilization: U
                   return typeof month === "string" ? formatMonth(month) : null;
                 }}
                 formatter={(value, name) => (
-                  <span className="flex w-full items-center justify-between gap-4">
-                    {name === "unemployment" ? "Desocupação" : "Subutilização"}
+                  <span
+                    className={cn(
+                      "flex w-full items-center justify-between gap-4",
+                      name === "gap" && "mt-0.5 border-t pt-1.5",
+                    )}
+                  >
+                    {seriesNames.get(String(name))}
                     <span className="tabular-nums">
-                      {typeof value === "number" ? formatPercent(value) : ""}
+                      {typeof value !== "number"
+                        ? ""
+                        : name === "gap"
+                          ? formatPoints(value)
+                          : formatPercent(value)}
                     </span>
                   </span>
                 )}
@@ -125,6 +140,14 @@ export function UnderutilizationCard({ underutilization }: { underutilization: U
             stroke="var(--color-underutilization)"
             strokeWidth={3}
             dot={false}
+            isAnimationActive={false}
+          />
+          <Line
+            dataKey="gap"
+            stroke="none"
+            dot={false}
+            activeDot={false}
+            legendType="none"
             isAnimationActive={false}
           />
         </LineChart>

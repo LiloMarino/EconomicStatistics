@@ -17,6 +17,7 @@ from backend.domain.focus import (
 from backend.domain.interest import (
     SelicChange,
     SelicStep,
+    ex_post_real_rates,
     forecast_by_month,
     last_change,
     month_end_rates,
@@ -90,8 +91,12 @@ class RealRate:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Interest:
+    """`real_rates` é o juro real de cada mês do gráfico contra a inflação que já
+    passou; `real_rate` é o de hoje contra a inflação esperada."""
+
     selic: Selic
     inflation: Inflation
+    real_rates: list[MonthlyRate]
     next_meeting: NextMeeting | None
     real_rate: RealRate | None
 
@@ -127,11 +132,13 @@ def interest(session: Session) -> Interest:
 
     meetings = _upcoming_meetings(session, expectations, selic_end)
     ipca_next = ipca_forecast(session, real)
+    selic_months = [
+        item for item in month_end_rates(daily) if item.ref_date >= chart_start
+    ]
+    inflation_months = rolling_12m(real)[-CHART_MONTHS:]
     return Interest(
         selic=Selic(
-            months=[
-                item for item in month_end_rates(daily) if item.ref_date >= chart_start
-            ],
+            months=selic_months,
             current=current,
             last_change=last_change(daily),
             forecast=(
@@ -141,7 +148,7 @@ def interest(session: Session) -> Interest:
             ),
         ),
         inflation=Inflation(
-            months=rolling_12m(real)[-CHART_MONTHS:],
+            months=inflation_months,
             forecast=(
                 None
                 if ipca_next is None
@@ -150,6 +157,7 @@ def interest(session: Session) -> Interest:
                 )
             ),
         ),
+        real_rates=ex_post_real_rates(selic_months, inflation_months),
         next_meeting=(
             _next_meeting(current, meetings, survey_date)
             if survey_date and meetings

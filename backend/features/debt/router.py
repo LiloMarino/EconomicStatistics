@@ -23,11 +23,13 @@ class DebtLevelDTO(BaseDTO):
 
 class DebtRatesDTO(BaseDTO):
     """Os 12 meses que terminam em `ref_date`, em fração: `implicit_rate` é o r, juro
-    médio da dívida líquida; `nominal_growth` é o g, crescimento do PIB nominal."""
+    médio da dívida líquida; `nominal_growth` é o g, crescimento do PIB nominal;
+    `rate_minus_growth` é r - g (0.03 é 3 pontos)."""
 
     ref_date: date
     implicit_rate: float
     nominal_growth: float
+    rate_minus_growth: float
 
 
 class StabilizationDTO(BaseDTO):

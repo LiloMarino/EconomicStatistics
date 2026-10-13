@@ -23,6 +23,7 @@ import {
   formatShortMonth,
 } from "@/shared/lib/format";
 import { niceTicks } from "@/shared/lib/nice-scale";
+import { cn } from "@/shared/lib/utils";
 import { texDecimal } from "@/shared/lib/tex";
 
 type MonthRate = Interest["selic"]["months"][number];
@@ -32,6 +33,7 @@ const chartConfig = {
   ipca: { label: "IPCA em 12 meses", color: "var(--foreground)" },
   selicForecast: { label: "Selic esperada", color: "var(--forecast)" },
   ipcaForecast: { label: "IPCA esperado", color: "var(--forecast)" },
+  realRate: { label: "Juro real", color: "var(--ink-2)" },
 } satisfies ChartConfig;
 
 const axisPercent = new Intl.NumberFormat("pt-BR", {
@@ -137,6 +139,7 @@ interface Row {
   ref_date: string;
   selic: number | null;
   ipca: number | null;
+  realRate: number | null;
   gapFloor: number | null;
   gapSize: number | null;
   selicForecast: number | null;
@@ -148,6 +151,7 @@ linha abre também a previsão dela, para as duas se emendarem. */
 function buildRows(data: Interest): Row[] {
   const selic = new Map(data.selic.months.map((month) => [month.ref_date, month.rate]));
   const ipca = new Map(data.inflation.months.map((month) => [month.ref_date, month.rate]));
+  const realRate = new Map(data.real_rates.map((month) => [month.ref_date, month.rate]));
   const selicForecast = new Map<string, number>(
     (data.selic.forecast?.months ?? []).map((month) => [month.ref_date, month.rate]),
   );
@@ -169,6 +173,7 @@ function buildRows(data: Interest): Row[] {
       ref_date: date,
       selic: selicRate,
       ipca: ipcaRate,
+      realRate: realRate.get(date) ?? null,
       gapFloor: selicRate !== null && ipcaRate !== null ? Math.min(selicRate, ipcaRate) : null,
       gapSize: selicRate !== null && ipcaRate !== null ? Math.abs(selicRate - ipcaRate) : null,
       selicForecast: selicForecast.get(date) ?? null,
@@ -273,7 +278,12 @@ export function SelicChart({ data }: { data: Interest }) {
                     return typeof month === "string" ? formatMonth(month) : null;
                   }}
                   formatter={(value, name) => (
-                    <span className="flex w-full items-center justify-between gap-4">
+                    <span
+                      className={cn(
+                        "flex w-full items-center justify-between gap-4",
+                        name === "realRate" && "mt-0.5 border-t pt-1.5",
+                      )}
+                    >
                       {seriesLabel(name)}
                       <span className="tabular-nums">
                         {typeof value === "number" ? formatPercent(value) : ""}
@@ -333,6 +343,14 @@ export function SelicChart({ data }: { data: Interest }) {
               stroke="var(--color-selic)"
               strokeWidth={3}
               dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="realRate"
+              stroke="none"
+              dot={false}
+              activeDot={false}
+              legendType="none"
               isAnimationActive={false}
             />
             <ReferenceDot

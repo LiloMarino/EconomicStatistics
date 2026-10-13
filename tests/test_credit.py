@@ -28,6 +28,7 @@ def test_cost_pairs_the_credit_cost_with_the_selic_at_the_end_of_each_month(
         "ref_date": "2026-08-01",
         "cost": pytest.approx(0.2419),
         "selic": pytest.approx(0.14),
+        "spread": pytest.approx(0.1019),
     }
     assert cost["spread"] == pytest.approx(0.1019)
 

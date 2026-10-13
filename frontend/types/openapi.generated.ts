@@ -469,7 +469,8 @@ export interface components {
         /**
          * CostMonthDTO
          * @description O custo do crédito (ICC) e a Selic meta de fim do mês `ref_date`, ao ano e em
-         *     fração (0.2419 é 24,19% ao ano).
+         *     fração (0.2419 é 24,19% ao ano). `spread` é o ICC menos a Selic, em fração (0.09 é 9
+         *     pontos percentuais).
          */
         CostMonthDTO: {
             /**
@@ -481,6 +482,8 @@ export interface components {
             cost: number;
             /** Selic */
             selic: number;
+            /** Spread */
+            spread: number;
         };
         /**
          * Country
@@ -623,7 +626,8 @@ export interface components {
         /**
          * DebtRatesDTO
          * @description Os 12 meses que terminam em `ref_date`, em fração: `implicit_rate` é o r, juro
-         *     médio da dívida líquida; `nominal_growth` é o g, crescimento do PIB nominal.
+         *     médio da dívida líquida; `nominal_growth` é o g, crescimento do PIB nominal;
+         *     `rate_minus_growth` é r - g (0.03 é 3 pontos).
          */
         DebtRatesDTO: {
             /**
@@ -635,6 +639,8 @@ export interface components {
             implicit_rate: number;
             /** Nominal Growth */
             nominal_growth: number;
+            /** Rate Minus Growth */
+            rate_minus_growth: number;
         };
         /**
          * DebtTrend
@@ -1174,10 +1180,17 @@ export interface components {
             /** Strip */
             strip: components["schemas"]["StripCellDTO"][];
         };
-        /** InterestDTO */
+        /**
+         * InterestDTO
+         * @description `real_rates` é o juro real de cada mês do gráfico contra a inflação que já
+         *     passou: a Selic do fim do mês dividida pelo IPCA de 12 meses do mesmo mês, em
+         *     fração. `real_rate` é o de hoje contra a inflação esperada.
+         */
         InterestDTO: {
             selic: components["schemas"]["SelicDTO"];
             inflation: components["schemas"]["InflationDTO"];
+            /** Real Rates */
+            real_rates: components["schemas"]["backend__features__interest__router__MonthRateDTO"][];
             next_meeting: components["schemas"]["NextMeetingDTO"] | null;
             real_rate: components["schemas"]["backend__features__interest__router__RealRateDTO"] | null;
         };
@@ -1526,7 +1539,7 @@ export interface components {
         /**
          * RatePairDTO
          * @description A desocupação e a subutilização do trimestre móvel que termina em `ref_date`, em
-         *     fração.
+         *     fração. `gap` é a subutilização menos a desocupação (0.078 é 7,8 pontos).
          */
         RatePairDTO: {
             /**
@@ -1538,6 +1551,8 @@ export interface components {
             unemployment: number;
             /** Underutilization */
             underutilization: number;
+            /** Gap */
+            gap: number;
         };
         /**
          * ReferenceRaiseDTO

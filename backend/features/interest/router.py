@@ -80,8 +80,13 @@ class RealRateDTO(BaseDTO):
 
 
 class InterestDTO(BaseDTO):
+    """`real_rates` é o juro real de cada mês do gráfico contra a inflação que já
+    passou: a Selic do fim do mês dividida pelo IPCA de 12 meses do mesmo mês, em
+    fração. `real_rate` é o de hoje contra a inflação esperada."""
+
     selic: SelicDTO
     inflation: InflationDTO
+    real_rates: list[MonthRateDTO]
     next_meeting: NextMeetingDTO | None
     real_rate: RealRateDTO | None
 

@@ -86,6 +86,11 @@ class RatePair:
     unemployment: float
     underutilization: float
 
+    @property
+    def gap(self) -> float:
+        """A subutilização menos a desocupação, em fração de ponto."""
+        return self.underutilization - self.unemployment
+
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Underutilization:
@@ -236,9 +241,7 @@ def _underutilization(
         raise MissingDataError(
             "Ainda não há mês com a desocupação e a subutilização no cache."
         )
-    return Underutilization(
-        months=months, gap=months[-1].underutilization - months[-1].unemployment
-    )
+    return Underutilization(months=months, gap=months[-1].gap)
 
 
 def _unemployment_forecast(

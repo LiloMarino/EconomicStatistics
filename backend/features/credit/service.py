@@ -45,6 +45,11 @@ class CostMonth:
     cost: float
     selic: float
 
+    @property
+    def spread(self) -> float:
+        """O ICC menos a Selic, em fração de ponto (0.09 é 9 pontos percentuais)."""
+        return self.cost - self.selic
+
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Cost:
@@ -143,7 +148,7 @@ def _cost(cost: list[Observation], selic_days: list[Observation], start: date) -
     ]
     if not months:
         raise MissingDataError("Ainda não há Selic para os meses do custo do crédito.")
-    return Cost(months=months, spread=months[-1].cost - months[-1].selic)
+    return Cost(months=months, spread=months[-1].spread)
 
 
 def _basel(session: Session, end: date) -> Basel:

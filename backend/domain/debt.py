@@ -27,6 +27,11 @@ class DebtRates:
     implicit_rate: float
     nominal_growth: float
 
+    @property
+    def rate_minus_growth(self) -> float:
+        """r - g, em fração de ponto: positivo, a dívida/PIB sobe sozinha."""
+        return self.implicit_rate - self.nominal_growth
+
 
 def implicit_rate(interest: float, gdp_12m: float, net_debt: Sequence[float]) -> float:
     """Os juros de 12 meses em reais sobre a dívida líquida média dos mesmos 12 meses.

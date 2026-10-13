@@ -148,6 +148,7 @@ def test_underutilization_pairs_the_two_rates_of_the_same_quarter(
         "ref_date": "2026-08-01",
         "unemployment": pytest.approx(0.053),
         "underutilization": pytest.approx(0.131),
+        "gap": pytest.approx(0.078),
     }
     assert underutilization["gap"] == pytest.approx(0.078)
 

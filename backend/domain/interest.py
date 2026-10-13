@@ -65,6 +65,23 @@ def ex_ante_real_rates(
     return rates
 
 
+def ex_post_real_rates(
+    selic: Sequence[MonthlyRate], inflation_12m: Sequence[MonthlyRate]
+) -> list[MonthlyRate]:
+    """O juro real de cada mês contra a inflação que já passou: a Selic do fim do mês
+    dividida pelo IPCA dos 12 meses que terminam nele. Selic de 15% contra 4,5% dão
+    1,15 / 1,045 - 1 = 10,05%. Mês sem as duas fica de fora."""
+    inflation = {item.ref_date: item.rate for item in inflation_12m}
+    return [
+        MonthlyRate(
+            ref_date=month.ref_date,
+            rate=real_change(month.rate, inflation[month.ref_date]),
+        )
+        for month in selic
+        if month.ref_date in inflation
+    ]
+
+
 def last_change(observations: Sequence[Observation]) -> SelicChange | None:
     """A última vez que a meta mudou, numa série diária em ordem de data."""
     for index in range(len(observations) - 1, 0, -1):

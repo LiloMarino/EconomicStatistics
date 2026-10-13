@@ -16,6 +16,7 @@ from backend.domain.interest import (
     SelicChange,
     SelicStep,
     ex_ante_real_rates,
+    ex_post_real_rates,
     forecast_by_month,
     last_change,
     month_end_rates,
@@ -79,6 +80,39 @@ def test_real_rate_divides_the_selic_by_the_expected_inflation() -> None:
     """Selic de 13,75% contra 4,59% esperados: 1,1375 / 1,0459 - 1 = 8,76%. A conta
     subtraída daria 9,16%."""
     assert round(real_change(0.1375, 0.0459) * 100, 2) == 8.76
+
+
+def test_ex_post_real_rate_divides_each_selic_by_the_inflation_of_the_same_month() -> (
+    None
+):
+    """Selic de 15% contra IPCA de 4,5% em 12 meses dão 1,15 / 1,045 - 1 = 10,05%. O
+    mês da Selic sem IPCA publicado fica de fora."""
+    selic = [
+        MonthlyRate(ref_date=date(2026, 8, 1), rate=0.15),
+        MonthlyRate(ref_date=date(2026, 9, 1), rate=0.15),
+    ]
+    inflation = [MonthlyRate(ref_date=date(2026, 8, 1), rate=0.045)]
+
+    [rate] = ex_post_real_rates(selic, inflation)
+
+    assert rate.ref_date == date(2026, 8, 1)
+    assert round(rate.rate * 100, 2) == 10.05
+
+
+@pytest.mark.usefixtures("seeded")
+def test_interest_real_rate_of_each_month_follows_the_chart(api: TestClient) -> None:
+    """O juro real de cada mês vai de set/2024 até ago/2026, o último IPCA: a meta de
+    out/2026 ainda não tem inflação para dividir."""
+    body = api.get("/api/interest").json()
+
+    selic = {m["ref_date"]: m["rate"] for m in body["selic"]["months"]}
+    inflation = {m["ref_date"]: m["rate"] for m in body["inflation"]["months"]}
+    real_rates = body["real_rates"]
+    assert real_rates[0]["ref_date"] == "2024-09-01"
+    assert real_rates[-1]["ref_date"] == "2026-08-01"
+    assert real_rates[-1]["rate"] == pytest.approx(
+        (1 + selic["2026-08-01"]) / (1 + inflation["2026-08-01"]) - 1
+    )
 
 
 @pytest.mark.usefixtures("seeded")
