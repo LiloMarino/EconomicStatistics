@@ -8,7 +8,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar sobre a decisão vigente de cada item.
 >
-> **Última mudança (2026-10-11):** Fechada a V1: a rodada antes | depois do canvas e as pendências da revisão, com a inadimplência, a subutilização, a renda nacional, o dólar diário e o juro real com histórico lendo a fonte
+> **Última mudança (2026-10-20):** Entrou a N8 com a F57: as novidades desde a última visita, na visão geral e na barra lateral
 
 ## Glossário
 
@@ -23,16 +23,17 @@
 | **N5** | Saber se a economia está saudável ou caminhando para uma crise | [F9](#f9), [F10](#f10), [F17](#f17), [F21](#f21), [F24](#f24), [F27](#f27), [F28](#f28), [F37](#f37), [F48](#f48), [F51](#f51) | — |
 | **N6** | Saber como o déficit é financiado | [F4](#f4), [F13](#f13), [F15](#f15), [F16](#f16), [F41](#f41), [F43](#f43) | — |
 | **N7** | Entender como os números se ligam: a teia de ciclos e fluxos | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48), [F50](#f50) | — |
+| **N8** | Saber o que chegou de novo desde a última vez que olhei | [F57](#f57) | — |
 | [**F34**](#f34) | Mercado imobiliário, na tela Crédito | — | 💤 |
 | [**F46**](#f46) | Juro neutro na tela Juros | — | 🔍 |
 
 <details>
-<summary><strong>Concluído / decidido / descartado (62 itens — clique pra expandir)</strong></summary>
+<summary><strong>Concluído / decidido / descartado (63 itens — clique pra expandir)</strong></summary>
 
 | ID | Resumo | Condiciona (F#) | Status |
 | --- | --- | --- | --- |
 | **D1** | Stack igual à do Finance Manager | [F1](#f1) | ✅ |
-| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | [F2](#f2), [F3](#f3), [F4](#f4), [F10](#f10), [F16](#f16), [F20](#f20), [F43](#f43) | ✅ |
+| **D2** | Dado externo passa por um cache SQLite descartável: tela → banco → fonte | [F2](#f2), [F3](#f3), [F4](#f4), [F10](#f10), [F16](#f16), [F20](#f20), [F43](#f43), [F57](#f57) | ✅ |
 | **D3** | Toda conta econômica mora no backend, em float, e taxa se compõe multiplicando | [F2](#f2), [F5](#f5), [F6](#f6), [F14](#f14), [F21](#f21), [F24](#f24), [F25](#f25), [F27](#f27), [F30](#f30), [F49](#f49), [F53](#f53), [F55](#f55) | ✅ |
 | **D4** | Conceito é um registro único e tipado no front, e toda série do backend aponta para um conceito | [F7](#f7), [F8](#f8), [F11](#f11), [F26](#f26) | ✅ |
 | **D5** | Cada grupo do IPCA tem cor e ícone fixos | [F21](#f21), [F23](#f23), [F25](#f25) | ✅ |
@@ -93,6 +94,7 @@
 | [**F54**](#f54) | Dólar dia a dia no Setor externo | — | ✅ |
 | [**F55**](#f55) | Juro real com histórico na Visão geral | — | ✅ |
 | [**F56**](#f56) | Fechamento das pendências da V1 | — | ✅ |
+| [**F57**](#f57) | Novidades desde a última visita | — | ✅ |
 
 </details>
 
@@ -309,13 +311,13 @@
 
 ### Sem marco
 
-> **Progresso:** 7/7 concluídas
+> **Progresso:** 8/8 concluídas
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
 | — | *(nada em aberto)* | — | — |
 
-<details><summary>Concluído (7 itens)</summary>
+<details><summary>Concluído (8 itens)</summary>
 
 | ID | Resumo | Depende de | Status |
 | --- | --- | --- | --- |
@@ -326,6 +328,7 @@
 | [**F45**](#f45) | Tolerância da meta de inflação buscada da fonte | [F29](#f29) | ✅ |
 | [**F49**](#f49) | Rodada "antes \| depois" do canvas nas telas do app | [F22](#f22), [F23](#f23) | ✅ |
 | [**F56**](#f56) | Fechamento das pendências da V1 | [F49](#f49) | ✅ |
+| [**F57**](#f57) | Novidades desde a última visita | — | ✅ |
 
 </details>
 
@@ -387,6 +390,7 @@
 | **F54** | Dólar dia a dia no Setor externo | N1 | D8 | M8 | [F31](#f31) | Médio | Baixo | Médio | Bom | ✅ Concluído |
 | **F55** | Juro real com histórico na Visão geral | N1 | D3 | M3 | [F11](#f11), [F30](#f30) | Baixo | Baixo | Médio | Bom | ✅ Concluído |
 | **F56** | Fechamento das pendências da V1 | N1, N2 | D8 | — | [F49](#f49) | Médio | Baixo | Alto | Excelente | ✅ Concluído |
+| **F57** | Novidades desde a última visita | N8 | D2 | — | — | Médio | Baixo | Alto | Excelente | ✅ Concluído |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -1315,6 +1319,30 @@ Cada seta diz se o dólar entra ou sai, ou se o BC compra ou vende. Com o mouse 
 - a Visão geral fechou os blocos sem buraco (até 4 cartões numa linha, 5 em 3 + 2);
 - o cabeçalho dos cartões põe os botões embaixo do título no celular;
 - a tabela de referências da Saúde empilha a referência embaixo de cada sinal no celular.
+
+<a id="f57"></a>
+**F57 — Novidades desde a última visita.** Feito. Serve a N8.
+
+**Mecanismo:**
+- o banco guarda, por fonte, até que período você já viu (`seen_series` e `seen_datasets`);
+- novidade é o período em cache que passou dessa marca. As regras moram em `backend/domain/news.py` e `backend/repository/seen.py`, e a API em `/api/news`.
+
+**A marca nasce no refresh**, antes e depois das buscas. Assim a primeira carga e o cache que já existia viram linha de base, e o que chega por cima deles é novidade.
+
+**Escopo:**
+- entram as séries de mês, trimestre e ano, a pesquisa Focus e o estoque da dívida federal;
+- a Selic e o dólar diário ficam de fora, porque ganham ponto todo dia útil;
+- valor revisado não conta como novidade, só período novo.
+
+**Na tela:**
+- a Visão geral ganhou a lista "Novidades", com um cartão por tela, e o selo "novo" nos cartões feitos de uma fonte com novidade;
+- a barra lateral mostra quantas fontes novas cada tela tem.
+
+**A marca de visto:**
+- cada fonte tem uma tela-casa (`frontend/features/news/screens.ts`), e acessar essa tela marca a fonte como vista;
+- a Visão geral não marca nada, e há o botão "Marcar tudo como visto".
+
+**Limitação:** a série que aparece em mais de uma tela só é marcada pela tela-casa dela. O IPCA, por exemplo, sai da lista pela tela Por categoria, e não pelo Poder de compra.
 
 ---
 ## 2. Nice-to-have

@@ -384,6 +384,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/news": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** News */
+        get: operations["news_api_news_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/news/seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Seen
+         * @description Marca as fontes pedidas como vistas até o período mais recente em cache.
+         */
+        post: operations["seen_api_news_seen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -526,6 +563,20 @@ export interface components {
          * @enum {string}
          */
         Dataset: "federal_debt_stock" | "focus_expectations" | "copom_meetings" | "imf_countries" | "inflation_tolerance";
+        /** DatasetNewsDTO */
+        DatasetNewsDTO: {
+            dataset: components["schemas"]["Dataset"];
+            /**
+             * Seen Until
+             * Format: date
+             */
+            seen_until: string;
+            /**
+             * Last Date
+             * Format: date
+             */
+            last_date: string;
+        };
         /** DatedValueDTO */
         DatedValueDTO: {
             /**
@@ -1352,6 +1403,13 @@ export interface components {
             /** Kept */
             kept: number;
         };
+        /** NewsDTO */
+        NewsDTO: {
+            /** Series */
+            series: components["schemas"]["SeriesNewsDTO"][];
+            /** Datasets */
+            datasets: components["schemas"]["DatasetNewsDTO"][];
+        };
         /**
          * NextMeetingDTO
          * @description A próxima reunião, a meta que o mercado espera dela e a diferença para a meta de
@@ -1445,6 +1503,12 @@ export interface components {
              */
             last_available: string;
         };
+        /**
+         * Periodicity
+         * @description `DAILY` tem valor todo dia do calendário; `BUSINESS_DAILY`, só nos dias úteis.
+         * @enum {string}
+         */
+        Periodicity: "daily" | "business_daily" | "monthly" | "quarterly" | "annual";
         /**
          * PositionPointDTO
          * @description A posição internacional no fim do trimestre que começa em `ref_date`, em fração
@@ -1638,6 +1702,13 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["GroupSeasonalityDTO"][];
         };
+        /** SeenDTO */
+        SeenDTO: {
+            /** Series */
+            series: components["schemas"]["SeriesId"][];
+            /** Datasets */
+            datasets: components["schemas"]["Dataset"][];
+        };
         /**
          * SelicChangeDTO
          * @description O dia em que a meta passou de `before` para `after`, ao ano e em fração.
@@ -1671,6 +1742,24 @@ export interface components {
          * @enum {string}
          */
         SeriesId: "ipca_general" | "ipca_food" | "ipca_housing" | "ipca_household" | "ipca_apparel" | "ipca_transport" | "ipca_health" | "ipca_personal" | "ipca_education" | "ipca_communication" | "free_prices" | "administered_prices" | "services_prices" | "inpc" | "minimum_wage" | "inflation_target" | "selic_target" | "dollar_month_end" | "dollar_daily" | "current_account_gdp" | "fdi_gdp" | "reserves" | "gdp_usd_12m" | "iip_assets" | "iip_liabilities" | "primary_income_received" | "primary_income_paid" | "nominal_deficit" | "primary_deficit" | "nominal_interest" | "primary_deficit_central" | "primary_deficit_regional" | "primary_deficit_state_owned" | "nominal_interest_central" | "nominal_interest_regional" | "nominal_interest_state_owned" | "net_debt" | "net_debt_brl" | "gross_debt" | "gdp_12m" | "federal_debt_maturity" | "central_bank_portfolio" | "repo_operations" | "monetary_base" | "gdp_growth_4q" | "gdp_growth_qoq" | "ibc_br" | "ibc_br_seasonally_adjusted" | "unemployment_rate" | "underutilization_rate" | "credit_cost" | "concessions_business" | "concessions_households" | "basel_capital" | "basel_rwa" | "delinquency";
+        /**
+         * SeriesNewsDTO
+         * @description A série ia até `seen_until` na última visita e hoje vai até `last_ref_date`.
+         */
+        SeriesNewsDTO: {
+            series_id: components["schemas"]["SeriesId"];
+            periodicity: components["schemas"]["Periodicity"];
+            /**
+             * Seen Until
+             * Format: date
+             */
+            seen_until: string;
+            /**
+             * Last Ref Date
+             * Format: date
+             */
+            last_ref_date: string;
+        };
         /**
          * SeriesStatusDTO
          * @description Até que mês o cache tem dado real, e quando a fonte respondeu pela última vez.
@@ -2762,6 +2851,84 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["EconomyHealthDTO"];
                 };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    news_api_news_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsDTO"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    seen_api_news_seen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SeenDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Unprocessable Content */
             422: {

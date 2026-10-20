@@ -23,6 +23,7 @@ from backend.features.providers import (
 )
 from backend.features.series.refresh import refresh_series
 from backend.features.simulator.refresh import refresh_imf
+from backend.repository.seen import record_baseline
 from backend.repository.series import fetch_logs, last_cached
 
 router = APIRouter(prefix="/api/series", tags=["series"])
@@ -64,6 +65,10 @@ def refresh(
     fica como estava, e a série vai para `failed` quando a falta é problema novo."""
     with _refresh_lock:
         now = datetime.now()
+        # A marca de visto nasce antes da busca, no cache que já existia, e depois
+        # dela, na fonte que acabou de ter a primeira carga: o que chega por cima de um
+        # cache é sempre novidade, e a primeira carga nunca é
+        record_baseline(session)
         report = refresh_series(session, providers, now)
         datasets: dict[Dataset, DatasetRefresh] = {
             Dataset.FEDERAL_DEBT_STOCK: refresh_federal_debt(
@@ -76,6 +81,7 @@ def refresh(
                 session, tolerance_provider, now
             ),
         }
+        record_baseline(session)
     return RefreshReportDTO(
         updated=list(report.updated),
         failed=list(report.failed),

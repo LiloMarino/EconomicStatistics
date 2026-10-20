@@ -1,5 +1,6 @@
 import type { OverviewIndicator } from "@/features/overview/use-overview";
 import type { ConceptId } from "@/shared/concepts/concept";
+import type { NewsSources } from "@/shared/hooks/use-news";
 import {
   formatDay,
   formatMoney,
@@ -62,6 +63,9 @@ interface IndicatorConfig {
   source: string;
   /** A tela temática que o cartão abre. */
   to: string;
+  /** As fontes de que o número é feito: o selo "novo" acende quando uma delas tem
+  período que você ainda não viu. */
+  sources: NewsSources;
 }
 
 // O Record obriga a existir conceito, fonte e tela para cada indicador do backend
@@ -75,6 +79,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "",
     source: "IBGE",
     to: "/inflation",
+    sources: { series: ["ipca_general"] },
   },
   expected_ipca: {
     block: "monetary",
@@ -85,6 +90,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: (refDate) => `mediana do Focus para ${refDate.slice(0, 4)}`,
     source: "Focus",
     to: "/focus",
+    sources: { datasets: ["focus_expectations"] },
   },
   selic: {
     block: "monetary",
@@ -95,6 +101,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "ao ano",
     source: "Banco Central",
     to: "/interest",
+    sources: { series: ["selic_target"] },
   },
   real_rate: {
     block: "monetary",
@@ -105,6 +112,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "ao ano",
     source: "Banco Central e Focus",
     to: "/interest",
+    sources: { series: ["selic_target"], datasets: ["focus_expectations"] },
   },
   net_debt: {
     block: "fiscal",
@@ -115,6 +123,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "do PIB",
     source: "Banco Central",
     to: "/debt",
+    sources: { series: ["net_debt"] },
   },
   gross_debt: {
     block: "fiscal",
@@ -125,6 +134,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "do PIB",
     source: "Banco Central",
     to: "/debt",
+    sources: { series: ["gross_debt"] },
   },
   ibc_br: {
     block: "activity",
@@ -135,6 +145,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "em 12 meses",
     source: "Banco Central",
     to: "/activity",
+    sources: { series: ["ibc_br"] },
   },
   gdp: {
     block: "activity",
@@ -145,6 +156,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "em 4 trimestres",
     source: "IBGE",
     to: "/activity",
+    sources: { series: ["gdp_growth_4q"] },
   },
   unemployment: {
     block: "activity",
@@ -155,6 +167,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "trimestre móvel",
     source: "IBGE",
     to: "/activity",
+    sources: { series: ["unemployment_rate"] },
   },
   dollar: {
     block: "external",
@@ -165,6 +178,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "no fim do mês",
     source: "Banco Central",
     to: "/external-sector",
+    sources: { series: ["dollar_month_end"] },
   },
   reserves: {
     block: "external",
@@ -175,6 +189,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "no fim do mês",
     source: "Banco Central",
     to: "/external-sector",
+    sources: { series: ["reserves"] },
   },
   current_account: {
     block: "external",
@@ -185,6 +200,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "do PIB em 12 meses",
     source: "Banco Central",
     to: "/external-sector",
+    sources: { series: ["current_account_gdp"] },
   },
   fdi: {
     block: "external",
@@ -195,6 +211,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "do PIB em 12 meses",
     source: "Banco Central",
     to: "/external-sector",
+    sources: { series: ["fdi_gdp"] },
   },
   international_position: {
     block: "external",
@@ -205,6 +222,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "do PIB",
     source: "Banco Central",
     to: "/external-sector",
+    sources: { series: ["iip_assets", "iip_liabilities"] },
   },
   credit_cost: {
     block: "credit",
@@ -215,6 +233,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "ao ano (ICC)",
     source: "Banco Central",
     to: "/credit",
+    sources: { series: ["credit_cost"] },
   },
   household_concessions: {
     block: "credit",
@@ -225,6 +244,7 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "em 12 meses, recursos livres",
     source: "Banco Central",
     to: "/credit",
+    sources: { series: ["concessions_households"] },
   },
   basel_ratio: {
     block: "credit",
@@ -235,5 +255,6 @@ export const indicatorConfig: Record<OverviewIndicator, IndicatorConfig> = {
     unit: "de capital sobre o risco (mínimo de 10,5%)",
     source: "Banco Central, IF.data",
     to: "/credit",
+    sources: { series: ["basel_capital", "basel_rwa"] },
   },
 };

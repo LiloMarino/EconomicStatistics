@@ -7,6 +7,7 @@ import type { Indicator } from "@/features/overview/use-overview";
 import { ConceptHint } from "@/shared/components/concept-hint";
 import { StatCard } from "@/shared/components/stat-card";
 import { Badge } from "@/shared/components/ui/badge";
+import { useHasNews } from "@/shared/hooks/use-news";
 import { formatPoints, formatShortPercent, formatSignedPercent } from "@/shared/lib/format";
 
 function formatChange({ change, change_kind }: Pick<Indicator, "change" | "change_kind">) {
@@ -25,6 +26,7 @@ export function IndicatorCard({ data }: { data: Indicator }) {
   const unit = typeof config.unit === "function" ? config.unit(data.ref_date) : config.unit;
   const change = formatChange(data);
   const Trend = data.change !== null && data.change < 0 ? TrendingDown : TrendingUp;
+  const fresh = useHasNews(config.sources);
 
   return (
     <StatCard
@@ -48,8 +50,9 @@ export function IndicatorCard({ data }: { data: Indicator }) {
       )}
       <Sparkline values={data.sparkline} label={`Evolução recente de ${config.title}`} />
       <div className="text-caption text-muted-foreground flex items-center justify-between gap-2 border-t pt-2">
-        <span>
+        <span className="flex flex-wrap items-center gap-1.5">
           até {periodFormats[config.period](data.ref_date)} · {config.source}
+          {fresh && <Badge variant="new">novo</Badge>}
         </span>
         <Link to={config.to} className="text-foreground font-semibold whitespace-nowrap">
           Ver tela →

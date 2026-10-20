@@ -4,7 +4,7 @@
 >
 > **Regra de sincronização:** os dois documentos usam os mesmos IDs (`N#`, `D#`) e devem sempre concordar. Ao criar/alterar um `N#`/`D#` aqui, espelhar no ROADMAP via `roadmap.py upsert-ref` na mesma resposta.
 >
-> **Última mudança (2026-10-11):** o fechamento da V1 estendeu a D3 (o front só escala uma fração pronta), a D4 (o exemplo do Aprender é datado), a D6 e a D7 (a rodada antes | depois do canvas) e a D8 (as séries novas, a janela de publicação e o juro neutro fora da Saúde).
+> **Última mudança (2026-10-20):** entrou a N8, saber o que chegou de novo desde a última vez que olhei.
 
 ---
 
@@ -85,6 +85,9 @@ Onde se vê o déficit, e se o governo está emitindo moeda para pagar a dívida
 
 **N7. Entender como os números se ligam ⭐**
 Inflação, juros, dívida, câmbio, crédito e emissão de moeda formam uma teia de ciclos e fluxos, e é essa teia que eu quero entender, não só cada número isolado. A pergunta da conversa que deu origem ao app resume: "dívida e inflação são 2 loops fechados em si mesmos, mas que podem interferir um no outro, enviando uma 'carga' que aumenta a força do loop?". Os mecanismos aparecem desenhados, com o mínimo de texto, e ligados ao dado real de hoje.
+
+**N8. Saber o que chegou de novo desde a última vez que olhei**
+São dezenas de indicadores, e cada fonte publica num dia diferente: num dia sai o IPCA, no outro o IBC-Br, na segunda a Focus. Hoje, para descobrir que um indicador ganhou um mês, eu preciso lembrar que antes ele ia até o mês anterior. Quero que o app me diga o que é novo e onde ver, sem depender da minha memória.
 
 ---
 

@@ -175,3 +175,25 @@ class ImfObservation(Base):
     )
     year: Mapped[int] = mapped_column(primary_key=True)
     value: Mapped[float]
+
+
+class SeenSeries(Base):
+    """Até que referência o usuário já viu cada série: a referência em cache que passa
+    de `seen_until` é novidade."""
+
+    __tablename__ = "seen_series"
+
+    series_id: Mapped[SeriesId] = mapped_column(_series_id_column(), primary_key=True)
+    seen_until: Mapped[date]
+
+
+class SeenDataset(Base):
+    """A `SeenSeries` das fontes que não são série, datada no período mais recente da
+    fonte: a pesquisa Focus ou o mês do estoque da dívida federal."""
+
+    __tablename__ = "seen_datasets"
+
+    dataset: Mapped[Dataset] = mapped_column(
+        _string_enum(Dataset, "dataset"), primary_key=True
+    )
+    seen_until: Mapped[date]

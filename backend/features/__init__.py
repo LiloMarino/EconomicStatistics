@@ -13,6 +13,7 @@ from backend.features.external_sector.router import router as external_sector_ro
 from backend.features.focus.router import router as focus_router
 from backend.features.inflation.router import router as inflation_router
 from backend.features.interest.router import router as interest_router
+from backend.features.news.router import router as news_router
 from backend.features.overview.router import router as overview_router
 from backend.features.price_cuts.router import router as price_cuts_router
 from backend.features.series.router import router as series_router
@@ -33,3 +34,4 @@ def register_routes(app: FastAPI) -> None:
     app.include_router(interest_router)
     app.include_router(overview_router)
     app.include_router(economy_health_router)
+    app.include_router(news_router)

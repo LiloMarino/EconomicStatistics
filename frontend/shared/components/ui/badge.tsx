@@ -24,9 +24,11 @@ const badgeVariants = cva(
         ok: "bg-ok-soft text-ok",
         critical: "bg-critical-soft text-destructive",
         warning: "bg-warning-soft text-warning",
+        new: "bg-primary-soft text-primary",
         count: "h-[18px] min-w-[18px] bg-muted px-[5px] text-xs text-ink-2",
         "count-critical": "h-[18px] min-w-[18px] bg-critical-soft px-[5px] text-xs text-destructive",
         "count-warning": "h-[18px] min-w-[18px] bg-warning-soft px-[5px] text-xs text-warning",
+        "count-new": "h-[18px] min-w-[18px] bg-primary-soft px-[5px] text-xs text-primary",
       },
     },
     defaultVariants: {

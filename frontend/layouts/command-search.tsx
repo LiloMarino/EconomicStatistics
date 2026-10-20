@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { explainerIds, explainers } from "@/shared/concepts/explainers";
-import { navGroups } from "@/layouts/navigation";
+import { navGroups } from "@/shared/lib/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
   Command,

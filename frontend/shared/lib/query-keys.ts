@@ -4,6 +4,7 @@ import type { QueryClient, QueryKey } from "@tanstack/react-query";
 export const queryKeys = {
   series: ["series"] as const,
   seriesStatus: ["series", "status"] as const,
+  news: ["series", "news"] as const,
   overview: ["series", "overview"] as const,
   economyHealth: ["series", "economy-health"] as const,
   inflationGroups: ["series", "inflation-groups"] as const,

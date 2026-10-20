@@ -1,6 +1,7 @@
 import { RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
+import { NewsList } from "@/features/news/news-list";
 import { GovernmentResultCard } from "@/features/overview/government-result-card";
 import { IndicatorCard } from "@/features/overview/indicator-card";
 import { blocks, indicatorConfig } from "@/features/overview/indicator-config";
@@ -120,6 +121,8 @@ export function OverviewPage() {
         description="A página de estatísticas do Banco Central, com cada número explicado"
         controls={<RefreshControl />}
       />
+
+      <NewsList />
 
       {overview.error ? (
         <NoData error={overview.error} />

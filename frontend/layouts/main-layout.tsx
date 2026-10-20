@@ -1,12 +1,16 @@
 import { ChartNoAxesCombined, Moon, PanelLeft, Sun } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
+import { newsByScreen } from "@/features/news/news-by-screen";
+import { useMarkSeen } from "@/features/news/use-mark-seen";
 import { useRefreshSeries } from "@/features/series/use-refresh-series";
+import { useNews } from "@/shared/hooks/use-news";
 import { useSeriesStatus } from "@/shared/hooks/use-series-status";
 import { useTheme } from "@/shared/hooks/use-theme";
 import { CommandSearch } from "@/layouts/command-search";
-import { defaultFooter, isActive, navGroups } from "@/layouts/navigation";
+import { defaultFooter, isActive, navGroups } from "@/shared/lib/navigation";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
   Sidebar,
@@ -95,9 +99,39 @@ function DataUntil({ pathname }: { pathname: string }) {
   );
 }
 
+/** Acessar a tela-casa de uma fonte marca o que chegou nela como visto. A Visão geral
+não é casa de fonte nenhuma, e por isso a lista de novidades dela fica até você abrir a
+tela de cada uma. */
+function useMarkScreenSeen(pathname: string) {
+  const { data } = useNews();
+  const { mutate: markSeen } = useMarkSeen();
+  // A query devolve o mesmo objeto enquanto o conteúdo não muda: a marca dispara ao
+  // entrar na tela e quando o refresh traz fonte nova a ela, uma vez cada
+  const screen = useMemo(
+    () => data && newsByScreen(data).find((item) => isActive(item.screen.to, pathname)),
+    [data, pathname],
+  );
+
+  useEffect(() => {
+    if (!screen) return;
+    markSeen({
+      series: screen.series.map((item) => item.series_id),
+      datasets: screen.datasets.map((item) => item.dataset),
+    });
+  }, [screen, markSeen]);
+}
+
 export function MainLayout() {
   const { pathname } = useLocation();
   const { mutate: refreshSeries } = useRefreshSeries();
+  const { data: news } = useNews();
+  const newsCount = new Map(
+    (news ? newsByScreen(news) : []).map((item) => [
+      item.screen.to,
+      item.series.length + item.datasets.length,
+    ]),
+  );
+  useMarkScreenSeen(pathname);
 
   // A cada abertura, o backend confere o que falta no cache de séries
   useEffect(() => {
@@ -152,6 +186,15 @@ export function MainLayout() {
                         >
                           <Icon />
                           <span>{label}</span>
+                          {newsCount.has(to) && (
+                            <Badge
+                              variant="count-new"
+                              className="ml-auto group-data-[collapsible=icon]:hidden"
+                              aria-label={`${newsCount.get(to)} com dado novo`}
+                            >
+                              {newsCount.get(to)}
+                            </Badge>
+                          )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
