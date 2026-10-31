@@ -24,8 +24,8 @@
 | **N6** | — | Saber como o déficit é financiado | — | [F4](#f4), [F13](#f13), [F15](#f15), [F16](#f16), [F41](#f41), [F43](#f43) | — | — | — |
 | **N7** | — | Entender como os números se ligam: a teia de ciclos e fluxos | — | [F9](#f9), [F13](#f13), [F30](#f30), [F31](#f31), [F33](#f33), [F36](#f36), [F37](#f37), [F39](#f39), [F48](#f48), [F50](#f50) | — | — | — |
 | **N8** | — | Saber o que chegou de novo desde a última vez que olhei | — | [F57](#f57) | — | — | — |
-| [**F34**](#f34) | feature | Mercado imobiliário, na tela Crédito | M8 | — | Médio | Médio | 💤 |
-| [**F46**](#f46) | feature | Juro neutro na tela Juros | M8 | — | — | — | 🔍 |
+| [**F34**](#f34) | Feature | Mercado imobiliário, na tela Crédito | M8 | — | Médio | Médio | 💤 |
+| [**F46**](#f46) | Feature | Juro neutro na tela Juros | M8 | — | — | — | 🔍 |
 
 <details>
 <summary><strong>Concluído / decidido / descartado (63 itens — clique pra expandir)</strong></summary>
@@ -40,61 +40,61 @@
 | **D6** | — | Linguagem visual própria, definida no canvas antes de virar código | — | [F7](#f7), [F8](#f8), [F9](#f9), [F11](#f11), [F13](#f13), [F14](#f14), [F15](#f15), [F16](#f16), [F17](#f17), [F22](#f22), [F23](#f23), [F24](#f24), [F26](#f26), [F39](#f39), [F40](#f40), [F41](#f41), [F44](#f44), [F47](#f47), [F48](#f48), [F49](#f49), [F50](#f50) | — | — | ✅ |
 | **D7** | — | Mecanismo se explica com diagrama, desenhado em React Flow | — | [F9](#f9), [F15](#f15), [F36](#f36), [F37](#f37), [F38](#f38), [F39](#f39), [F48](#f48), [F49](#f49), [F50](#f50) | — | — | ✅ |
 | **D8** | — | Dado externo se atualiza sozinho e aos poucos, sem número digitado no código | — | [F15](#f15), [F45](#f45), [F47](#f47), [F51](#f51), [F52](#f52), [F53](#f53), [F54](#f54), [F56](#f56) | — | — | ✅ |
-| [**F1**](#f1) | feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | M1 | — | — | — | ✅ |
-| [**F2**](#f2) | feature | Cache de séries no SQLite com refresh idempotente | M1 | — | — | — | ✅ |
-| [**F3**](#f3) | feature | Fonte IBGE: IPCA por grupo (tabela 7060) | M1 | — | — | — | ✅ |
-| [**F4**](#f4) | feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | M1 | — | — | — | ✅ |
-| [**F5**](#f5) | feature | Tela de inflação por categoria (os três gráficos atuais) | M1 | — | — | — | ✅ |
-| [**F6**](#f6) | feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | M1 | — | — | — | ✅ |
-| [**F7**](#f7) | feature | Catálogo de conceitos: os textos dos "?" num registro único | M2 | — | — | — | ✅ |
-| [**F8**](#f8) | feature | Aba Aprender: glossário e página por conceito | M2 | — | — | — | ✅ |
-| [**F9**](#f9) | feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | M2 | — | — | — | ✅ |
-| [**F10**](#f10) | feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | M7 | — | — | — | ✅ |
-| [**F11**](#f11) | feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | — | — | — | ✅ |
-| [**F12**](#f12) | feature | Tela de série: histórico, período e comparação na URL | — | — | — | — | 🚫 |
-| [**F13**](#f13) | feature | Tela Déficit: primário, juros e nominal | M4 | — | — | — | ✅ |
-| [**F14**](#f14) | feature | Tela Dívida: r, g, r − g e o primário que estabiliza | M4 | — | — | — | ✅ |
-| [**F15**](#f15) | feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | M4 | — | — | — | ✅ |
-| [**F16**](#f16) | feature | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | — | — | — | ✅ |
-| [**F17**](#f17) | feature | "Check engine": semáforo dos sinais de crise | M5 | — | — | — | ✅ |
-| [**F18**](#f18) | feature | Linha do tempo histórica com os episódios marcados | — | — | — | — | 🚫 |
-| [**F19**](#f19) | feature | Comparação internacional da dívida (FMI) | — | — | — | — | 🚫 |
-| [**F20**](#f20) | feature | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | — | — | — | ✅ |
-| [**F21**](#f21) | feature | Inflação acelerando ou freando | M6 | — | — | — | ✅ |
-| [**F22**](#f22) | feature | Rodadas de design no canvas | M6 | — | — | — | ✅ |
-| [**F23**](#f23) | feature | Linguagem visual nas telas que existem | M6 | — | — | — | ✅ |
-| [**F24**](#f24) | feature | Simulador da dívida, com casos que aconteceram e exemplos | M4 | — | — | — | ✅ |
-| [**F25**](#f25) | feature | Comparação com o mesmo mês de outros anos | M6 | — | — | — | ✅ |
-| [**F26**](#f26) | feature | Busca com Ctrl+K: telas e conceitos | M2 | — | — | — | ✅ |
-| [**F27**](#f27) | feature | Continuação pelo Focus nos gráficos | M7 | — | — | — | ✅ |
-| [**F28**](#f28) | feature | Tela Focus: como a expectativa mudou semana a semana | M7 | — | — | — | ✅ |
-| [**F29**](#f29) | feature | Limites mínimo e máximo da meta no gráfico do IPCA | M7 | — | — | — | ✅ |
-| [**F30**](#f30) | feature | Tela Juros: Selic, Copom e juro real | M8 | — | — | — | ✅ |
-| [**F31**](#f31) | feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | M8 | — | — | — | ✅ |
-| [**F32**](#f32) | feature | Tela Atividade: PIB, IBC-Br e desemprego | M8 | — | — | — | ✅ |
-| [**F33**](#f33) | feature | Tela Crédito: custo do crédito, spread e concessões | M8 | — | — | — | ✅ |
-| [**F35**](#f35) | feature | IPCA livres, administrados e serviços | — | — | — | — | ✅ |
-| [**F36**](#f36) | feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | M2 | — | — | — | ✅ |
-| [**F37**](#f37) | feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | M2 | — | — | — | ✅ |
-| [**F38**](#f38) | feature | Diagramas nos conceitos que já existem | M2 | — | — | — | ✅ |
-| [**F39**](#f39) | feature | Pranchas dos explicadores no canvas | M2 | — | — | — | ✅ |
-| [**F40**](#f40) | feature | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | — | — | — | ✅ |
-| [**F41**](#f41) | feature | Déficit mês a mês, com o nominal numa coluna própria | M4 | — | — | — | ✅ |
-| [**F42**](#f42) | feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | M2 | — | — | — | ✅ |
-| [**F43**](#f43) | feature | Quem faz o déficit: a NFSP por esfera | M4 | — | — | — | ✅ |
-| [**F44**](#f44) | feature | A busca e o rodapé da barra lateral seguem a tela | — | — | — | — | ✅ |
-| [**F45**](#f45) | feature | Tolerância da meta de inflação buscada da fonte | — | — | — | — | ✅ |
-| [**F47**](#f47) | feature | Basileia dos bancos na tela Crédito e no painel | M8 | — | — | — | ✅ |
-| [**F48**](#f48) | feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | M2 | — | — | — | ✅ |
-| [**F49**](#f49) | feature | Rodada "antes \| depois" do canvas nas telas do app | — | — | — | — | ✅ |
-| [**F50**](#f50) | feature | Explicador: o caminho dos dólares | M2 | — | — | — | ✅ |
-| [**F51**](#f51) | feature | Inadimplência na tela Crédito | M8 | — | — | — | ✅ |
-| [**F52**](#f52) | feature | Subutilização da força de trabalho na tela Atividade | M8 | — | — | — | ✅ |
-| [**F53**](#f53) | feature | Renda nacional no Setor externo: quanto do PIB fica no país | M8 | — | — | — | ✅ |
-| [**F54**](#f54) | feature | Dólar dia a dia no Setor externo | M8 | — | — | — | ✅ |
-| [**F55**](#f55) | feature | Juro real com histórico na Visão geral | M3 | — | — | — | ✅ |
-| [**F56**](#f56) | feature | Fechamento das pendências da V1 | — | — | — | — | ✅ |
-| [**F57**](#f57) | feature | Novidades desde a última visita | — | — | — | — | ✅ |
+| [**F1**](#f1) | Feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | M1 | — | — | — | ✅ |
+| [**F2**](#f2) | Feature | Cache de séries no SQLite com refresh idempotente | M1 | — | — | — | ✅ |
+| [**F3**](#f3) | Feature | Fonte IBGE: IPCA por grupo (tabela 7060) | M1 | — | — | — | ✅ |
+| [**F4**](#f4) | Feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | M1 | — | — | — | ✅ |
+| [**F5**](#f5) | Feature | Tela de inflação por categoria (os três gráficos atuais) | M1 | — | — | — | ✅ |
+| [**F6**](#f6) | Feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | M1 | — | — | — | ✅ |
+| [**F7**](#f7) | Feature | Catálogo de conceitos: os textos dos "?" num registro único | M2 | — | — | — | ✅ |
+| [**F8**](#f8) | Feature | Aba Aprender: glossário e página por conceito | M2 | — | — | — | ✅ |
+| [**F9**](#f9) | Feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | M2 | — | — | — | ✅ |
+| [**F10**](#f10) | Feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | M7 | — | — | — | ✅ |
+| [**F11**](#f11) | Feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | M3 | — | — | — | ✅ |
+| [**F12**](#f12) | Feature | Tela de série: histórico, período e comparação na URL | — | — | — | — | 🚫 |
+| [**F13**](#f13) | Feature | Tela Déficit: primário, juros e nominal | M4 | — | — | — | ✅ |
+| [**F14**](#f14) | Feature | Tela Dívida: r, g, r − g e o primário que estabiliza | M4 | — | — | — | ✅ |
+| [**F15**](#f15) | Feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | M4 | — | — | — | ✅ |
+| [**F16**](#f16) | Feature | Composição da dívida pública federal (Tesouro), na tela Dívida | M4 | — | — | — | ✅ |
+| [**F17**](#f17) | Feature | "Check engine": semáforo dos sinais de crise | M5 | — | — | — | ✅ |
+| [**F18**](#f18) | Feature | Linha do tempo histórica com os episódios marcados | — | — | — | — | 🚫 |
+| [**F19**](#f19) | Feature | Comparação internacional da dívida (FMI) | — | — | — | — | 🚫 |
+| [**F20**](#f20) | Feature | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | — | — | — | — | ✅ |
+| [**F21**](#f21) | Feature | Inflação acelerando ou freando | M6 | — | — | — | ✅ |
+| [**F22**](#f22) | Feature | Rodadas de design no canvas | M6 | — | — | — | ✅ |
+| [**F23**](#f23) | Feature | Linguagem visual nas telas que existem | M6 | — | — | — | ✅ |
+| [**F24**](#f24) | Feature | Simulador da dívida, com casos que aconteceram e exemplos | M4 | — | — | — | ✅ |
+| [**F25**](#f25) | Feature | Comparação com o mesmo mês de outros anos | M6 | — | — | — | ✅ |
+| [**F26**](#f26) | Feature | Busca com Ctrl+K: telas e conceitos | M2 | — | — | — | ✅ |
+| [**F27**](#f27) | Feature | Continuação pelo Focus nos gráficos | M7 | — | — | — | ✅ |
+| [**F28**](#f28) | Feature | Tela Focus: como a expectativa mudou semana a semana | M7 | — | — | — | ✅ |
+| [**F29**](#f29) | Feature | Limites mínimo e máximo da meta no gráfico do IPCA | M7 | — | — | — | ✅ |
+| [**F30**](#f30) | Feature | Tela Juros: Selic, Copom e juro real | M8 | — | — | — | ✅ |
+| [**F31**](#f31) | Feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | M8 | — | — | — | ✅ |
+| [**F32**](#f32) | Feature | Tela Atividade: PIB, IBC-Br e desemprego | M8 | — | — | — | ✅ |
+| [**F33**](#f33) | Feature | Tela Crédito: custo do crédito, spread e concessões | M8 | — | — | — | ✅ |
+| [**F35**](#f35) | Feature | IPCA livres, administrados e serviços | — | — | — | — | ✅ |
+| [**F36**](#f36) | Feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | M2 | — | — | — | ✅ |
+| [**F37**](#f37) | Feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | M2 | — | — | — | ✅ |
+| [**F38**](#f38) | Feature | Diagramas nos conceitos que já existem | M2 | — | — | — | ✅ |
+| [**F39**](#f39) | Feature | Pranchas dos explicadores no canvas | M2 | — | — | — | ✅ |
+| [**F40**](#f40) | Feature | Leitura mais clara nas telas Dívida, Setor externo e Déficit | — | — | — | — | ✅ |
+| [**F41**](#f41) | Feature | Déficit mês a mês, com o nominal numa coluna própria | M4 | — | — | — | ✅ |
+| [**F42**](#f42) | Feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | M2 | — | — | — | ✅ |
+| [**F43**](#f43) | Feature | Quem faz o déficit: a NFSP por esfera | M4 | — | — | — | ✅ |
+| [**F44**](#f44) | Feature | A busca e o rodapé da barra lateral seguem a tela | — | — | — | — | ✅ |
+| [**F45**](#f45) | Feature | Tolerância da meta de inflação buscada da fonte | — | — | — | — | ✅ |
+| [**F47**](#f47) | Feature | Basileia dos bancos na tela Crédito e no painel | M8 | — | — | — | ✅ |
+| [**F48**](#f48) | Feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | M2 | — | — | — | ✅ |
+| [**F49**](#f49) | Feature | Rodada "antes \| depois" do canvas nas telas do app | — | — | — | — | ✅ |
+| [**F50**](#f50) | Feature | Explicador: o caminho dos dólares | M2 | — | — | — | ✅ |
+| [**F51**](#f51) | Feature | Inadimplência na tela Crédito | M8 | — | — | — | ✅ |
+| [**F52**](#f52) | Feature | Subutilização da força de trabalho na tela Atividade | M8 | — | — | — | ✅ |
+| [**F53**](#f53) | Feature | Renda nacional no Setor externo: quanto do PIB fica no país | M8 | — | — | — | ✅ |
+| [**F54**](#f54) | Feature | Dólar dia a dia no Setor externo | M8 | — | — | — | ✅ |
+| [**F55**](#f55) | Feature | Juro real com histórico na Visão geral | M3 | — | — | — | ✅ |
+| [**F56**](#f56) | Feature | Fechamento das pendências da V1 | — | — | — | — | ✅ |
+| [**F57**](#f57) | Feature | Novidades desde a última visita | — | — | — | — | ✅ |
 
 </details>
 
@@ -106,7 +106,7 @@
 
 | ID | Tipo | Resumo | Marco | Destrava | Esforço | Custo-benefício | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [**F46**](#f46) | feature | Juro neutro na tela Juros | M8 · 6º | 0 | — | — | 🔍 |
+| [**F46**](#f46) | Feature | Juro neutro na tela Juros | M8 · 6º | 0 | — | — | 🔍 |
 
 ---
 
@@ -122,12 +122,12 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F1**](#f1) | feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ Concluído |
-| 2 | [**F2**](#f2) | feature | Cache de séries no SQLite com refresh idempotente | — | ✅ Concluído |
-| 3 | [**F3**](#f3) | feature | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ Concluído |
-| 4 | [**F4**](#f4) | feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ Concluído |
-| 5 | [**F5**](#f5) | feature | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ Concluído |
-| 6 | [**F6**](#f6) | feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ Concluído |
+| 1 | [**F1**](#f1) | Feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | — | ✅ Concluído |
+| 2 | [**F2**](#f2) | Feature | Cache de séries no SQLite com refresh idempotente | — | ✅ Concluído |
+| 3 | [**F3**](#f3) | Feature | Fonte IBGE: IPCA por grupo (tabela 7060) | — | ✅ Concluído |
+| 4 | [**F4**](#f4) | Feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | — | ✅ Concluído |
+| 5 | [**F5**](#f5) | Feature | Tela de inflação por categoria (os três gráficos atuais) | — | ✅ Concluído |
+| 6 | [**F6**](#f6) | Feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | — | ✅ Concluído |
 
 ### M2 — Camada didática
 
@@ -139,17 +139,17 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F7**](#f7) | feature | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ Concluído |
-| 2 | [**F8**](#f8) | feature | Aba Aprender: glossário e página por conceito | — | ✅ Concluído |
-| 3 | [**F9**](#f9) | feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | — | ✅ Concluído |
-| 4 | [**F26**](#f26) | feature | Busca com Ctrl+K: telas e conceitos | — | ✅ Concluído |
-| 5 | [**F36**](#f36) | feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ✅ Concluído |
-| 6 | [**F37**](#f37) | feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ✅ Concluído |
-| 7 | [**F38**](#f38) | feature | Diagramas nos conceitos que já existem | — | ✅ Concluído |
-| 8 | [**F39**](#f39) | feature | Pranchas dos explicadores no canvas | — | ✅ Concluído |
-| 9 | [**F42**](#f42) | feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ Concluído |
-| 10 | [**F48**](#f48) | feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ✅ Concluído |
-| 11 | [**F50**](#f50) | feature | Explicador: o caminho dos dólares | — | ✅ Concluído |
+| 1 | [**F7**](#f7) | Feature | Catálogo de conceitos: os textos dos "?" num registro único | — | ✅ Concluído |
+| 2 | [**F8**](#f8) | Feature | Aba Aprender: glossário e página por conceito | — | ✅ Concluído |
+| 3 | [**F9**](#f9) | Feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | — | ✅ Concluído |
+| 4 | [**F26**](#f26) | Feature | Busca com Ctrl+K: telas e conceitos | — | ✅ Concluído |
+| 5 | [**F36**](#f36) | Feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | — | ✅ Concluído |
+| 6 | [**F37**](#f37) | Feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | — | ✅ Concluído |
+| 7 | [**F38**](#f38) | Feature | Diagramas nos conceitos que já existem | — | ✅ Concluído |
+| 8 | [**F39**](#f39) | Feature | Pranchas dos explicadores no canvas | — | ✅ Concluído |
+| 9 | [**F42**](#f42) | Feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | — | ✅ Concluído |
+| 10 | [**F48**](#f48) | Feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | — | ✅ Concluído |
+| 11 | [**F50**](#f50) | Feature | Explicador: o caminho dos dólares | — | ✅ Concluído |
 
 ### M3 — Painel da economia
 
@@ -161,8 +161,8 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F11**](#f11) | feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ✅ Concluído |
-| 2 | [**F55**](#f55) | feature | Juro real com histórico na Visão geral | — | ✅ Concluído |
+| 1 | [**F11**](#f11) | Feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | — | ✅ Concluído |
+| 2 | [**F55**](#f55) | Feature | Juro real com histórico na Visão geral | — | ✅ Concluído |
 
 ### M4 — Dívida e déficit
 
@@ -174,13 +174,13 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F13**](#f13) | feature | Tela Déficit: primário, juros e nominal | — | ✅ Concluído |
-| 2 | [**F14**](#f14) | feature | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ Concluído |
-| 3 | [**F15**](#f15) | feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | — | ✅ Concluído |
-| 4 | [**F16**](#f16) | feature | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ✅ Concluído |
-| 5 | [**F24**](#f24) | feature | Simulador da dívida, com casos que aconteceram e exemplos | — | ✅ Concluído |
-| 6 | [**F41**](#f41) | feature | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ Concluído |
-| 7 | [**F43**](#f43) | feature | Quem faz o déficit: a NFSP por esfera | — | ✅ Concluído |
+| 1 | [**F13**](#f13) | Feature | Tela Déficit: primário, juros e nominal | — | ✅ Concluído |
+| 2 | [**F14**](#f14) | Feature | Tela Dívida: r, g, r − g e o primário que estabiliza | — | ✅ Concluído |
+| 3 | [**F15**](#f15) | Feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | — | ✅ Concluído |
+| 4 | [**F16**](#f16) | Feature | Composição da dívida pública federal (Tesouro), na tela Dívida | — | ✅ Concluído |
+| 5 | [**F24**](#f24) | Feature | Simulador da dívida, com casos que aconteceram e exemplos | — | ✅ Concluído |
+| 6 | [**F41**](#f41) | Feature | Déficit mês a mês, com o nominal numa coluna própria | — | ✅ Concluído |
+| 7 | [**F43**](#f43) | Feature | Quem faz o déficit: a NFSP por esfera | — | ✅ Concluído |
 
 ### M5 — Saúde da economia
 
@@ -192,7 +192,7 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F17**](#f17) | feature | "Check engine": semáforo dos sinais de crise | — | ✅ Concluído |
+| 1 | [**F17**](#f17) | Feature | "Check engine": semáforo dos sinais de crise | — | ✅ Concluído |
 
 ### M6 — Linguagem visual própria e ritmo da inflação
 
@@ -204,10 +204,10 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F21**](#f21) | feature | Inflação acelerando ou freando | — | ✅ Concluído |
-| 2 | [**F22**](#f22) | feature | Rodadas de design no canvas | — | ✅ Concluído |
-| 3 | [**F23**](#f23) | feature | Linguagem visual nas telas que existem | — | ✅ Concluído |
-| 4 | [**F25**](#f25) | feature | Comparação com o mesmo mês de outros anos | — | ✅ Concluído |
+| 1 | [**F21**](#f21) | Feature | Inflação acelerando ou freando | — | ✅ Concluído |
+| 2 | [**F22**](#f22) | Feature | Rodadas de design no canvas | — | ✅ Concluído |
+| 3 | [**F23**](#f23) | Feature | Linguagem visual nas telas que existem | — | ✅ Concluído |
+| 4 | [**F25**](#f25) | Feature | Comparação com o mesmo mês de outros anos | — | ✅ Concluído |
 
 ### M7 — Expectativas de mercado e meta completa
 
@@ -219,10 +219,10 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F10**](#f10) | feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ✅ Concluído |
-| 2 | [**F27**](#f27) | feature | Continuação pelo Focus nos gráficos | — | ✅ Concluído |
-| 3 | [**F28**](#f28) | feature | Tela Focus: como a expectativa mudou semana a semana | — | ✅ Concluído |
-| 4 | [**F29**](#f29) | feature | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ Concluído |
+| 1 | [**F10**](#f10) | Feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | — | ✅ Concluído |
+| 2 | [**F27**](#f27) | Feature | Continuação pelo Focus nos gráficos | — | ✅ Concluído |
+| 3 | [**F28**](#f28) | Feature | Tela Focus: como a expectativa mudou semana a semana | — | ✅ Concluído |
+| 4 | [**F29**](#f29) | Feature | Limites mínimo e máximo da meta no gráfico do IPCA | — | ✅ Concluído |
 
 ### M8 — Cobertura da página de estatísticas do BCB
 
@@ -234,17 +234,17 @@
 
 | # | ID | Tipo | Resumo | Depende de | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [**F30**](#f30) | feature | Tela Juros: Selic, Copom e juro real | — | ✅ Concluído |
-| 2 | [**F31**](#f31) | feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ Concluído |
-| 3 | [**F32**](#f32) | feature | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ Concluído |
-| 4 | [**F33**](#f33) | feature | Tela Crédito: custo do crédito, spread e concessões | — | ✅ Concluído |
-| 5 | [**F34**](#f34) | feature | Mercado imobiliário, na tela Crédito | [F33](#f33) | 💤 Sem prioridade |
-| 6 | [**F46**](#f46) | feature | Juro neutro na tela Juros | [F30](#f30) | 🔍 Em avaliação |
-| 7 | [**F47**](#f47) | feature | Basileia dos bancos na tela Crédito e no painel | — | ✅ Concluído |
-| 8 | [**F51**](#f51) | feature | Inadimplência na tela Crédito | — | ✅ Concluído |
-| 9 | [**F52**](#f52) | feature | Subutilização da força de trabalho na tela Atividade | — | ✅ Concluído |
-| 10 | [**F53**](#f53) | feature | Renda nacional no Setor externo: quanto do PIB fica no país | — | ✅ Concluído |
-| 11 | [**F54**](#f54) | feature | Dólar dia a dia no Setor externo | — | ✅ Concluído |
+| 1 | [**F30**](#f30) | Feature | Tela Juros: Selic, Copom e juro real | — | ✅ Concluído |
+| 2 | [**F31**](#f31) | Feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | — | ✅ Concluído |
+| 3 | [**F32**](#f32) | Feature | Tela Atividade: PIB, IBC-Br e desemprego | — | ✅ Concluído |
+| 4 | [**F33**](#f33) | Feature | Tela Crédito: custo do crédito, spread e concessões | — | ✅ Concluído |
+| 5 | [**F34**](#f34) | Feature | Mercado imobiliário, na tela Crédito | [F33](#f33) | 💤 Sem prioridade |
+| 6 | [**F46**](#f46) | Feature | Juro neutro na tela Juros | [F30](#f30) | 🔍 Em avaliação |
+| 7 | [**F47**](#f47) | Feature | Basileia dos bancos na tela Crédito e no painel | — | ✅ Concluído |
+| 8 | [**F51**](#f51) | Feature | Inadimplência na tela Crédito | — | ✅ Concluído |
+| 9 | [**F52**](#f52) | Feature | Subutilização da força de trabalho na tela Atividade | — | ✅ Concluído |
+| 10 | [**F53**](#f53) | Feature | Renda nacional no Setor externo: quanto do PIB fica no país | — | ✅ Concluído |
+| 11 | [**F54**](#f54) | Feature | Dólar dia a dia no Setor externo | — | ✅ Concluído |
 
 ---
 
@@ -258,7 +258,7 @@
 
 | ID | Tipo | Resumo | Serve | D# | Marco | Depende de | Falta |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| **F46** | feature | Juro neutro na tela Juros | N1, N2 | — | M8 | [F30](#f30) | Uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária |
+| **F46** | Feature | Juro neutro na tela Juros | N1, N2 | — | M8 | [F30](#f30) | Uma fonte que dê para baixar: o BC só publica o juro neutro em texto de PDF do Relatório de Política Monetária |
 
 <a id="f46"></a>
 **F46 — Juro neutro na tela Juros.** O cartão "O juro aperta ou alivia?" da prancha `Juros` compara o juro real com o juro neutro que o Banco Central estima, em barras, com o neutro sem cor (D6). Ficou de fora da F30: o Banco Central só publica a estimativa em texto de PDF do Relatório de Política Monetária (o anexo estatístico em planilha não traz a série, e o layout das abas muda a cada edição), e digitar o número o deixaria envelhecer (D8). Volta quando houver uma fonte que dê para baixar. Conferido de novo em 2026-10-11: continua só em boxe de PDF. A tela Saúde da economia também deixou de mostrar o número (F56).
@@ -269,7 +269,7 @@
 
 | ID | Tipo | Resumo | Serve | D# | Marco | Depende de | Esforço | Risco | Valor | Custo-benefício |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **F34** | feature | Mercado imobiliário, na tela Crédito | N1 | — | M8 | [F33](#f33) | Médio | Médio | Baixo | Médio |
+| **F34** | Feature | Mercado imobiliário, na tela Crédito | N1 | — | M8 | [F33](#f33) | Médio | Médio | Baixo | Médio |
 
 <a id="f34"></a>
 **F34 — Mercado imobiliário.** Uma seção na tela Crédito (F33) com os dois gráficos de mercado imobiliário da página do BCB:
@@ -286,58 +286,58 @@ Fica registrado sem prioridade: completa a cobertura da página do BCB, mas é o
 
 | ID | Tipo | Resumo | Serve | D# | Marco |
 | --- | --- | --- | --- | --- | --- |
-| **F1** | feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | N1, N2, N3 | D1 | M1 |
-| **F2** | feature | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 |
-| **F3** | feature | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 |
-| **F4** | feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 |
-| **F5** | feature | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 |
-| **F6** | feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 |
-| **F7** | feature | Catálogo de conceitos: os textos dos "?" num registro único | N2 | D4, D6 | M2 |
-| **F8** | feature | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 |
-| **F9** | feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | N2, N5, N7 | D6, D7 | M2 |
-| **F10** | feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 |
-| **F11** | feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | N1 | D4, D6 | M3 |
-| **F13** | feature | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 |
-| **F14** | feature | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 |
-| **F15** | feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | N6 | D6, D7, D8 | M4 |
-| **F16** | feature | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 |
-| **F17** | feature | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 |
-| **F20** | feature | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — |
-| **F21** | feature | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 |
-| **F22** | feature | Rodadas de design no canvas | N2 | D6 | M6 |
-| **F23** | feature | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 |
-| **F24** | feature | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 |
-| **F25** | feature | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 |
-| **F26** | feature | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 |
-| **F27** | feature | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 |
-| **F28** | feature | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 |
-| **F29** | feature | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 |
-| **F30** | feature | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 |
-| **F31** | feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 |
-| **F32** | feature | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 |
-| **F33** | feature | Tela Crédito: custo do crédito, spread e concessões | N1, N7 | — | M8 |
-| **F35** | feature | IPCA livres, administrados e serviços | N1, N2 | — | — |
-| **F36** | feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | N2, N4, N7 | D7 | M2 |
-| **F37** | feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | N4, N5, N7 | D7 | M2 |
-| **F38** | feature | Diagramas nos conceitos que já existem | N2 | D7 | M2 |
-| **F39** | feature | Pranchas dos explicadores no canvas | N2, N7 | D6, D7 | M2 |
-| **F40** | feature | Leitura mais clara nas telas Dívida, Setor externo e Déficit | N2, N4 | D6 | — |
-| **F41** | feature | Déficit mês a mês, com o nominal numa coluna própria | N4, N6 | D6 | M4 |
-| **F42** | feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 |
-| **F43** | feature | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 |
-| **F44** | feature | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — |
-| **F45** | feature | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — |
-| **F47** | feature | Basileia dos bancos na tela Crédito e no painel | N1 | D6, D8 | M8 |
-| **F48** | feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 |
-| **F49** | feature | Rodada "antes \| depois" do canvas nas telas do app | N1, N2 | D3, D6, D7 | — |
-| **F50** | feature | Explicador: o caminho dos dólares | N2, N7 | D6, D7 | M2 |
-| **F51** | feature | Inadimplência na tela Crédito | N1, N5 | D8 | M8 |
-| **F52** | feature | Subutilização da força de trabalho na tela Atividade | N1, N2 | D8 | M8 |
-| **F53** | feature | Renda nacional no Setor externo: quanto do PIB fica no país | N1, N2 | D3, D8 | M8 |
-| **F54** | feature | Dólar dia a dia no Setor externo | N1 | D8 | M8 |
-| **F55** | feature | Juro real com histórico na Visão geral | N1 | D3 | M3 |
-| **F56** | feature | Fechamento das pendências da V1 | N1, N2 | D8 | — |
-| **F57** | feature | Novidades desde a última visita | N8 | D2 | — |
+| **F1** | Feature | Scaffold no padrão do Finance Manager, aposentando o Streamlit | N1, N2, N3 | D1 | M1 |
+| **F2** | Feature | Cache de séries no SQLite com refresh idempotente | N1, N3 | D2, D3 | M1 |
+| **F3** | Feature | Fonte IBGE: IPCA por grupo (tabela 7060) | N1, N3 | D2 | M1 |
+| **F4** | Feature | Fonte BCB/SGS, portada do Finance Manager e parametrizada por código | N1, N3, N4, N6 | D2 | M1 |
+| **F5** | Feature | Tela de inflação por categoria (os três gráficos atuais) | N1 | D3 | M1 |
+| **F6** | Feature | Poder de compra por categoria: conta exata e quatro referências de reajuste | N3 | D3 | M1 |
+| **F7** | Feature | Catálogo de conceitos: os textos dos "?" num registro único | N2 | D4, D6 | M2 |
+| **F8** | Feature | Aba Aprender: glossário e página por conceito | N2 | D4, D6 | M2 |
+| **F9** | Feature | Explicadores com diagrama: os dois loops e as três pontes, r − g | N2, N5, N7 | D6, D7 | M2 |
+| **F10** | Feature | Fonte Focus completa: todos os indicadores, na menor escala, com o histórico das pesquisas | N1, N5 | D2 | M7 |
+| **F11** | Feature | Painel "Visão geral": a página de estatísticas do BCB refeita com explicação | N1 | D4, D6 | M3 |
+| **F13** | Feature | Tela Déficit: primário, juros e nominal | N4, N6, N7 | D6 | M4 |
+| **F14** | Feature | Tela Dívida: r, g, r − g e o primário que estabiliza | N4 | D3, D6 | M4 |
+| **F15** | Feature | Como o déficit é pago: carteira do BC, compromissadas e base monetária, na tela Déficit | N6 | D6, D7, D8 | M4 |
+| **F16** | Feature | Composição da dívida pública federal (Tesouro), na tela Dívida | N4, N6 | D2, D6 | M4 |
+| **F17** | Feature | "Check engine": semáforo dos sinais de crise | N5 | D6 | M5 |
+| **F20** | Feature | IPCA por grupo desde 1999 (emenda das tabelas do IBGE) | N3, N1 | D2 | — |
+| **F21** | Feature | Inflação acelerando ou freando | N1, N5 | D3, D5 | M6 |
+| **F22** | Feature | Rodadas de design no canvas | N2 | D6 | M6 |
+| **F23** | Feature | Linguagem visual nas telas que existem | N2, N3 | D5, D6 | M6 |
+| **F24** | Feature | Simulador da dívida, com casos que aconteceram e exemplos | N4, N5 | D3, D6 | M4 |
+| **F25** | Feature | Comparação com o mesmo mês de outros anos | N1, N2 | D3, D5 | M6 |
+| **F26** | Feature | Busca com Ctrl+K: telas e conceitos | N1, N2 | D4, D6 | M2 |
+| **F27** | Feature | Continuação pelo Focus nos gráficos | N1, N5 | D3 | M7 |
+| **F28** | Feature | Tela Focus: como a expectativa mudou semana a semana | N1, N5 | — | M7 |
+| **F29** | Feature | Limites mínimo e máximo da meta no gráfico do IPCA | N1, N2 | — | M7 |
+| **F30** | Feature | Tela Juros: Selic, Copom e juro real | N1, N7 | D3 | M8 |
+| **F31** | Feature | Tela Setor externo: dólar, transações correntes e IDP, reservas, posição internacional | N1, N2, N7 | — | M8 |
+| **F32** | Feature | Tela Atividade: PIB, IBC-Br e desemprego | N1, N2 | — | M8 |
+| **F33** | Feature | Tela Crédito: custo do crédito, spread e concessões | N1, N7 | — | M8 |
+| **F35** | Feature | IPCA livres, administrados e serviços | N1, N2 | — | — |
+| **F36** | Feature | Explicador: as três dívidas (DBGG, DLSP e DPF) | N2, N4, N7 | D7 | M2 |
+| **F37** | Feature | Explicador: por que a dívida não explode (prazo, rolagem, moeda, credores) | N4, N5, N7 | D7 | M2 |
+| **F38** | Feature | Diagramas nos conceitos que já existem | N2 | D7 | M2 |
+| **F39** | Feature | Pranchas dos explicadores no canvas | N2, N7 | D6, D7 | M2 |
+| **F40** | Feature | Leitura mais clara nas telas Dívida, Setor externo e Déficit | N2, N4 | D6 | — |
+| **F41** | Feature | Déficit mês a mês, com o nominal numa coluna própria | N4, N6 | D6 | M4 |
+| **F42** | Feature | Gráfico com o dado de hoje no "É bom ou ruim?" do Aprender | N2 | — | M2 |
+| **F43** | Feature | Quem faz o déficit: a NFSP por esfera | N4, N6 | D2 | M4 |
+| **F44** | Feature | A busca e o rodapé da barra lateral seguem a tela | N1 | D6 | — |
+| **F45** | Feature | Tolerância da meta de inflação buscada da fonte | N1 | D8 | — |
+| **F47** | Feature | Basileia dos bancos na tela Crédito e no painel | N1 | D6, D8 | M8 |
+| **F48** | Feature | Explicadores sem prancha: inércia e Plano Real, emissão de moeda, reservas e câmbio, dominância fiscal | N2, N5, N7 | D6, D7 | M2 |
+| **F49** | Feature | Rodada "antes \| depois" do canvas nas telas do app | N1, N2 | D3, D6, D7 | — |
+| **F50** | Feature | Explicador: o caminho dos dólares | N2, N7 | D6, D7 | M2 |
+| **F51** | Feature | Inadimplência na tela Crédito | N1, N5 | D8 | M8 |
+| **F52** | Feature | Subutilização da força de trabalho na tela Atividade | N1, N2 | D8 | M8 |
+| **F53** | Feature | Renda nacional no Setor externo: quanto do PIB fica no país | N1, N2 | D3, D8 | M8 |
+| **F54** | Feature | Dólar dia a dia no Setor externo | N1 | D8 | M8 |
+| **F55** | Feature | Juro real com histórico na Visão geral | N1 | D3 | M3 |
+| **F56** | Feature | Fechamento das pendências da V1 | N1, N2 | D8 | — |
+| **F57** | Feature | Novidades desde a última visita | N8 | D2 | — |
 
 <a id="f1"></a>
 **F1 — Scaffold no padrão do Finance Manager.** Feito.
@@ -1288,9 +1288,9 @@ Cada seta diz se o dólar entra ou sai, ou se o BC compra ou vende. Com o mouse 
 
 | ID | Tipo | Resumo | Serve |
 | --- | --- | --- | --- |
-| **F12** | feature | Tela de série: histórico, período e comparação na URL | N1 |
-| **F18** | feature | Linha do tempo histórica com os episódios marcados | N5, N2 |
-| **F19** | feature | Comparação internacional da dívida (FMI) | N4, N5 |
+| **F12** | Feature | Tela de série: histórico, período e comparação na URL | N1 |
+| **F18** | Feature | Linha do tempo histórica com os episódios marcados | N5, N2 |
+| **F19** | Feature | Comparação internacional da dívida (FMI) | N4, N5 |
 
 <a id="f12"></a>
 **F12 — Descartado.** 🚫 Descartada na revisão de 2026-10-08. O comparador livre de séries não vinha de nenhuma pergunta, e sobrepor séries de unidades diferentes sugere correlação que não existe. Os pares que fazem sentido são poucos e conhecidos (DLSP e DBGG, transações correntes e IDP, Selic e IPCA) e ficam montados nas telas temáticas. O clique no cartão do painel leva à tela temática do bloco.
